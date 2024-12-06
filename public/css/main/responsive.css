@@ -1,0 +1,666 @@
+section.hero-course-banner-section {
+	padding: 11% 0;
+}
+a footer.hero-footer {
+	margin-top: -70px;
+}
+
+
+
+@media screen and (width:1399px) {
+.down-arrow {
+    bottom: -5%;
+}
+}
+/* start media query for 1024px display device */
+@media screen and (width:1299px) {
+.banner-img-section h2 {
+    font-size: 49px;
+}
+.sm-clean a, .sm-clean a:hover, .sm-clean a:focus, .sm-clean a:active, .sm-clean a.highlighted {
+    padding: 12px 20px;
+    color: #fff;
+    border-radius: 0 !important;
+}
+}
+@media (min-width:991px) and (max-width:1199px) {
+	#myBtnContainer{
+		width: 90%;
+	}
+}
+@media screen and (max-width:990px) {
+.card-box {
+	width: 100%;
+	padding: 30px 0;
+	margin-bottom: 0;
+}
+.banner-img-section h2 {
+    font-size: 40px;
+}
+.banner-content-section {
+    padding-top: 40px;
+}
+.sm-clean a, .sm-clean a:hover, .sm-clean a:focus, .sm-clean a:active, .sm-clean a.highlighted {
+    padding: 12px 22px;
+}
+section.hero-courses.section {
+    padding: 40px 0 50px;
+}
+.about-btn {
+    margin-top: 20px;
+}
+.our-courses-box {
+    padding: 20px;
+}
+.hero-routine {
+    padding: 40px 0;
+}
+}
+
+
+@media screen and (max-width:990px) {
+	.about-btn {
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.banner-img-section h2 {
+		font-size: 40px;
+	}
+	section.hero-contact-form {
+		margin-top: 40px;
+	}
+	.map {
+		margin-top: -25px;
+	}
+	.coming-soon-card-box-input{
+		width: 75%;
+	}
+	.hero-about-content {
+		margin: 0px 0 0 0;
+	}
+	.about-img {
+		padding: 0;
+		margin-bottom: 30px;
+	}
+	.about-img img.img-fluid {
+		width: 100%;
+		display: block;
+	}
+	.hero-range-slider {
+		padding-top: 20px;
+	}
+	.range-title {
+		margin-top: -30px;
+	}
+	.bottom-btn-2 {
+		width: 15.5%;
+		padding: 6px 20px;
+	}
+	div#myBtnContainer .btn {
+		padding: 6px 12px;
+	}
+	.contact-card h3 {
+		font-size: 15px;
+	}
+	.contact-card {
+		padding: 50px 10px 40px 10px;
+	}
+
+	.banner-img-section h2 {
+		font-size: 30px;
+		margin-bottom: 0;
+	}
+	.hero-header-banner-section {
+		padding-top: calc(1200 / 1920* 100%);
+	}
+	.hero-header-banner-section::before {
+		background: linear-gradient(to bottom, rgba(21,24,21,1) 0px,rgba(21,24,21,0.85) 20px, rgba(21,24,21,0.5) 50px, transparent 70px);
+	}
+	.hero-header-banner-section .content-section p {
+		margin: 10px auto;
+	}
+	.content-btn {
+		width: 140px;
+		padding: 7px 0;
+	}
+	.down-arrow {
+		bottom: -5%;
+		left: 45%;
+	}
+	header {
+		padding-top: 10px;
+	}
+	header.shrink {
+		padding: 5px 0 8px 0;
+	}
+	.hero-courses.section {
+		/* padding: 40px 0 50px; */
+		background-color: #f8f8f9;
+	}
+	/* section.hero-trainers {
+		margin: 40px 0 50px;
+	}
+	section.hero-routine {
+		padding: 40px 0 50px;
+	}
+	.hero-blog-section {
+		margin: 40px 0 50px;
+	} */
+	li.last_menu {
+		background: none;
+		margin-left: 0px !important;
+		border-radius: 0px;
+	}
+	li.last_menu:hover{
+		background:none;
+		margin-left:0px !important;
+		border-radius:0px !important;
+	}
+	#myBtnContainer {
+		width: 100%;
+	}
+	.content h4 {
+		font-size: 18px;
+	}
+	section.hero-courses.section {
+		background-color: #f8f8f9;
+	}
+	#myBtnContainer{
+		overflow: scroll;
+		flex-wrap: nowrap;
+		display: flex;
+	}
+	/* custom */
+	footer {
+		padding-bottom: 15px;
+	}
+	.footer-tag- {
+		margin-top: 5px;
+	}
+	.footer-logo {
+		margin: 0 auto;
+		width: 90px;
+		height: 90px;
+		text-align: center;
+		margin-top: -10px;
+	}
+	.footer-social-link{
+		margin: 15px 0 20px 0;
+	}
+	.blog .container > .row {
+		flex-direction: column-reverse;
+		gap: 30px;
+	}
+	.blog_title h3 {.trainer-header h2
+		font-size: 22px !important;
+		background-size: 200px 3px !important;
+	}
+	.our-courses-header h2, .routine-title h2, .about-header h2, .trainer-header h2, .blog-header h2, .card-box-title h2, .range-title h2, .testimonials-title h2, .get-in-touch-title h2, .about-header h2, .trainer-header h2, .yoga_bg .title_box h2 {
+		font-size: 22px;
+		background-size: 200px 3px;
+	}
+	.our-courses-header p, .about-header p, .trainer-header p, .blog-header p, .card-box-title p, .range-title p, .testimonials-title p, .get-in-touch-title p {
+		margin: 20px auto !important;
+	}
+	.routine-title p {
+		margin: 20px auto !important;
+	}
+}
+
+@media (max-width:575px) {
+	.author-box, .comment-box{
+		display: block;
+	}
+	.authore-content{
+		padding-left: 0px;
+	}
+}
+/* @media screen and (min-width: 320px) and (max-width: 767px) {
+	
+} */
+
+@media screen and (max-width:767px) {
+	.hero-header-banner-section {
+		padding-top: calc(1920 / 1920* 100%);
+	}
+	li.last_menu{
+		background:transparent;
+		margin-left:0px !important;
+	}
+	.banner-img-section h2 {
+		font-size: 35px;
+	}
+	header {
+		padding-top: 5px;
+	}
+	.down-arrow{
+		display:none;
+	}
+	/* .range-title h2{
+		font-size:30px;
+	} */
+	.range-title {
+		margin-top: 20px;
+	}
+	.hero-video-section {
+		padding: 40px 0 !important;
+	}
+	.error-content h2 {
+		font-size: 24px;	
+		text-transform: uppercase;
+	}
+	/* navbar */
+	.navbar-light .navbar-nav .nav-link:hover:after, .navbar-light .navbar-nav .nav-link:active:after {
+		width: 24%;
+		transition: 0.5s all ease;
+	}
+	.navbar-light .navbar-nav .nav-link:after {
+		left: 6px;
+	}
+	/* about */
+	.about-img {
+		padding: 0;
+		margin-bottom: 20px;
+	}
+	/* schedule */
+	section.hero-schedule-banner-section {
+		padding: 107px 0;
+	}
+	.blog-column-1 {
+		display: inline-block;
+		width: 49%;
+	}
+	.blog-column-2 {
+		display: inline-block;
+		width: 49%;
+	}
+	.blog-column-3 {
+		display: inline-block;
+		width: 49%;
+	}
+	.blog-column-4 {
+		display: inline-block;
+		width: 49%;
+	}
+	.blog-column-5 {
+		display: inline-block;
+		width: 49%;
+	}
+	div#myBtnContainer .btn {
+		padding: 6px 15px;
+	}
+	#myBtnContainer{
+		background-color:transparent !important;
+	}
+	/* footer */
+	.card-box {
+		width: 100%;
+		padding: 30px 6px;
+		margin-bottom: 0;
+	}
+	.footer-nav ul {
+		display: flex;
+		margin: 20px 0;
+		padding: 10px 0;
+		flex-direction: column;
+	}
+	.footer-content p {
+		text-align: left;
+		width: 100%;
+	}
+	.footer-social-link ul {
+		text-align: left;
+	}
+	.footer-social-link ul li {
+		margin: 8px 0;
+	}
+	.footer-tag-2 ul {
+		text-align: center;
+		margin: 0 !important;
+	}
+	.footer-tag- p {
+		text-align: center;
+		margin: 5px !important;
+	}
+	.footer-social-link ul li span img.img-fluid {
+		padding: 10px;
+		width: 39px;
+	}
+	/* inner page */
+
+		/* about page */
+
+		/* header banner */
+	section.hero-about-banner-section {
+		padding: 70px 0 40px 0;
+		background-position: center;
+	}
+	/* start blog page */
+	.hero-blog-banner-section {
+		padding: 70px 0;
+	}
+	.hero-blog-details-banner-section {
+		padding: 70px 0;
+	}
+	.blog-card {
+		width: 100%;
+	}
+	.bottom-nav ul li {
+		margin: 0;
+	}
+	/* blog details */
+	section.hero-contact-banner-section{
+		padding:140px 0px;
+	}
+	.details-tag-1 {
+		width: 100%;/* float: left; */
+	}
+	.details-tag-1 ul li span img.img-fluid {
+		width: 13%;
+		margin-right: 5px;
+		display: inline-block;
+	}
+	.details-tag-2 {
+		width: 100%;
+	}
+	.details-tag-2 ul {
+		text-align: left;
+	}
+	.details-tag-2 ul li span img.img-fluid {
+		width: 18%;
+		margin-right: 5px;
+		display: inline-block;
+	}
+	.blog-details-content h2 {
+		font-size: 21px;
+	}
+	.blog-details-content h2 {
+		text-align: left;
+	}
+	.special-paragraph {
+		width: 98%;
+		margin-left: 10px;
+	}
+	.special-para-img img.img-fluid {
+		width: 43%;
+		height: 116px;
+	}
+	.blog-details-tag-list ul li span img.img-fluid {
+		width: 35%;
+	}
+	.bottom-btn-1 {
+		width: auto;
+	}
+	.bottom-btn-2 {
+		width: auto;
+	}
+	.author-img {
+		width: 100%;
+		float: none;
+	}
+	.author-img-border {
+		width: 143px;
+		height: 143px;
+		top: -6px;
+		left: -6px;
+	}
+	.authore-content h2 {
+		text-align: left;
+		margin-top: 15px;
+	}
+	.comment-box-img img.img-fluid {
+		padding: 5px;
+		width: 100%;
+	}
+	.comment-box-img {
+		width: max-content;
+	}
+	.comment-box-content {
+		width: 100%;
+	}
+	.comment-box-header {
+		width: 70%;
+		float: none;
+	}
+	.comment-box-reply-section {
+		width: 30%;
+	}
+	input.input-form {
+		display: block;
+		width: 100%;
+		margin: 10px 6px;
+	}
+	textarea.input-massege {
+		display: block;
+		width: 100%;
+		margin: 15px 6px;
+	}
+	/* .blog-categories h2 {
+		margin-top: 60px;
+	} */
+	.authore-content {
+		width: 100%;
+	}
+	.details-tag-1 ul li {
+		font-size: 11px;
+	}
+	ul.navbar-nav {
+		padding: 15px 0;
+	}
+	/* team page */
+	.trainer-img img.img-fluid {
+		width: 100%;
+		display: block;
+	}
+	/* error page */
+
+	section.hero-error-banner-section {
+		background-position: left;
+		padding: 57% 0;
+		overflow: hidden;
+	}
+	/* coming soon page */
+	section.hero-coming-soon-banner-section {
+		background-position: center;
+		padding: 40% 0 40% 0;
+		overflow: hidden;
+	}
+	.coming-soon-content h2 {
+		font-size: 18px;
+	}
+	.coming-soon-block ul li p {
+		font-size: 18px;
+	}
+	.coming-soon-block ul li h5 {
+		padding: 14px;
+		font-size: 30px;
+		width: 90px;
+	}
+	.coming-soon-footer p {
+		margin-top: 50px;
+	}
+
+	.banner-img-section h2 {
+		font-size: 24px;
+	}
+	section.hero-courses.section {
+		background-color: #f8f8f9;
+	}
+	li.last_menu:hover{
+		background:none;
+		margin-left:0px !important;
+	}
+	section.hero-course-banner-section {
+		padding: 140px 0px;
+	}
+	section.hero-schedule-banner-section {
+		padding: 140px 0;
+	}
+	.contact-box-icons {
+		width: 70px;
+		height: 70px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	/* custom */
+	footer {
+		margin-top: 60px;
+	}
+	.blog_page_box {
+		padding-bottom: 20px !important;
+	}
+	.blog_con_inner {
+		margin-top: 15px;
+	}
+	.blog_con_inner .date_con {
+		margin: 10px 0 !important;
+	}
+	.single_blog .title_sub {
+		font-size: 20px !important;
+	}
+	.single_blog .title_sub {
+		margin: 12px 0 !important;
+	}
+	.blogInfoContent {
+		margin-top: 12px !important;
+	}
+	.single_blog .date_con {
+		margin-top: 12px !important;
+	}
+	p {
+		margin-bottom: 0.75rem !important;
+	}
+	.our-courses-header p, .about-header p, .trainer-header p, .blog-header p, .card-box-title p, .range-title p, .testimonials-title p, .get-in-touch-title p {
+		margin: 15px auto !important;
+	}
+	.routine-title p {
+		margin: 15px auto !important;
+	}
+}
+
+@media(max-width: 1399px){
+	.yoga_bg .col-md-12 {
+		align-items: stretch;
+		gap: 50px;
+	}
+	.first_col2 {
+		display: none;
+	}
+	.first_col, .first_col3 {
+		width: 100%;
+	}
+	.first_col .yoga_box {
+		flex-direction: row-reverse;
+		text-align: left;
+	}
+}
+
+@media(max-width: 990px){
+	section.hero-about, section.hero-courses.section, section.hero-trainers, section.hero-routine, .hero-video-section, .hero-blog-section, .card-box, section.hero-testimonials, section.hero-schedule {
+		padding: 50px 0;
+	}
+	footer {
+		margin-top: 50px;
+	}
+	.course-btn {
+		margin-top: 30px;
+	}
+	.hero-about .row > *:last-child {
+		display: none;
+	}
+	.about-content {
+		padding-top: 20px;
+	}
+	.hero-courses .row {
+		gap: 20px 0;
+	}
+	.yoga_bg {
+		padding-top: 50px;
+	}
+	.yoga_bg .title_box h2 {
+		margin-bottom: 30px;
+	}
+	.yoga_bg .col-md-12 {
+		flex-direction: column;
+		gap: 25px;
+		padding-bottom: 50px;
+	}
+	.first_col, .first_col3 {
+		padding-bottom: 0;
+		gap: 25px;
+	}
+
+	.yoga_con h3 {
+		font-size: 17px;
+	}
+
+	.icon_box {
+		width: 65px;
+		height: 65px;
+	}
+
+	/* why choose us */
+	.hero-range-slider .row {
+		
+	}
+	
+	.hero-range-slider .row > *:first-child {
+		width: 100%;
+		margin-bottom: 50px;
+	}
+	.hero-range-slider .row > *:last-child {
+		display: none;
+	}
+	.blog {
+		margin-top: 50px !important;
+    	margin-bottom: 100px !important;
+	}
+}
+
+@media(max-width: 767px){
+	section.hero-about, section.hero-courses.section, section.hero-trainers, section.hero-routine, .hero-video-section, .hero-blog-section, .card-box, section.hero-testimonials, section.hero-schedule {
+		padding: 40px 0;
+	}
+	.about-content {
+		padding-top: 15px;
+	}
+	.footer-logo {
+		margin-top: -20px;
+	}
+	.footer-social-link{
+		margin: 0;
+	}
+	.course-btn {
+		margin-top: 20px;
+	}
+	.yoga_bg {
+		padding-top: 40px;
+	}
+	.yoga_bg .title_box h2 {
+		margin-bottom: 25px;
+	}
+	.yoga_bg .col-md-12 {
+		gap: 20px;
+		padding-bottom: 40px;
+	}
+	.first_col, .first_col3 {
+		gap: 20px;
+	}
+
+	.yoga_con h3 {
+		font-size: 16px;
+	}
+
+	.icon_box {
+		width: 55px;
+		height: 55px;
+	}
+	.hero-range-slider .row > *:first-child {
+		margin-bottom: 40px;
+	}
+	.blog {
+		margin-top: 30px !important;
+    	margin-bottom: 90px !important;
+	}
+}

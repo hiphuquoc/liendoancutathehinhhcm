@@ -1,0 +1,57 @@
+@if(!empty($blogs)&&$blogs->isNotEmpty())
+  <section class="hero-blog-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 col-sm-12 col-xs-12">
+          <div class="blog-header">
+            <h2>TIN TỨC <span>HOT</span></h2>
+            <p>Cập nhật liên tục những tin tức nóng hổi về các sự kiện, giải đấu, xu hướng mới trong làng thể hình và cử tạ. Tin tức của chúng tôi cung cấp thông tin chi tiết về các hoạt động của Liên đoàn, các bài viết chuyên môn, cũng như những sự kiện thể thao nổi bật, giúp bạn luôn được cập nhật và đồng hành cùng cộng đồng thể thao.</p>
+          </div>
+        </div>
+        <div class="col-lg-12 col-sm-12 col-xs-12">
+          <div class="owl-carousel owl-theme ss_carousel" id="slider2">
+            @foreach($blogs as $blog)
+              @php
+                  $titleBlog      = '';
+                  $slugBlog       = '';
+                  foreach($blog->seos as $seo){
+                    if(!empty($seo->infoSeo->language)&&$seo->infoSeo->language==$language){
+                      $titleBlog  = $seo->infoSeo->title;
+                      $slugBlog   = $seo->infoSeo->slug_full;
+
+                      break;
+                    }
+                  }
+              @endphp
+              
+              <div class="item effectFadeIn">
+                <div class="blog-box">
+                  <div class="blog-img"> <a href="/{{ $slugBlog }}"> 
+                      @if(!empty($blog->seo->image))
+                        <img src="{{ \App\Helpers\Image::getUrlImageSmallByUrlImage($blog->seo->image) }}" alt="{{ $titleBlog }}" title="{{ $titleBlog }}" />
+                      @endif
+                      {{-- <img src="https://netizensstore.com/gymfit_theme/html/multipage_6/assets/img/main-page/blog-img-1.webp" alt="Gymfit" class="img-fluid"> --}}
+                      <div class="img-overlay"></div>
+                    </a> </div>
+                  <div class="blog-content">
+                    <p>{{ date('d/m/Y', strtotime($blog->seo->created_at)) }} Đăng bởi Admin</p>
+                    <h2><a href="/{{ $slugBlog }}" class="maxLine_3">{{ $titleBlog }}</a></h2>
+                    <p>Curabitur sit amet enim sagittis, blandit dolor quis, efficitur est. Morbi vitae quam ac erat
+                      tincidunt aliquet. Nullam posuere at massa id faucibus. </p>
+                    {{-- <div class="blog-link"> <a href="blog.html">Xem chi tiết <i class="fa fa-angle-right"
+                          aria-hidden="true"></i></a> </div> --}}
+                  </div>
+                </div>
+              </div>
+            @endforeach
+          </div>
+        </div>
+
+        <div class="col-lg-12 col-sm-12 col-xs-12">
+          <div class="course-button"> <a href="/tin-tuc" class="course-btn">Xem tất cả</a> </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+@endif

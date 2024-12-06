@@ -1,0 +1,57 @@
+{
+  "resources/sources/admin/style.scss": {
+    "file": "assets/style-a7a7c058.css",
+    "isEntry": true,
+    "src": "resources/sources/admin/style.scss"
+  },
+  "resources/sources/main/aboutus-first-view.scss": {
+    "file": "assets/home-first-view-1c301b38.css",
+    "isEntry": true,
+    "src": "resources/sources/main/contact-first-view.scss"
+  },
+  "resources/sources/main/aboutus-non-first-view.scss": {
+    "file": "assets/home-non-first-view-1a84b608.css",
+    "isEntry": true,
+    "src": "resources/sources/main/category-blog-non-first-view.scss"
+  },
+  "resources/sources/main/category-blog-first-view.scss": {
+    "file": "assets/category-blog-first-view-091f5d16.css",
+    "isEntry": true,
+    "src": "resources/sources/main/category-blog-first-view.scss"
+  },
+  "resources/sources/main/category-blog-non-first-view.scss": {
+    "file": "assets/home-non-first-view-1a84b608.css",
+    "isEntry": true,
+    "src": "resources/sources/main/category-blog-non-first-view.scss"
+  },
+  "resources/sources/main/contact-first-view.scss": {
+    "file": "assets/home-first-view-1c301b38.css",
+    "isEntry": true,
+    "src": "resources/sources/main/contact-first-view.scss"
+  },
+  "resources/sources/main/contact-non-first-view.scss": {
+    "file": "assets/home-non-first-view-1a84b608.css",
+    "isEntry": true,
+    "src": "resources/sources/main/category-blog-non-first-view.scss"
+  },
+  "resources/sources/main/home-first-view.scss": {
+    "file": "assets/home-first-view-1c301b38.css",
+    "isEntry": true,
+    "src": "resources/sources/main/contact-first-view.scss"
+  },
+  "resources/sources/main/home-non-first-view.scss": {
+    "file": "assets/home-non-first-view-1a84b608.css",
+    "isEntry": true,
+    "src": "resources/sources/main/category-blog-non-first-view.scss"
+  },
+  "resources/sources/main/page-first-view.scss": {
+    "file": "assets/page-first-view-e4e0ff28.css",
+    "isEntry": true,
+    "src": "resources/sources/main/page-first-view.scss"
+  },
+  "resources/sources/main/page-non-first-view.scss": {
+    "file": "assets/home-non-first-view-1a84b608.css",
+    "isEntry": true,
+    "src": "resources/sources/main/category-blog-non-first-view.scss"
+  }
+}

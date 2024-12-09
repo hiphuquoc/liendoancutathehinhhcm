@@ -32,6 +32,7 @@ use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\CategoryBlogController;
 use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\TrainerController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\CacheController;
 use App\Http\Controllers\Admin\WallpaperController;
@@ -166,8 +167,8 @@ Route::middleware('auth', 'role:admin')->group(function (){
             Route::get('/', [BlogController::class, 'list'])->name('admin.blog.list');
             Route::get('/view', [BlogController::class, 'view'])->name('admin.blog.view');
             Route::post('/createAndUpdate', [BlogController::class, 'createAndUpdate'])->name('admin.blog.createAndUpdate');
-            /* Delete AJAX */
             Route::get('/delete', [BlogController::class, 'delete'])->name('admin.blog.delete');
+            /* Delete AJAX */
             Route::get('/loadProduct', [BlogController::class, 'loadProduct'])->name('admin.blog.loadProduct');
             Route::get('/chooseProduct', [BlogController::class, 'chooseProduct'])->name('admin.blog.chooseProduct');
             Route::get('/loadThemeProductChoosed', [BlogController::class, 'loadThemeProductChoosed'])->name('admin.blog.loadThemeProductChoosed');
@@ -175,6 +176,13 @@ Route::middleware('auth', 'role:admin')->group(function (){
             Route::get('/clearProductChoosed', [BlogController::class, 'clearProductChoosed'])->name('admin.blog.clearProductChoosed');
             Route::get('/getListProductChoose', [BlogController::class, 'getListProductChoose'])->name('admin.blog.getListProductChoose');
             Route::get('/callAIWritePerProduct', [BlogController::class, 'callAIWritePerProduct'])->name('admin.blog.callAIWritePerProduct');
+        });
+        /* ===== Trainer ===== */
+        Route::prefix('trainer')->group(function(){
+            Route::get('/', [TrainerController::class, 'list'])->name('admin.trainer.list');
+            Route::get('/view', [TrainerController::class, 'view'])->name('admin.trainer.view');
+            Route::post('/createAndUpdate', [TrainerController::class, 'createAndUpdate'])->name('admin.trainer.createAndUpdate');
+            Route::get('/delete', [TrainerController::class, 'delete'])->name('admin.trainer.delete');
         });
         /* ===== Order ===== */
         Route::prefix('order')->group(function(){

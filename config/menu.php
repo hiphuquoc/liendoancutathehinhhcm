@@ -44,6 +44,18 @@ return [
         //     ]
         // ],
         [
+            'name'      => 'Huấn luyện viên',
+            'route'     => 'admin.trainer.list',
+            'icon'      => '<i class="fa-solid fa-user-tie"></i>',
+            // 'child'     => [
+            //     [
+            //         'name'  => '1. Danh sách',
+            //         'route' => '',
+            //         'icon'  => '<i data-feather=\'circle\'></i>'
+            //     ]
+            // ]
+        ],
+        [
             'name'      => 'Quản lí trang',
             'route'     => 'admin.page.list',
             'icon'      => '<i class="fa-regular fa-file-lines"></i>',

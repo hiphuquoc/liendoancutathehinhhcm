@@ -2,12 +2,22 @@
     display: flex;
     gap: 30px; /* Khoảng cách giữa các khối */
     align-items: flex-start;
+    padding: 50px 0;
 }
 .layoutTeacherDetail_info {
     width: 380px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 .layoutTeacherDetail_detail {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: justify;
+    border-left: 5px solid #dee2e6;
+    padding-left: 30px;
 }
 .teacherDetailImg {
     position: relative;
@@ -16,6 +26,7 @@
     padding-top: calc(100% * (4 / 3)); /* Tỷ lệ 3:4 */
     border-radius: 12px; /* Làm tròn khung ngoài */
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng đổ bóng */
+    margin-bottom: 1rem;
 }
 
 .teacherDetailImg img {
@@ -26,4 +37,135 @@
     height: 100%;
     object-fit: cover; /* Hình ảnh lấp đầy khung */
     border-radius: 12px;
+}
+
+.teacherInfoBox2 {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.teacherInfoBox2 .teacherInfoBox2_info {
+    width: 100%;
+}
+
+.teacherInfoBox2 h1 {
+    text-transform: uppercase;
+    font-size: 36px;
+    font-weight: bold;
+    color: #008ac0;
+    margin-bottom: 0 !important; 
+}
+
+.teacherInfoBox2 .teacherInfoBox2_image {
+    display: none;
+}
+
+.teacherInfoBox2 .teacherInfoBox2_image img {
+    width: 100%;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.teacherInfoBox2 .teacherInfoBox2_info_sub {
+    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 0 !important;
+}
+
+.teacherInfoBox2 .teacherInfoBox2_info_contact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.teacherInfoBox2 .teacherInfoBox2_info_contact i {
+    color: #008ac0;
+    font-size: 16px;
+    margin: 0;
+    height: unset;
+    width: unset;
+}
+
+.teacherInfoBox2 .teacherInfoBox2_info_contact .teacherInfoBox2_info_contact_item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.teacherInfoBox2 .teacherInfoBox2_info_contact .line {
+    width: 75px;
+    height: 25px;
+    background: #008ac0;
+    border-radius: 12px 0 0 12px;
+}
+.teacherInfoBox .teacherInfoBox2_content {
+    display: flex;
+    gap: 1rem;
+}
+.teacherInfoBox .teacherInfoBox2_content .teacherInfoBox2_content_image {
+    flex:0 0 200px;
+}
+.teacherInfoBox .teacherInfoBox2_content .teacherInfoBox2_content_image img {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+.teacherInfoBox h2 {
+    font-weight: bold;
+    font-size: 24px;
+    background: url(https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/line-bottom-header.webp) left bottom no-repeat;
+    background-size: 150px 3px;
+    background-position-x: left;
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+}
+
+.teacherInfoBox h3 {
+    font-size: 18px;
+    font-weight: bold;
+    /* margin-bottom: 0 !important; */
+}
+.teacherInfoBox .teacherInfoBox_company {
+    margin-bottom: 0.5rem;
+}
+.teacherInfoBox .container-skills {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.teacherInfoBox .container-skills .bar {
+    margin: 0;
+}
+.teacherInfoBox .container-skills .bar-title, .teacherInfoBox .container-skills .percent {
+    color: #212529;
+}
+
+.teacherInfoBox .container-skills .bar-fill-html {
+    background: #008ac0;
+}
+
+@media(max-width: 990px){
+    .layoutTeacherDetail {
+        flex-direction: column;
+    }
+    .layoutTeacherDetail_info {
+        display: none;
+    }
+    .layoutTeacherDetail_detail {
+        gap: 15px;
+        border-left: none;
+        padding-left: unset;
+    }
+    .teacherInfoBox2 .teacherInfoBox2_image {
+        flex: 0 0 180px;
+        display: flex;
+    }
+    .teacherInfoBox2 .teacherInfoBox2_info_contact {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 0;
+    }
+    .teacherInfoBox2 .teacherInfoBox2_info_contact .line {
+        display: none;
+    }
 }

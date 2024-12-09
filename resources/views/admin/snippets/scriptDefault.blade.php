@@ -5,8 +5,6 @@
 <!-- === END:: Scripts Default === -->
 <!-- Include jQuery UI library -->
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-<!-- Include jQuery UI Sortable library -->
-<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 <!-- BEGIN: Page Vendor JS-->
 <script src="{{ asset('sources/admin/app-assets/vendors/js/pickers/pickadate/picker.js') }}"></script>
 <script src="{{ asset('sources/admin/app-assets/vendors/js/pickers/pickadate/picker.date.js') }}"></script>
@@ -31,6 +29,7 @@
 <script src="{{ asset('sources/admin/app-assets/js/core/app.min.js') }}"></script>
 <script src="{{ asset('sources/admin/app-assets/js/scripts/customizer.min.js') }}"></script>
 <script src="{{ asset('sources/admin/app-assets/js/core/app-menu.min.js') }}"></script>
+
 <!-- END: MENU -->
 
 <!-- END: Page Vendor JS-->

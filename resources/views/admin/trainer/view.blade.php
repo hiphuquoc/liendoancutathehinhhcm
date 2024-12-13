@@ -14,7 +14,7 @@
     @csrf
     <input type="hidden" id="seo_id" name="seo_id" value="{{ $itemSeo->id ?? 0 }}" />
     <input type="hidden" id="seo_id_vi" name="seo_id_vi" value="{{ !empty($item->seo->id)&&$type!='copy' ? $item->seo->id : 0 }}" />
-    <input type="hidden" id="blog_info_id" name="blog_info_id" value="{{ !empty($item->id)&&$type!='copy' ? $item->id : 0 }}" />
+    <input type="hidden" id="trainer_info_id" name="trainer_info_id" value="{{ !empty($item->id)&&$type!='copy' ? $item->id : 0 }}" />
     <input type="hidden" id="language" name="language" value="{{ $language ?? 'vi' }}" />
     <input type="hidden" id="type" name="type" value="{{ $type }}" />
         <div class="pageAdminWithRightSidebar withRightSidebar">
@@ -84,85 +84,40 @@
                                 </h4>
                             </div>
                             <div class="card-body" data-repeater-list="repeater_trainer_achievement">
-
-                                <!-- item -->
-                                <div class="flexBox" data-repeater-item>
-                                    <div class="flexBox_item">
-                                        <input type="text" class="form-control" name="trainer_achievement_content" placeholder="Nhập thành tích" required>
-                                    </div>
-                                    <div class="flexBox_item" style="display: flex; flex: 0 0 30px; justify-content: space-between;">
-                                        <div class="icon-wrapper iconAction">
-                                            <a href="#" class="actionDelete" data-repeater-delete>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-square">
-                                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                                    <line x1="9" y1="9" x2="15" y2="15"></line>
-                                                    <line x1="15" y1="9" x2="9" y2="15"></line>
-                                                </svg>
-                                                <div>Xóa</div>
-                                            </a>
+                                @php
+                                    $dataAchievements = old('repeater_trainer_achievement') ?? $item->achievements;
+                                @endphp
+                                @foreach($dataAchievements as $achi)
+                                    <!-- item -->
+                                    <div class="flexBox" data-repeater-item>
+                                        <div class="flexBox_item">
+                                            <input 
+                                                type="text" 
+                                                class="form-control" 
+                                                name="content" 
+                                                placeholder="Nhập thành tích..." 
+                                                value="{{ is_array($achi) ? ($achi['content'] ?? '') : ($achi->content ?? '') }}" 
+                                                required>
+                                        </div>
+                                        <div class="flexBox_item" style="display: flex; flex: 0 0 30px; justify-content: space-between;">
+                                            <div class="icon-wrapper iconAction">
+                                                <a href="#" class="actionDelete" data-repeater-delete>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-square">
+                                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                                                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                                                    </svg>
+                                                    <div>Xóa</div>
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-
+                                @endforeach
                             </div>
                         </div>
                     </div>
                     
-                    <!-- kinh nghiệm -->
-                    <div class="pageAdminWithRightSidebar_main_content_item repeater">
-                        <div class="card">
-                            <div class="card-header border-bottom">
-                                <h4 class="card-title">
-                                    Kinh nghiệm
-                                    <i class="fa-regular fa-circle-plus" data-repeater-create></i>
-                                </h4>
-                            </div>
-                            <div class="card-body" data-repeater-list="repeater_trainer_experience">
-
-                                <!-- item -->
-                                <div class="flexBox">
-                                    <div class="flexBox_item">
-                                        <label class="form-label inputRequired">Chức vụ</label>
-                                        <input type="text" class="form-control" name="trainer_experience_title" value="" required>
-                                        <div class="invalid-feedback">{{ config('admin.massage_validate.not_empty') }}</div>
-                                    </div>
-                                </div>
-
-                                <!-- item -->
-                                <div class="flexBox">
-                                    <div class="flexBox_item">
-                                        <label class="form-label inputRequired">Đơn vị</label>
-                                        <input type="text" class="form-control" name="trainer_experience_company" value="" required>
-                                        <div class="invalid-feedback">{{ config('admin.massage_validate.not_empty') }}</div>
-                                    </div>
-                                </div>
-
-                                @for($i=0;$i<2;++$i)
-                                <!-- item -->
-                                <div class="flexBox" data-repeater-item>
-                                    <div class="flexBox_item">
-                                        <input type="text" class="form-control" name="trainer_skill[]" placeholder="Nhập kinh nghiệm" required>
-                                    </div>
-                                    <div class="flexBox_item" style="display: flex; flex: 0 0 30px; justify-content: space-between;">
-                                        <div class="icon-wrapper iconAction">
-                                            <a href="#" class="actionDelete" data-repeater-delete>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-square">
-                                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                                    <line x1="9" y1="9" x2="15" y2="15"></line>
-                                                    <line x1="15" y1="9" x2="9" y2="15"></line>
-                                                </svg>
-                                                <div>Xóa</div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                @endfor
-
-                            </div>
-                        </div>
-                    </div>
-
-                   {{-- <!-- kỹ năng -->
+                   <!-- kỹ năng -->
                     <div class="pageAdminWithRightSidebar_main_content_item repeater">
                         <div class="card">
                             <div class="card-header border-bottom">
@@ -172,44 +127,152 @@
                                 </h4>
                             </div>
                             <div class="card-body" data-repeater-list="repeater_trainer_skill">
-
-                                <!-- item -->
-                                <div class="flexBox" data-repeater-item>
-                                    <div class="flexBox_item">
-                                        <input type="text" class="form-control" name="trainer_skill_title[]" placeholder="Nhập kỹ năng" required>
-                                    </div>
-                                    <div class="flexBox_item" style="width:100px;">
-                                        <input type="number" class="form-control" name="trainer_skill_percent[]" placeholder="%" required>
-                                    </div>
-                                    <div class="flexBox_item" style="display: flex; flex: 0 0 30px; justify-content: space-between;">
-                                        <div class="icon-wrapper iconAction">
-                                            <a href="#" class="actionDelete" data-repeater-delete>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-square">
-                                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                                    <line x1="9" y1="9" x2="15" y2="15"></line>
-                                                    <line x1="15" y1="9" x2="9" y2="15"></line>
-                                                </svg>
-                                                <div>Xóa</div>
-                                            </a>
+                                @php
+                                    $dataSkills = old('repeater_trainer_skill') ?? $item->skills;
+                                @endphp
+                                @foreach($dataSkills as $skill)
+                                    <!-- item -->
+                                    <div class="flexBox" data-repeater-item>
+                                        <div class="flexBox_item">
+                                            <input type="text" class="form-control" name="skill" placeholder="Nhập kỹ năng..." value="{{ is_array($skill) ? ($skill['skill'] ?? '') : ($skill->skill ?? '') }}" required>
+                                        </div>
+                                        <div class="flexBox_item" style="width:100px;">
+                                            <input type="number" class="form-control" name="percent" placeholder="%" value="{{ is_array($skill) ? ($skill['percent'] ?? '') : ($skill->percent ?? '') }}" required>
+                                        </div>
+                                        <div class="flexBox_item" style="display: flex; flex: 0 0 30px; justify-content: space-between;">
+                                            <div class="icon-wrapper iconAction">
+                                                <a href="#" class="actionDelete" data-repeater-delete>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-square">
+                                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                                                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                                                    </svg>
+                                                    <div>Xóa</div>
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-
+                                @endforeach
                             </div>
                         </div>
                     </div>
 
-                    <!-- bằng cấp -->
-                    <div class="pageAdminWithRightSidebar_main_content_item">
-                        <div class="card">
+                    <!-- kinh nghiệm -->
+                    <div class="pageAdminWithRightSidebar_main_content_item repeater">
+                        <div class="card" data-repeater-list="repeater_trainer_experience">
                             <div class="card-header border-bottom">
-                                <h4 class="card-title">Bằng cấp</h4>
+                                <h4 class="card-title">
+                                    Kinh nghiệm
+                                    <i class="fa-regular fa-circle-plus" data-repeater-create></i>
+                                </h4>
                             </div>
-                            <div class="card-body">
-                                
-                            </div>
+                            @php
+                                $dataExperience = old('repeater_trainer_achievement') ?? $item->experiences;
+                            @endphp
+                            @foreach($dataExperience as $exp)
+                                <div class="card-body" data-repeater-item>
+                                    <!-- item -->
+                                    <div class="flexBox">
+                                        <div class="flexBox_item">
+                                            <label class="form-label inputRequired">Chức vụ</label>
+                                            <input type="text" class="form-control" name="title" value="{{ is_array($exp) ? ($exp['title'] ?? '') : ($exp->title ?? '') }}" required>
+                                            <div class="invalid-feedback">{{ config('admin.massage_validate.not_empty') }}</div>
+                                        </div>
+                                    </div>
+                                    <!-- item -->
+                                    <div class="flexBox">
+                                        <div class="flexBox_item">
+                                            <label class="form-label inputRequired">Đơn vị</label>
+                                            <input type="text" class="form-control" name="company" value="{{ is_array($exp) ? ($exp['company'] ?? '') : ($exp->company ?? '') }}" required>
+                                            <div class="invalid-feedback">{{ config('admin.massage_validate.not_empty') }}</div>
+                                        </div>
+                                    </div>
+                                    <!-- item -->
+                                    @php
+                                        if(is_array($exp)) {
+                                            $contentExp     = $exp['content'];
+                                        }else {
+                                            $contentExp     = '';
+                                            foreach($exp->contents as $c){
+                                                $contentExp .= $c->content."\r\n";
+                                            }
+                                        }
+                                    @endphp
+                                    <div class="flexBox">
+                                        <div class="flexBox_item">
+                                            <label class="form-label inputRequired">Kỹ năng (mỗi dòng 1 kỹ năng)</label>
+                                            <textarea class="form-control" name="content" rows="5" required>{{ $contentExp }}</textarea>
+                                            <div class="invalid-feedback">{{ config('admin.massage_validate.not_empty') }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="flexBox">
+                                        <div class="flexBox_item">
+                                            <button type="button" class="btn btn-danger waves-effect waves-float waves-light" style="float:right;" data-repeater-delete>Xóa</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+
                         </div>
-                    </div> --}}
+                    </div>
+
+                    <!-- bằng cấp -->
+                    <div class="pageAdminWithRightSidebar_main_content_item repeater">
+                        <div class="card" data-repeater-list="repeater_trainer_degree">
+                            <div class="card-header border-bottom">
+                                <h4 class="card-title">
+                                    Bằng cấp
+                                    <i class="fa-regular fa-circle-plus" data-repeater-create></i>
+                                </h4>
+                            </div>
+                            @php
+                                $dataDegree = old('repeater_trainer_degree') ?? $item->degrees;
+                            @endphp
+                            @foreach($dataDegree as $degree)
+                                <div class="card-body" data-repeater-item>
+                                    <!-- item -->
+                                    <div class="flexBox">
+                                        <div class="flexBox_item">
+                                            <label class="form-label inputRequired">Tiêu đề</label>
+                                            <input type="text" class="form-control" name="title" value="{{ is_array($degree) ? ($degree['title'] ?? '') : ($degree->title ?? '') }}" required>
+                                            <div class="invalid-feedback">{{ config('admin.massage_validate.not_empty') }}</div>
+                                        </div>
+                                    </div>
+                                    <!-- item -->
+                                    <div class="flexBox">
+                                        <div class="flexBox_item">
+                                            <label class="form-label inputRequired">Trường học</label>
+                                            <input type="text" class="form-control" name="school" value="{{ is_array($degree) ? ($degree['school'] ?? '') : ($degree->school ?? '') }}" required>
+                                            <div class="invalid-feedback">{{ config('admin.massage_validate.not_empty') }}</div>
+                                        </div>
+                                    </div>
+                                    <!-- item -->
+                                    @php
+                                        if(is_array($degree)) {
+                                            $contentDegree  = $degree['content'];
+                                        }else {
+                                            $contentDegree  = '';
+                                            foreach($degree->contents as $c){
+                                                $contentDegree .= $c->content."\r\n";
+                                            }
+                                        }
+                                    @endphp
+                                    <div class="flexBox">
+                                        <div class="flexBox_item">
+                                            <label class="form-label inputRequired">Kỹ năng (mỗi dòng 1 kỹ năng)</label>
+                                            <textarea class="form-control" name="content" rows="5" required>{{ $contentDegree }}</textarea>
+                                            <div class="invalid-feedback">{{ config('admin.massage_validate.not_empty') }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="flexBox">
+                                        <div class="flexBox_item">
+                                            <button type="button" class="btn btn-danger waves-effect waves-float waves-light" style="float:right;" data-repeater-delete>Xóa</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
 
                 </div>
                 <!-- END:: Main content -->
@@ -224,16 +287,15 @@
                     <div class="customScrollBar-y">
                         <!-- Form Upload -->
                         <div class="pageAdminWithRightSidebar_main_rightSidebar_item">
-                            @include('admin.form.formImage')
+                            @include('admin.form.formAvatarTrainer')
                         </div>
-                        {{-- <!-- Form Slider -->
+                        <!-- thêm kinh nghiệm -->
                         <div class="pageAdminWithRightSidebar_main_rightSidebar_item">
-                            @include('admin.form.formSlider')
-                        </div> --}}
-                        {{-- <!-- Form Gallery -->
-                        <div class="pageAdminWithRightSidebar_main_rightSidebar_item">
-                            @include('admin.category.formGallery')
-                        </div> --}}
+                            <button class="btn btn-icon btn-primary waves-effect waves-float waves-light" type="button" aria-label="Thêm" style="width:100%;" data-repeater-create data-target-repeater="repeater-sp-version">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus me-25"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                <span>Thêm phiên bản SP</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <!-- END:: Sidebar content -->
@@ -249,9 +311,9 @@
                 $(this).slideDown(); // Hiệu ứng khi thêm mới
             },
             hide: function (deleteElement) {
-                if (confirm('Bạn có chắc chắn muốn xóa?')) {
+                // if (confirm('Bạn có chắc chắn muốn xóa?')) {
                     $(this).slideUp(deleteElement); // Hiệu ứng khi xóa
-                }
+                // }
             }
         });
     </script>

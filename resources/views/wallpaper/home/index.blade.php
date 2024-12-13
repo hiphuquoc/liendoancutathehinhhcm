@@ -50,7 +50,9 @@
     @include('wallpaper.home.aboutus')
     @include('wallpaper.home.benefit')
     @include('wallpaper.home.course')
-    @include('wallpaper.home.teacher')
+    @if(!empty($trainers)&&$trainers->isNotEmpty())
+        @include('wallpaper.home.teacher')
+    @endif
     @include('wallpaper.home.timetable')
     @include('wallpaper.aboutus.whychooseus')
     @include('wallpaper.aboutus.peopletellus')

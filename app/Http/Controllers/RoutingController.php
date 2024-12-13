@@ -6,20 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cookie;
-// use Illuminate\Support\Facades\Blade;
 use App\Helpers\Url;
 use App\Http\Controllers\CategoryMoneyController;
 use App\Models\Blog;
-use App\Models\Category;
-// use App\Models\Tag;
-// use App\Models\Style;
 use App\Models\Customer;
 use App\Models\Page;
 use App\Models\CategoryBlog;
-use App\Models\FreeWallpaper;
-// use App\Models\Seo;
-use App\Helpers\GeoIP;
-use App\Models\ISO3166;
+use App\Models\Trainer;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -148,6 +141,18 @@ class RoutingController extends Controller{
                     $dataContent        = CategoryMoneyController::buildTocContentMain($htmlContent, $language);
                     $htmlContent        = str_replace('<div id="tocContentMain"></div>', '<div id="tocContentMain">'.$dataContent['toc_content'].'</div>', $dataContent['content']);
                     $xhtml              = view('wallpaper.blog.index', compact('item', 'itemSeo', 'blogFeatured', 'language', 'breadcrumb', 'htmlContent'))->render();
+                }
+                /* ===== Trainer ==== */
+                if($itemSeo->type=='trainer_info'){
+                    $flagMatch          = true;
+                    /* thông tin trang */
+                    $item               = Trainer::select('*')
+                                            ->whereHas('seos.infoSeo', function($query) use($idSeo){
+                                                $query->where('id', $idSeo);
+                                            })
+                                            ->with('seo', 'seos.infoSeo.contents')
+                                            ->first();
+                    $xhtml              = view('wallpaper.teacherDetail.index', compact('item', 'itemSeo', 'language', 'breadcrumb'))->render();
                 }
                 /* Ghi dữ liệu - Xuất kết quả */
                 if($flagMatch==true){

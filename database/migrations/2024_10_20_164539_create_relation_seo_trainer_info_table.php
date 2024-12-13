@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('trainer_degree_content', function (Blueprint $table) {
+        Schema::create('relation_seo_trainer_info', function (Blueprint $table) {
             $table->id();
-            $table->integer('trainer_degree_id');
-            $table->text('content');
+            $table->integer('seo_id');
+            $table->integer('trainer_info_id');
         });
     }
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        // Schema::dropIfExists('trainer_degree_content');
+        // Schema::dropIfExists('relation_seo_blog_info');
     }
 };

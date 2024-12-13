@@ -75,22 +75,6 @@
             <textarea class="form-control {{ !empty($flagCopySource)&&$flagCopySource==true ? 'inputSuccess' : '' }}" id="seo_description"  name="seo_description" rows="5" {{ $chatgptDataAndEvent['dataChatgpt'] ?? null }} required>{{ old('seo_description') ?? $itemSeo['seo_description'] ?? '' }}</textarea>
             <div class="invalid-feedback">{{ config('message.admin.validate.not_empty') }}</div>
         </div>
-        {{-- <!-- One Row -->
-        <div class="formBox_full_item">
-            <div class="inputWithNumberChacractor">
-                <span class="inputWithNumberChacractor_label" data-toggle="tooltip" data-placement="top" title="
-                    Đây là Mô tả được hiển thị ngoài Google (bản tiếng anh)... Tốt nhất nên từ 140 - 160 ký tự, có chứa từ khóa chính tranh top và mô tả được cái người dùng đang cần
-                ">
-                    <i class="explainInput" data-feather='alert-circle'></i>
-                    <label class="form-label inputRequired" for="seo_description">SEO Description (En)</label>
-                </span>
-                <div class="inputWithNumberChacractor_count" data-charactor="en_seo_description">
-                    {{ !empty($itemSeo->seo_description) ? mb_strlen($itemSeo->seo_description) : 0 }}
-                </div>
-            </div>
-            <textarea class="form-control" id="en_seo_description"  name="en_seo_description" rows="5" required>{{ old('en_seo_description') ?? $item->en_seo['seo_description'] ?? '' }}</textarea>
-            <div class="invalid-feedback">{{ config('message.admin.validate.not_empty') }}</div>
-        </div> --}}
         <!-- One Row -->
         @php
             $chatgptDataAndEvent = [];
@@ -131,98 +115,42 @@
             <input type="text" id="slug" class="form-control" name="slug" value="{{ $slug }}" {{ $chatgptDataAndEvent['dataChatgpt'] ?? null }} required>
             <div class="invalid-feedback">{{ config('message.admin.validate.not_empty') }}</div>
         </div>
-        {{-- <!-- One Row -->
-        <div class="formBox_full_item">
-            <span data-toggle="tooltip" data-placement="top" title="
-                Đây là URL để người dùng truy cập (bản tiếng anh)... viết liền không dấu và ngăn cách nhau bởi dấu gạch (-)... nên chứa từ khóa SEO chính và ngắn gọn
-            ">
-                <i class="explainInput" data-feather='alert-circle'></i>
-                <label class="form-label inputRequired" for="en_slug">Slug (En)</label>
-            </span>
-            <input type="text" id="en_slug" class="form-control" name="en_slug" value="{{ old('en_slug') ?? $item->en_seo['slug'] ?? '' }}" required>
-            <div class="invalid-feedback">{{ config('message.admin.validate.not_empty') }}</div>
-        </div> --}}
         <!-- One Row -->
-        {{-- <div class="formBox_full_item">
-            <span data-toggle="tooltip" data-placement="top" title="
-                Đây là đánh dấu trang gốc của trang này, thẻ link canonical của trang này sẽ được khai báo là đường dẫn của trang gốc để Google biết đây là trang copy của trang gốc
-            ">
-                <i class="explainInput" data-feather='alert-circle'></i>
-                <label class="form-label" for="link_canonical">Trang gốc</label>
-            </span>
-            <select class="select2 form-select select2-hidden-accessible" id="link_canonical" name="link_canonical">
-                <option value="">- Lựa chọn -</option>
-                @foreach($sources as $source)
-                    @php
-                        $selected   = null;
-                        $seoChoose  = [];
-                        foreach($source->seos as $seo){
-                            if(!empty($seo->infoSeo->language)){
-                                if($language==$seo->infoSeo->language){
-                                    $seoChoose = $seo->infoSeo;
-                                    if(!empty($idSeoSource)&&$idSeoSource==$seoChoose->id){
-                                        $selected = 'selected';
-                                    }else if(!empty($itemSeo->link_canonical)&&$itemSeo->link_canonical==$seoChoose->id){
-                                        $selected = 'selected';
-                                    } 
-                                    break;
-                                }
-                            }
-                        }
-                    @endphp
-                    @if(!empty($seoChoose))
-                        <option value="{{ $seoChoose->id }}" {{ $selected }}>{{ $source->seo->slug_full }}</option>
-                    @endif
-                @endforeach
-            </select>
-        </div> --}}
-        <div class="formBox_full_item">
-            <span data-toggle="tooltip" data-placement="top" title="
-                Đây là đánh dấu trang gốc của trang này, thẻ link canonical của trang này sẽ được khai báo là đường dẫn của trang gốc để Google biết đây là trang copy của trang gốc
-            ">
-                <i class="explainInput" data-feather='alert-circle'></i>
-                <label class="form-label" for="link_canonical">Trang gốc</label>
-            </span>
-            <select class="select2 form-select select2-hidden-accessible" id="link_canonical" name="link_canonical">
-                <option value="">- Lựa chọn -</option>
-                @foreach($sources as $source)
-                    @php
-                        $selected   = null;
-                        $seoChoose  = [];
-                        foreach($source->seos as $seo){
-                            if(!empty($seo->infoSeo->language)){
-                                if($language==$seo->infoSeo->language){
-                                    $seoChoose = $seo->infoSeo;
-                                    if(old('link_canonical') == $seoChoose->id || (!empty($idSeoSource) && $idSeoSource == $seoChoose->id) || (!empty($itemSeo->link_canonical) && $itemSeo->link_canonical == $seoChoose->id)){
-                                        $selected = 'selected';
+        @if(!empty($sources))
+            <div class="formBox_full_item">
+                <span data-toggle="tooltip" data-placement="top" title="
+                    Đây là đánh dấu trang gốc của trang này, thẻ link canonical của trang này sẽ được khai báo là đường dẫn của trang gốc để Google biết đây là trang copy của trang gốc
+                ">
+                    <i class="explainInput" data-feather='alert-circle'></i>
+                    <label class="form-label" for="link_canonical">Trang gốc</label>
+                </span>
+                <select class="select2 form-select select2-hidden-accessible" id="link_canonical" name="link_canonical">
+                    <option value="">- Lựa chọn -</option>
+                    @foreach($sources as $source)
+                        @php
+                            $selected   = null;
+                            $seoChoose  = [];
+                            foreach($source->seos as $seo){
+                                if(!empty($seo->infoSeo->language)){
+                                    if($language==$seo->infoSeo->language){
+                                        $seoChoose      = $seo->infoSeo;
+                                        if(old('link_canonical') == $seoChoose->id || (!empty($idSeoSource) && $idSeoSource == $seoChoose->id) || (!empty($itemSeo->link_canonical) && $itemSeo->link_canonical == $seoChoose->id)){
+                                            $selected   = 'selected';
+                                        }
+                                        break;
                                     }
-                                    break;
                                 }
                             }
-                        }
-                    @endphp
-                    @if(!empty($seoChoose))
-                        <option value="{{ $seoChoose->id }}" {{ $selected }}>{{ $source->seo->slug_full }}</option>
-                    @endif
-                @endforeach
-            </select>
-        </div>
-        
-        {{-- <!-- One Row -->
-        <div class="formBox_full_item">
-            <span data-toggle="tooltip" data-placement="top" title="
-                Đây là thẻ khai báo Link Canonical để chuyển giá trị trang trùng lặp nội dung về trang chính (bản tiếng anh). Bỏ trống tức trang chính là trang này
-            ">
-                <i class="explainInput" data-feather='alert-circle'></i>
-                <label class="form-label" for="en_link_canonical">Link Canonical</label>
-            </span>
-            <div class="input-group input-group-merge">
-                <span class="input-group-text" style="background:#efefef;">{{ env('APP_URL') }}/</span>
-                <input type="text" name="en_link_canonical" class="form-control" value="{{ old('en_link_canonical') ?? $item->en_seo->link_canonical ?? null }}" style="padding-left:1rem;" />
+                        @endphp
+                        @if(!empty($seoChoose))
+                            <option value="{{ $seoChoose->id }}" {{ $selected }}>{{ $source->seo->slug_full }}</option>
+                        @endif
+                    @endforeach
+                </select>
             </div>
-        </div> --}}
+        @endif
         <!-- One Row -->
-        @if(!empty($parents))
+        @if(!empty($parents)&&$parents->isNotEmpty())
             <div class="formBox_full_item">
                 <span data-toggle="tooltip" data-placement="top" title="
                     Là trang cha chứa trang hiện tại... URL cũng sẽ được hiển thị theo cấp cha - con
@@ -257,17 +185,6 @@
                 </div>
             </div>
         @endif
-
-        {{-- <!-- One Row -->
-        <div class="formBox_full_item">
-            <span data-toggle="tooltip" data-placement="top" title="
-                Nhập vào một số để thể hiện độ ưu tiên khi hiển thị cùng các Category khác (Số càng nhỏ càng ưu tiên cao - Để trống tức là không ưu tiên)
-            ">
-                <i class="explainInput" data-feather='alert-circle'></i>
-                <label class="form-label" for="ordering">Thứ tự</label>
-            </span>
-            <input type="number" min="0" id="ordering" class="form-control" name="ordering" value="{{ old('ordering') ?? $itemSeo['ordering'] ?? '' }}">
-        </div> --}}
         <!-- One Row -->
         <div class="formBox_full_item">
             <div class="flexBox">

@@ -15,14 +15,14 @@
               <div class="item">
                  <div class="testimonials-box">
                     <div class="testimonials-img">
-                       <img src="https://netizensstore.com/gymfit_theme/html/multipage_6/assets/img/inner-page/testimonials-img-1.webp" alt="">
+                       <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-empty-avatar.webp" alt="">
                        <div class="img-back"></div>
                     </div>
                     <div class="testimonials-content">
                        <h2>Nguyễn Văn Hưng <span>/ Khóa Huấn luyện viên Cử tạ chuyên nghiệp</span></h2>
                        <p>Khóa học giúp tôi nắm vững kiến thức chuyên môn và tự tin hơn trong vai trò huấn luyện viên. Sự hướng dẫn tận tình từ các giảng viên là điều tôi ấn tượng nhất.</p>
                     </div>
-                    <div class="quote"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/two-quotes.webp" alt="Gymfit" class="img-fluid">
+                    <div class="quote"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-quote.webp" alt="Gymfit" class="img-fluid">
                     </div>
                  </div>
               </div>
@@ -31,14 +31,14 @@
               <div class="item">
                  <div class="testimonials-box">
                     <div class="testimonials-img">
-                       <img src="https://netizensstore.com/gymfit_theme/html/multipage_6/assets/img/inner-page/testimonials-img-3.webp" alt="">
+                       <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-empty-avatar.webp" alt="">
                        <div class="img-back"></div>
                     </div>
                     <div class="testimonials-content">
                        <h2>Trần Thu Trang <span>/ Khóa Đào tạo Fitness nâng cao</span></h2>
                        <p>Tôi đã cải thiện kỹ thuật tập luyện và học được cách xây dựng chế độ dinh dưỡng phù hợp. Môi trường học tập chuyên nghiệp và thân thiện khiến tôi muốn quay lại nhiều lần.</p>
                     </div>
-                    <div class="quote"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/two-quotes.webp" alt="Gymfit" class="img-fluid">
+                    <div class="quote"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-quote.webp" alt="Gymfit" class="img-fluid">
                     </div>
                  </div>
               </div>
@@ -47,14 +47,14 @@
               <div class="item">
                  <div class="testimonials-box">
                     <div class="testimonials-img">
-                       <img src="https://netizensstore.com/gymfit_theme/html/multipage_6/assets/img/inner-page/testimonials-img-2.webp" alt="">
+                       <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-empty-avatar.webp" alt="">
                        <div class="img-back"></div>
                     </div>
                     <div class="testimonials-content">
                        <h2>Lê Minh Hoàng <span>/ Khóa Powerlifting căn bản</span></h2>
                        <p>Khóa học không chỉ dạy kỹ thuật mà còn truyền cảm hứng mạnh mẽ. Đây là nơi tôi bắt đầu hành trình vượt qua giới hạn bản thân trong từng bài tập.</p>
                     </div>
-                    <div class="quote"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/two-quotes.webp" alt="Gymfit" class="img-fluid">
+                    <div class="quote"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-quote.webp" alt="Gymfit" class="img-fluid">
                     </div>
                  </div>
               </div>

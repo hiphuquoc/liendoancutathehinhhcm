@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Route;
 use App\Models\Page;
-use App\Models\Category;
+use App\Models\Trainer;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\Admin\HelperController;
 use App\Models\ISO3166;
@@ -46,12 +46,17 @@ class HomeController extends Controller {
                     }
                 }
             }
-            /* lấy 3 blog hiển thị tạm */
+            /* lấy 10 blog hiển thị tạm */
             $params                 = [];
             $params['request_load'] = 10;
             $blogs                  = \App\Http\Controllers\CategoryBlogController::getBlogs($params, $language);
-            $xhtml                  = view('wallpaper.home.index', compact('item', 'itemSeo', 'language', 'blogs'))->render();
+            /* lấy 10 trainer hiển thị tạm */
+            $trainers               = Trainer::select('*')
+                                        ->skip(0)
+                                        ->take(10)
+                                        ->get();
             /* Ghi dữ liệu - Xuất kết quả */
+            $xhtml                  = view('wallpaper.home.index', compact('item', 'itemSeo', 'trainers', 'blogs', 'language'))->render();
             if(env('APP_CACHE_HTML')==true) Storage::put(config('main_'.env('APP_NAME').'.cache.folderSave').$nameCache, $xhtml);
         }
         echo $xhtml;
@@ -228,9 +233,10 @@ class HomeController extends Controller {
                     }
                 }
             }
+            $trainers   = Trainer::all();
             /* breadcrumb */
             $breadcrumb = Url::buildBreadcrumb($itemSeo->slug_full);
-            $xhtml      = view('wallpaper.teacher.index', compact('item', 'itemSeo', 'language', 'breadcrumb'))->render();
+            $xhtml      = view('wallpaper.teacher.index', compact('item', 'itemSeo', 'trainers', 'language', 'breadcrumb'))->render();
         //     /* Ghi dữ liệu - Xuất kết quả */
         //     if(env('APP_CACHE_HTML')==true) Storage::put(config('main_'.env('APP_NAME').'.cache.folderSave').$nameCache, $xhtml);
         // }

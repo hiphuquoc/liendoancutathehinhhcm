@@ -36,7 +36,7 @@
     </div> 
     <!-- kêu gọi -->
     <div class="bottom-box"> <span class="pull-left">
-        Cảm ơn bạn đã xem bài viết, để ủng hộ chúng tôi hãy chia sẻ nó tới bạn bè của bạn!
+        Cảm ơn bạn đã xem bài viết, để ủng hộ chúng tôi hãy chia sẻ bài viết này tới bạn bè của bạn nhé!
       </span>
       <ul class="pull-right share">
         <li><a href="https://www.facebook.com/sharer/sharer.php?u={{ $itemSeo->slug_full ?? '' }}"><i class="fa-brands fa-facebook-f"></i></a></li>

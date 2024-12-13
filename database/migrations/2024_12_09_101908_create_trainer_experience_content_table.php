@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('trainer_experience_content', function (Blueprint $table) {
             $table->id();
             $table->integer('trainer_experience_id');
-            $table->integer('content');
+            $table->text('content');
         });
     }
 

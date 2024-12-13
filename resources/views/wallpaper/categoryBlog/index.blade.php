@@ -61,26 +61,7 @@
                     <!-- blog news -->
                     @include('wallpaper.categoryBlog.blogFeatured')
                     <!-- categories -->
-                    @include('wallpaper.categoryBlog.categoryList')
-            
-                    {{-- <div class="tags_box">
-                        <div class="blog_title">
-                        <h3>Tags</h3>
-                        <img class="img-fluid" src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/about-header-line.webp">
-                        </div>
-                        <div class="tags">
-                        <ul>
-                            <li><a href="#">Yoga Center</a></li>
-                            <li><a href="#">Trainers</a></li>
-                            <li><a href="#">Kundalini Yoga</a></li>
-                            <li><a href="#">Health Care</a></li>
-                            <li><a href="#">Flow</a></li>
-                            <li><a href="#">Tips</a></li>
-                            <li><a href="#">Equipment</a></li>
-                        </ul>
-                        </div>
-                    </div> --}}
-                    
+                    @include('wallpaper.categoryBlog.categoryList')                    
                     <!-- fanpage facebook -->
                     @include('wallpaper.categoryBlog.fanpageFacebook')
                 </div>

@@ -28,4 +28,7 @@ return [
     'blog_info'        => [
         'model_name'    => 'Blog',
     ],
+    'trainer_info'        => [
+        'model_name'    => 'Trainer',
+    ],
 ];

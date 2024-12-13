@@ -48,68 +48,7 @@
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('css/main/trainer.css') }}?{{ time() }}">
 
 <link rel="stylesheet" type="text/css" media="screen" href="https://netizensstore.com/gymfit_theme/html/multipage_8/assets/fonts/flaticon.css">
-{{-- <link rel="stylesheet" type="text/css" media="screen" href="https://netizensstore.com/gymfit_theme/html/multipage_8/assets/css/style.css"> --}}
 <!-- CSS Khung nhìn đầu tiên - Inline Css -->
 @stack('cssFirstView')
 <!-- Css tải sau -->
 @stack('headCustom')
-{{-- @if(env('APP_ENV')=='local')
-    <!-- tải font nếu dev -->
-    <style type="text/css">
-        @font-face {
-            font-family: 'Segoe-UI';
-            font-style: normal;
-            font-weight: 500;
-            src: url('/css/font/SegoeUI.ttf');
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: 'Segoe-UI Semi';
-            font-style: normal;
-            font-weight: 700;
-            font-display: swap;
-            src: url('/css/font/SegoeUI-SemiBold.ttf');
-        }
-
-        @font-face {
-            font-family: 'Segoe-UI Bold';
-            font-style: normal;
-            font-weight: 700;
-            font-display: swap;
-            src: url('/css/font/SegoeUI-Bold.ttf');
-        } */
-
-        @font-face {
-            font-family: 'SVN-Gilroy';
-            font-style: normal;
-            font-display: swap;
-            font-weight: 500;
-            src: url('/css/font/svn-gilroy_medium.ttf');
-        }
-
-        @font-face {
-            font-family: 'SVN-Gilroy Med';
-            font-style: normal;
-            font-display: swap;
-            font-weight: 700;
-            src: url('/css/font/svn-gilroy_med.ttf');
-        }
-
-        @font-face {
-            font-family: 'SVN-Gilroy Semi';
-            font-style: normal;
-            font-weight: 700;
-            font-display: swap;
-            src: url('/css/font/svn-gilroy_semibold.ttf');
-        }
-
-        @font-face {
-            font-family: 'SVN-Gilroy Bold';
-            font-style: normal;
-            font-weight: 700;
-            font-display: swap;
-            src: url('/css/font/svn-gilroy_semibold.ttf');
-        }
-    </style>
-@endif --}}

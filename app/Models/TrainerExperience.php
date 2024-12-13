@@ -12,7 +12,7 @@ class TrainerExperience extends Model {
         'title',
         'company',
     ];
-    public $timestamps = true;
+    public $timestamps = false;
 
     public static function insertItem($params){
         $id             = 0;
@@ -33,5 +33,9 @@ class TrainerExperience extends Model {
             $flag       = $model->update();
         }
         return $flag;
+    }
+
+    public function contents() {
+        return $this->hasMany(\App\Models\TrainerExperienceContent::class, 'trainer_experience_id', 'id');
     }
 }

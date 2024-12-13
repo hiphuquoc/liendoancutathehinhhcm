@@ -11,7 +11,7 @@ class TrainerAchievement extends Model {
     protected $fillable     = [
         'content',
     ];
-    public $timestamps = true;
+    public $timestamps = false;
 
     public static function insertItem($params){
         $id             = 0;

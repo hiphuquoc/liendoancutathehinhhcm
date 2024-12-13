@@ -1,5 +1,5 @@
 <!-- start our courses -->
-<section class="hero-courses section">
+<section class="hero-courses section" style="background:#fff;">
     <div class="container">
       <div class="row">
         <div class="col-lg-12 col-sm-12 col-xs-12">
@@ -20,7 +20,7 @@
             </div>
           </div>
         </div>
-        @for($i=2;$i<16;++$i)
+        @for($i=2;$i<13;++$i)
           <div class="col-lg-4 col-sm-6 col-xs-12">
             <div class="our-courses-box effectFadeIn">
               <div class="course-img"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-{{ $i }}-small.webp" alt="Gymfit" class="img-fluid">

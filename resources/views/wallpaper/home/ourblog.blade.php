@@ -11,38 +11,30 @@
         <div class="col-lg-12 col-sm-12 col-xs-12">
           <div class="owl-carousel owl-theme ss_carousel" id="slider2">
             @foreach($blogs as $blog)
-              @php
-                  $titleBlog      = '';
-                  $slugBlog       = '';
-                  foreach($blog->seos as $seo){
-                    if(!empty($seo->infoSeo->language)&&$seo->infoSeo->language==$language){
-                      $titleBlog  = $seo->infoSeo->title;
-                      $slugBlog   = $seo->infoSeo->slug_full;
-
-                      break;
-                    }
-                  }
-              @endphp
-              
-              <div class="item effectFadeIn">
-                <div class="blog-box">
-                  <div class="blog-img"> <a href="/{{ $slugBlog }}"> 
-                      @if(!empty($blog->seo->image))
-                        <img src="{{ \App\Helpers\Image::getUrlImageSmallByUrlImage($blog->seo->image) }}" alt="{{ $titleBlog }}" title="{{ $titleBlog }}" />
-                      @endif
-                      {{-- <img src="https://netizensstore.com/gymfit_theme/html/multipage_6/assets/img/main-page/blog-img-1.webp" alt="Gymfit" class="img-fluid"> --}}
-                      <div class="img-overlay"></div>
-                    </a> </div>
-                  <div class="blog-content">
-                    <p>{{ date('d/m/Y', strtotime($blog->seo->created_at)) }} Đăng bởi Admin</p>
-                    <h2><a href="/{{ $slugBlog }}" class="maxLine_3">{{ $titleBlog }}</a></h2>
-                    <p>Curabitur sit amet enim sagittis, blandit dolor quis, efficitur est. Morbi vitae quam ac erat
-                      tincidunt aliquet. Nullam posuere at massa id faucibus. </p>
-                    {{-- <div class="blog-link"> <a href="blog.html">Xem chi tiết <i class="fa fa-angle-right"
-                          aria-hidden="true"></i></a> </div> --}}
+              @foreach($blog->seos as $seo)
+                @if(!empty($seo->infoSeo->language)&&$seo->infoSeo->language==$language)
+                  @php
+                      $titleBlog    = $seo->infoSeo->title ?? '';
+                      $slugBlog     = $seo->infoSeo->slug_full ?? '';
+                  @endphp
+                  <div class="item effectFadeIn">
+                    <div class="blog-box">
+                      <div class="blog-img"> <a href="/{{ $slugBlog }}"> 
+                          @if(!empty($blog->seo->image))
+                            <img src="{{ \App\Helpers\Image::getUrlImageSmallByUrlImage($blog->seo->image) }}" alt="{{ $titleBlog }}" title="{{ $titleBlog }}" />
+                          @endif
+                          <div class="img-overlay"></div>
+                        </a> </div>
+                      <div class="blog-content">
+                        <p>{{ date('d/m/Y', strtotime($blog->seo->created_at)) }} Đăng bởi Admin</p>
+                        <h2><a href="/{{ $slugBlog }}" class="maxLine_3">{{ $titleBlog }}</a></h2>
+                        <p class="maxLine_5">{!! !empty($seo->infoSeo->contents[0]->content) ? strip_tags($seo->infoSeo->contents[0]->content) : '' !!}</p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+                  @break
+                @endif
+              @endforeach
             @endforeach
           </div>
         </div>

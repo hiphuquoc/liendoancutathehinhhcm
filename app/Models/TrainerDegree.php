@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class TrainerDegree extends Model {
     use HasFactory;
-    protected $table        = 'trainer_experience';
+    protected $table        = 'trainer_degree';
     protected $fillable     = [
         'title',
         'school',
     ];
-    public $timestamps = true;
+    public $timestamps = false;
 
     public static function insertItem($params){
         $id             = 0;
@@ -33,5 +33,9 @@ class TrainerDegree extends Model {
             $flag       = $model->update();
         }
         return $flag;
+    }
+
+    public function contents() {
+        return $this->hasMany(\App\Models\TrainerDegreeContent::class, 'trainer_degree_id', 'id');
     }
 }

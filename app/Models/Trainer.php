@@ -9,13 +9,25 @@ class Trainer extends Model {
     use HasFactory;
     protected $table        = 'trainer_info';
     protected $fillable     = [
-        'full_name', 
-        'job',
         'phone',
         'email',
-        'summary',
     ];
-    public $timestamps = true;
+    public $timestamps = false;
+
+    public static function getList($params = null){
+        $result     = self::select('*')
+                        /* tìm theo tên */
+                        ->when(!empty($params['search_name']), function($query) use($params){
+                            $searchName = $params['search_name'];
+                            $query->whereHas('seo', function($subQuery) use($searchName){
+                                $subQuery->where('title', 'like', '%'.$searchName.'%');
+                            });
+                        })
+                        ->with('seo')
+                        ->orderBy('id', 'DESC')
+                        ->paginate($params['paginate']);
+        return $result;
+    }
 
     public static function insertItem($params){
         $id             = 0;
@@ -36,6 +48,14 @@ class Trainer extends Model {
             $flag       = $model->update();
         }
         return $flag;
+    }
+
+    public function seo() {
+        return $this->hasOne(\App\Models\Seo::class, 'id', 'seo_id');
+    }
+
+    public function seos() {
+        return $this->hasMany(\App\Models\RelationSeoTrainerInfo::class, 'trainer_info_id', 'id');
     }
 
     public function achievements() {

@@ -5,7 +5,7 @@
     "src": "resources/sources/admin/style.scss"
   },
   "resources/sources/main/aboutus-first-view.scss": {
-    "file": "assets/home-first-view-1c301b38.css",
+    "file": "assets/home-first-view-cebb1efc.css",
     "isEntry": true,
     "src": "resources/sources/main/contact-first-view.scss"
   },
@@ -15,7 +15,7 @@
     "src": "resources/sources/main/category-blog-non-first-view.scss"
   },
   "resources/sources/main/category-blog-first-view.scss": {
-    "file": "assets/category-blog-first-view-091f5d16.css",
+    "file": "assets/category-blog-first-view-a14884ff.css",
     "isEntry": true,
     "src": "resources/sources/main/category-blog-first-view.scss"
   },
@@ -25,7 +25,7 @@
     "src": "resources/sources/main/category-blog-non-first-view.scss"
   },
   "resources/sources/main/contact-first-view.scss": {
-    "file": "assets/home-first-view-1c301b38.css",
+    "file": "assets/home-first-view-cebb1efc.css",
     "isEntry": true,
     "src": "resources/sources/main/contact-first-view.scss"
   },
@@ -35,7 +35,7 @@
     "src": "resources/sources/main/category-blog-non-first-view.scss"
   },
   "resources/sources/main/home-first-view.scss": {
-    "file": "assets/home-first-view-1c301b38.css",
+    "file": "assets/home-first-view-cebb1efc.css",
     "isEntry": true,
     "src": "resources/sources/main/contact-first-view.scss"
   },
@@ -45,7 +45,7 @@
     "src": "resources/sources/main/category-blog-non-first-view.scss"
   },
   "resources/sources/main/page-first-view.scss": {
-    "file": "assets/page-first-view-e4e0ff28.css",
+    "file": "assets/page-first-view-776aaa77.css",
     "isEntry": true,
     "src": "resources/sources/main/page-first-view.scss"
   },

@@ -3,24 +3,8 @@
   <!-- start footer section -->
   <footer>
     <div class="container">
-      <!-- start card section -->
-      <div class="row">
-        <div class="col-lg-12 col-sm-12 col-xs-12">
-          <div class="card-box effectDropdown">
-            <div class="card-box-title">
-              <h2>ĐĂNG KÝ <span>NHẬN BẢN TIN</span></h2>
-            </div>
-            <div class="card-box-input">
-              <input type="text" placeholder="Email của bạn...." class="card-input">
-              <div class="input-img"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/paper-plane.webp" alt="đăng ký nhận bạn tin" class="img-fluid">
-              </div>
-            </div>
-            <div class="card-box-content">
-              <p>Hãy tham gia để nhận được những thông tin mới nhất từ chúng tôi!</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- registry email -->
+      @include('wallpaper.snippets.registryEmail')
       <!-- end card section -->
       <div class="row">
         <div class="col-lg-12 col-sm-12 col-xs-12">

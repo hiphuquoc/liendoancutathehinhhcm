@@ -3,25 +3,26 @@
 return [
     'info'  => [
         'liendoan'  => [
-            'author_name'           => 'Name.com.vn',
-            'founder_name'          => 'Name.com.vn',
-            'founder_address'       => '55 Cô Giang, Rạch Giá',
+            'author_name'           => 'Liên đoàn Cử tạ - Thể hình TPHCM',
+            'founder_name'          => 'Liên đoàn Cử tạ - Thể hình TPHCM',
+            'founder_address'       => '219 Lý Thường Kiệt, Phường 15, Quận 11, Thành phố Hồ Chí Minh',
             'founding'              => '2023-03-30',
-            'company_name'          => 'Name.com.vn',
-            'email'                 => 'anhnendienthoai@gmail.com',
+            'company_name'          => 'Liên đoàn Cử tạ - Thể hình TPHCM',
+            'email'                 => 'info@liendoancutathehinhhcm.com.vn',
+            'hotline'               => '0903 789 820',
             'company_description'   => 'Giới thiệu dịch vụ',
             'contacts'          =>  [
                                         [
                                             'type'      => 'customer service',
-                                            'phone'     => '0968617168'
+                                            'phone'     => '0903789820'
                                         ],
                                         [
                                             'type'      => 'technical support',
-                                            'phone'     => '0968617168'
+                                            'phone'     => '0903789820'
                                         ],
                                         [
                                             'type'      => 'sales',
-                                            'phone'     => '0968617168'
+                                            'phone'     => '0903789820'
                                         ]
                                     ],
         ],
@@ -44,10 +45,10 @@ return [
         ]
     ],
     'socials'           => [
-        'https://facebook.com/name',
-        'https://twitter.com/name',
-        'https://pinterest.com/name',
-        'https://youtube.com/name'
+        'https://facebook.com/liendoancutathehinhtphcm',
+        'https://twitter.com/liendoancutathehinhtphcm',
+        'https://pinterest.com/liendoancutathehinhtphcm',
+        'https://youtube.com/liendoancutathehinhtphcm'
     ],
     'google_cloud_storage' => [
         'default_domain'    => 'https://'.env('GOOGLE_CLOUD_STORAGE_BUCKET').'.storage.googleapis.com/',

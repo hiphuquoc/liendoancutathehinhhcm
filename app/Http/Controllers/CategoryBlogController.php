@@ -59,11 +59,10 @@ class CategoryBlogController extends Controller {
     }
 
     public static function getBlogs($params, $language) {
-        $keySearch          = $params['search'] ?? null;
+        $keySearch          = $params['search_name'] ?? null;
         $sortBy             = $params['sort_by'] ?? null;
         $arrayIdCategory    = $params['array_category_blog_id'] ?? [];
         $perPage            = $params['request_load'] ?? 10; // Số bài viết mỗi trang
-    
         // Truy vấn chính
         $query = Blog::select('blog_info.*')
             ->join('seo', 'seo.id', '=', 'blog_info.seo_id')

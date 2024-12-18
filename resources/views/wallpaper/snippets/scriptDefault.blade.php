@@ -297,35 +297,35 @@
         });
     });
     
-    // /* hiện thông báo cho sản phẩm vào giỏ hàng thành công */
-    // function openCloseModal(idModal, action = null){
-    //     const elementModal  = $('#'+idModal);
-    //     const flag          = elementModal.css('display');
-    //     /* tooggle */
-    //     if(action==null){
-    //         if(flag=='none'){
-    //             elementModal.css('display', 'flex');
-    //             $('#js_openCloseModal_blur').addClass('blurBackground');
-    //             $('body').css('overflow', 'hidden');
-    //         }else {
-    //             elementModal.css('display', 'none');
-    //             $('#js_openCloseModal_blur').removeClass('blurBackground');
-    //             $('body').css('overflow', 'unset');
-    //         }
-    //     }
-    //     /* đóng */
-    //     if(action=='close'){
-    //         elementModal.css('display', 'none');
-    //         $('#js_openCloseModal_blur').removeClass('blurBackground');
-    //         $('body').css('overflow', 'unset');
-    //     }
-    //     /* mở */
-    //     if(action=='open'){
-    //         elementModal.css('display', 'flex');
-    //         $('#js_openCloseModal_blur').addClass('blurBackground');
-    //         $('body').css('overflow', 'hidden');
-    //     }
-    // }
+    /* hiện thông báo cho sản phẩm vào giỏ hàng thành công */
+    function openCloseModal(idModal, action = null){
+        const elementModal  = $('#'+idModal);
+        const flag          = elementModal.css('display');
+        /* tooggle */
+        if(action==null){
+            if(flag=='none'){
+                elementModal.css('display', 'flex');
+                $('#js_openCloseModal_blur').addClass('blurBackground');
+                $('body').css('overflow', 'hidden');
+            }else {
+                elementModal.css('display', 'none');
+                $('#js_openCloseModal_blur').removeClass('blurBackground');
+                $('body').css('overflow', 'unset');
+            }
+        }
+        /* đóng */
+        if(action=='close'){
+            elementModal.css('display', 'none');
+            $('#js_openCloseModal_blur').removeClass('blurBackground');
+            $('body').css('overflow', 'unset');
+        }
+        /* mở */
+        if(action=='open'){
+            elementModal.css('display', 'flex');
+            $('#js_openCloseModal_blur').addClass('blurBackground');
+            $('body').css('overflow', 'hidden');
+        }
+    }
     
     // /* add loading icon */
     // function loadLoading(action = 'show') {
@@ -370,82 +370,110 @@
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     }
+    /* set content messgae Modal ajax */
+    function setMessageModal(title = null, content = null) {
+        const queryParams = new URLSearchParams({
+            title: title,
+            content: content
+        }).toString();
+
+        fetch("{{ route('ajax.setMessageModal') }}?" + queryParams, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .then(data => {
+            $('#messageModal .modalBox_box').html(data);
+            openCloseModal('messageModal');
+        })
+        .catch(error => {
+            console.error("Fetch request failed:", error);
+        });
+    }
     
-    // /* validate form khi nhập */
-    // function validateWhenType(elementInput, type = 'empty'){
-    //     const idElement         = $(elementInput).attr('id');
-    //     const parent            = $(document).find('[for*="'+idElement+'"]').parent();
-    //     /* validate empty */
-    //     if(type=='empty'){
-    //         const valueElement  = $.trim($(elementInput).val());
-    //         if(valueElement!=''&&valueElement!='0'){
-    //             parent.removeClass('validateErrorEmpty');
-    //             parent.addClass('validateSuccess');
-    //         }else {
-    //             parent.removeClass('validateSuccess');
-    //             parent.addClass('validateErrorEmpty');
-    //         }
-    //     }
-    //     /* validate phone */ 
-    //     if(type=='phone'){
-    //         const valueElement = $.trim($(elementInput).val());
-    //         if(valueElement.length>=10&&/^\d+$/.test(valueElement)){
-    //             parent.removeClass('validateErrorPhone');
-    //             parent.addClass('validateSuccess');
-    //         }else {
-    //             parent.removeClass('validateSuccess');
-    //             parent.addClass('validateErrorPhone');
-    //         }
-    //     }
-    //     /* validate email */ 
-    //     if(type=='email'){
-    //         const valueElement = $.trim($(elementInput).val());
-    //         /* check empty (nếu required) */
-    //         if($(elementInput).prop('required')){
-    //             if(valueElement==''){
-    //                 parent.removeClass('validateSuccess');
-    //                 parent.removeClass('validateErrorEmail');
-    //                 parent.addClass('validateErrorEmpty');
-    //                 return false;
-    //             }
-    //             /* check email hợp lệ */
-    //             if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valueElement)){
-    //                 parent.removeClass('validateErrorEmail');
-    //                 parent.removeClass('validateErrorEmpty');
-    //                 parent.addClass('validateSuccess');
-    //             }else {
-    //                 parent.removeClass('validateSuccess');
-    //                 parent.removeClass('validateErrorEmpty');
-    //                 parent.addClass('validateErrorEmail');
-    //             }
-    //         }else {
-    //             /* check email hợp lệ */
-    //             if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valueElement)){
-    //                 parent.removeClass('validateErrorEmail');
-    //                 parent.removeClass('validateErrorEmpty');
-    //                 parent.addClass('validateSuccess');
-    //             }
-    //         }
-    //     }
-    // }
+    /* validate form khi nhập */
+    function validateWhenType(elementInput, type = 'empty'){
+        const idElement         = $(elementInput).attr('id');
+        const parent            = $(document).find('[for*="'+idElement+'"]').parent();
+        /* validate empty */
+        if(type=='empty'){
+            const valueElement  = $.trim($(elementInput).val());
+            if(valueElement!=''&&valueElement!='0'){
+                parent.removeClass('validateErrorEmpty');
+                parent.addClass('validateSuccess');
+            }else {
+                parent.removeClass('validateSuccess');
+                parent.addClass('validateErrorEmpty');
+            }
+        }
+        /* validate phone */ 
+        if(type=='phone'){
+            const valueElement = $.trim($(elementInput).val());
+            if(valueElement.length>=10&&/^\d+$/.test(valueElement)){
+                parent.removeClass('validateErrorPhone');
+                parent.addClass('validateSuccess');
+            }else {
+                parent.removeClass('validateSuccess');
+                parent.addClass('validateErrorPhone');
+            }
+        }
+        /* validate email */ 
+        if(type=='email'){
+            const valueElement = $.trim($(elementInput).val());
+            /* check empty (nếu required) */
+            if($(elementInput).prop('required')){
+                if(valueElement==''){
+                    parent.removeClass('validateSuccess');
+                    parent.removeClass('validateErrorEmail');
+                    parent.addClass('validateErrorEmpty');
+                    return false;
+                }
+                /* check email hợp lệ */
+                if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valueElement)){
+                    parent.removeClass('validateErrorEmail');
+                    parent.removeClass('validateErrorEmpty');
+                    parent.addClass('validateSuccess');
+                }else {
+                    parent.removeClass('validateSuccess');
+                    parent.removeClass('validateErrorEmpty');
+                    parent.addClass('validateErrorEmail');
+                }
+            }else {
+                /* check email hợp lệ */
+                if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valueElement)){
+                    parent.removeClass('validateErrorEmail');
+                    parent.removeClass('validateErrorEmpty');
+                    parent.addClass('validateSuccess');
+                }
+            }
+        }
+    }
     
     
-    // /* validate form */
-    // function validateForm(idForm){
-    //     let error       = [];
-    //     /* input required không được bỏ trống */
-    //     $('#'+idForm).find('input[required]').each(function(){
-    //         /* đưa vào mảng */
-    //         if($(this).val()==''){
-    //             error.push($(this).attr('name'));
-    //         }
-    //     })
-    //     /* select */
-    //     $('#'+idForm).find('select[required]').each(function(){
-    //         if($(this).val()==0) error.push($(this).attr('name'));
-    //     })
-    //     return error;
-    // }
+    /* validate form */
+    function validateForm(idForm){
+        let error       = [];
+        /* input required không được bỏ trống */
+        $('#'+idForm).find('input[required]').each(function(){
+            /* đưa vào mảng */
+            if($(this).val()==''){
+                error.push($(this).attr('name'));
+            }
+        })
+        /* select */
+        $('#'+idForm).find('select[required]').each(function(){
+            if($(this).val()==0) error.push($(this).attr('name'));
+        })
+        return error;
+    }
     
     /* check đăng nhập */
     function checkLoginAndSetShow(){

@@ -106,6 +106,7 @@ class RoutingController extends Controller{
                                             ->first();
                     /* tạo mảng để lấy blogs */
                     $params             = [];
+                    if(!empty($request->get('search_name'))) $params['search_name'] = $request->get('search_name');
                     $params['request_load'] = 10;
                     $params['sort_by']  = Cookie::get('sort_by') ?? null;
                     $categoryTree       = CategoryBlog::getTreeCategoryByInfoCategory($item, []);

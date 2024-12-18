@@ -24,18 +24,57 @@ $colorButtonLv2 : #006d57;
 /* ===== */
 $colorTextLight : #ffd100;
 // $colorTitle     : #ffffffCC;
-$colorTitle     : #c6d8fd;
+$colorTitle     : #1f2d3d;
 /* ===== */
-$colorText      : #c0d0f1;
+$colorText      : #2c3e50;
 $colorIcon      : #5a7dc2;
 /* ===== */
 $colorLabel     : #ad8e70;
 /* ===== */
 $colorPrice     : #ffd100;
 $colorStar      : #ffd100;
-$colorSuccess   : #00bd7d;
+$colorSuccess   : #008ac0;
 $colorRed       : #FF6500;
 
-$colorBackgroundLv1: #1a202c;
-$colorBackgroundLv2: #2d3848;
-$colorBackgroundLv3: #3a4556;
+$colorBackgroundLv1: #f7fafc;
+$colorBackgroundLv2: #edf2f7;
+$colorBackgroundLv3: #e2e8f0;
+
+$fontTitle: "SVN-Gilroy Bold", sans-serif;
+$fontText: "SVN-Gilroy", sans-serif;
+
+@mixin iconCloseSquare {
+    position: absolute;
+    top: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1rem;
+    background: $colorBackgroundLv2;
+    color: $colorText;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1;
+    border-top-right-radius: inherit;
+    border-bottom-left-radius: inherit;
+    right: 0;
+    &:dir(rtl), [dir="rtl"] & {
+        right: unset;
+        left: 0;
+        border-top-right-radius: unset;
+        border-bottom-left-radius: unset;
+        border-top-left-radius: inherit;
+        border-bottom-right-radius: inherit;
+    }
+    i {
+        font-size: 1rem;
+        color: rgba($colorText, 0.5);
+    }
+    &:hover {
+        background: rgba(0,0,0,0.25);
+        i {
+            color: #fff !important;
+        }
+    }
+}

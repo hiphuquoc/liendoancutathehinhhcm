@@ -294,6 +294,7 @@ Route::get('/buildTocContentMain', [AjaxController::class, 'buildTocContentMain'
 Route::get('/loadLoading', [AjaxController::class, 'loadLoading'])->name('ajax.loadLoading');
 Route::get('/loadDistrictByIdProvince', [AjaxController::class, 'loadDistrictByIdProvince'])->name('ajax.loadDistrictByIdProvince');
 Route::get('/registryEmail', [AjaxController::class, 'registryEmail'])->name('ajax.registryEmail');
+Route::get('/requestContact', [AjaxController::class, 'requestContact'])->name('ajax.requestContact');
 // Route::get('/registrySeller', [AjaxController::class, 'registrySeller'])->name('ajax.registrySeller');
 Route::get('/setMessageModal', [AjaxController::class, 'setMessageModal'])->name('ajax.setMessageModal');
 Route::get('/checkLoginAndSetShow', [AjaxController::class, 'checkLoginAndSetShow'])->name('ajax.checkLoginAndSetShow');

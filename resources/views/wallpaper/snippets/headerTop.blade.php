@@ -57,7 +57,7 @@
                   @endif
                 </li>
               @endforeach
-              <li class="last_menu"><a href="#">Đăng ký ngay</a></li>
+              {{-- <li class="last_menu"><a href="#">Đăng ký ngay</a></li> --}}
             </ul>
           </nav>
         </div>

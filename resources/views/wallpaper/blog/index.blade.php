@@ -79,26 +79,11 @@
             </div>
         </div>
     </div>
-
-    {{-- @include('wallpaper.home.teacher')
-    @include('wallpaper.home.timetable')
-    @include('wallpaper.home.video')
-    @include('wallpaper.home.ourblog') --}}
-    {{-- @include('wallpaper.home.form') --}}
 @endsection
-@push('modal')
-    
-
-@endpush
-@push('bottom')
-    <!-- === START:: Zalo Ring === -->
-    {{-- @include('wallpaper.snippets.zaloRing') --}}
-    <!-- === END:: Zalo Ring === -->
-@endpush
-@push('scriptCustom')
+{{-- @push('scriptCustom')
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {
             
         });
     </script>
-@endpush
+@endpush --}}

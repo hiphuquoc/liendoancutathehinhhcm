@@ -1246,6 +1246,7 @@ footer span {
     text-align: center;
     color: #616783;
     margin: 0;
+	padding: 0 15px;
 }
 .card-box-input {
 	display: inline-block;
@@ -1272,6 +1273,7 @@ input.card-input {
 	right: 0;
 	border-radius: 50%;
 	padding: 11px;
+	cursor: pointer;
 }
 /* 
 ---------------------------------------------
@@ -2674,15 +2676,15 @@ input.contact-form-input {
 	font-size: 14px;
 	font-weight: 400;
 	color: #000;
-	border-radius: 25px;
+	border-radius: 12px;
 	border: 1px solid #cbcbcb;
 	transition: 0.5s all ease;
 }
-@media screen and (max-width:480px) {
+@media screen and (max-width: 767px) {
 	input.contact-form-input {
 		width: 100%;
 		margin: 0 auto;
-		margin-top: 25px;
+		margin-top: 20px;
 	}
 }
 .contact-form {
@@ -3037,11 +3039,11 @@ i.fa-clock {
 }
 
 
-@media screen and (max-width:480px) {
+@media screen and (max-width: 767px) {
 	textarea.contact-form-message{
 		width: 100%;
-		margin: 25px auto 0 auto;
-		margin-top: 25px;
+		margin: 20px auto 0 auto;
+		/* margin-top: 20px; */
 	}
 }
 

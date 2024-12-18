@@ -2,25 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Admin\HelperController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\File;
-use Intervention\Image\ImageManagerStatic;
-use App\Models\District;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Tag;
 use App\Models\Blog;
-use App\Models\FreeWallpaper;
-use App\Models\RegistryEmail;
-use App\Models\RelationFreeWallpaperUser;
-use App\Models\Page;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
-use App\Services\BuildInsertUpdateModel;
-// use SebastianBergmann\Type\FalseType;
 
 class SearchController extends Controller {
 

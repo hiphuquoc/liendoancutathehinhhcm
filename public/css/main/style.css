@@ -1224,6 +1224,7 @@ footer span {
     box-shadow: 0 0 20px #d9edfc;
     margin: 0 auto;
 	margin-bottom: -50px;
+	border-radius: 15px;
 }
 .card-box-title h2 {
 	font-size: 36px;

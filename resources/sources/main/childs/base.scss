@@ -122,3 +122,16 @@
       margin-bottom: calc(52.5px + 0.25rem);
   }
 }
+
+.show-991 {
+  display: none !important;
+  @media(max-width: 991px){
+    display: flex !important;
+  }
+}
+.hide-991 {
+  display: flex !important;
+  @media(max-width: 991px){
+    display: none !important;
+  }
+}

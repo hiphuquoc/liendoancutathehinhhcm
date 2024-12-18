@@ -81,7 +81,7 @@
             @endif
             <!-- thành tích (mobile) -->
             @if(!empty($item->achievements)&&$item->achievements->isNotEmpty())
-              <div class="teacherInfoBox hide-990">
+              <div class="teacherInfoBox show-991">
                 <h2>Thành tích</h2> 
                 <ul>
                   @foreach($item->achievements as $achievement)
@@ -92,7 +92,7 @@
             @endif
             <!-- kỹ năng (mobile) -->
             @if(!empty($item->skills)&&$item->skills->isNotEmpty())
-              <div class="teacherInfoBox hide-990">
+              <div class="teacherInfoBox show-991">
                   <h2>Kỹ năng</h2> 
                   <div class="container-skills">
                     

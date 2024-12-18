@@ -326,17 +326,6 @@
             $('body').css('overflow', 'hidden');
         }
     }
-    
-    // /* add loading icon */
-    // function loadLoading(action = 'show') {
-    //     if(action == 'show'){
-    //         $('.loadingBox').addClass('show');
-    //     }else if(action == 'hide'){
-    //         $('.loadingBox').removeClass('show');
-    //     }else {
-    //         $('.loadingBox').toggleClass('show');
-    //     }
-    // }
 
     /* tính năng registry email ở footer */
     function submitFormRegistryEmail(idForm) {

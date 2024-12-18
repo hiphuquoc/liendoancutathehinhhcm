@@ -43,13 +43,13 @@ class AjaxController extends Controller {
         if(!empty($infoEmail)){
             $result['type']     = 'success';
             $result['title']    = 'Đăng ký email thành công!';
-            $result['content']  = '<div>Cảm ơn bạn đã đăng ký nhận tin!</div>
-                                    <div>Trong thời gian tới nếu có bất kỳ chương trình khuyến mãi nào '.config('main_'.env('APP_NAME').'.info.'.env('APP_NAME').'.company_name').' sẽ gửi cho bạn đầu tiên.</div>'; 
+            $result['content']  = '<div>Bạn vừa đăng ký nhận bản tin thành công với email '.$email.'. Trong thời gian tới nếu có bất kỳ thông tin mới nào '.config('main_'.env('APP_NAME').'.info.'.env('APP_NAME').'.company_name').' sẽ gửi cho bạn đầu tiên qua địa chỉ email này.</div>
+                                    <div>Chúc bạn có một ngày tuyệt vời!</div>'; 
             return json_encode($result);
         }
         $result['type']     = 'error';
         $result['title']    = 'Đăng ký email thất bại!';
-        $result['content']  = '<div>Có lỗi xảy ra, vui lòng thử lại</div>'; 
+        $result['content']  = '<div>Đã có lỗi không mong muốn xảy ra trong quá trình gửi yêu cầu, vui lòng thử lại hoặc liên hệ quản trị viên của chúng tôi qua điện thoại '.config('main_'.env('APP_NAME').'.info.'.env('APP_NAME').'.hotline').'!</div>'; 
         return json_encode($result);
     }
 

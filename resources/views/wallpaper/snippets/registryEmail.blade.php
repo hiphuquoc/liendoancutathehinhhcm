@@ -5,7 +5,7 @@
                 <h2>ĐĂNG KÝ <span>NHẬN BẢN TIN</span></h2>
             </div>
             <div class="card-box-input">
-                <form id="registryEmail" method="GET">
+                <form id="registryEmail" method="GET" onsubmit="submitFormRegistryEmail('registryEmail'); return false;">
                     <input 
                         type="email" 
                         name="registry_email" 
@@ -14,10 +14,9 @@
                         oninput="validateWhenType(this, 'email');" 
                         required 
                     />
-                    <!-- Button ẩn để hỗ trợ Enter -->
                     <button type="submit" style="display: none;"></button>
                 </form>
-                <div class="input-img" id="submitRegistryEmail" style="cursor: pointer;">
+                <div class="input-img" id="submitRegistryEmail" onclick="submitFormRegistryEmail('registryEmail');" style="cursor: pointer;">
                     <img 
                         src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/paper-plane.webp" 
                         alt="đăng ký nhận bản tin" 
@@ -31,6 +30,7 @@
         </div>
     </div>
 </div>
+
 @push('modal')
     @include('wallpaper.modal.messageModal')
 @endpush

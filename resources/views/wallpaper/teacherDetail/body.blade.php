@@ -33,7 +33,7 @@
                 </ul>
               </div>
             @endif
-            <!-- thông tin -->
+            <!-- kỹ năng -->
             @if(!empty($item->skills)&&$item->skills->isNotEmpty())
               <div class="teacherInfoBox">
                   <h2>Kỹ năng</h2> 
@@ -53,7 +53,7 @@
             @endif
         </div>
         <div class="layoutTeacherDetail_detail">
-            <!-- thông tin -->
+            <!-- thông tin header -->
             <div class="teacherInfoBox2">
               <div class="teacherInfoBox2_image">
                 <img class="lazyload" src="{{ $imageMini }}" data-src="{{ $imageSmall }}" alt="ảnh huấn luyện viên {{ $fullName }}" title="ảnh huấn luyện viên {{ $fullName }}" loading="lazy" />
@@ -77,6 +77,35 @@
               <div class="teacherInfoBox">
                   <h2>Giới thiệu</h2> 
                   <p class="teacherInfoBox_content">{{ $summary }}</p>
+              </div>
+            @endif
+            <!-- thành tích (mobile) -->
+            @if(!empty($item->achievements)&&$item->achievements->isNotEmpty())
+              <div class="teacherInfoBox hide-990">
+                <h2>Thành tích</h2> 
+                <ul>
+                  @foreach($item->achievements as $achievement)
+                    <li>{{ $achievement->content }}</li>
+                  @endforeach
+                </ul>
+              </div>
+            @endif
+            <!-- kỹ năng (mobile) -->
+            @if(!empty($item->skills)&&$item->skills->isNotEmpty())
+              <div class="teacherInfoBox hide-990">
+                  <h2>Kỹ năng</h2> 
+                  <div class="container-skills">
+                    
+                      @foreach($item->skills as $skill)
+                        <div class="html">
+                          <p class="bar-title">{{ $skill->skill }} <span class="percent align-right">{{ $skill->percent }}%</span> </p>
+                          <div class="bar">
+                            <div class="bar-fill bar-fill-html start"></div>
+                          </div>
+                        </div>
+                      @endforeach
+
+                  </div>
               </div>
             @endif
             <!-- kinh nghiệm -->

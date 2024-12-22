@@ -221,7 +221,7 @@ class PageController extends Controller {
                 /* delete các trang seos ngôn ngữ */
                 foreach($info->seos as $s){
                     /* xóa ảnh đại diện trên google_clouds */ 
-                    if(!empty($info->seo->image)) Upload::deleteWallpaper($s->infoSeo->image);
+                    if(!empty($s->infoSeo->image)) Upload::deleteWallpaper($s->infoSeo->image);
                     if(!empty($s->infoSeo->contents)) foreach($s->infoSeo->contents as $c) $c->delete();
                     $s->infoSeo()->delete();
                     $s->delete();

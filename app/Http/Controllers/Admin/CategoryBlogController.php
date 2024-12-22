@@ -201,7 +201,7 @@ class CategoryBlogController extends Controller {
                                 ->with('seo', 'seos')
                                 ->first();
                 /* xóa ảnh đại diện trên google_clouds */ 
-                if(!empty($s->infoSeo->image)) Upload::deleteWallpaper($info->seo->image);
+                if(!empty($info->seo->image)) Upload::deleteWallpaper($info->seo->image);
                 /* delete relation */
                 $info->blogs()->delete();
                 $info->files()->delete();

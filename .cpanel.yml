@@ -1,7 +1,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/hitourvn/tickets.com.vn/
+    - export DEPLOYPATH=/home/hitourvn/liendoancutathehinhhcm.com.vn/
     - /bin/cp -R * $DEPLOYPATH
     # - rm $DEPLOYPATH/public/build/assets/style-main.css
     

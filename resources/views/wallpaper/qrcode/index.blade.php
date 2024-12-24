@@ -23,6 +23,10 @@
             justify-content: center;
             align-items: center;
         }
+        .qr-code img {
+            max-width: 100px;
+            max-height: 100px;
+        }
     </style>
 </head>
 <body>
@@ -39,18 +43,19 @@
             @foreach ($trainers as $trainer)
                 @if(!empty($trainer['name']))
                     <tr>
-                        <td>
-                            {{ $loop->index + 1 }}
-                        </td>
+                        <td>{{ $loop->index + 1 }}</td>
                         <td style="text-align: left;">
                             <div>Họ và tên: {{ $trainer['name'] }}</div>
                             <div>Ngày tháng năm sinh: {{ $trainer['birth_day'] }}</div>
                             <div>Số CCCD: {{ $trainer['cccd'] }}</div>
                             <div>Điện thoại: {{ $trainer['phone'] }}</div>
-                            <div>Địa chỉ: {{ $trainer['address'] }}</div> 
-                            <div>Đường dẫn: {{ $trainer['link'] }}</div>
+                            <div>Địa chỉ: {{ $trainer['address'] }}</div>
+                            <div>Đường dẫn: <a href="{{ $trainer['link'] }}" target="_blank">{{ $trainer['link'] }}</a></div>
                         </td>
-                        <td class="qr-code">{!! $trainer['qrCode'] !!}</td>
+                        <td class="qr-code">
+                            {{-- Mã hóa SVG thành Base64 và gắn vào URI --}}
+                            <img src="data:image/svg+xml;base64,{{ base64_encode($trainer['qrCode']) }}" alt="QR Code" style="min-width:300px;min-height:300px;" />
+                        </td>
                     </tr>
                 @endif
             @endforeach

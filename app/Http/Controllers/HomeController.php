@@ -312,9 +312,9 @@ class HomeController extends Controller {
 
             // Sử dụng UTF-8 để hỗ trợ ký tự tiếng Việt
             $trainer['qrCode'] = QrCode::encoding('UTF-8')
-                ->format('svg')          // Định dạng SVG
+                ->format('svg')          // Định dạng SVG 
                 ->size(300)              // Kích thước QR code
-                ->errorCorrection('H')   // Độ chính xác cao
+                ->errorCorrection('M')   // Độ chính xác cao
                 ->generate($qrData);     // Tạo QR code
         }
 

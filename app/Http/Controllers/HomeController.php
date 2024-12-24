@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Charactor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Route;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Page;
 use App\Models\Trainer;
 use App\Http\Controllers\SettingController;
@@ -279,20 +282,45 @@ class HomeController extends Controller {
         echo $xhtml;
     }
 
-    // public static function test(Request $request){
+    public static function qrcode(Request $request){
+        // Đường dẫn file trong thư mục storage
+        $filePath = Storage::path('public/danh-sach-hlv.xlsx'); // Thay "your-folder" bằng tên thư mục trong storage
 
-    //     $allTimezone = Timezone::all();
-    //     foreach($allTimezone as $timezone){
-    //         $timezoneLow    = strtolower($timezone->timezone);
-    //         Timezone::updateItem($timezone->id, [
-    //             'timezone_lower'    => $timezoneLow
-    //         ]);
-    //     }
+        // Đọc file Excel và chuyển thành mảng
+        $data = Excel::toArray([], $filePath);
 
+        // Giả sử dữ liệu nằm trong sheet đầu tiên
+        $sheet = $data[0];
 
-    //     dd(123);
-        
-    // }
+        // Bỏ qua dòng tiêu đề (nếu có) và chuyển thành mảng huấn luyện viên
+        $trainers = [];
+        foreach ($sheet as $index => $row) {
+            if ($index === 0) continue; // Bỏ qua tiêu đề
+            $slug       = Charactor::convertStrToUrl(strtolower($row[1]));
+            $trainers[] = [
+                'name' => $row[1] ?? '',
+                'birth_day' => $row[2] ?? '', 
+                'cccd' => $row[3] ?? '',   
+                'phone' => $row[4] ?? '',   
+                'address' => $row[5] ?? '', 
+                'link'      => 'https://liendoancutathehinhhcm.com.vn/huan-luyen-vien/'.$slug,
+            ];
+        }
+
+        foreach ($trainers as &$trainer) {
+            $qrData = "Name: {$trainer['name']}\nNgày tháng năm sinh: {$trainer['birth_day']}\nSố CCCD: {$trainer['cccd']}\nĐiện thoại: {$trainer['phone']}\nĐịa chỉ: {$trainer['address']}\nĐường dẫn: {$trainer['link']}";
+
+            // Sử dụng UTF-8 để hỗ trợ ký tự tiếng Việt
+            $trainer['qrCode'] = QrCode::encoding('UTF-8')
+                ->format('svg')          // Định dạng SVG
+                ->size(300)              // Kích thước QR code
+                ->errorCorrection('H')   // Độ chính xác cao
+                ->generate($qrData);     // Tạo QR code
+        }
+
+        // Trả dữ liệu ra view
+        return view('wallpaper.qrcode.index', compact('trainers'));
+    }
 
     private static function findUniqueElements($arr1, $arr2) {
         // Lọc các phần tử có trong arr1 nhưng không có trong arr2 và ngược lại
@@ -303,150 +331,4 @@ class HomeController extends Controller {
         return array_merge($uniqueInArr1, $uniqueInArr2);
     }
 
-    // public static function copyProductBySource($urlSource, $urlSearch){
-    //     $response  = [];
-    //     $productSource  = Product::select('*')
-    //         ->whereHas('seo', function ($query) use($urlSource){
-    //             $query->where('slug', $urlSource);
-    //         })
-    //         ->with('seo', 'seos.infoSeo.contents')
-    //         ->first();
-
-    //     $tmp            = Product::select('*')
-    //         ->whereHas('seo', function ($query) use($urlSearch){
-    //             $query->where('slug', 'LIKE', $urlSearch.'%');
-    //         })
-    //         ->where('id', '!=', $productSource->id)
-    //         ->with('seo', 'seos.infoSeo.contents')
-    //         ->get();
-    //     $k      = 1;
-    //     foreach ($tmp as $t) {
-    //         /* xóa relation seos -> infoSeo -> contents (nếu có) */
-    //         foreach ($t->seos as $seo) {
-    //             foreach ($seo->infoSeo->contents as $content) {
-    //                 SeoContent::select('*')
-    //                     ->where('id', $content->id)
-    //                     ->delete();
-    //             }
-    //             \App\Models\RelationSeoProductInfo::select('*')
-    //                 ->where('seo_id', $seo->seo_id)
-    //                 ->delete();
-    //             Seo::select('*')
-    //                 ->where('id', $seo->seo_id)
-    //                 ->delete();
-    //         }
-    //         /* tạo dữ liệu mới */
-    //         $i = 0;
-    //         foreach ($productSource->seos as $seoS) {
-    //             /* tạo seo */
-    //             $tmp2   = $seoS->infoSeo->toArray();
-    //             $insert = [];
-    //             foreach ($tmp2 as $key => $value) {
-    //                 if ($key != 'contents' && $key != 'id') $insert[$key] = $value;
-    //             }
-    //             $insert['link_canonical']   = $tmp2['id'];
-    //             $insert['slug']             = $tmp2['slug'] . '-' . $k;
-    //             $insert['slug_full']        = $tmp2['slug_full'] . '-' . $k;
-    //             $idSeo = Seo::insertItem($insert);
-    //             /* cập nhật lại seo_id của product */
-    //             if ($insert['language'] == 'vi') {
-    //                 Product::updateItem($t->id, [
-    //                     'seo_id' => $idSeo,
-    //                 ]);
-    //             }
-    //             $response[] = $idSeo;
-    //             /* tạo relation_seo_product_info */
-    //             RelationSeoProductInfo::insertItem([
-    //                 'seo_id'    => $idSeo,
-    //                 'product_info_id' => $t->id,
-    //             ]);
-    //             /* tạo content */
-    //             foreach ($seoS->infoSeo->contents as $content) {
-    //                 $contentInsert = $content->content;
-    //                 $contentInsert = str_replace($seoS->infoSeo->slug_full, $insert['slug_full'], $contentInsert);
-    //                 SeoContent::insertItem([
-    //                     'seo_id'    => $idSeo,
-    //                     'content'   => $contentInsert,
-    //                     'ordering'  => $content->ordering,
-    //                 ]);
-    //             }
-    //             ++$i;
-    //         }
-    //         /* copy relation product và category */
-    //         \App\Models\RelationCategoryProduct::select('*')
-    //             ->where('product_info_id', $t->id)
-    //             ->delete();
-    //         foreach($productSource->categories as $category){
-    //             \App\Models\RelationCategoryProduct::insertItem([
-    //                 'category_info_id'       => $category->category_info_id,
-    //                 'product_info_id'      => $t->id
-    //             ]);
-    //         }
-    //         /* copy relation product và tag */
-    //         \App\Models\RelationTagInfoOrther::select('*')
-    //             ->where('reference_type', 'product_info')
-    //             ->where('reference_id', $t->id)
-    //             ->delete();
-    //         foreach($productSource->tags as $tag){
-    //             \App\Models\RelationTagInfoOrther::insertItem([
-    //                 'tag_info_id'       => $tag->tag_info_id,
-    //                 'reference_type'    => 'product_info',
-    //                 'reference_id'      => $t->id
-    //             ]);
-    //         }
-    //         ++$k;
-    //     }
-    //     return $response;
-    // }
-
-    // public static function getCategories($params){
-    //     $language       = session()->get('language');
-    //     $sortBy         = $params['sort_by'] ?? null;
-    //     $loaded         = $params['loaded'] ?? 0;
-    //     $requestLoad    = $params['request_load'] ?? 10;
-    //     $type           = $params['type'] ?? 'category_info'; /* category_info, style_info, event_info */
-    //     $response       = [];
-    //     $items          = Category::select('*')
-    //                         ->whereHas('seo', function($query) use($type){
-    //                             $query->where('level', 2)
-    //                                 ->where('type', $type);
-    //                         })
-    //                         ->whereHas('seos.infoSeo', function($query) use($language){
-    //                             $query->where('language', $language);
-    //                         })
-    //                         ->where('flag_show', 1)
-    //                         ->when(empty($sortBy), function($query){
-    //                             $query->orderBy('id', 'ASC');
-    //                         })
-    //                         ->when($sortBy=='newest'||$sortBy=='propose', function($query){
-    //                             $query->orderBy('id', 'DESC');
-    //                         })
-    //                         ->when($sortBy=='favourite', function($query){
-    //                             $query->orderBy('heart', 'DESC')
-    //                                     ->orderBy('id', 'DESC');
-    //                         })
-    //                         ->when($sortBy=='oldest', function($query){
-    //                             $query->orderBy('id', 'ASC');
-    //                         })
-    //                         // ->with(['seo', 'seos.infoSeo' => function($query) use($language) {
-    //                         //     $query->where('language', $language);
-    //                         // }])
-    //                         ->skip($loaded)
-    //                         ->take($requestLoad)
-    //                         ->get();
-    //     $total          = Category::select('*')
-    //                         ->whereHas('seo', function($query) use($type){
-    //                             $query->where('level', 2)
-    //                                 ->where('type', $type);
-    //                         })
-    //                         ->whereHas('seos.infoSeo', function($query) use($language){
-    //                             $query->where('language', $language);
-    //                         })
-    //                         ->where('flag_show', 1)
-    //                         ->count();
-    //     $response['items']      = $items;
-    //     $response['total']      = $total;
-    //     $response['loaded']     = $loaded + $requestLoad;
-    //     return $response;
-    // }
 }

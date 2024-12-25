@@ -314,12 +314,35 @@ class HomeController extends Controller {
             $trainer['qrCode'] = QrCode::encoding('UTF-8')
                 ->format('svg')          // Định dạng SVG 
                 ->size(300)              // Kích thước QR code
-                ->errorCorrection('M')   // Độ chính xác cao
+                ->margin(1) // Viền xung quanh
+                // ->color(0, 138, 192) // Màu mã QR (R, G, B)
+                ->backgroundColor(255, 255, 255) // Màu nền
+                ->style('round') // Làm tròn các ô vuông
+                ->eye('circle') // Làm tròn phần mắt của mã QR
+                // ->errorCorrection('M')   // Độ chính xác cao
                 ->generate($qrData);     // Tạo QR code
         }
 
         // Trả dữ liệu ra view
         return view('wallpaper.qrcode.index', compact('trainers'));
+    }
+
+    public function test(){
+        $link = 'https://liendoancutathehinhhcm.com.vn';
+
+        // Tạo mã QR Code dạng SVG với tùy chỉnh
+        $qrCode = QrCode::format('svg') // Định dạng SVG
+            ->size(300) // Kích thước
+            ->margin(1) // Viền xung quanh
+            // ->color(0, 138, 192) // Màu mã QR (R, G, B)
+            ->backgroundColor(255, 255, 255) // Màu nền
+            ->style('round') // Làm tròn các ô vuông
+            ->eye('circle') // Làm tròn phần mắt của mã QR
+            ->merge('https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/logo-liendoancuta-1.webp', 0.3, true)
+            ->generate($link);
+
+        // Trả về mã QR Code SVG
+        return response($qrCode)->header('Content-Type', 'image/svg+xml');
     }
 
     private static function findUniqueElements($arr1, $arr2) {

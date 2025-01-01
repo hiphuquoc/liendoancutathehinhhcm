@@ -12,7 +12,7 @@
     <div id="js_openCloseModal_blur">
         <!-- LOADER START HERE -->
         <div class="page_loader">
-            <img loading='lazy' src="https://netizensstore.com/gymfit_theme/html/multipage_1/assets/images/loader.svg" alt="img" title="" style="width:70px" />
+            <img loading='lazy' src="{{ Storage::url('images/svg/loader.svg') }}" alt="loader" title="loader" style="width:70px" />
         </div>
 
         <!-- header Top -->

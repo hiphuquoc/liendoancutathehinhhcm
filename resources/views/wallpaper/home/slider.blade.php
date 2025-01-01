@@ -15,7 +15,9 @@
         </div>
       </div>
     </div> --}}
-    <div class="down-arrow"> <img src="https://netizensstore.com/gymfit_theme/html/multipage_6/assets/img/main-page/down-arrow.webp" alt="Gymfit" class="img-fluid"> </div>
+    <a href="#id-neo" id="id-neo" class="down-arrow">
+      <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/down-arrow.webp" alt="Gymfit" class="img-fluid"> 
+    </a>
   </div>
 </section>
 <!-- end header banner section -->

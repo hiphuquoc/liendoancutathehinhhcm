@@ -70,10 +70,10 @@
         
                     <!-- content blog -->
                     @include('wallpaper.blog.content')
-                    <!-- comment of gust -->
+                    {{-- <!-- comment of gust -->
                     @include('wallpaper.blog.comment')
                     <!-- comment form -->
-                    @include('wallpaper.blog.commentForm')
+                    @include('wallpaper.blog.commentForm') --}}
 
                 </div>
             </div>

@@ -51,7 +51,7 @@ body {
 	height: 100%;
 	line-height: 1.68;
 	box-sizing: border-box;
-	font-family: 'Open Sans', sans-serif;
+	font-family: "Open Sans", serif;
 }
 
 .page_loader{
@@ -428,14 +428,15 @@ ABOUT SECTION
 	text-decoration: none;
 }
 .about-header h2 {
-	font-size: 36px;
+	font-size: 32px;
+	font-family: "Encode Sans SC", serif;
 	font-weight: bold;
 	line-height: 1.45;
 	text-align: left;
 	color: #322b40;
 	background: url(https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/line-bottom-header.webp) left bottom no-repeat;
     background-size: 200px 5px;
-	padding-bottom: 10px;
+	padding-bottom: 15px;
 	margin-bottom: 0;
 }
 .about-header h2 span {
@@ -472,7 +473,8 @@ section.hero-course-banner-section {
 	padding: 150px 0;
 }
 .our-courses-header h2 {
-	font-size: 36px;
+	font-size: 32px;
+	font-family: "Encode Sans SC", serif;
 	font-weight: bold;
 	line-height: 1.45;
 	text-align: center;
@@ -480,7 +482,7 @@ section.hero-course-banner-section {
 	background: url(https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/line-bottom-header.webp) left bottom no-repeat;
     background-size: 200px 5px;
 	background-position-x: center;
-	padding-bottom: 10px;
+	padding-bottom: 15px;
 }
 .our-courses-header h2 span {
 	color: #00adef;
@@ -592,7 +594,8 @@ OUR TRAINERS
 */
 
 .trainer-header h2 {
-	font-size: 36px;
+	font-size: 32px;
+	font-family: "Encode Sans SC", serif;
 	font-weight: bold;
 	line-height: 1.45;
 	text-align: center;
@@ -600,7 +603,7 @@ OUR TRAINERS
 	background: url(https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/line-bottom-header.webp) left bottom no-repeat;
     background-size: 200px 5px;
 	background-position-x: center;
-	padding-bottom: 10px;
+	padding-bottom: 15px;
 }
 .trainer-header h2 span {
 	color: #00adef;
@@ -713,7 +716,8 @@ section.hero-routine {
 	margin-bottom: 40px;
 }
 .routine-title h2 {
-	font-size: 36px;
+	font-size: 32px;
+	font-family: "Encode Sans SC", serif;
 	font-weight: bold;
 	line-height: 1.45;
 	text-align: center;
@@ -721,7 +725,7 @@ section.hero-routine {
 	background: url(https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/line-bottom-header.webp) left bottom no-repeat;
     background-size: 200px 5px;
 	background-position-x: center;
-	padding-bottom: 10px;
+	padding-bottom: 15px;
 }
 .routine-title h2 span {
 	color: #00adef;
@@ -860,7 +864,8 @@ VIDEO SECTION
 	margin: 0 auto;
 }
 .video-section h2 {
-	font-size: 36px;
+	font-size: 32px;
+	font-family: "Encode Sans SC", serif;
 	font-weight: 600;
 	line-height: 1.45;
 	text-align: center;
@@ -919,7 +924,8 @@ OUR BLOG
 	padding: 60px 0;
 }
 .blog-header h2 {
-	font-size: 36px;
+	font-size: 32px;
+	font-family: "Encode Sans SC", serif;
 	font-weight: bold;
 	line-height: 1.45;
 	text-align: center;
@@ -927,7 +933,7 @@ OUR BLOG
 	background: url(https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/line-bottom-header.webp) left bottom no-repeat;
     background-size: 200px 5px;
 	background-position-x: center;
-	padding-bottom: 10px;
+	padding-bottom: 15px;
 }
 .blog-header p {
 	font-size: 15px;
@@ -1000,6 +1006,10 @@ OUR BLOG
 	align-items: center;
 	justify-content: center;
 }
+/* .owl-carousel .owl-stage {
+	display: flex;
+	gap: 25px;
+} */
 .blog-box {
 	position: relative;
 	display: block;
@@ -1230,7 +1240,8 @@ footer span {
 	border-radius: 15px;
 }
 .card-box-title h2 {
-	font-size: 36px;
+	font-size: 32px;
+	font-family: "Encode Sans SC", serif;
 	font-weight: bold;
 	line-height: 1.45;
 	text-align: center;
@@ -1238,7 +1249,7 @@ footer span {
 	background: url(https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/line-bottom-header.webp) left bottom no-repeat;
     background-size: 200px 5px;
 	background-position-x: center;
-	padding-bottom: 10px;
+	padding-bottom: 15px;
 }
 .card-box-title h2 span {
 	color: #00adef;
@@ -1376,7 +1387,8 @@ ABOUT PAGE
 	margin-top: 50px;
 }
 .range-title h2 {
-	font-size: 36px;
+	font-size: 32px;
+	font-family: "Encode Sans SC", serif;
 	font-weight: bold;
 	line-height: 1.45;
 	text-align: left;
@@ -1588,7 +1600,8 @@ ABOUT PAGE
 /* end skill section */
 
 .testimonials-title h2 {
-	font-size: 36px;
+	font-size: 32px;
+	font-family: "Encode Sans SC", serif;
 	font-weight: bold;
 	line-height: 1.45;
 	text-align: center;
@@ -1596,7 +1609,7 @@ ABOUT PAGE
 	background: url(https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/line-bottom-header.webp) left bottom no-repeat;
     background-size: 200px 5px;
 	background-position-x: center;
-	padding-bottom: 10px;
+	padding-bottom: 15px;
 }
 .testimonials-title h2 span {
 	color: #00adef;
@@ -2577,7 +2590,8 @@ section.hero-contact-banner-section {
 	padding: 11% 0;
 }
 .get-in-touch-title h2 {
-	font-size: 36px;
+	font-size: 32px;
+	font-family: "Encode Sans SC", serif;
 	font-weight: bold;
 	line-height: 1.45;
 	text-align: center;
@@ -2585,7 +2599,7 @@ section.hero-contact-banner-section {
 	background: url(https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/line-bottom-header.webp) left bottom no-repeat;
     background-size: 200px 5px;
 	background-position-x: center;
-	padding-bottom: 10px;
+	padding-bottom: 15px;
 }
 .get-in-touch-title h2 span {
 	color: #00adef;
@@ -2992,13 +3006,14 @@ section.hero-error-banner-section {
 	text-decoration: none;
 }
 .error-content h2 {
-	font-size: 36px;
+	font-size: 32px;
+	font-family: "Encode Sans SC", serif;
 	font-weight: 600;
 	line-height: 1.45;
 	text-align: center;
 	color: #ffffff;
 	text-transform:uppercase;
-	margin: 10px 0;
+	margin: 15px 0;
 }
 .error-content p {
 	font-size: 18px;
@@ -3061,11 +3076,12 @@ i.fa-clock {
 	background-position: center;
 }
 
-.yoga_bg .title_box h2{
+.yoga_bg .title_box h2 {
 	color:#fff;
 	text-align: center;
 	margin-bottom: 50px;
-	font-size: 36px;
+	font-size: 32px;
+	font-family: "Encode Sans SC", serif;
     font-weight: bold;
     line-height: 1.45;
 }
@@ -3152,94 +3168,6 @@ i.fa-clock {
 	width: 100%;
 }
 
-/*
-.first_col {
-    width: 32%;
-    float: left;
-    position: relative;
-}
-.yoga_con{
-	text-align:right;
-}
-.yoga_con h3{
-	font-size:20px;
-	color:#fff;
-	font-weight:500;
-	text-transform:uppercase;
-}
-.yoga_con p{
-	font-size:14px;
-	color:#fff;
-	line-height:25px;
-	margin-bottom:0px;
-}
-.yoga_con {
-    text-align: right;
-    width: 70%;
-    float: left;
-    margin-right: 15px;
-}
-.yoga_img {
-    float: left;
-    width: 25%;
-}
-.yoga_img img {
-    width: 100%;
-	height: 100%;
-	padding: 15px;
-}
-.yoga_img .icon_box {
-    box-shadow: 3px 4px 15px 0px rgba(0, 0, 0, 0.25);
-    border-radius: 60px;
-	-webkit-border-radius:50%;
-  -moz-border-radius:50%;
-  -o-border-radius:50%;
-  transition: all 800ms ease-in-out;
-}
-.yoga_box:hover .yoga_img .icon_box {
-	-ms-transform: rotate(360deg);
-  -webkit-transform: rotate(360deg);
-  transform: rotate(360deg);
-}
-.yoga_box {
-    margin-bottom: 40px;
-    display: inline-block;
-}
-.first_col3 {
-    width: 32%;
-    float: left;
-    position: relative;
-}
-.first_col3 .yoga_con{
-	text-align:left;
-}
-.first_col2 {
-    width: 36%;
-    float: left;
-    position: relative;
-}
-.yoga_img_box .img-fluid {
-    max-width: 100%;
-    margin-left: -8px;
-	object-fit: cover;
-}
-.icon_box {
-    height: 75px;
-    width: 75px;
-    background-color: #fff;
-	box-shadow: 3px 4px 15px 0px rgba(0, 0, 0, 0.25); 
-    border-radius: 60px;
-	text-align:center;
-}
-.yoga_bg h2 {
-	font-size: 36px;
-    font-weight: 700;
-    line-height: 1.45;
-    text-align: center;
-    color: #322b40;
-    padding-bottom: 50px;
-}
-	*/
 .boxFanpageFacebook {
 	width: 100%;
 	position: sticky;

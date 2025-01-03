@@ -75,6 +75,9 @@
                     <!-- comment form -->
                     @include('wallpaper.blog.commentForm') --}}
 
+                    <!-- related -->
+                    {{-- @include('wallpaper.blog.related') --}}
+
                 </div>
             </div>
         </div>

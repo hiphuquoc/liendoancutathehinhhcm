@@ -136,12 +136,14 @@ class RoutingController extends Controller{
                                             ->first();
                     /* blog nổi bật - sidebar */
                     $blogFeatured       = BlogController::getBlogFeatured($language);
+                    /* related */
+                    $related            = $blogFeatured;
                     /* xây dựng toc_content */
                     $htmlContent        = '';
                     foreach($itemSeo->contents as $content) $htmlContent .= $content->content;
                     $dataContent        = CategoryMoneyController::buildTocContentMain($htmlContent, $language);
                     $htmlContent        = str_replace('<div id="tocContentMain"></div>', '<div id="tocContentMain">'.$dataContent['toc_content'].'</div>', $dataContent['content']);
-                    $xhtml              = view('wallpaper.blog.index', compact('item', 'itemSeo', 'blogFeatured', 'language', 'breadcrumb', 'htmlContent'))->render();
+                    $xhtml              = view('wallpaper.blog.index', compact('item', 'itemSeo', 'blogFeatured', 'related', 'language', 'breadcrumb', 'htmlContent'))->render();
                 }
                 /* ===== Trainer ==== */
                 if($itemSeo->type=='trainer_info'){

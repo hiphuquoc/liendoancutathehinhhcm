@@ -183,17 +183,22 @@ i.fa.fa-angle-right {
 .tags ul{
     padding: 0;
 }
-.blog_title h3 {
-    font-size: 28px;
+.blog_title h3, .related-header h3 {
+    font-size: 24px;
     color: #484a4c;
     font-weight: 600;
     text-transform: uppercase;
-    font-family: 'Signika', sans-serif;
     margin-bottom: -3px;
     background: url(https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/line-bottom-header.webp) left bottom no-repeat;
     background-size: 200px 5px;
-	padding-bottom: 10px;
+	padding-bottom: 15px;
     margin-bottom: 25px;
+    font-family: "Encode Sans SC", serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+}
+.related-header h3 {
+    margin-bottom: 20px !important;
 }
 #searchbox svg {
     position: absolute;

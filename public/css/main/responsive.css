@@ -190,13 +190,14 @@ a footer.hero-footer {
 		flex-direction: column-reverse;
 		gap: 30px;
 	}
-	.blog_title h3 {.trainer-header h2
+	.blog_title h3 {
 		font-size: 22px !important;
 		background-size: 200px 3px !important;
 	}
-	.our-courses-header h2, .routine-title h2, .about-header h2, .trainer-header h2, .blog-header h2, .card-box-title h2, .range-title h2, .testimonials-title h2, .get-in-touch-title h2, .about-header h2, .trainer-header h2, .yoga_bg .title_box h2 {
+	.our-courses-header h2, .routine-title h2, .blog-header h2, .card-box-title h2, .range-title h2, .testimonials-title h2, .get-in-touch-title h2, .about-header h2, .trainer-header h2, .yoga_bg .title_box h2 {
 		font-size: 22px;
 		background-size: 200px 3px;
+		padding-bottom: 12.5px;
 	}
 	.our-courses-header p, .about-header p, .trainer-header p, .blog-header p, .card-box-title p, .range-title p, .testimonials-title p, .get-in-touch-title p {
 		margin: 20px auto !important;

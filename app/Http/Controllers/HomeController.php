@@ -308,7 +308,9 @@ class HomeController extends Controller {
         }
 
         foreach ($trainers as &$trainer) {
-            $qrData = "Name: {$trainer['name']}\nNgày tháng năm sinh: {$trainer['birth_day']}\nSố CCCD: {$trainer['cccd']}\nĐiện thoại: {$trainer['phone']}\nĐịa chỉ: {$trainer['address']}\nĐường dẫn: {$trainer['link']}";
+            // $qrData = "Name: {$trainer['name']}\nNgày tháng năm sinh: {$trainer['birth_day']}\nSố CCCD: {$trainer['cccd']}\nĐiện thoại: {$trainer['phone']}\nĐịa chỉ: {$trainer['address']}\nĐường dẫn: {$trainer['link']}";
+
+            $qrLink     = $trainer['link'];
 
             // Sử dụng UTF-8 để hỗ trợ ký tự tiếng Việt
             $trainer['qrCode'] = QrCode::encoding('UTF-8')
@@ -320,7 +322,7 @@ class HomeController extends Controller {
                 ->style('round') // Làm tròn các ô vuông
                 ->eye('circle') // Làm tròn phần mắt của mã QR
                 // ->errorCorrection('M')   // Độ chính xác cao
-                ->generate($qrData);     // Tạo QR code
+                ->generate($qrLink);     // Tạo QR code
         }
 
         // Trả dữ liệu ra view

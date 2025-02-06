@@ -72,7 +72,7 @@
                         @php
                           $email = !empty($item->email)&&trim($item->email)!='nguyencamtien2001@gmail.com' ? $item->email : 'Đang cập nhật...!';
                         @endphp
-                        <i class="fa fa-phone" aria-hidden="true"></i>{{ $email }}
+                        <i class="fa-solid fa-envelope-open"></i>{{ $email }}
                     </div>
                     <div class="teacherInfoBox2_info_contact_item line"></div>
                 </div>

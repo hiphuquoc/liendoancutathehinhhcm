@@ -20,7 +20,7 @@
                 $imageSmall = \App\Helpers\Image::getUrlImageSmallByUrlImage($item->seo->image);
                 $imageMini  = \App\Helpers\Image::getUrlImageMiniByUrlImage($item->seo->image);
               @endphp
-              <img class="lazyload" src="{{ $imageMini }}" data-src="{{ $imageSmall }}" alt="ảnh huấn luyện viên {{ $fullName }}" title="ảnh huấn luyện viên {{ $fullName }}" loading="lazy" />
+              <img class="lazyload" src="{{ $imageMini }}?{{ time() }}" data-src="{{ $imageSmall }}?{{ time() }}" alt="ảnh huấn luyện viên {{ $fullName }}" title="ảnh huấn luyện viên {{ $fullName }}" loading="lazy" />
             </div>
             <!-- thành tích -->
             @if(!empty($item->achievements)&&$item->achievements->isNotEmpty())

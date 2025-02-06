@@ -25,7 +25,7 @@
                                 <div class="trainer_box">
                                     <div class="img_trainer">
                                         <div class="img_wrapper">
-                                            <img class="lazyload" src="{{ $imageMini }}?{{ time() }}" data-src="{{ $imageSmall }}" alt="{{ $fullName }}" title="{{ $fullName }}" loading="lazy" />
+                                            <img class="lazyload" src="{{ $imageMini }}" data-src="{{ $imageSmall }}?{{ time() }}" alt="{{ $fullName }}" title="{{ $fullName }}" loading="lazy" />
                                         </div>
                                         <div class="trainer_social">
                                             <a href="#"><i class="fa-brands fa-facebook-f"></i></a>

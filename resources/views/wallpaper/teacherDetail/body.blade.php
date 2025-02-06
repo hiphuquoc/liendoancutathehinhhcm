@@ -56,7 +56,7 @@
             <!-- thông tin header -->
             <div class="teacherInfoBox2">
               <div class="teacherInfoBox2_image">
-                <img class="lazyload" src="{{ $imageMini }}" data-src="{{ $imageSmall }}" alt="ảnh huấn luyện viên {{ $fullName }}" title="ảnh huấn luyện viên {{ $fullName }}" loading="lazy" />
+                <img class="lazyload" src="{{ $imageMini }}?{{ time() }}" data-src="{{ $imageSmall }}?{{ time() }}" alt="ảnh huấn luyện viên {{ $fullName }}" title="ảnh huấn luyện viên {{ $fullName }}" loading="lazy" />
               </div>
               <div class="teacherInfoBox2_info">
                 <h1>{{ $fullName }}</h1> 

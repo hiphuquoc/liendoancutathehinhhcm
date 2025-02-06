@@ -5,12 +5,12 @@
 <!-- ===== START: SEARCH FORM ===== -->
 <form id="formSearch" method="get" action="{{ route('admin.trainer.list') }}">
     <div class="searchBox">
-        <div class="searchBox_item">
+        {{-- <div class="searchBox_item">
             <div class="input-group">
                 <input type="text" class="form-control" name="search_name" placeholder="Tìm theo tên" value="{{ $params['search_name'] ?? null }}">
                 <button class="btn btn-primary waves-effect" id="button-addon2" type="submit" aria-label="Tìm">Tìm</button>
             </div>
-        </div>
+        </div> --}}
         @if(!empty($categories))
             <div class="searchBox_item">
                 <select class="form-select select2" name="search_category" onChange="submitForm('formSearch');">

@@ -29,7 +29,7 @@
                      </g>
                   </svg>
                </span>
-               <h2 class="brand-text">Hitour</h2>
+               <h2 class="brand-text">Liendoan</h2>
             </a>
          </li>
          <li class="nav-item nav-toggle">
@@ -53,53 +53,59 @@
                $dataMenu            = config('menu.left-menu-admin');
                $routeCurrent        = request()->route()->getName();
                foreach($dataMenu as $menu){
-                  $link             = !empty($menu['route']) ? route($menu['route']) : '#';
-                  $flagSub          = !empty($child['child']) ? 'has-sub' : null;
-                  $menuChild        = null;
-                  $active           = !empty($menu['route'])&&$menu['route']==$routeCurrent ? 'active' : null;
-                  if(!empty($menu['child'])){
-                     $menuChild     = '<ul class="menu-content">';
-                     foreach($menu['child'] as $child){
-                        $active1    = !empty($child['route'])&&$child['route']==$routeCurrent ? 'active' : null;
-                        $linkChild  = !empty($child['route']) ? route($child['route']) : '#';
-                        $flagSub2   = !empty($child['child']) ? 'has-sub' : null;
-                        $menuChild  .= '<li class="'.$flagSub2.' '.$active1.'">';
-                        $menuChild  .= '  <a class="d-flex align-items-center" href="'.$linkChild.'">
-                                             '.$child['icon'].'
-                                             <span class="menu-title text-truncate">'.$child['name'].'</span>
-                                          </a>';
-                        if(!empty($child['child'])){
-                           $menuChild     .= '<ul class="menu-content">';
-                           foreach($child['child'] as $child2){
-                              $linkChild2 = !empty($child2['route']) ? route($child2['route']) : '#';
-                              $active2    = !empty($child2['route'])&&$child2['route']==$routeCurrent ? 'active' : null;
-                              $menuChild .= '<li class="'.$active2.'">
-                                                <a class="d-flex align-items-center" href="'.$linkChild2.'">
-                                                   <span class="menu-item text-truncate" data-i18n="Basic">'.$child2['name'].'</span>
-                                                </a>
-                                             </li>';
+                  /* kiểm tra quyền */
+                  $flagShow         = auth()->user()->roles()->whereIn('name', $menu['role'])->exists();                  
+                  if($flagShow==true){
+                     $link             = !empty($menu['route']) ? route($menu['route']) : '#';
+                     $flagSub          = !empty($child['child']) ? 'has-sub' : null;
+                     $menuChild        = null;
+                     $active           = !empty($menu['route'])&&$menu['route']==$routeCurrent ? 'active' : null;
+                     if(!empty($menu['child'])){
+                        $menuChild     = '<ul class="menu-content">';
+                        foreach($menu['child'] as $child){
+                           $active1    = !empty($child['route'])&&$child['route']==$routeCurrent ? 'active' : null;
+                           $linkChild  = !empty($child['route']) ? route($child['route']) : '#';
+                           $flagSub2   = !empty($child['child']) ? 'has-sub' : null;
+                           $menuChild  .= '<li class="'.$flagSub2.' '.$active1.'">';
+                           $menuChild  .= '  <a class="d-flex align-items-center" href="'.$linkChild.'">
+                                                '.$child['icon'].'
+                                                <span class="menu-title text-truncate">'.$child['name'].'</span>
+                                             </a>';
+                           if(!empty($child['child'])){
+                              $menuChild     .= '<ul class="menu-content">';
+                              foreach($child['child'] as $child2){
+                                 $linkChild2 = !empty($child2['route']) ? route($child2['route']) : '#';
+                                 $active2    = !empty($child2['route'])&&$child2['route']==$routeCurrent ? 'active' : null;
+                                 $menuChild .= '<li class="'.$active2.'">
+                                                   <a class="d-flex align-items-center" href="'.$linkChild2.'">
+                                                      <span class="menu-item text-truncate" data-i18n="Basic">'.$child2['name'].'</span>
+                                                   </a>
+                                                </li>';
+                              }
+                              $menuChild     .= '</ul>';
                            }
-                           $menuChild     .= '</ul>';
+                           $menuChild  .= '</li>';
                         }
-                        $menuChild  .= '</li>';
+                        $menuChild     .= '</ul>';
                      }
-                     $menuChild     .= '</ul>';
+                     echo '<li class="nav-item '.$flagSub.' '.$active.'">
+                              <a href="'.$link.'" class="d-flex align-items-center">
+                                 '.$menu['icon'].'
+                                 <span class="menu-title text-truncate">'.$menu['name'].'</span>
+                              </a>
+                              '.$menuChild.'
+                        </li>';
                   }
-                  echo '<li class="nav-item '.$flagSub.' '.$active.'">
-                           <a href="'.$link.'" class="d-flex align-items-center">
-                              '.$menu['icon'].'
-                              <span class="menu-title text-truncate">'.$menu['name'].'</span>
-                           </a>
-                           '.$menuChild.'
-                     </li>';
                }
             @endphp
-            <li class="nav-item">
-               <a href="#" class="d-flex align-items-center" onClick="clearCacheHtml();">
-                  <i class="fa-sharp fa-solid fa-xmark"></i>
-                  <span class="menu-title text-truncate">Xóa Cache</span>
-               </a>
-            </li>
+            @if(auth()->user()->hasRole('admin'))
+               <li class="nav-item">
+                  <a href="#" class="d-flex align-items-center" onClick="clearCacheHtml();">
+                     <i class="fa-sharp fa-solid fa-xmark"></i>
+                     <span class="menu-title text-truncate">Xóa Cache</span>
+                  </a>
+               </li>
+            @endif
       </ul>
    </div>
 </div>

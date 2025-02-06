@@ -4,8 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class RoleMiddleware
-{
+class RoleMiddleware {
     public function handle($request, Closure $next, $role, $permission = null)
     {
         if(!$request->user()->hasRole($role)) {

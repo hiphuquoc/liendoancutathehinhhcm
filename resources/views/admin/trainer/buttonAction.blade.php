@@ -9,9 +9,11 @@
         <label class="form-check-label" for="index_google">Báo google index</label>
     </div>
 </div>
-<div class="pageAdminWithRightSidebar_main_rightSidebar_item buttonAction">
+
+{{-- <div class="pageAdminWithRightSidebar_main_rightSidebar_item buttonAction">
     <div class="btn btn-danger waves-effect waves-float waves-light" aria-label="Xóa trang" data-bs-toggle="modal" data-bs-target="#modalChooseLanguageBeforeDeletePage" style="width:100%;">Xóa ngôn ngữ</div>
-</div>
+</div> --}}
+
 {{-- <div class="pageAdminWithRightSidebar_main_rightSidebar_item">
     <div class="actionBox">
         @if($language=='vi')

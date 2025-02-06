@@ -172,7 +172,7 @@
                     success     : function(response){
                         console.log(response);
                         if(response.flag==true){
-                            window.location.href = "{{ route('admin.blog.list') }}";
+                            window.location.href = "{{ route('admin.trainer.list') }}";
                         }else {
                             $('#js_noticeLogin').html(response.message).css('display', 'block');
                         }

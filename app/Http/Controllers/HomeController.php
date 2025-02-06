@@ -22,6 +22,10 @@ use App\Models\RelationSeoProductInfo;
 use App\Models\Timezone;
 use App\Helpers\Url;
 
+use App\Models\User;
+use App\Models\UserRole;
+use Illuminate\Support\Facades\Hash;
+
 class HomeController extends Controller {
     public static function home(Request $request, $language = 'vi'){
         /* ngôn ngữ */
@@ -330,21 +334,48 @@ class HomeController extends Controller {
     }
 
     public function test(){
-        $link = 'https://liendoancutathehinhhcm.com.vn';
+        // $link = 'https://liendoancutathehinhhcm.com.vn';
 
-        // Tạo mã QR Code dạng SVG với tùy chỉnh
-        $qrCode = QrCode::format('svg') // Định dạng SVG
-            ->size(300) // Kích thước
-            ->margin(1) // Viền xung quanh
-            // ->color(0, 138, 192) // Màu mã QR (R, G, B)
-            ->backgroundColor(255, 255, 255) // Màu nền
-            ->style('round') // Làm tròn các ô vuông
-            ->eye('circle') // Làm tròn phần mắt của mã QR
-            ->merge('https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/logo-liendoancuta-1.webp', 0.3, true)
-            ->generate($link);
+        // // Tạo mã QR Code dạng SVG với tùy chỉnh
+        // $qrCode = QrCode::format('svg') // Định dạng SVG
+        //     ->size(300) // Kích thước
+        //     ->margin(1) // Viền xung quanh
+        //     // ->color(0, 138, 192) // Màu mã QR (R, G, B)
+        //     ->backgroundColor(255, 255, 255) // Màu nền
+        //     ->style('round') // Làm tròn các ô vuông
+        //     ->eye('circle') // Làm tròn phần mắt của mã QR
+        //     ->merge('https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/logo-liendoancuta-1.webp', 0.3, true)
+        //     ->generate($link);
 
-        // Trả về mã QR Code SVG
-        return response($qrCode)->header('Content-Type', 'image/svg+xml');
+        // // Trả về mã QR Code SVG
+        // return response($qrCode)->header('Content-Type', 'image/svg+xml');
+
+
+        $teachers = Trainer::select('*')
+                        ->get();
+
+        foreach($teachers as $teacher){
+            $slug       = $teacher->seo->slug ?? '';
+            $email      = str_replace('-', '', $slug);
+            $infoUser   = User::select('*')
+                            ->where('email', $email)
+                            ->first();
+            if(!empty($slug)&&empty($infoUser)){
+                $idUser =  User::create([
+                    'name'      => $slug,
+                    'email'     => $email,
+                    'password'  => Hash::make($email)
+                ]);
+                UserRole::insertItem([
+                    'user_id'   => $idUser->id,
+                    'role_id'   => 2,
+                ]);
+            }
+        }
+        
+
+        dd(123);
+                       
     }
 
     private static function findUniqueElements($arr1, $arr2) {

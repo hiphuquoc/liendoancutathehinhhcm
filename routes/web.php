@@ -61,8 +61,17 @@ use App\Http\Controllers\GoogledriveController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::middleware('auth', 'role:sub-admin')->group(function () {
+    /* ===== Trainer ===== */
+    Route::prefix('trainer')->group(function(){
+        Route::get('/', [TrainerController::class, 'list'])->name('admin.trainer.list');
+        Route::get('/view', [TrainerController::class, 'view'])->name('admin.trainer.view');
+        Route::post('/createAndUpdate', [TrainerController::class, 'createAndUpdate'])->name('admin.trainer.createAndUpdate');
+        Route::get('/delete', [TrainerController::class, 'delete'])->name('admin.trainer.delete');
+    });
+});
 
-Route::middleware('auth', 'role:admin')->group(function (){
+Route::middleware('auth', 'role:admin')->group(function () {
     Route::prefix('he-thong')->group(function(){
         /* ===== AI ===== */
         Route::get('/chatGpt', [ChatGptController::class, 'chatGpt'])->name('main.chatGpt');
@@ -177,13 +186,13 @@ Route::middleware('auth', 'role:admin')->group(function (){
             Route::get('/getListProductChoose', [BlogController::class, 'getListProductChoose'])->name('admin.blog.getListProductChoose');
             Route::get('/callAIWritePerProduct', [BlogController::class, 'callAIWritePerProduct'])->name('admin.blog.callAIWritePerProduct');
         });
-        /* ===== Trainer ===== */
-        Route::prefix('trainer')->group(function(){
-            Route::get('/', [TrainerController::class, 'list'])->name('admin.trainer.list');
-            Route::get('/view', [TrainerController::class, 'view'])->name('admin.trainer.view');
-            Route::post('/createAndUpdate', [TrainerController::class, 'createAndUpdate'])->name('admin.trainer.createAndUpdate');
-            Route::get('/delete', [TrainerController::class, 'delete'])->name('admin.trainer.delete');
-        });
+        // /* ===== Trainer ===== */
+        // Route::prefix('trainer')->group(function(){
+        //     Route::get('/', [TrainerController::class, 'list'])->name('admin.trainer.list');
+        //     Route::get('/view', [TrainerController::class, 'view'])->name('admin.trainer.view');
+        //     Route::post('/createAndUpdate', [TrainerController::class, 'createAndUpdate'])->name('admin.trainer.createAndUpdate');
+        //     Route::get('/delete', [TrainerController::class, 'delete'])->name('admin.trainer.delete');
+        // });
         /* ===== Order ===== */
         Route::prefix('order')->group(function(){
             Route::get('/', [OrderController::class, 'list'])->name('admin.order.list');

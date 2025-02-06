@@ -5,16 +5,26 @@ return [
             'name'      => 'Huấn luyện viên',
             'route'     => 'admin.trainer.list',
             'icon'      => '<i class="fa-solid fa-user-tie"></i>',
+            'role'      => [
+                'admin', 
+                'sub-admin',
+            ],
         ],
         [
             'name'      => 'Quản lí trang',
             'route'     => 'admin.page.list',
             'icon'      => '<i class="fa-regular fa-file-lines"></i>',
+            'role'      => [
+                'admin',
+            ],
         ],
         [
             'name'      => 'Quản lí Blog',
             'route'     => '',
             'icon'      => '<i class="fa-solid fa-blog"></i>',
+            'role'      => [
+                'admin', 
+            ],
             'child'     => [
                 [
                     'name'  => '1. Chuyên mục',
@@ -33,11 +43,17 @@ return [
             'name'      => 'Quản lí ảnh',
             'route'     => 'admin.image.list',
             'icon'      => '<i class="fa-regular fa-images"></i>',
+            'role'      => [
+                'admin', 
+            ],
         ],
         [
             'name'      => 'Công cụ SEO',
             'route'     => '',
             'icon'      => '<i class="fa-solid fa-screwdriver-wrench"></i>',
+            'role'      => [
+                'admin', 
+            ],
             'child'     => [
                 [
                     'name'  => '1. Redirect 301',
@@ -60,6 +76,9 @@ return [
             'name'      => 'Công nghệ AI',
             'route'     => '',
             'icon'      => '<i class="fa-solid fa-robot"></i>',
+            'role'      => [
+                'admin', 
+            ],
             'child'     => [
                 [
                     'name'  => '1. Prompt',

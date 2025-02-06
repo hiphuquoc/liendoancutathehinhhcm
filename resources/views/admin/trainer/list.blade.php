@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
 
-<div class="titlePage">Danh Sách Bài Viết</div>
+<div class="titlePage">Danh Sách Huấn Luyện Viên</div>
 <!-- ===== START: SEARCH FORM ===== -->
 <form id="formSearch" method="get" action="{{ route('admin.trainer.list') }}">
     <div class="searchBox">
@@ -49,11 +49,18 @@
             <tbody>
                 @if(!empty($list)&&$list->isNotEmpty())
                     @foreach($list as $item)
-                        @include('admin.category.row', [
-                            'item'          => $item,
-                            'no'            => $loop->index+1,
-                            'typeRoute'     => 'trainer',
-                        ])
+
+                        @php
+                            $slug = $item->seo->slug ?? '';
+                        @endphp
+                        @if(auth()->user()->name==$slug)
+                            @include('admin.category.row', [
+                                'item'          => $item,
+                                'no'            => $loop->index+1,
+                                'typeRoute'     => 'trainer',
+                            ])
+                        @endif
+
                     @endforeach
                 @else
                     <tr><td colspan="5">Không có dữ liệu phù hợp!</td></tr>

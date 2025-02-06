@@ -58,7 +58,8 @@ class TrainerController extends Controller {
                                 ->with('seo.contents', 'seos.infoSeo.contents', 'seos.infoSeo.jobAutoTranslate')
                                 ->first();
         if(empty($item)) $flagView = false;
-        if($flagView==true){
+        $slug               = $item->seo->slug ?? '';
+        if($flagView==true&&$slug==auth()->user()->name){
             /* lấy item seo theo ngôn ngữ được chọn */
             $itemSeo            = [];
             if(!empty($item->seos)){

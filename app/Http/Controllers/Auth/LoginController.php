@@ -51,7 +51,7 @@ class LoginController extends Controller
         // Đăng nhập
         if(Auth::attempt($dataForm)){
             $user       = Auth::user();
-            if($user->hasRole('admin')){
+            if($user->hasRole('admin')||$user->hasRole('sub-admin')){
                 $flag   = true;
             } else {
                 $flag       = false;

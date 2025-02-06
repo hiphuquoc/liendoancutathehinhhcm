@@ -63,10 +63,16 @@
                 <div class="teacherInfoBox2_info_sub">{{ $job }}</div>
                 <div class="teacherInfoBox2_info_contact">
                     <div class="teacherInfoBox2_info_contact_item">
-                        <i class="fa fa-phone" aria-hidden="true"></i>{{ $item->phone ?? '' }}
+                        @php
+                          $phone = !empty($item->phone)&&trim($item->phone)!='0976525242' ? $item->phone : 'Đang cập nhật...!';
+                        @endphp
+                        <i class="fa fa-phone" aria-hidden="true"></i>{{ $phone }}
                     </div>
                     <div class="teacherInfoBox2_info_contact_item">
-                        <i class="fa fa-phone" aria-hidden="true"></i>{{ $item->email ?? '' }}
+                        @php
+                          $email = !empty($item->email)&&trim($item->email)!='nguyencamtien2001@gmail.com' ? $item->email : 'Đang cập nhật...!';
+                        @endphp
+                        <i class="fa fa-phone" aria-hidden="true"></i>{{ $email }}
                     </div>
                     <div class="teacherInfoBox2_info_contact_item line"></div>
                 </div>

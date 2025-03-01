@@ -23,6 +23,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\Request;
 
+use App\Models\User;
+use App\Models\UserRole;
+use Illuminate\Support\Facades\Hash;
+
 class TrainerController extends Controller {
 
     public function __construct(BuildInsertUpdateModel $BuildInsertUpdateModel){
@@ -59,26 +63,27 @@ class TrainerController extends Controller {
                                 ->first();
         if(empty($item)) $flagView = false;
         $slug               = $item->seo->slug ?? '';
-        if($flagView==true&&$slug==auth()->user()->name){
+        $hasAdminRole = auth()->user()->hasRole('admin');
+        if($hasAdminRole || ($flagView == true && $slug == auth()->user()->name)){
             /* lấy item seo theo ngôn ngữ được chọn */
-            $itemSeo            = [];
-            if(!empty($item->seos)){
-                foreach($item->seos as $s){
-                    if($s->infoSeo->language==$language) {
+            $itemSeo = [];
+            if (!empty($item->seos)) {
+                foreach ($item->seos as $s) {
+                    if ($s->infoSeo->language == $language) {
                         $itemSeo = $s->infoSeo;
                         break;
                     }
                 }
             }
             /* prompts */
-            $prompts            = Prompt::select('*')
-                                    ->where('reference_table', 'trainer_info')
-                                    ->get();
+            $prompts = Prompt::select('*')
+                        ->where('reference_table', 'trainer_info')
+                        ->get();
             /* type */
-            $type               = !empty($itemSeo) ? 'edit' : 'create';
-            $type               = $request->get('type') ?? $type;
+            $type = !empty($itemSeo) ? 'edit' : 'create';
+            $type = $request->get('type') ?? $type;
             /* trang cha */
-            $parents            = Page::all();
+            $parents = Page::all();
             return view('admin.trainer.view', compact('item', 'itemSeo', 'prompts', 'type', 'language', 'parents', 'message'));
         } else {
             return redirect()->route('admin.trainer.list');
@@ -227,6 +232,39 @@ class TrainerController extends Controller {
         return redirect()->route('admin.trainer.view', ['id' => $idTrainer, 'language' => $language]);
     }
 
+    public function createUser(){
+        $teachers = Trainer::select('*')->get();
+        $count = 0;
+
+        foreach ($teachers as $teacher) {
+            $slug = $teacher->seo->slug ?? '';
+            $email = str_replace('-', '', $slug);
+
+            $infoUser = User::where('email', $email)->first();
+
+            if (!empty($slug) && empty($infoUser)) {
+                $idUser = User::create([
+                    'name' => $slug,
+                    'email' => $email,
+                    'password' => Hash::make($email)
+                ]);
+
+                UserRole::insertItem([
+                    'user_id' => $idUser->id,
+                    'role_id' => 2,
+                ]);
+
+                if ($idUser) ++$count;
+            }
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => '👋 Đã tạo thành công <span class="highLight_500">' . $count . '</span> tài khoản HLV mới.',
+            'count' => $count,
+        ]);
+    }
+
     public function delete(Request $request){
         if(!empty($request->get('id'))){
             try {
@@ -259,6 +297,20 @@ class TrainerController extends Controller {
                     $s->infoSeo()->delete();
                     $s->delete();
                 }
+                /* Xóa user tương ứng */
+                $slug = $info->seo->slug ?? null;
+                if (!empty($slug)) {
+                    $email = str_replace('-', '', $slug);
+                    $user = User::where('email', $email)->first();
+                    
+                    if (!empty($user)) {
+                        // Xóa tất cả vai trò của user
+                        UserRole::where('user_id', $user->id)->delete();
+                        // Xóa user
+                        $user->delete();
+                    }
+                }
+
                 $info->delete();
                 DB::commit();
                 return true;

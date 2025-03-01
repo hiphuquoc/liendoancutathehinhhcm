@@ -61,18 +61,19 @@ use App\Http\Controllers\GoogledriveController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::middleware('auth', 'role:sub-admin')->group(function () {
-    /* ===== Trainer ===== */
+Route::middleware(['auth', 'role:admin,sub-admin'])->group(function () {
     Route::prefix('trainer')->group(function(){
         Route::get('/', [TrainerController::class, 'list'])->name('admin.trainer.list');
         Route::get('/view', [TrainerController::class, 'view'])->name('admin.trainer.view');
         Route::post('/createAndUpdate', [TrainerController::class, 'createAndUpdate'])->name('admin.trainer.createAndUpdate');
-        Route::get('/delete', [TrainerController::class, 'delete'])->name('admin.trainer.delete');
     });
 });
 
 Route::middleware('auth', 'role:admin')->group(function () {
     Route::prefix('he-thong')->group(function(){
+        /* ===== AI ===== */
+        Route::get('/delete', [TrainerController::class, 'delete'])->name('admin.trainer.delete');
+        Route::get('/createUser', [TrainerController::class, 'createUser'])->name('admin.trainer.createUser');
         /* ===== AI ===== */
         Route::get('/chatGpt', [ChatGptController::class, 'chatGpt'])->name('main.chatGpt');
         /* ===== REDIRECT ===== */

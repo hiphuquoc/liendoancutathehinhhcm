@@ -22,10 +22,6 @@ use App\Models\RelationSeoProductInfo;
 use App\Models\Timezone;
 use App\Helpers\Url;
 
-use App\Models\User;
-use App\Models\UserRole;
-use Illuminate\Support\Facades\Hash;
-
 class HomeController extends Controller {
     public static function home(Request $request, $language = 'vi'){
         /* ngôn ngữ */
@@ -349,32 +345,6 @@ class HomeController extends Controller {
 
         // // Trả về mã QR Code SVG
         // return response($qrCode)->header('Content-Type', 'image/svg+xml');
-
-
-        $teachers = Trainer::select('*')
-                        ->get();
-
-        foreach($teachers as $teacher){
-            $slug       = $teacher->seo->slug ?? '';
-            $email      = str_replace('-', '', $slug);
-            $infoUser   = User::select('*')
-                            ->where('email', $email)
-                            ->first();
-            if(!empty($slug)&&empty($infoUser)){
-                $idUser =  User::create([
-                    'name'      => $slug,
-                    'email'     => $email,
-                    'password'  => Hash::make($email)
-                ]);
-                UserRole::insertItem([
-                    'user_id'   => $idUser->id,
-                    'role_id'   => 2,
-                ]);
-            }
-        }
-        
-
-        dd(123);
                        
     }
 

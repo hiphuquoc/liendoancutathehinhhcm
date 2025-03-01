@@ -29,8 +29,9 @@
 <script src="{{ asset('sources/admin/app-assets/js/core/app.min.js') }}"></script>
 <script src="{{ asset('sources/admin/app-assets/js/scripts/customizer.min.js') }}"></script>
 <script src="{{ asset('sources/admin/app-assets/js/core/app-menu.min.js') }}"></script>
-
 <!-- END: MENU -->
+
+<script src="{{ asset('sources/admin/app-assets/vendors/js/extensions/toastr.min.js') }}"></script>
 
 <!-- END: Page Vendor JS-->
 <script defer>
@@ -216,6 +217,31 @@
             confirmButtonText: 'Xác nhận'
         })
     }
+    function createUser() {
+        Swal.fire({
+            title: 'Xác nhận tạo Tài Khoản HLV',
+            html: '<div>Hành động này sẽ tiến hành tạo tài khoản cho những HLV còn thiếu (không ảnh hưởng HLV cũ).</div>',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: 'Hủy',
+            preConfirm: () => {
+                Swal.showLoading();
+                return $.ajax({
+                    url: '{{ route("admin.trainer.createUser") }}',
+                    type: 'get',
+                    dataType: 'json'
+                }).then(response => {
+                    if (response.status) {
+                        createToast('success', 'Thành công', response.message);
+                    } else {
+                        createToast('error', 'Thất bại', '❌ Không thể tạo tài khoản.');
+                    }
+                }).catch(error => {
+                    createToast('error', 'Lỗi hệ thống', '❌ Đã xảy ra lỗi khi gửi yêu cầu. Vui lòng thử lại.');
+                });
+            }
+        });
+    }
     /* tạo job dịch tự động */
     function createJobTranslateContent(idSeoVI, language){
         $.ajax({
@@ -245,6 +271,39 @@
                 'filter'    : 'blur(8px)',
                 'overflow'  : 'hidden',
             });
+        }
+    }
+    function createToast(type, title, message) {
+        const toastContainer = document.getElementById('toast-container') || document.body;
+        
+        // Tạo ID duy nhất cho mỗi Toast
+        const toastId = 'toast-' + Date.now();
+
+        // Tạo cấu trúc HTML của Toast
+        const toastHTML = `
+            <div id="${toastId}" class="toast toast-${type}" aria-live="polite" style="display: block; opacity: 1;">
+                <div class="toast-progress" style="width: 0%;"></div>
+                <button type="button" class="toast-close-button" role="button">×</button>
+                <div class="toast-title">${title}</div>
+                <div class="toast-message">${message}</div>
+            </div>
+        `;
+
+        // Thêm Toast vào container
+        toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+
+        const toastElement = document.getElementById(toastId);
+
+        // Tự động ẩn Toast sau 3 giây và xóa khỏi DOM
+        setTimeout(() => {
+            toastElement.style.opacity = 0;
+            setTimeout(() => toastElement.remove(), 300); // Xóa sau khi hiệu ứng mờ hoàn tất
+        }, 10000);
+
+        // Xử lý sự kiện đóng thủ công
+        const closeButton = toastElement.querySelector('.toast-close-button');
+        if (closeButton) {
+            closeButton.addEventListener('click', () => toastElement.remove());
         }
     }
 </script>

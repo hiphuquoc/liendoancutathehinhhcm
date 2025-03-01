@@ -29,9 +29,9 @@
   <link rel="stylesheet" type="text/css" href="{{ asset('sources/admin/app-assets/css/plugins/forms/pickers/form-pickadate.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('sources/admin/app-assets/css/plugins/forms/form-validation.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('sources/admin/app-assets/css/plugins/extensions/ext-component-sweet-alerts.min.css') }}">
-  {{-- <link rel="stylesheet" href="assets/vendor/libs/animate-css/animate.css" />
-  <link rel="stylesheet" href="assets/vendor/libs/sweetalert2/sweetalert2.css" /> --}}
   <!-- END: Page CSS-->
+  <link rel="stylesheet" type="text/css" href="{{ asset('sources/admin/app-assets/vendors/css/extensions/toastr.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ asset('sources/admin/app-assets/css/plugins/extensions/ext-component-toastr.css') }}">
 
   <!-- BEGIN: Custom CSS-->
   <style type="text/css">

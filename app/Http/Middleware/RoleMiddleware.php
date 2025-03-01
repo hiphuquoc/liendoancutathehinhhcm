@@ -5,16 +5,21 @@ namespace App\Http\Middleware;
 use Closure;
 
 class RoleMiddleware {
-    public function handle($request, Closure $next, $role, $permission = null)
-    {
-        if(!$request->user()->hasRole($role)) {
+    public function handle($request, Closure $next, ...$roles){
+
+        $flagNext = false;
+        foreach($roles as $role){
+            if($request->user()->hasRole($role)){
+                $flagNext   = true;
+                break;
+            }
+        }
+        
+        if($flagNext==true){
+            return $next($request);
+        } else {
             abort(404);
         }
-
-        if($permission !== null && !$request->user()->can($permission)) {
-              abort(404);
-        }
-
-        return $next($request);
+        
     }
 }

@@ -47,20 +47,19 @@
                 </tr>
             </thead>
             <tbody>
-                @if(!empty($list)&&$list->isNotEmpty())
+                @if(!empty($list) && $list->isNotEmpty())
                     @foreach($list as $item)
-
                         @php
                             $slug = $item->seo->slug ?? '';
+                            $canView = auth()->user()->hasRole('admin') || auth()->user()->name == $slug;
                         @endphp
-                        @if(auth()->user()->name==$slug)
+                        @if($canView)
                             @include('admin.category.row', [
-                                'item'          => $item,
-                                'no'            => $loop->index+1,
-                                'typeRoute'     => 'trainer',
+                                'item'      => $item,
+                                'no'        => $loop->index+1,
+                                'typeRoute' => 'trainer',
                             ])
                         @endif
-
                     @endforeach
                 @else
                     <tr><td colspan="5">Không có dữ liệu phù hợp!</td></tr>

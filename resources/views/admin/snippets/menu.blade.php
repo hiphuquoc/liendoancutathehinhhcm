@@ -100,6 +100,12 @@
             @endphp
             @if(auth()->user()->hasRole('admin'))
                <li class="nav-item">
+                  <a href="#" class="d-flex align-items-center" onClick="createUser();">
+                     <i class="fa-solid fa-user-plus"></i>
+                     <span class="menu-title text-truncate">Tạo TK HLV</span>
+                  </a>
+               </li>
+               <li class="nav-item">
                   <a href="#" class="d-flex align-items-center" onClick="clearCacheHtml();">
                      <i class="fa-sharp fa-solid fa-xmark"></i>
                      <span class="menu-title text-truncate">Xóa Cache</span>

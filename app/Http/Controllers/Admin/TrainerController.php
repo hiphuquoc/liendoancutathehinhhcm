@@ -47,7 +47,7 @@ class TrainerController extends Controller {
     public function view(Request $request){
         $message            = $request->get('message') ?? null;
         $id                 = $request->get('id') ?? 0;
-        $language           = $request->get('language') ?? null;
+        $language           = $request->get('language') ?? 'vi';
         /* kiểm tra xem ngôn ngữ có nằm trong danh sách không */
         $flagView           = false;
         foreach(config('language') as $ld){
@@ -145,61 +145,75 @@ class TrainerController extends Controller {
                 TrainerAchievement::select('*')
                     ->where('trainer_info_id', $idTrainer)
                     ->delete();
-                foreach($request->get('repeater_trainer_achievement') as $achi){
-                    TrainerAchievement::insertItem([
-                        'trainer_info_id'   => $idTrainer,
-                        'content'           => $achi['content'],
-                    ]);
+                if(!empty($request->get('repeater_trainer_achievement'))){
+                    foreach($request->get('repeater_trainer_achievement') as $achi){
+                        if(!empty($achi['content'])){
+                            TrainerAchievement::insertItem([
+                                'trainer_info_id'   => $idTrainer,
+                                'content'           => $achi['content'],
+                            ]);
+                        }
+                    }
                 }
                 /* insert kỹ năng (trainer_skill) */
                 TrainerSkill::select('*')
                     ->where('trainer_info_id', $idTrainer)
                     ->delete();
-                foreach($request->get('repeater_trainer_skill') as $skill){
-                    if(!empty($skill['skill'])&&!empty($skill['percent'])){
-                        TrainerSkill::insertItem([
-                            'trainer_info_id'   => $idTrainer,
-                            'skill'             => $skill['skill'],
-                            'percent'           => $skill['percent'],
-                        ]);
+                if(!empty($request->get('repeater_trainer_skill'))){
+                    foreach($request->get('repeater_trainer_skill') as $skill){
+                        if(!empty($skill['skill'])&&!empty($skill['percent'])){
+                            TrainerSkill::insertItem([
+                                'trainer_info_id'   => $idTrainer,
+                                'skill'             => $skill['skill'],
+                                'percent'           => $skill['percent'],
+                            ]);
+                        }
                     }
                 }
                 /* insert kinh nghiệm (trainer_experience) */
                 TrainerExperience::select('*')
                     ->where('trainer_info_id', $idTrainer)
                     ->delete();
-                foreach($request->get('repeater_trainer_experience') as $exper){
-                    $idTrainerExperience    = TrainerExperience::insertItem([
-                                                'trainer_info_id'   => $idTrainer,
-                                                'title'             => $exper['title'],
-                                                'company'           => $exper['company'],
-                                            ]);
-                    /* insert thêm content => ở đây chỉ insert và không xóa content cũ (chấp nhận phình dữ liệu) */
-                    $tmp                    = explode("\r\n", $exper['content']);
-                    foreach($tmp as $t){
-                        TrainerExperienceContent::insertItem([
-                            'trainer_experience_id' => $idTrainerExperience,
-                            'content'               => trim($t),
-                        ]);
+                if(!empty($request->get('repeater_trainer_experience'))){
+                    foreach($request->get('repeater_trainer_experience') as $exper){
+                        if(!empty($exper['title'])&&!empty($exper['company'])&&!empty($exper['content'])){
+                            $idTrainerExperience    = TrainerExperience::insertItem([
+                                'trainer_info_id'   => $idTrainer,
+                                'title'             => $exper['title'],
+                                'company'           => $exper['company'],
+                            ]);
+                            /* insert thêm content => ở đây chỉ insert và không xóa content cũ (chấp nhận phình dữ liệu) */
+                            $tmp                    = explode("\r\n", $exper['content']);
+                            foreach($tmp as $t){
+                                TrainerExperienceContent::insertItem([
+                                    'trainer_experience_id' => $idTrainerExperience,
+                                    'content'               => trim($t),
+                                ]);
+                            }
+                        }
                     }
                 }
                 /* insert bằng cấp (trainer_degree) */
                 TrainerDegree::select('*')
                     ->where('trainer_info_id', $idTrainer)
                     ->delete();
-                foreach($request->get('repeater_trainer_degree') as $degree){
-                    $idTrainerDegree    = TrainerDegree::insertItem([
-                                                'trainer_info_id'   => $idTrainer,
-                                                'title'             => $degree['title'],
-                                                'school'            => $degree['school'],
-                                            ]);
-                    /* insert thêm content => ở đây chỉ insert và không xóa content cũ (chấp nhận phình dữ liệu) */
-                    $tmp                    = explode("\r\n", $degree['content']);
-                    foreach($tmp as $t){
-                        TrainerDegreeContent::insertItem([
-                            'trainer_degree_id'     => $idTrainerDegree,
-                            'content'               => trim($t),
-                        ]);
+                if(!empty($request->get('repeater_trainer_degree'))){
+                    foreach($request->get('repeater_trainer_degree') as $degree){
+                        if(!empty($degree['title'])&&!empty($degree['school'])&&!empty($degree['content'])){
+                            $idTrainerDegree    = TrainerDegree::insertItem([
+                                                        'trainer_info_id'   => $idTrainer,
+                                                        'title'             => $degree['title'],
+                                                        'school'            => $degree['school'],
+                                                    ]);
+                            /* insert thêm content => ở đây chỉ insert và không xóa content cũ (chấp nhận phình dữ liệu) */
+                            $tmp                    = explode("\r\n", $degree['content']);
+                            foreach($tmp as $t){
+                                TrainerDegreeContent::insertItem([
+                                    'trainer_degree_id'     => $idTrainerDegree,
+                                    'content'               => trim($t),
+                                ]);
+                            }
+                        }
                     }
                 }
                 DB::commit();
@@ -231,7 +245,7 @@ class TrainerController extends Controller {
         $request->session()->put('message', $message);
         return redirect()->route('admin.trainer.view', ['id' => $idTrainer, 'language' => $language]);
     }
-
+    
     public function createUser(){
         $teachers = Trainer::select('*')->get();
         $count = 0;

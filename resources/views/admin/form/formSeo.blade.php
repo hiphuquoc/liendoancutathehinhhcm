@@ -115,7 +115,7 @@
             <input type="text" id="slug" class="form-control" name="slug" value="{{ $slug }}" {{ $chatgptDataAndEvent['dataChatgpt'] ?? null }} required>
             <div class="invalid-feedback">{{ config('message.admin.validate.not_empty') }}</div>
         </div>
-        <!-- One Row -->
+        {{-- <!-- One Row -->
         @if(!empty($sources))
             <div class="formBox_full_item">
                 <span data-toggle="tooltip" data-placement="top" title="
@@ -148,7 +148,7 @@
                     @endforeach
                 </select>
             </div>
-        @endif
+        @endif --}}
         <!-- One Row -->
         @if(!empty($parents)&&$parents->isNotEmpty())
             <div class="formBox_full_item">

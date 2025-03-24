@@ -21,6 +21,7 @@ use GeoIp2\Database\Reader;
 use App\Models\RelationSeoProductInfo;
 use App\Models\Timezone;
 use App\Helpers\Url;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class HomeController extends Controller {
     public static function home(Request $request, $language = 'vi'){
@@ -290,16 +291,17 @@ class HomeController extends Controller {
         $data = Excel::toArray([], $filePath);
 
         // Giả sử dữ liệu nằm trong sheet đầu tiên
-        $sheet = $data[0];
+        $sheet = $data[1];
 
         // Bỏ qua dòng tiêu đề (nếu có) và chuyển thành mảng huấn luyện viên
         $trainers = [];
+        
         foreach ($sheet as $index => $row) {
-            if ($index === 0) continue; // Bỏ qua tiêu đề
+            if ($index < 4) continue; // Bỏ qua tiêu đề
             $slug       = Charactor::convertStrToUrl(strtolower($row[1]));
             $trainers[] = [
                 'name' => $row[1] ?? '',
-                'birth_day' => $row[2] ?? '', 
+                'birth_day' => is_numeric($row[2]) ? Date::excelToDateTimeObject($row[2])->format('d/m/Y') : $row[2],
                 'cccd' => $row[3] ?? '',   
                 'phone' => $row[4] ?? '',   
                 'address' => $row[5] ?? '', 
@@ -307,22 +309,19 @@ class HomeController extends Controller {
             ];
         }
 
-        foreach ($trainers as &$trainer) {
-            // $qrData = "Name: {$trainer['name']}\nNgày tháng năm sinh: {$trainer['birth_day']}\nSố CCCD: {$trainer['cccd']}\nĐiện thoại: {$trainer['phone']}\nĐịa chỉ: {$trainer['address']}\nĐường dẫn: {$trainer['link']}";
-
-            $qrLink     = $trainer['link'];
-
-            // Sử dụng UTF-8 để hỗ trợ ký tự tiếng Việt
-            $trainer['qrCode'] = QrCode::encoding('UTF-8')
-                ->format('svg')          // Định dạng SVG 
-                ->size(300)              // Kích thước QR code
-                ->margin(1) // Viền xung quanh
-                // ->color(0, 138, 192) // Màu mã QR (R, G, B)
-                ->backgroundColor(255, 255, 255) // Màu nền
-                ->style('round') // Làm tròn các ô vuông
-                ->eye('circle') // Làm tròn phần mắt của mã QR
-                // ->errorCorrection('M')   // Độ chính xác cao
-                ->generate($qrLink);     // Tạo QR code
+        for ($i = 0; $i < count($trainers); $i++) {
+            $qrLink = $trainers[$i]['link'];
+        
+            $qrCode = QrCode::encoding('UTF-8')
+                ->format('svg')
+                ->size(300)
+                ->margin(1)
+                ->backgroundColor(255, 255, 255)
+                ->style('round')
+                ->eye('circle')
+                ->generate($qrLink);
+        
+            $trainers[$i]['qrCode'] = "data:image/svg+xml;base64," . base64_encode($qrCode);
         }
 
         // Trả dữ liệu ra view

@@ -53,13 +53,54 @@
                             <div>Đường dẫn: <a href="{{ $trainer['link'] }}" target="_blank">{{ $trainer['link'] }}</a></div>
                         </td>
                         <td class="qr-code">
-                            {{-- Mã hóa SVG thành Base64 và gắn vào URI --}}
-                            <img src="data:image/svg+xml;base64,{{ base64_encode($trainer['qrCode']) }}" alt="QR Code" style="min-width:300px;min-height:300px;" />
+                            <img src="{{ $trainer['qrCode'] }}" alt="QR Code" class="qr-img" />
+                            <button class="download-btn" data-name="{{ $trainer['name'] }}">Tải xuống PNG</button>
                         </td>
                     </tr>
                 @endif
             @endforeach
         </tbody>
     </table>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".download-btn").forEach(button => {
+                button.addEventListener("click", function() {
+                    let row = this.closest("td");
+                    let img = row.querySelector(".qr-img");
+                    let trainerName = this.getAttribute("data-name").replace(/\s+/g, "_");
+        
+                    fetch(img.src)
+                        .then(res => res.text()) // Lấy nội dung SVG
+                        .then(svgText => {
+                            let canvas = document.createElement("canvas");
+                            let ctx = canvas.getContext("2d");
+                            let imgElement = new Image();
+        
+                            let svgBlob = new Blob([svgText], { type: "image/svg+xml;charset=utf-8" });
+                            let url = URL.createObjectURL(svgBlob);
+        
+                            imgElement.onload = function() {
+                                canvas.width = 300; // Kích thước mong muốn
+                                canvas.height = 300;
+                                ctx.drawImage(imgElement, 0, 0, 300, 300);
+        
+                                // Tạo file PNG
+                                let pngUrl = canvas.toDataURL("image/png");
+        
+                                // Tạo thẻ <a> để tải xuống
+                                let downloadLink = document.createElement("a");
+                                downloadLink.href = pngUrl;
+                                downloadLink.download = `QR_${trainerName}.png`;
+                                document.body.appendChild(downloadLink);
+                                downloadLink.click();
+                                document.body.removeChild(downloadLink);
+                                URL.revokeObjectURL(url);
+                            };
+                            imgElement.src = url;
+                        });
+                });
+            });
+        });
+    </script>
 </body>
 </html>

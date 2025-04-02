@@ -1,57 +1,57 @@
 {
   "resources/sources/admin/style.scss": {
-    "file": "assets/style-52c26010.css",
-    "isEntry": true,
-    "src": "resources/sources/admin/style.scss"
+    "file": "assets/style-G_Uag4Of.css",
+    "src": "resources/sources/admin/style.scss",
+    "isEntry": true
   },
   "resources/sources/main/aboutus-first-view.scss": {
-    "file": "assets/home-first-view-e5b009e7.css",
-    "isEntry": true,
-    "src": "resources/sources/main/contact-first-view.scss"
+    "file": "assets/home-first-view-BSUi3V76.css",
+    "src": "resources/sources/main/home-first-view.scss",
+    "isEntry": true
   },
   "resources/sources/main/aboutus-non-first-view.scss": {
-    "file": "assets/home-non-first-view-1a84b608.css",
-    "isEntry": true,
-    "src": "resources/sources/main/category-blog-non-first-view.scss"
+    "file": "assets/home-non-first-view-uvBumCKy.css",
+    "src": "resources/sources/main/home-non-first-view.scss",
+    "isEntry": true
   },
   "resources/sources/main/category-blog-first-view.scss": {
-    "file": "assets/category-blog-first-view-f557c6c6.css",
-    "isEntry": true,
-    "src": "resources/sources/main/category-blog-first-view.scss"
+    "file": "assets/category-blog-first-view-fIhTcnpA.css",
+    "src": "resources/sources/main/category-blog-first-view.scss",
+    "isEntry": true
   },
   "resources/sources/main/category-blog-non-first-view.scss": {
-    "file": "assets/home-non-first-view-1a84b608.css",
-    "isEntry": true,
-    "src": "resources/sources/main/category-blog-non-first-view.scss"
+    "file": "assets/home-non-first-view-uvBumCKy.css",
+    "src": "resources/sources/main/home-non-first-view.scss",
+    "isEntry": true
   },
   "resources/sources/main/contact-first-view.scss": {
-    "file": "assets/home-first-view-e5b009e7.css",
-    "isEntry": true,
-    "src": "resources/sources/main/contact-first-view.scss"
+    "file": "assets/home-first-view-BSUi3V76.css",
+    "src": "resources/sources/main/home-first-view.scss",
+    "isEntry": true
   },
   "resources/sources/main/contact-non-first-view.scss": {
-    "file": "assets/home-non-first-view-1a84b608.css",
-    "isEntry": true,
-    "src": "resources/sources/main/category-blog-non-first-view.scss"
+    "file": "assets/home-non-first-view-uvBumCKy.css",
+    "src": "resources/sources/main/home-non-first-view.scss",
+    "isEntry": true
   },
   "resources/sources/main/home-first-view.scss": {
-    "file": "assets/home-first-view-e5b009e7.css",
-    "isEntry": true,
-    "src": "resources/sources/main/contact-first-view.scss"
+    "file": "assets/home-first-view-BSUi3V76.css",
+    "src": "resources/sources/main/home-first-view.scss",
+    "isEntry": true
   },
   "resources/sources/main/home-non-first-view.scss": {
-    "file": "assets/home-non-first-view-1a84b608.css",
-    "isEntry": true,
-    "src": "resources/sources/main/category-blog-non-first-view.scss"
+    "file": "assets/home-non-first-view-uvBumCKy.css",
+    "src": "resources/sources/main/home-non-first-view.scss",
+    "isEntry": true
   },
   "resources/sources/main/page-first-view.scss": {
-    "file": "assets/page-first-view-0d8ee6a0.css",
-    "isEntry": true,
-    "src": "resources/sources/main/page-first-view.scss"
+    "file": "assets/page-first-view-C6wGQJls.css",
+    "src": "resources/sources/main/page-first-view.scss",
+    "isEntry": true
   },
   "resources/sources/main/page-non-first-view.scss": {
-    "file": "assets/home-non-first-view-1a84b608.css",
-    "isEntry": true,
-    "src": "resources/sources/main/category-blog-non-first-view.scss"
+    "file": "assets/home-non-first-view-uvBumCKy.css",
+    "src": "resources/sources/main/home-non-first-view.scss",
+    "isEntry": true
   }
 }

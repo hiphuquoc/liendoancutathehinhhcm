@@ -11,6 +11,14 @@ return [
             ],
         ],
         [
+            'name'      => 'Tài liệu',
+            'route'     => 'admin.document.list',
+            'icon'      => '<i class="fa-solid fa-book"></i>',
+            'role'      => [
+                'admin',
+            ],
+        ],
+        [
             'name'      => 'Quản lí trang',
             'route'     => 'admin.page.list',
             'icon'      => '<i class="fa-regular fa-file-lines"></i>',

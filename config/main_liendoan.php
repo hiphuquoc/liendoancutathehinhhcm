@@ -56,6 +56,7 @@ return [
         'sources'           => 'sources/',
         'freeWallpapers'    => 'freewallpapers/',
         'images'            => 'storage/images/',
+        'documents'         => 'documents/',
     ],
     'filter'    => [
         'price' => [
@@ -216,6 +217,10 @@ return [
         [
             'name'  => 'Lịch học',
             'slug'  => 'lich-hoc',
+        ],
+        [
+            'name'  => 'Tài liệu',
+            'slug'  => 'tai-lieu',
         ],
         [
             'name'  => 'Huấn luyện viên',

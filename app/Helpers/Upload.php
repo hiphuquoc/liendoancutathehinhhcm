@@ -84,5 +84,37 @@ class Upload {
         }
         return $flag;
     }
+
+    public static function uploadDocument($requestFile, $filename, $folderUpload) {
+        $result = null;
+        // Kiểm tra xem có file được chọn không
+        if (!empty($requestFile)) {
+            
+            // ===== Folder upload
+            $pdfFile = $requestFile;
+
+            // ===== Set filename & check exists
+            $extension = pathinfo($filename)['extension'];
+
+            // Chỉ chấp nhận file PDF
+            if ($extension !== 'pdf') {
+                return $result; // Trả về null nếu không phải file PDF
+            }
+
+            // Đường dẫn lưu file
+            $fileUrl = $folderUpload . $filename;
+
+            // Sử dụng disk GCS (Google Cloud Storage)
+            $gcsDisk = Storage::disk('gcs');
+
+            // Lưu file PDF trực tiếp lên storage
+            $gcsDisk->put($fileUrl, file_get_contents($pdfFile->getRealPath()));
+
+            // Trả về đường dẫn file
+            $result = $fileUrl;
+        }
+
+        return $result;
+    }
     
 }

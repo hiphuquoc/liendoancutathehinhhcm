@@ -31,4 +31,7 @@ return [
     'trainer_info'        => [
         'model_name'    => 'Trainer',
     ],
+    'document_info'        => [
+        'model_name'    => 'Document',
+    ],
 ];

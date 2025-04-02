@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Cookie;
 use App\Helpers\Url;
 use App\Http\Controllers\CategoryMoneyController;
 use App\Models\Blog;
-use App\Models\Customer;
+use App\Models\Document;
 use App\Models\Page;
 use App\Models\CategoryBlog;
 use App\Models\Trainer;
@@ -81,14 +81,12 @@ class RoutingController extends Controller{
                                             })
                                             ->with('type')
                                             ->first();
-                    if(!empty($item->type->code)&&$item->type->code=='my_download'&&!empty(Auth::user()->email)){
-                        $emailCustomer  = Auth::user()->email;
-                        $infoCustomer   = Customer::select('*')
-                                            ->where('email', $emailCustomer)
-                                            ->with('orders')
-                                            ->first();
-                        /* trang tài khoản */
-                        $xhtml  = view('wallpaper.account.myDownload', compact('item', 'itemSeo', 'infoCustomer', 'language', 'breadcrumb'))->render();
+                    if(!empty($item->type->code)&&$item->type->code=='document'){ 
+                        /* trang tài liệu tổng */
+                        $documents = Document::select('*')
+                                        ->with('seo', 'seos')
+                                        ->get();
+                        $xhtml  = view('wallpaper.document.index', compact('item', 'itemSeo', 'documents', 'language', 'breadcrumb'))->render();
                     }else {
                         /* trang bình thường */
                         $xhtml  = view('wallpaper.page.index', compact('item', 'itemSeo', 'language', 'breadcrumb'))->render();

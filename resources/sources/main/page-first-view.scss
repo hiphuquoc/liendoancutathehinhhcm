@@ -19,27 +19,77 @@
     align-self: center;
 }
 
-// .pageContentWithSidebar {
-//     display: flex;
-//     align-items: flex-start;
-//     justify-content: center;
-//     &_content {
-//         width: calc(100% - 280px - 2.5rem);
-//         ul {
-//             margin-left: 1.25rem;
-//         }
-//     }
-//     &_sidebar {
-//         flex: 0 0 280px;
-//         margin-left: 2.5rem;
-//     }
-//     @media(max-width: 1199px){
-//         flex-wrap: wrap;
-//         &_content {
-//             width: 100%;
-//         }
-//         &_sidebar {
-//             margin-left: 0;
-//         }
-//     }
-// }
+.tableDocument {
+    table {
+        display: table;
+        width: 100%;
+        border: 1px solid $bg-05;
+        box-sizing: border-box;
+
+        // Thêm min-width và overflow cho container của bảng
+        min-width: 660px; // Chiều rộng tối thiểu của bảng
+        overflow-x: auto; // Cho phép cuộn ngang nếu nội dung vượt quá chiều rộng
+    }
+
+    // Container bọc bảng (thêm nếu cần thiết)
+    .tableContainer {
+        overflow-x: auto; // Kích hoạt cuộn ngang
+        -webkit-overflow-scrolling: touch; // Hỗ trợ cuộn mượt trên thiết bị di động
+        margin-bottom: 1rem; // Khoảng cách dưới cùng
+
+        &::-webkit-scrollbar {
+            height: 4px; // Chiều cao của thanh cuộn
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: $bg-05; // Màu của thanh cuộn
+            border-radius: 4px; // Bo tròn thanh cuộn
+        }
+
+        &::-webkit-scrollbar-track {
+            background-color: transparent; // Màu nền của thanh cuộn
+        }
+    }
+
+    thead, tbody {
+        tr {
+            th {
+                font-size: 0.95rem;
+                background: $colorBackgroundLv3;
+                padding: 0.5rem 0.75rem;
+                font-weight: bold;
+                white-space: nowrap; // Ngăn văn bản xuống dòng
+            }
+            td {
+                font-size: 0.95rem;
+                padding: 0.75rem;
+                white-space: nowrap; // Ngăn văn bản xuống dòng
+                &.action {
+                    display: flex;
+                    justify-content: flex-end;
+                    align-items: center;
+                    gap: 0.5rem;
+                    > * {
+                        width: 35px;
+                        height: 26px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        font-size: 1.3rem;
+                        color: $bg-07;
+                        cursor: pointer;
+                        &:hover {
+                            color: $colorLv2;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.noteDocument {
+    font-size: 0.95rem;
+    color: $colorLv2;
+    // font-weight: 700;
+    font-style: italic;
+}

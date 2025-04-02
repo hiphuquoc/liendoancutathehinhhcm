@@ -32,6 +32,7 @@ use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\CategoryBlogController;
 use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\Admin\TrainerController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\CacheController;
@@ -186,6 +187,13 @@ Route::middleware('auth', 'role:admin')->group(function () {
             Route::get('/clearProductChoosed', [BlogController::class, 'clearProductChoosed'])->name('admin.blog.clearProductChoosed');
             Route::get('/getListProductChoose', [BlogController::class, 'getListProductChoose'])->name('admin.blog.getListProductChoose');
             Route::get('/callAIWritePerProduct', [BlogController::class, 'callAIWritePerProduct'])->name('admin.blog.callAIWritePerProduct');
+        });
+        /* ===== Document ===== */
+        Route::prefix('document')->group(function(){
+            Route::get('/', [DocumentController::class, 'list'])->name('admin.document.list');
+            Route::get('/view', [DocumentController::class, 'view'])->name('admin.document.view');
+            Route::post('/createAndUpdate', [DocumentController::class, 'createAndUpdate'])->name('admin.document.createAndUpdate');
+            Route::get('/delete', [DocumentController::class, 'delete'])->name('admin.document.delete');
         });
         // /* ===== Trainer ===== */
         // Route::prefix('trainer')->group(function(){

@@ -15,6 +15,7 @@ use App\Models\Page;
 use App\Models\Product;
 use App\Models\CategoryBlog;
 use App\Models\Blog;
+use App\Models\Document;
 use App\Helpers\Upload;
 use App\Models\FreeWallpaper;
 
@@ -54,7 +55,7 @@ class HelperController extends Controller {
                     }else {
                         $response = $part.$charactor.$slugParent;
                     }
-                } else if($type=='product_info'||$type=='free_wallpaper_info'||$type=='blog_info'){ /* trường hợp là product_info hay free_wallpaper_info */
+                } else if($type=='product_info'||$type=='free_wallpaper_info'||$type=='blog_info'||$type=='document_info'){ /* trường hợp là product_info hay free_wallpaper_info */
                     $response   = Charactor::convertStrToUrl($title).'-'.time();
                 } else if($type=='category_blog'){ /* trường hợp là category_blog */
                     $response   = Charactor::convertStrToUrl($title);
@@ -109,6 +110,14 @@ class HelperController extends Controller {
                     break;
                 case 'blog_info':
                     $response   = Blog::select('*')
+                                    ->whereHas('seos.infoSeo', function($query) use($idSeo){
+                                        $query->where('id', $idSeo);
+                                    })
+                                    ->with('seo', 'seos')
+                                    ->first();
+                    break;
+                case 'document_info':
+                    $response   = Document::select('*')
                                     ->whereHas('seos.infoSeo', function($query) use($idSeo){
                                         $query->where('id', $idSeo);
                                     })

@@ -26,7 +26,6 @@
                     'routeName' => 'admin.trainer.view',
                 ])
             </div>
-            
             <!-- Error -->
             @if ($errors->any())
                 <ul class="errorList">
@@ -41,7 +40,7 @@
             <div class="pageAdminWithRightSidebar_main">
                 <!-- START:: Main content -->
                 <div class="pageAdminWithRightSidebar_main_content">
-                    <div class="pageAdminWithRightSidebar_main_content_item">
+                    {{-- <div class="pageAdminWithRightSidebar_main_content_item">
                         <div class="card">
                             <div class="card-header border-bottom">
                                 <h4 class="card-title">Thông tin trang</h4>
@@ -56,7 +55,7 @@
 
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="pageAdminWithRightSidebar_main_content_item">
                         <div class="card">
                             <div class="card-header border-bottom">
@@ -74,6 +73,7 @@
                             </div>
                         </div>
                     </div>
+
                     <!-- thành tích -->
                     <div class="pageAdminWithRightSidebar_main_content_item repeater">
                         <div class="card">

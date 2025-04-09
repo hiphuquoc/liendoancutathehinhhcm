@@ -235,4 +235,5 @@ return [
             'slug'  => 'lien-he',
         ],
     ],
+    'slug_trainer_parent' => 'huan-luyen-vien', /* dùng cho cách tính năng nâng cao => nếu thay đổi slug của trang huan-luyen-vien phải cập nhật lại ở đây */
 ];

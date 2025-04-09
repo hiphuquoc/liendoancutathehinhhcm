@@ -40,7 +40,7 @@
             <div class="pageAdminWithRightSidebar_main">
                 <!-- START:: Main content -->
                 <div class="pageAdminWithRightSidebar_main_content">
-                    {{-- <div class="pageAdminWithRightSidebar_main_content_item">
+                    <div class="pageAdminWithRightSidebar_main_content_item">
                         <div class="card">
                             <div class="card-header border-bottom">
                                 <h4 class="card-title">Thông tin trang</h4>
@@ -55,7 +55,7 @@
 
                             </div>
                         </div>
-                    </div> --}}
+                    </div>
                     <div class="pageAdminWithRightSidebar_main_content_item">
                         <div class="card">
                             <div class="card-header border-bottom">

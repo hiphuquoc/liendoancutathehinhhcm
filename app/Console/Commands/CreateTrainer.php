@@ -46,7 +46,7 @@ class CreateTrainer extends Command {
             $trainers[] = [
                 'name'          => ucwords($cells[1]) ?? '',
                 // 'birth_day'     => $brithDay, 
-                'phone'         => $cells[4] ?? '',   
+                'phone'         => $cells[4] ?? '0912345678',   
                 // 'email'         => $cells[4] ?? '',
                 // 'address'       => $cells[5] ?? '',
                 // 'sex'           => $cells[7] ?? '', // ✅ Lấy được giá trị thay vì công thức

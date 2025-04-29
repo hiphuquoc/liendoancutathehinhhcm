@@ -22,10 +22,10 @@ use App\Http\Requests\TrainerRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\Request;
-
 use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class TrainerController extends Controller {
 
@@ -40,8 +40,19 @@ class TrainerController extends Controller {
         /* paginate */
         $viewPerPage        = Cookie::get('viewTrainerInfo') ?? 50;
         $params['paginate'] = $viewPerPage;
-        $list               = Trainer::getList($params);
-        return view('admin.trainer.list', compact('list', 'params', 'viewPerPage'));
+        if(auth()->user()->hasRole('admin')){
+            $list               = Trainer::getList($params);
+            return view('admin.trainer.list', compact('list', 'params', 'viewPerPage'));
+        }else if(auth()->user()->hasRole('sub-admin')){
+            $username   = auth()->user()->name;
+            $list       = Trainer::select('*')
+                                    ->whereHas('seo', function($query) use($username){
+                                        $query->where('slug', $username);
+                                    })
+                                    ->paginate(1);
+            return view('admin.trainer.list', compact('list', 'params', 'viewPerPage'));
+        }
+        
     }
 
     public function view(Request $request){

@@ -20,7 +20,7 @@ class CreateTrainer extends Command {
 
     public function handle(){
         // Đường dẫn file trong thư mục storage
-        $filePath = Storage::path('public/danh-sach-hlv.xlsx'); // Thay "your-folder" bằng tên thư mục trong storage
+        $filePath = Storage::path('public/danh-sach-hlv-new.xlsx'); // Thay "your-folder" bằng tên thư mục trong storage
 
         // Load file Excel bằng PhpSpreadsheet
         $spreadsheet = IOFactory::load($filePath);

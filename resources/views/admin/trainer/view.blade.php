@@ -86,6 +86,7 @@
                             <div class="card-body" data-repeater-list="repeater_trainer_achievement">
                                 @php
                                     $dataAchievements = old('repeater_trainer_achievement') ?? $item->achievements;
+                                    $dataAchievements = $dataAchievements->isNotEmpty() ? $dataAchievements : [null];
                                 @endphp
                                 @foreach($dataAchievements as $achi)
                                     <!-- item -->
@@ -129,6 +130,7 @@
                             <div class="card-body" data-repeater-list="repeater_trainer_skill">
                                 @php
                                     $dataSkills = old('repeater_trainer_skill') ?? $item->skills;
+                                    $dataSkills = $dataSkills->isNotEmpty() ? $dataSkills : [null];
                                 @endphp
                                 @foreach($dataSkills as $skill)
                                     <!-- item -->
@@ -168,6 +170,7 @@
                             </div>
                             @php
                                 $dataExperience = old('repeater_trainer_achievement') ?? $item->experiences;
+                                $dataExperience = $dataExperience->isNotEmpty() ? $dataExperience : [null];
                             @endphp
                             @foreach($dataExperience as $exp)
                                 <div class="card-body" data-repeater-item>
@@ -193,8 +196,10 @@
                                             $contentExp     = $exp['content'];
                                         }else {
                                             $contentExp     = '';
-                                            foreach($exp->contents as $c){
-                                                $contentExp .= $c->content."\r\n";
+                                            if(!empty($exp->contents)){
+                                                foreach($exp->contents as $c){
+                                                    $contentExp .= $c->content."\r\n";
+                                                }
                                             }
                                         }
                                     @endphp
@@ -227,6 +232,7 @@
                             </div>
                             @php
                                 $dataDegree = old('repeater_trainer_degree') ?? $item->degrees;
+                                $dataDegree = $dataDegree->isNotEmpty() ? $dataDegree : [null];
                             @endphp
                             @foreach($dataDegree as $degree)
                                 <div class="card-body" data-repeater-item>
@@ -252,8 +258,10 @@
                                             $contentDegree  = $degree['content'];
                                         }else {
                                             $contentDegree  = '';
-                                            foreach($degree->contents as $c){
-                                                $contentDegree .= $c->content."\r\n";
+                                            if(!empty($degree->contents)){
+                                                foreach($degree->contents as $c){
+                                                    $contentDegree .= $c->content."\r\n";
+                                                }
                                             }
                                         }
                                     @endphp

@@ -136,7 +136,7 @@ class CreateTrainer extends Command {
                     "phone" => $trainer['phone'],
                     "email" => $slug.'@liendoancutathehinhhcm.com.vn',
                     "seo_title" => $seoTitle,
-                    "seo_description" => $seoTitle,
+                    "seo_description" => 'Viết 1 đoạn giới thiệu về bạn!',
                     "slug" => $slug,
                     "repeater_trainer_achievement" => $dataAchievements,
                     "repeater_trainer_skill" => $dataSkills,

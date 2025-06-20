@@ -1,4 +1,7 @@
 {{-- <input type="hidden" name="seo_id" value="{{ $itemSeo->id ?? null }}" /> --}}
+@php
+    $disabled = auth()->user()->hasRole('admin') ? '' : 'disabled';
+@endphp
 <div class="formBox">
     <div class="formBox_full">
         <!-- One Row -->
@@ -35,7 +38,7 @@
                     {{ !empty($itemSeo->seo_title) ? mb_strlen($itemSeo->seo_title) : 0 }}
                 </div>
             </div>
-            <input type="text" id="seo_title" class="form-control {{ !empty($flagCopySource)&&$flagCopySource==true ? 'inputSuccess' : '' }}" name="seo_title" value="{{ old('seo_title') ?? $itemSeo['seo_title'] ?? '' }}" {{ $chatgptDataAndEvent['dataChatgpt'] ?? null }} required>
+            <input type="text" id="seo_title" class="form-control {{ !empty($flagCopySource)&&$flagCopySource==true ? 'inputSuccess' : '' }}" name="seo_title" value="{{ old('seo_title') ?? $itemSeo['seo_title'] ?? '' }}" {{ $chatgptDataAndEvent['dataChatgpt'] ?? null }} {{ $disabled }} required>
             <div class="invalid-feedback">{{ config('message.admin.validate.not_empty') }}</div>
         </div>
         <!-- One Row -->
@@ -112,7 +115,7 @@
                     $slug   = old('slug') ?? $itemSeo['slug'] ?? '';
                 } 
             @endphp
-            <input type="text" id="slug" class="form-control" name="slug" value="{{ $slug }}" {{ $chatgptDataAndEvent['dataChatgpt'] ?? null }} required>
+            <input type="text" id="slug" class="form-control" name="slug" value="{{ $slug }}" {{ $chatgptDataAndEvent['dataChatgpt'] ?? null }} {{ $disabled }} required>
             <div class="invalid-feedback">{{ config('message.admin.validate.not_empty') }}</div>
         </div>
         {{-- <!-- One Row -->
@@ -159,7 +162,7 @@
                     <label class="form-label" for="parent">Trang cha</label>
                 </span>
                 <div class="{{ !empty($flagCopySource)&&$flagCopySource==true ? 'boxInputSuccess' : '' }}">
-                    <select class="select2 form-select select2-hidden-accessible" id="parent" name="parent">
+                    <select class="select2 form-select select2-hidden-accessible" id="parent" name="parent" {{ $disabled }}>
                         <option value="0">- Lựa chọn -</option>
                         @foreach($parents as $page)
                             @php
@@ -195,7 +198,7 @@
                         <i class="explainInput" data-feather='alert-circle'></i>
                         <label class="form-label inputRequired" for="rating_aggregate_count">Lượt đánh giá</label>
                     </span>
-                    <input type="number" id="rating_aggregate_count" class="form-control {{ !empty($flagCopySource)&&$flagCopySource==true ? 'inputSuccess' : '' }}" name="rating_aggregate_count" value="{{ old('rating_aggregate_count') ?? $itemSeo['rating_aggregate_count'] ?? $item->seo['rating_aggregate_count'] ?? rand(1000,10000) }}" required>
+                    <input type="number" id="rating_aggregate_count" class="form-control {{ !empty($flagCopySource)&&$flagCopySource==true ? 'inputSuccess' : '' }}" name="rating_aggregate_count" value="{{ old('rating_aggregate_count') ?? $itemSeo['rating_aggregate_count'] ?? $item->seo['rating_aggregate_count'] ?? rand(1000,10000) }}" {{ $disabled }} required>
                     <div class="invalid-feedback">{{ config('message.admin.validate.not_empty') }}</div>
                 </div>
                 <div class="flexBox_item" style="margin-left:1rem;">
@@ -205,7 +208,7 @@
                         <i class="explainInput" data-feather='alert-circle'></i>
                         <label class="form-label inputRequired" for="rating_aggregate_star">Điểm đánh giá</label>
                     </span>
-                    <input type="text" id="rating_aggregate_star" class="form-control {{ !empty($flagCopySource)&&$flagCopySource==true ? 'inputSuccess' : '' }}" name="rating_aggregate_star" value="{{ old('rating_aggregate_star') ?? $itemSeo['rating_aggregate_star'] ?? $item->seo['rating_aggregate_star'] ?? '4.'.rand(6,8) }}" required>
+                    <input type="text" id="rating_aggregate_star" class="form-control {{ !empty($flagCopySource)&&$flagCopySource==true ? 'inputSuccess' : '' }}" name="rating_aggregate_star" value="{{ old('rating_aggregate_star') ?? $itemSeo['rating_aggregate_star'] ?? $item->seo['rating_aggregate_star'] ?? '4.'.rand(6,8) }}" {{ $disabled }} required>
                     <div class="invalid-feedback">{{ config('message.admin.validate.not_empty') }}</div>
                 </div>
             </div>

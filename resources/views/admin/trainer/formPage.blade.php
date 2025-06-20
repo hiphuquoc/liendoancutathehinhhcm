@@ -10,7 +10,10 @@
                     <label class="form-label inputRequired" for="title">Họ và tên | Chức vụ</label>
                 </span>
             </div>
-            <input type="text" class="form-control" id="title" name="title" value="{{ old('title') ?? $itemSeo->title ?? null }}" required>
+            @php
+                $disabled = auth()->user()->hasRole('admin') ? '' : 'disabled';
+            @endphp
+            <input type="text" class="form-control" id="title" name="title" value="{{ old('title') ?? $itemSeo->title ?? null }}" {{ $disabled }} required>
             <div class="invalid-feedback">{{ config('admin.massage_validate.not_empty') }}</div>
         </div>
         @if($language=='vi')

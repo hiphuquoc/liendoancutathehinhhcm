@@ -253,7 +253,7 @@ class TrainerController extends Controller {
             ];
         }
         $request->session()->put('message', $message);
-        return redirect()->route('admin.trainer.view', ['id' => $idTrainer, 'language' => $language]);
+        return redirect()->route('admin.trainer.view', ['id' => $idTrainer]);
     }
     
     public function createUser(){

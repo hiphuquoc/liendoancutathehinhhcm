@@ -55,8 +55,6 @@ class CreateTrainer extends Command {
             ];
         }
 
-        // dd($trainers);
-
         $count          = 0;
         /* lấy id trang parent (huan-luyen-vien) */
         $parent         = Seo::select('*')
@@ -132,7 +130,7 @@ class CreateTrainer extends Command {
                     "rating_aggregate_count" => "8452",
                     "rating_aggregate_star" => "4.7",
                     /* biến số */
-                    "title" => $nameCover,
+                    "title" => $nameCover . ' | Huấn luyện viên cá nhân (PT)',
                     "phone" => $trainer['phone'],
                     "email" => $slug.'@liendoancutathehinhhcm.com.vn',
                     "seo_title" => $seoTitle,

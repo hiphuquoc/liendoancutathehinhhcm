@@ -117,7 +117,7 @@ class CreateTrainer extends Command {
             if(!empty($trainer['name'])){
                 $nameCover  = ucwords(mb_strtolower($trainer['name'], 'UTF-8'));
                 // insert dữ liệu
-                $seoTitle   = "Huẩn luyện viên ".$nameCover." của Liên Đoàn Cử Tạ - Thể Hình HCM | liendoancutathehinhhcm";
+                $seoTitle   = "Huấn luyện viên ".$nameCover." của Liên Đoàn Cử Tạ - Thể Hình HCM | liendoancutathehinhhcm";
                 $slug       = \App\Helpers\Charactor::convertStrToUrl($nameCover);
                 /* data tổng */
                 $data = [

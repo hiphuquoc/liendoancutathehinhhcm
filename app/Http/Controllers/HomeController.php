@@ -285,7 +285,7 @@ class HomeController extends Controller {
 
     public static function qrcode(Request $request){
         // Đường dẫn file trong thư mục storage
-        $filePath = Storage::path('public/danh-sach-hlv.xlsx'); // Thay "your-folder" bằng tên thư mục trong storage
+        $filePath = Storage::path('public/danh-sach-hlv-new.xlsx'); // Thay "your-folder" bằng tên thư mục trong storage
 
         // Đọc file Excel và chuyển thành mảng
         $data = Excel::toArray([], $filePath);

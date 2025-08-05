@@ -22,6 +22,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            gap: 1rem;
         }
         .qr-code img {
             max-width: 100px;

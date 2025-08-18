@@ -5,19 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
-use App\Jobs\BuildScss;
 use App\Helpers\Charactor;
 
 use App\Models\Seo;
-use App\Models\Category;
-use App\Models\Tag;
-use App\Models\Page;
-use App\Models\Product;
-use App\Models\CategoryBlog;
-use App\Models\Blog;
-use App\Models\Document;
 use App\Helpers\Upload;
-use App\Models\FreeWallpaper;
 
 class HelperController extends Controller {
 
@@ -55,9 +46,9 @@ class HelperController extends Controller {
                     }else {
                         $response = $part.$charactor.$slugParent;
                     }
-                } else if($type=='product_info'||$type=='free_wallpaper_info'||$type=='blog_info'||$type=='document_info'){ /* trường hợp là product_info hay free_wallpaper_info */
+                } else if($type=='blog_info'||$type=='post_info'){ /* trường hợp là product_info hay free_wallpaper_info */
                     $response   = Charactor::convertStrToUrl($title).'-'.time();
-                } else if($type=='category_blog'){ /* trường hợp là category_blog */
+                } else { /* trường hợp là category_blog */
                     $response   = Charactor::convertStrToUrl($title);
                 }
             } else { /* trường hợp không có trang cha */
@@ -67,82 +58,36 @@ class HelperController extends Controller {
         return $response;
     }
 
-    public static function getFullInfoPageByIdSeo($idSeo){
-        $response               = new \stdClass;
-        /* kiểm tra xem loại nào */
-        $infoSeo                = Seo::select('*')
-                                    ->where('id', $idSeo)
-                                    ->first();
-        if(!empty($infoSeo)){
-            $type               = $infoSeo->type;
-            switch ($type) {
-                case 'tag_info':
-                    $response   = Tag::select('*')
-                                    ->whereHas('seos.infoSeo', function($query) use($idSeo){
-                                        $query->where('id', $idSeo);
-                                    })
-                                    ->with('seo', 'seos')
-                                    ->first();
-                    break;
-                case 'product_info':
-                    $response   = Product::select('*')
-                                    ->whereHas('seos.infoSeo', function($query) use($idSeo){
-                                        $query->where('id', $idSeo);
-                                    })
-                                    ->with('seo', 'seos')
-                                    ->first();
-                    break;
-                case 'page_info':
-                    $response   = Page::select('*')
-                                    ->whereHas('seos.infoSeo', function($query) use($idSeo){
-                                        $query->where('id', $idSeo);
-                                    })
-                                    ->with('seo', 'seos')
-                                    ->first();
-                    break;
-                case 'category_blog':
-                    $response   = CategoryBlog::select('*')
-                                    ->whereHas('seos.infoSeo', function($query) use($idSeo){
-                                        $query->where('id', $idSeo);
-                                    })
-                                    ->with('seo', 'seos')
-                                    ->first();
-                    break;
-                case 'blog_info':
-                    $response   = Blog::select('*')
-                                    ->whereHas('seos.infoSeo', function($query) use($idSeo){
-                                        $query->where('id', $idSeo);
-                                    })
-                                    ->with('seo', 'seos')
-                                    ->first();
-                    break;
-                case 'document_info':
-                    $response   = Document::select('*')
-                                    ->whereHas('seos.infoSeo', function($query) use($idSeo){
-                                        $query->where('id', $idSeo);
-                                    })
-                                    ->with('seo', 'seos')
-                                    ->first();
-                    break;
-                case 'free_wallpaper_info':
-                    $response   = FreeWallpaper::select('*')
-                                    ->whereHas('seos.infoSeo', function($query) use($idSeo){
-                                        $query->where('id', $idSeo);
-                                    })
-                                    ->with('seo', 'seos')
-                                    ->first();
-                    break;
-                default:
-                    /* vì có thể là category_info, style_info, event_info */
-                    $response   = Category::select('*')
-                                    ->whereHas('seos.infoSeo', function($query) use($idSeo){
-                                        $query->where('id', $idSeo);
-                                    })
-                                    ->with('seo', 'seos')
-                                    ->first();
-                    break;
+    public static function getFullInfoPageByIdSeo($idSeo)
+    {
+        $response = new \stdClass;
+
+        // Lấy thông tin SEO
+        $infoSeo = Seo::select('*')
+            ->where('id', $idSeo)
+            ->first();
+
+        if (!empty($infoSeo)) {
+            $type = $infoSeo->type;
+            $config = config('tablemysql');
+
+            // Kiểm tra xem type có tồn tại trong config không
+            if (isset($config[$type]) && isset($config[$type]['model_name'])) {
+                $modelName = $config[$type]['model_name'];
+                $modelClass = "App\\Models\\{$modelName}"; // Giả sử namespace của model là App\Models
+
+                // Kiểm tra xem class model có tồn tại không
+                if (class_exists($modelClass)) {
+                    $response = $modelClass::select('*')
+                        ->whereHas('seos.infoSeo', function ($query) use ($idSeo) {
+                            $query->where('id', $idSeo);
+                        })
+                        ->with('seo', 'seos')
+                        ->first();
+                }
             }
         }
+
         return $response;
     }
     
@@ -193,5 +138,10 @@ class HelperController extends Controller {
             ];
             $request->session()->put('message', $message);
         }
+    }
+
+    /* Chuẩn hóa Unicode: Sử dụng Normalizer của PHP (có sẵn trong phần mở rộng intl) để chuẩn hóa chuỗi đầu vào. Điều này đảm bảo các ký tự có dấu được so sánh một cách chính xác. */
+    public static function normalizeUnicode($string) {
+        return \Normalizer::normalize($string, \Normalizer::FORM_C);
     }
 }

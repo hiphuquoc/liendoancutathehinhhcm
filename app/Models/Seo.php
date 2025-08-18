@@ -37,24 +37,21 @@ class Seo extends Model {
         'language',
     ];
 
-    public static function insertItem($params, $idSeoVI = 0)
+    public static function insertItem(array $params, int $idSeoVI = 0): int
     {
-        $id = 0;
+        // Tạo mới bản ghi
+        $model = new Seo();
 
-        // Kiểm tra language duy nhất
-        $flagCheckLanguage = self::checkLanguageUnique($idSeoVI, $params['language'] ?? '');
-
-        // Tiến hành insert nếu điều kiện hợp lệ
-        if($flagCheckLanguage){
-            $model = new Seo();
-            foreach ($params as $key => $value) {
-                $model->{$key} = $value;
-            }
-            $model->save();
-            $id = $model->id;
+        // Gán các tham số vào model
+        foreach ($params as $key => $value) {
+            $model->{$key} = $value;
         }
 
-        return $id;
+        // Lưu vào cơ sở dữ liệu
+        $model->save();
+
+        // Trả về ID của bản ghi vừa được tạo
+        return $model->id ?: 0;
     }
 
     public static function insertQuick(array $params): int
@@ -102,6 +99,24 @@ class Seo extends Model {
             }
         }
         return $flag;
+    }
+
+    public static function replaceInternalLinksInSeoContents($slugOld, $slugNew){
+        $baseUrl        = env('APP_URL');
+
+        $contentsMatch = SeoContent::whereRaw('content REGEXP ?', [
+            'href=["\']' . preg_quote($baseUrl . '/' . HelperController::normalizeUnicode($slugOld), '/') . '(\?.*)?["\']'
+        ])
+        ->orWhereRaw('content REGEXP ?', [
+            'href=["\']\.\./\.\./' . preg_quote(HelperController::normalizeUnicode($slugOld), '/') . '(\?.*)?["\']'
+        ])
+        ->get();
+
+        // Xử lý từng bản ghi
+        foreach ($contentsMatch as $content) {
+            $content->content = self::replaceInternalLinks($slugOld, $slugNew, $content->content);
+            $content->save();
+        }
     }
 
     public static function replaceInternalLinks($slugOld, $slugNew, $content) {
@@ -202,37 +217,6 @@ class Seo extends Model {
                 'slug_full' => $slugFull,
                 'type' => $type,
                 'idSeo' => $idSeo,
-                'error_message' => $e->getMessage(),
-                'stack_trace' => $e->getTraceAsString(),
-            ]);
-        }
-
-        return $flag;
-    }
-
-
-    public static function checkLanguageUnique($idSeoVi, $language)
-    {
-        $flag = false;
-
-        try {
-            $tmp = HelperController::getFullInfoPageByIdSeo($idSeoVi);
-
-            // Nếu không tìm thấy hoặc language rỗng thì trả về false, không log
-            if (empty($tmp) || empty($language)) {
-                return $flag;
-            }
-
-            foreach ($tmp->seos as $seo) {
-                if (!empty($seo->infoSeo->language) && $seo->infoSeo->language == $language) {
-                    $flag = true;
-                    break;
-                }
-            }
-        } catch (\Exception $e) {
-            Log::error('Lỗi khi kiểm tra language', [
-                'idSeoVi' => $idSeoVi,
-                'language' => $language,
                 'error_message' => $e->getMessage(),
                 'stack_trace' => $e->getTraceAsString(),
             ]);

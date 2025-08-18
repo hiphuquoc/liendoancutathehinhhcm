@@ -55,7 +55,6 @@ class CreateTrainer extends Command {
             ];
         }
 
-        $count          = 0;
         /* lấy id trang parent (huan-luyen-vien) */
         $parent         = Seo::select('*')
                             ->where('slug', config('main_'.env('APP_NAME').'.slug_trainer_parent'))
@@ -113,6 +112,8 @@ class CreateTrainer extends Command {
                 ++$i;
             }
         }
+
+        $count              = 0;
         foreach($trainers as $trainer){
             if(!empty($trainer['name'])){
                 $nameCover  = ucwords(mb_strtolower($trainer['name'], 'UTF-8'));
@@ -142,12 +143,14 @@ class CreateTrainer extends Command {
                     "repeater_trainer_degree" => $dataDegrees,
                 ];
 
-                dispatch(function () use ($data) {
+                dispatch(function () use ($data, $count) {
                     $request = TrainerRequest::create(route('admin.trainer.view'), 'POST', $data);
                     $request->setLaravelSession(session());
                     
                     $controller = app(TrainerController::class);
                     $controller->createAndUpdate($request);
+
+                    ++$count;
                 });
             }
         }

@@ -143,15 +143,15 @@ class CreateTrainer extends Command {
                     "repeater_trainer_degree" => $dataDegrees,
                 ];
 
-                dispatch(function () use ($data, $count) {
+                dispatch(function () use ($data) {
                     $request = TrainerRequest::create(route('admin.trainer.view'), 'POST', $data);
                     $request->setLaravelSession(session());
                     
                     $controller = app(TrainerController::class);
                     $controller->createAndUpdate($request);
-
-                    ++$count;
                 });
+
+                ++$count;
             }
         }
         

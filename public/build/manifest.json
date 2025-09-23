@@ -1,56 +1,56 @@
 {
   "resources/sources/admin/style.scss": {
-    "file": "assets/style-G_Uag4Of.css",
+    "file": "assets/style.css",
     "src": "resources/sources/admin/style.scss",
     "isEntry": true
   },
   "resources/sources/main/aboutus-first-view.scss": {
-    "file": "assets/home-first-view-BSUi3V76.css",
+    "file": "assets/home-first-view.css",
     "src": "resources/sources/main/home-first-view.scss",
     "isEntry": true
   },
   "resources/sources/main/aboutus-non-first-view.scss": {
-    "file": "assets/home-non-first-view-uvBumCKy.css",
+    "file": "assets/home-non-first-view.css",
     "src": "resources/sources/main/home-non-first-view.scss",
     "isEntry": true
   },
   "resources/sources/main/category-blog-first-view.scss": {
-    "file": "assets/category-blog-first-view-fIhTcnpA.css",
+    "file": "assets/category-blog-first-view.css",
     "src": "resources/sources/main/category-blog-first-view.scss",
     "isEntry": true
   },
   "resources/sources/main/category-blog-non-first-view.scss": {
-    "file": "assets/home-non-first-view-uvBumCKy.css",
+    "file": "assets/home-non-first-view.css",
     "src": "resources/sources/main/home-non-first-view.scss",
     "isEntry": true
   },
   "resources/sources/main/contact-first-view.scss": {
-    "file": "assets/home-first-view-BSUi3V76.css",
-    "src": "resources/sources/main/home-first-view.scss",
+    "file": "assets/contact-first-view.css",
+    "src": "resources/sources/main/contact-first-view.scss",
     "isEntry": true
   },
   "resources/sources/main/contact-non-first-view.scss": {
-    "file": "assets/home-non-first-view-uvBumCKy.css",
+    "file": "assets/home-non-first-view.css",
     "src": "resources/sources/main/home-non-first-view.scss",
     "isEntry": true
   },
   "resources/sources/main/home-first-view.scss": {
-    "file": "assets/home-first-view-BSUi3V76.css",
+    "file": "assets/home-first-view.css",
     "src": "resources/sources/main/home-first-view.scss",
     "isEntry": true
   },
   "resources/sources/main/home-non-first-view.scss": {
-    "file": "assets/home-non-first-view-uvBumCKy.css",
+    "file": "assets/home-non-first-view.css",
     "src": "resources/sources/main/home-non-first-view.scss",
     "isEntry": true
   },
   "resources/sources/main/page-first-view.scss": {
-    "file": "assets/page-first-view-C6wGQJls.css",
+    "file": "assets/page-first-view.css",
     "src": "resources/sources/main/page-first-view.scss",
     "isEntry": true
   },
   "resources/sources/main/page-non-first-view.scss": {
-    "file": "assets/home-non-first-view-uvBumCKy.css",
+    "file": "assets/home-non-first-view.css",
     "src": "resources/sources/main/home-non-first-view.scss",
     "isEntry": true
   }

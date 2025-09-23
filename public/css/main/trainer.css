@@ -2,6 +2,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 15px 0;
+    transition: all 0.3s ease;
 }
 .hero-trainers .course-btn {
     margin-top: 20px;
@@ -10,6 +11,8 @@
     width: auto;
     margin: 0 12.5px;
     position: relative;
+    transition: all 0.3s ease;
+    overflow: hidden;
 }
 .trainer_all .trainer_box {
     width: calc(33.33% - 25px); /* khong phải slider => show all */
@@ -18,10 +21,15 @@
     display: flex;
 }
 .img_trainer{
+    display: flex;
     position: relative;
     overflow: hidden;
+    border-radius: 12px;
     -webkit-clip-path: polygon(30% 0, 100% 0, 100% 100%, 0 100%, 0 22%);
     clip-path: polygon(30% 0, 100% 0, 100% 100%, 0 100%, 0 22%);
+}
+.img_trainer:hover img {
+    scale: 1.1;
 }
 .img_wrapper {
     width: 100%;
@@ -35,15 +43,32 @@
     width: 100%;
     height: 100%;
     object-fit: cover; /* Hình ảnh lấp đầy khung theo tỷ lệ */
-    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+.sponsor_sign {
+    background-color: #319795;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    min-width: 50px;
+    height: 32px;
+    border-radius: 7px 0 0 7px;
+    position: absolute;
+    right: 0;
+    top: 20px;
+    padding: 5px 12px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    z-index: 1;
 }
 .trainer_box:before {
     background-color: #00adef;
     content: "";
-    height: 110px;
-    left: 35px;
+    height: 120px;
+    left: 40px;
     position: absolute;
-    top: 0;
+    top: -20px;
     transform: rotate(45deg);
     width: 5px;
 }
@@ -127,4 +152,18 @@
     .trainer_con p {
         margin-top: 5px;
     }
+}
+
+.no-trainer-found {
+    display: none;
+    opacity: 0;
+    text-align: center;
+    font-size: 18px;
+    color: #555;
+    margin-top: 20px;
+    transition: opacity 0.3s ease;
+}
+.no-trainer-found.show {
+    display: block;
+    opacity: 1;
 }

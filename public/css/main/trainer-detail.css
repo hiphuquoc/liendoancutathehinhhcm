@@ -39,6 +39,24 @@
     border-radius: 12px;
 }
 
+.sponsor_sign {
+    background-color: #319795;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    min-width: 50px;
+    height: 32px;
+    border-radius: 7px 0 0 7px;
+    position: absolute;
+    right: 0;
+    top: 20px;
+    padding: 5px 12px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    z-index: 1;
+}
+
 .teacherInfoBox {
     display: flex;
     flex-direction: column;
@@ -67,6 +85,7 @@
 
 .teacherInfoBox2 .teacherInfoBox2_image {
     display: none;
+    position: relative;
 }
 
 .teacherInfoBox2 .teacherInfoBox2_image img {

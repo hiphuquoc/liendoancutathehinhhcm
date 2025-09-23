@@ -215,8 +215,8 @@ return [
             'slug'  => 'khoa-hoc',
         ],
         [
-            'name'  => 'Lịch học',
-            'slug'  => 'lich-hoc',
+            'name'  => 'Đối tác',
+            'slug'  => 'doi-tac-nha-tai-tro',
         ],
         [
             'name'  => 'Tài liệu',

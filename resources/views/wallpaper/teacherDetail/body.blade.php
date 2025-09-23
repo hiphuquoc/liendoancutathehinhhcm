@@ -4,23 +4,36 @@
             <!-- ảnh đại diện -->
             <div class="teacherDetailImg">
               @php
-                /* thông tin trang */
+                /* Thông tin trang */
                 $fullName     = '';
                 $job          = '';
                 $summary      = '';
                 foreach($item->seos as $seo){
-                  if(!empty($seo->infoSeo->language)&&$seo->infoSeo->language==$language){
+                  if(!empty($seo->infoSeo->language) && $seo->infoSeo->language == $language){
                     $tmp        = explode('|', $seo->infoSeo->title);
                     $fullName   = !empty($tmp[0]) ? $tmp[0] : '';
                     $job        = !empty($tmp[1]) ? $tmp[1] : '';
                     $summary    = $seo->infoSeo->seo_description;
                   }
                 }
-                /* thông tin ảnh */
-                $imageSmall = \App\Helpers\Image::getUrlImageSmallByUrlImage($item->seo->image);
-                $imageMini  = \App\Helpers\Image::getUrlImageMiniByUrlImage($item->seo->image);
+
+                /* Thông tin ảnh */
+                $defaultImage = config('image.default'); // ảnh mặc định
+                if (!empty($item->seo) && !empty($item->seo->image)) {
+                    $imageSmall = \App\Helpers\Image::getUrlImageSmallByUrlImage($item->seo->image);
+                    $imageMini  = \App\Helpers\Image::getUrlImageMiniByUrlImage($item->seo->image);
+                } else {
+                    $imageSmall = $defaultImage;
+                    $imageMini  = $defaultImage;
+                }
               @endphp
-              <img class="lazyload" src="{{ $imageMini }}?{{ time() }}" data-src="{{ $imageSmall }}?{{ time() }}" alt="ảnh huấn luyện viên {{ $fullName }}" title="ảnh huấn luyện viên {{ $fullName }}" loading="lazy" />
+
+              <img class="lazyload"
+                  src="{{ $imageMini }}?{{ time() }}"
+                  data-src="{{ $imageSmall }}?{{ time() }}"
+                  alt="Ảnh huấn luyện viên {{ $fullName }}"
+                  title="Ảnh huấn luyện viên {{ $fullName }}"
+                  loading="lazy" />
             </div>
             <!-- thành tích -->
             @if(!empty($item->achievements)&&$item->achievements->isNotEmpty())

@@ -31,7 +31,7 @@
     $urlPath                    = urldecode(request()->path());
 @endphp             
 <div class="logoInMenuMobile show-991">
-    <a href="/{{ $language }}" class="logoMain" aria-label="{{ config('language.'.$language.'.data.home') }} Name.com.vn"></a>
+    <a href="/{{ $language }}" class="logoMain" aria-label="{{ config('language.'.$language.'.data.home') }} Liên đoàn"></a>
 </div>
 <!-- icon hiển thị chế độ xem -->
 <div class="layoutHeaderSide_header_menuView" onclick="settingCollapsedMenu();">
@@ -49,7 +49,7 @@
             // if($urlPath==$language||$urlPath=='/') $selected = 'selected';
         @endphp
         <li class="{{ $selected }}">
-            <a href="/{{ $language }}" title="{{ config('language.'.$language.'.data.home').' '.config('main_'.env('APP_NAME').'.info.'.env('APP_NAME').'.company_name') }}" aria-label="{{ config('language.'.$language.'.data.home') }} Name.com.vn">
+            <a href="/{{ $language }}" title="{{ config('language.'.$language.'.data.home').' '.config('main_'.env('APP_NAME').'.info.'.env('APP_NAME').'.company_name') }}" aria-label="{{ config('language.'.$language.'.data.home') }} Liên đoàn">
                 {!! $icon !!}
                 <div class="maxLine_1">{{ config('language.'.$language.'.data.home') }}</div>
             </a>
@@ -311,7 +311,7 @@
             {{ config('language.'.$language.'.data.connect_with_us') }}
         </div>
         <div class="socialBox_social_box">
-            <a href="https://www.facebook.com/wallpapers.name.com.vn" class="socialBox_social_box_item" aria-label="facebook">
+            <a href="https://www.facebook.com/wallpapers.Liên đoàn" class="socialBox_social_box_item" aria-label="facebook">
                 <i class="fa-brands fa-facebook-f"></i>
             </a>
             <a href="https://www.instagram.com/wallpapers_namecomvn" class="socialBox_social_box_item" aria-label="instagram">

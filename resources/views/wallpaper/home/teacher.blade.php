@@ -14,22 +14,17 @@
             @foreach($trainer->seos as $seo)
                 @if(!empty($seo->infoSeo->language)&&$seo->infoSeo->language==$language)
                     @php
-                        $tmp        = explode('|', $seo->infoSeo->title);
-                        $fullName   = !empty($tmp[0]) ? $tmp[0] : '';
-                        $job        = !empty($tmp[1]) ? $tmp[1] : '';
-                        $imageSmall = \App\Helpers\Image::getUrlImageSmallByUrlImage($seo->infoSeo->image);
-                        $imageMini  = \App\Helpers\Image::getUrlImageMiniByUrlImage($seo->infoSeo->image);
+                      $tmp        = explode('|', $seo->infoSeo->title);
+                      $fullName   = !empty($tmp[0]) ? $tmp[0] : '';
+                      $job        = !empty($tmp[1]) ? $tmp[1] : '';
+                      $imageSmall = \App\Helpers\Image::getUrlImageSmallByUrlImage($seo->infoSeo->image);
+                      $imageMini  = \App\Helpers\Image::getUrlImageMiniByUrlImage($seo->infoSeo->image);
                     @endphp
                     <div class="trainer_box">
                         <div class="img_trainer">
-                            <div class="img_wrapper">
+                            <a href="/{{ $seo->infoSeo->slug_full }}" class="img_wrapper">
                                 <img class="lazyload" src="{{ $imageMini }}?{{ time() }}" data-src="{{ $imageSmall }}?{{ time() }}" alt="{{ $fullName }}" title="{{ $fullName }}" loading="lazy" />
-                            </div>
-                            <div class="trainer_social">
-                                <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-                                <a href="#"><i class="fa-brands fa-youtube"></i></a>
-                                <a href="#"><i class="fa-brands fa-instagram"></i></a>
-                            </div>
+                            </a>
                         </div>
                         <div class="trainer_con">
                             <a href="/{{ $seo->infoSeo->slug_full }}"><h3>{{ $fullName }}</h3></a>

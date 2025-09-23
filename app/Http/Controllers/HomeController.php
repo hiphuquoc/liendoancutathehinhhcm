@@ -55,10 +55,15 @@ class HomeController extends Controller {
             $params['request_load'] = 10;
             $blogs                  = \App\Http\Controllers\CategoryBlogController::getBlogs($params, $language);
             /* lấy 10 trainer hiển thị tạm */
-            $trainers               = Trainer::select('*')
-                                        ->skip(0)
-                                        ->take(10)
-                                        ->get();
+            $trainers = Trainer::with(['seo' => function ($q) {
+                            $q->whereNotNull('image')->where('image', '!=', '');
+                        }])
+                        ->whereHas('seo', function ($q) {
+                            $q->whereNotNull('image')->where('image', '!=', '');
+                        })
+                        ->inRandomOrder()
+                        ->take(3)
+                        ->get();
             /* Ghi dữ liệu - Xuất kết quả */
             $xhtml                  = view('wallpaper.home.index', compact('item', 'itemSeo', 'trainers', 'blogs', 'language'))->render();
             if(env('APP_CACHE_HTML')==true) Storage::put(config('main_'.env('APP_NAME').'.cache.folderSave').$nameCache, $xhtml);
@@ -204,6 +209,79 @@ class HomeController extends Controller {
             /* breadcrumb */
             $breadcrumb = Url::buildBreadcrumb($itemSeo->slug_full);
             $xhtml      = view('wallpaper.timetable.index', compact('item', 'itemSeo', 'language', 'breadcrumb'))->render();
+        //     /* Ghi dữ liệu - Xuất kết quả */
+        //     if(env('APP_CACHE_HTML')==true) Storage::put(config('main_'.env('APP_NAME').'.cache.folderSave').$nameCache, $xhtml);
+        // }
+        echo $xhtml;
+    }
+
+    public static function sponsor(Request $request, $language = 'vi'){
+        /* ngôn ngữ */
+        SettingController::settingLanguage($language);
+        // /* cache HTML */
+        // $nameCache              = $language.'home.'.config('main_'.env('APP_NAME').'.cache.extension');
+        // $pathCache              = Storage::path(config('main_'.env('APP_NAME').'.cache.folderSave')).$nameCache;
+        // $cacheTime    	        = env('APP_CACHE_TIME') ?? 1800;
+        // if(file_exists($pathCache)&&$cacheTime>(time() - filectime($pathCache))){
+        //     $xhtml              = file_get_contents($pathCache);
+        // }else {
+            $item               = Page::select('*')
+                ->whereHas('seos.infoSeo', function ($query) use ($language) {
+                    $query->where('language', $language)
+                            ->where('slug', 'doi-tac-nha-tai-tro');
+                })
+                ->with('seo', 'seos.infoSeo', 'type')
+                ->first();
+            /* lấy item seo theo ngôn ngữ được chọn */
+            $itemSeo            = [];
+            if (!empty($item->seos)) {
+                foreach ($item->seos as $s) {
+                    if ($s->infoSeo->language == $language) {
+                        $itemSeo = $s->infoSeo;
+                        break;
+                    }
+                }
+            }
+            $trainers   = Trainer::all();
+            /* breadcrumb */
+            $breadcrumb = Url::buildBreadcrumb($itemSeo->slug_full);
+            $xhtml      = view('wallpaper.sponsor.index', compact('item', 'itemSeo', 'trainers', 'language', 'breadcrumb'))->render();
+        //     /* Ghi dữ liệu - Xuất kết quả */
+        //     if(env('APP_CACHE_HTML')==true) Storage::put(config('main_'.env('APP_NAME').'.cache.folderSave').$nameCache, $xhtml);
+        // }
+        echo $xhtml;
+    }
+
+    public static function sponsorDetail(Request $request, $language = 'vi'){
+        /* ngôn ngữ */
+        SettingController::settingLanguage($language);
+        // /* cache HTML */
+        // $nameCache              = $language.'home.'.config('main_'.env('APP_NAME').'.cache.extension');
+        // $pathCache              = Storage::path(config('main_'.env('APP_NAME').'.cache.folderSave')).$nameCache;
+        // $cacheTime    	        = env('APP_CACHE_TIME') ?? 1800;
+        // if(file_exists($pathCache)&&$cacheTime>(time() - filectime($pathCache))){
+        //     $xhtml              = file_get_contents($pathCache);
+        // }else {
+            $item               = Page::select('*')
+                ->whereHas('seos.infoSeo', function ($query) use ($language) {
+                    $query->where('language', $language)
+                            ->where('slug', 'doi-tac-nha-tai-tro');
+                })
+                ->with('seo', 'seos.infoSeo', 'type')
+                ->first();
+            /* lấy item seo theo ngôn ngữ được chọn */
+            $itemSeo            = [];
+            if (!empty($item->seos)) {
+                foreach ($item->seos as $s) {
+                    if ($s->infoSeo->language == $language) {
+                        $itemSeo = $s->infoSeo;
+                        break;
+                    }
+                }
+            }
+            /* breadcrumb */
+            $breadcrumb = Url::buildBreadcrumb($itemSeo->slug_full);
+            $xhtml      = view('wallpaper.sponsorDetail.index', compact('item', 'itemSeo', 'language', 'breadcrumb'))->render();
         //     /* Ghi dữ liệu - Xuất kết quả */
         //     if(env('APP_CACHE_HTML')==true) Storage::put(config('main_'.env('APP_NAME').'.cache.folderSave').$nameCache, $xhtml);
         // }

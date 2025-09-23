@@ -2,11 +2,11 @@
 @push('cssFirstView')
     <!-- trường hợp là local thì dùng vite để chạy npm run dev lúc code -->
     @if(env('APP_ENV')=='local')
-        @vite('resources/sources/main/home-first-view.scss')
+        @vite('resources/sources/main/contact-first-view.scss')
     @else
         @php
             $manifest           = json_decode(file_get_contents(public_path('build/manifest.json')), true);
-            $cssFirstView       = $manifest['resources/sources/main/home-first-view.scss']['file'];
+            $cssFirstView       = $manifest['resources/sources/main/contact-first-view.scss']['file'];
         @endphp
         <style type="text/css">
             {!! file_get_contents(asset('build/' . $cssFirstView)) !!}
@@ -43,23 +43,11 @@
 @section('content')
     <!-- share social -->
     @include('wallpaper.template.shareSocial')
-    <!-- content -->
-    <div class="breadcrumbMobileBox"><!-- dùng để chống nhảy padding - margin so với các trang có breadcrumb --></div>
     <!-- Item Category Grid Box -->
-    @include('wallpaper.home.slider')
-    @include('wallpaper.home.aboutus')
-    @include('wallpaper.home.benefit')
-    @include('wallpaper.home.course')
-    @if(!empty($trainers)&&$trainers->isNotEmpty())
-        @include('wallpaper.home.teacher')
-    @endif
-    {{-- @include('wallpaper.home.timetable') --}}
-    @include('wallpaper.aboutus.whychooseus')
-    @include('wallpaper.aboutus.peopletellus')
-    @include('wallpaper.home.video')
-    @include('wallpaper.home.sponsor')
-    @include('wallpaper.home.ourblog')
-    {{-- @include('wallpaper.home.form') --}}
+    @include('wallpaper.snippets.banner', [
+        'urlImage' => 'https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/about-bg-img.webp',
+    ])
+    @include('wallpaper.sponsor.sponsor')
 @endsection
 @push('modal')
     

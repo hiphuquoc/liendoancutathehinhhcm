@@ -366,6 +366,8 @@ Route::get('/{language?}', [HomeController::class, 'home'])
 Route::get('/gioi-thieu', [HomeController::class, 'aboutus'])->name('main.aboutus');
 Route::get('/khoa-hoc', [HomeController::class, 'course'])->name('main.course');
 Route::get('/lich-hoc', [HomeController::class, 'timetable'])->name('main.timetable');
+Route::get('/doi-tac-nha-tai-tro', [HomeController::class, 'sponsor'])->name('main.sponsor');
+Route::get('/doi-tac-nha-tai-tro/test', [HomeController::class, 'sponsorDetail'])->name('main.sponsorDetail');
 Route::get('/huan-luyen-vien', [HomeController::class, 'teacher'])->name('main.teacher');
 Route::get('/huan-luyen-vien/nguyen-cam-tien', [HomeController::class, 'teacherDetail'])->name('main.teacherDetail');
 Route::get('/lien-he', [HomeController::class, 'contact'])->name('main.contact');

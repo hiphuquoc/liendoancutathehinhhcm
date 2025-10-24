@@ -34,6 +34,7 @@ use App\Http\Controllers\Admin\CategoryBlogController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\Admin\TrainerController;
+use App\Http\Controllers\Admin\RefereeController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\CacheController;
 use App\Http\Controllers\Admin\WallpaperController;
@@ -68,13 +69,25 @@ Route::middleware(['auth', 'role:admin,sub-admin'])->group(function () {
         Route::get('/view', [TrainerController::class, 'view'])->name('admin.trainer.view');
         Route::post('/createAndUpdate', [TrainerController::class, 'createAndUpdate'])->name('admin.trainer.createAndUpdate');
     });
+    Route::prefix('referee')->group(function(){
+        Route::get('/', [RefereeController::class, 'list'])->name('admin.referee.list');
+        Route::get('/view', [RefereeController::class, 'view'])->name('admin.referee.view');
+        Route::post('/createAndUpdate', [RefereeController::class, 'createAndUpdate'])->name('admin.referee.createAndUpdate');
+    });
 });
 
 Route::middleware('auth', 'role:admin')->group(function () {
     Route::prefix('he-thong')->group(function(){
-        /* ===== AI ===== */
-        Route::get('/delete', [TrainerController::class, 'delete'])->name('admin.trainer.delete');
-        Route::get('/createUser', [TrainerController::class, 'createUser'])->name('admin.trainer.createUser');
+        /* ===== Trainer ===== */
+        Route::prefix('trainer')->group(function(){
+            Route::get('/delete', [TrainerController::class, 'delete'])->name('admin.trainer.delete');
+            Route::get('/createUser', [TrainerController::class, 'createUser'])->name('admin.trainer.createUser');
+        });
+        /* ===== Referee ===== */
+        Route::prefix('referee')->group(function(){
+            Route::get('/delete', [RefereeController::class, 'delete'])->name('admin.referee.delete');
+            Route::get('/createUser', [RefereeController::class, 'createUser'])->name('admin.referee.createUser');
+        });
         /* ===== AI ===== */
         Route::get('/chatGpt', [ChatGptController::class, 'chatGpt'])->name('main.chatGpt');
         /* ===== REDIRECT ===== */
@@ -195,13 +208,6 @@ Route::middleware('auth', 'role:admin')->group(function () {
             Route::post('/createAndUpdate', [DocumentController::class, 'createAndUpdate'])->name('admin.document.createAndUpdate');
             Route::get('/delete', [DocumentController::class, 'delete'])->name('admin.document.delete');
         });
-        // /* ===== Trainer ===== */
-        // Route::prefix('trainer')->group(function(){
-        //     Route::get('/', [TrainerController::class, 'list'])->name('admin.trainer.list');
-        //     Route::get('/view', [TrainerController::class, 'view'])->name('admin.trainer.view');
-        //     Route::post('/createAndUpdate', [TrainerController::class, 'createAndUpdate'])->name('admin.trainer.createAndUpdate');
-        //     Route::get('/delete', [TrainerController::class, 'delete'])->name('admin.trainer.delete');
-        // });
         /* ===== Order ===== */
         Route::prefix('order')->group(function(){
             Route::get('/', [OrderController::class, 'list'])->name('admin.order.list');
@@ -367,9 +373,8 @@ Route::get('/gioi-thieu', [HomeController::class, 'aboutus'])->name('main.aboutu
 Route::get('/khoa-hoc', [HomeController::class, 'course'])->name('main.course');
 Route::get('/lich-hoc', [HomeController::class, 'timetable'])->name('main.timetable');
 Route::get('/doi-tac-nha-tai-tro', [HomeController::class, 'sponsor'])->name('main.sponsor');
-Route::get('/doi-tac-nha-tai-tro/test', [HomeController::class, 'sponsorDetail'])->name('main.sponsorDetail');
 Route::get('/huan-luyen-vien', [HomeController::class, 'teacher'])->name('main.teacher');
-Route::get('/huan-luyen-vien/nguyen-cam-tien', [HomeController::class, 'teacherDetail'])->name('main.teacherDetail');
+Route::get('/trong-tai', [HomeController::class, 'referee'])->name('main.referee');
 Route::get('/lien-he', [HomeController::class, 'contact'])->name('main.contact');
 /* trang giỏ hàng */
 $validCarts     = config('main_'.env('APP_NAME').'.url_cart_page');

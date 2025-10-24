@@ -21,6 +21,7 @@ use GeoIp2\Database\Reader;
 use App\Models\RelationSeoProductInfo;
 use App\Models\Timezone;
 use App\Helpers\Url;
+use App\Models\Referee;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class HomeController extends Controller {
@@ -252,42 +253,6 @@ class HomeController extends Controller {
         echo $xhtml;
     }
 
-    public static function sponsorDetail(Request $request, $language = 'vi'){
-        /* ngôn ngữ */
-        SettingController::settingLanguage($language);
-        // /* cache HTML */
-        // $nameCache              = $language.'home.'.config('main_'.env('APP_NAME').'.cache.extension');
-        // $pathCache              = Storage::path(config('main_'.env('APP_NAME').'.cache.folderSave')).$nameCache;
-        // $cacheTime    	        = env('APP_CACHE_TIME') ?? 1800;
-        // if(file_exists($pathCache)&&$cacheTime>(time() - filectime($pathCache))){
-        //     $xhtml              = file_get_contents($pathCache);
-        // }else {
-            $item               = Page::select('*')
-                ->whereHas('seos.infoSeo', function ($query) use ($language) {
-                    $query->where('language', $language)
-                            ->where('slug', 'doi-tac-nha-tai-tro');
-                })
-                ->with('seo', 'seos.infoSeo', 'type')
-                ->first();
-            /* lấy item seo theo ngôn ngữ được chọn */
-            $itemSeo            = [];
-            if (!empty($item->seos)) {
-                foreach ($item->seos as $s) {
-                    if ($s->infoSeo->language == $language) {
-                        $itemSeo = $s->infoSeo;
-                        break;
-                    }
-                }
-            }
-            /* breadcrumb */
-            $breadcrumb = Url::buildBreadcrumb($itemSeo->slug_full);
-            $xhtml      = view('wallpaper.sponsorDetail.index', compact('item', 'itemSeo', 'language', 'breadcrumb'))->render();
-        //     /* Ghi dữ liệu - Xuất kết quả */
-        //     if(env('APP_CACHE_HTML')==true) Storage::put(config('main_'.env('APP_NAME').'.cache.folderSave').$nameCache, $xhtml);
-        // }
-        echo $xhtml;
-    }
-
     public static function teacher(Request $request, $language = 'vi'){
         /* ngôn ngữ */
         SettingController::settingLanguage($language);
@@ -325,7 +290,43 @@ class HomeController extends Controller {
         echo $xhtml;
     }
 
-    public static function teacherDetail(Request $request, $language = 'vi'){
+    // public static function teacherDetail(Request $request, $language = 'vi'){
+    //     /* ngôn ngữ */
+    //     SettingController::settingLanguage($language);
+    //     /* cache HTML */
+    //     $nameCache              = $language.'home.'.config('main_'.env('APP_NAME').'.cache.extension');
+    //     $pathCache              = Storage::path(config('main_'.env('APP_NAME').'.cache.folderSave')).$nameCache;
+    //     $cacheTime    	        = env('APP_CACHE_TIME') ?? 1800;
+    //     if(file_exists($pathCache)&&$cacheTime>(time() - filectime($pathCache))){
+    //         $xhtml              = file_get_contents($pathCache);
+    //     }else {
+    //         $item               = Page::select('*')
+    //             ->whereHas('seos.infoSeo', function ($query) use ($language) {
+    //                 $query->where('language', $language)
+    //                         ->where('slug', 'huan-luyen-vien');
+    //             })
+    //             ->with('seo', 'seos.infoSeo', 'type')
+    //             ->first();
+    //         /* lấy item seo theo ngôn ngữ được chọn */
+    //         $itemSeo            = [];
+    //         if (!empty($item->seos)) {
+    //             foreach ($item->seos as $s) {
+    //                 if ($s->infoSeo->language == $language) {
+    //                     $itemSeo = $s->infoSeo;
+    //                     break;
+    //                 }
+    //             }
+    //         }
+    //         /* breadcrumb */
+    //         $breadcrumb = Url::buildBreadcrumb($itemSeo->slug_full);
+    //         $xhtml      = view('wallpaper.teacherDetail.index', compact('item', 'itemSeo', 'language', 'breadcrumb'))->render();
+    //         /* Ghi dữ liệu - Xuất kết quả */
+    //         if(env('APP_CACHE_HTML')==true) Storage::put(config('main_'.env('APP_NAME').'.cache.folderSave').$nameCache, $xhtml);
+    //     }
+    //     echo $xhtml;
+    // }
+
+    public static function referee(Request $request, $language = 'vi'){
         /* ngôn ngữ */
         SettingController::settingLanguage($language);
         // /* cache HTML */
@@ -338,7 +339,7 @@ class HomeController extends Controller {
             $item               = Page::select('*')
                 ->whereHas('seos.infoSeo', function ($query) use ($language) {
                     $query->where('language', $language)
-                            ->where('slug', 'huan-luyen-vien');
+                            ->where('slug', 'trong-tai');
                 })
                 ->with('seo', 'seos.infoSeo', 'type')
                 ->first();
@@ -352,9 +353,10 @@ class HomeController extends Controller {
                     }
                 }
             }
+            $trainers   = Referee::all();
             /* breadcrumb */
             $breadcrumb = Url::buildBreadcrumb($itemSeo->slug_full);
-            $xhtml      = view('wallpaper.teacherDetail.index', compact('item', 'itemSeo', 'language', 'breadcrumb'))->render();
+            $xhtml      = view('wallpaper.referee.index', compact('item', 'itemSeo', 'trainers', 'language', 'breadcrumb'))->render();
         //     /* Ghi dữ liệu - Xuất kết quả */
         //     if(env('APP_CACHE_HTML')==true) Storage::put(config('main_'.env('APP_NAME').'.cache.folderSave').$nameCache, $xhtml);
         // }

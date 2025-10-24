@@ -227,6 +227,10 @@ return [
             'slug'  => 'huan-luyen-vien',
         ],
         [
+            'name'  => 'Trọng tài',
+            'slug'  => 'trong-tai',
+        ],
+        [
             'name'  => 'Tin tức',
             'slug'  => 'tin-tuc',
         ],

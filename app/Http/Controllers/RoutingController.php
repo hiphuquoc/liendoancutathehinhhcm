@@ -12,6 +12,7 @@ use App\Models\Blog;
 use App\Models\Document;
 use App\Models\Page;
 use App\Models\CategoryBlog;
+use App\Models\Referee;
 use App\Models\Trainer;
 use Illuminate\Support\Facades\Auth;
 
@@ -74,16 +75,16 @@ class RoutingController extends Controller{
                 $flagMatch          = false;
                 /* ===== Trang ==== */
                 if($itemSeo->type=='page_info'){
-                    $flagMatch          = true;
-                    $item               = Page::select('*')
-                                            ->whereHas('seos.infoSeo', function($query) use($idSeo){
-                                                $query->where('id', $idSeo);
-                                            })
-                                            ->with('type')
-                                            ->first();
+                    $flagMatch      = true;
+                    $item           = Page::select('*')
+                                        ->whereHas('seos.infoSeo', function($query) use($idSeo){
+                                            $query->where('id', $idSeo);
+                                        })
+                                        ->with('type')
+                                        ->first();
                     if(!empty($item->type->code)&&$item->type->code=='document'){ 
                         /* trang tài liệu tổng */
-                        $documents = Document::select('*')
+                        $documents  = Document::select('*')
                                         ->with('seo', 'seos')
                                         ->get();
                         $xhtml  = view('wallpaper.document.index', compact('item', 'itemSeo', 'documents', 'language', 'breadcrumb'))->render();
@@ -148,6 +149,18 @@ class RoutingController extends Controller{
                     $flagMatch          = true;
                     /* thông tin trang */
                     $item               = Trainer::select('*')
+                                            ->whereHas('seos.infoSeo', function($query) use($idSeo){
+                                                $query->where('id', $idSeo);
+                                            })
+                                            ->with('seo', 'seos.infoSeo.contents')
+                                            ->first();
+                    $xhtml              = view('wallpaper.teacherDetail.index', compact('item', 'itemSeo', 'language', 'breadcrumb'))->render();
+                }
+                /* ===== Referee ==== */
+                if($itemSeo->type=='referee_info'){
+                    $flagMatch          = true;
+                    /* thông tin trang */
+                    $item               = Referee::select('*')
                                             ->whereHas('seos.infoSeo', function($query) use($idSeo){
                                                 $query->where('id', $idSeo);
                                             })

@@ -31,6 +31,9 @@ return [
     'trainer_info'        => [
         'model_name'    => 'Trainer',
     ],
+    'referee_info'        => [
+        'model_name'    => 'Referee',
+    ],
     'document_info'        => [
         'model_name'    => 'Document',
     ],

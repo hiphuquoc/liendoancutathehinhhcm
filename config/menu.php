@@ -2,6 +2,15 @@
 return [
     'left-menu-admin'   => [
         [
+            'name'      => 'Trọng tài',
+            'route'     => 'admin.referee.list',
+            'icon'      => '<i class="fa-solid fa-user-tie"></i>',
+            'role'      => [
+                'admin', 
+                'sub-admin',
+            ],
+        ],
+        [
             'name'      => 'Huấn luyện viên',
             'route'     => 'admin.trainer.list',
             'icon'      => '<i class="fa-solid fa-user-tie"></i>',

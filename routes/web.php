@@ -290,6 +290,7 @@ Route::post('/vnpay/url_ipn', [VNPayController::class, 'handleIPN'])->name('main
 /* nháp */
 Route::get('/test123', [HomeController::class, 'test'])->name('main.test');
 Route::get('/qrcode', [HomeController::class, 'qrcode'])->name('main.qrcode');
+Route::get('/qrcode-tt', [HomeController::class, 'qrcodeTT'])->name('main.qrcodeTT');
 Route::get('/chatgpt', [HomeController::class, 'chatGPT'])->name('main.chatGPT');
 /* lỗi */
 Route::get('/error', [\App\Http\Controllers\ErrorController::class, 'handle'])->name('error.handle');

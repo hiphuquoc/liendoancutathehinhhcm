@@ -1,359 +1,661 @@
 @extends('layouts.admin')
+
 @section('content')
     @php
-        $titlePage      = 'Thêm Bài Viết mới';
-        $submit         = 'admin.referee.createAndUpdate';
-        if(!empty($type)&&$type=='edit'){
-            $titlePage  = 'Chỉnh sửa Bài Viết';
+    $titlePage = 'Thêm Trọng tài mới';
+    $submit = 'admin.referee.createAndUpdate';
+    if(!empty($type) && $type == 'edit'){
+        $titlePage = 'Chỉnh sửa Trọng tài';
+    }
+    
+    // Image URL
+    $imageUrl = null;
+    $imageUrlSmall = null;
+    $imageInfo = null;
+    if(!empty($item->seo->image)) {
+        $imageUrl = \App\Helpers\Image::getUrlImageCloud($item->seo->image);
+        $imageUrlSmall = \App\Helpers\Image::getUrlImageSmallByUrlImage($item->seo->image);
+        try {
+            $response = Http::get($imageUrl);
+            if($response->ok() && $type != 'copy') {
+                $size = getimagesize($imageUrl);
+                $extension = pathinfo($imageUrl, PATHINFO_EXTENSION);
+                $fileSize = $response->header('content-length');
+                $imageInfo = [
+                    'extension' => $extension,
+                    'width' => $size[0],
+                    'height' => $size[1],
+                    'size' => round($fileSize / 1024, 0)
+                ];
         }
+        } catch (\Exception $e) {
+            // Ignore
+        }
+    }
+    
+    // View URL
+    $viewUrl = !empty($itemSeo->slug_full) ? '/' . $itemSeo->slug_full : null;
+    
+    // Ensure variables exist
+    $itemSourceToCopy = $itemSourceToCopy ?? null;
+    $itemSeoSourceToCopy = $itemSeoSourceToCopy ?? null;
     @endphp
-    <!-- Start: backgroun để chặn thao tác khi đang dịch content ngầm -->
+
+<!-- Start: background để chặn thao tác khi đang dịch content ngầm -->
     @include('admin.category.lock')
-    <!-- End: backgroun để chặn thao tác khi đang dịch content ngầm -->
-    <form id="formAction" class="needs-validation invalid" action="{{ route($submit) }}" method="POST" novalidate enctype="multipart/form-data">
+<!-- End: background để chặn thao tác khi đang dịch content ngầm -->
+
+<form id="formAction" action="{{ route($submit) }}" method="POST" enctype="multipart/form-data" class="adminFormPage_form">
     @csrf
     <input type="hidden" id="seo_id" name="seo_id" value="{{ $itemSeo->id ?? 0 }}" />
-    <input type="hidden" id="seo_id_vi" name="seo_id_vi" value="{{ !empty($item->seo->id)&&$type!='copy' ? $item->seo->id : 0 }}" />
-    <input type="hidden" id="referee_info_id" name="referee_info_id" value="{{ !empty($item->id)&&$type!='copy' ? $item->id : 0 }}" />
+    <input type="hidden" id="seo_id_vi" name="seo_id_vi" value="{{ !empty($item->seo->id) && $type != 'copy' ? $item->seo->id : 0 }}" />
+    <input type="hidden" id="referee_info_id" name="referee_info_id" value="{{ !empty($item->id) && $type != 'copy' ? $item->id : 0 }}" />
     <input type="hidden" id="language" name="language" value="{{ $language ?? 'vi' }}" />
     <input type="hidden" id="type" name="type" value="{{ $type }}" />
-        <div class="pageAdminWithRightSidebar withRightSidebar">
-            <div class="pageAdminWithRightSidebar_header" style="z-index:1000;position:relative;">
-                <div style="width:100%;margin-bottom:10px;">{{ $titlePage }}</div>
-                @include('admin.template.languageBox', [
+
+    <div class="adminFormPage">
+        <div class="adminFormPage_content">
+            <!-- Header -->
+            @include('admin.components.pageHeader', [
+                'title' => $titlePage,
+                'desc' => $type == 'edit' ? 'Chỉnh sửa thông tin trọng tài' : 'Tạo trọng tài mới',
+                'icon' => '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>',
+                'backUrl' => route('admin.referee.list'),
+                'backText' => 'Quay lại'
+            ])
+            
+            <!-- Language Switcher -->
+            <div class="adminFormPage_languageSwitcher">
+                @include('admin.components.formLanguageSwitcher', [
                     'item' => $item,
                     'language' => $language,
-                    'routeName' => 'admin.referee.view',
+                    'routeName' => 'admin.referee.view'
                 ])
             </div>
-            <!-- Error -->
-            @if ($errors->any())
-                <ul class="errorList">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            @endif
-            <!-- MESSAGE -->
-            @include('admin.template.messageAction')
             
-            <div class="pageAdminWithRightSidebar_main">
-                <!-- START:: Main content -->
-                <div class="pageAdminWithRightSidebar_main_content">
-                    <div class="pageAdminWithRightSidebar_main_content_item">
-                        <div class="card">
-                            <div class="card-header border-bottom">
-                                <h4 class="card-title">Thông tin trang</h4>
+            <!-- Validation Errors Banner -->
+            @include('admin.components.formValidationErrors')
+
+            <!-- Message -->
+            @if(session('message'))
+                <div class="adminFormPage_message adminFormPage_message--{{ session('message')['type'] ?? 'info' }}">
+                    <div class="adminFormPage_message_icon">
+                        @if((session('message')['type'] ?? 'info') === 'success')
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                        @else
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                        @endif
+                    </div>
+                    <div class="adminFormPage_message_content">
+                        {!! session('message')['message'] ?? '' !!}
+                    </div>
+                </div>
+            @endif
+
+            <!-- Body -->
+            <div class="adminFormPage_body">
+                <div class="adminFormPage_main">
+                    <!-- Thông tin trang -->
+                    <div class="adminFormSection">
+                        <div class="adminFormSection_header">
+                            <div class="adminFormSection_header_icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
+                                </svg>
                             </div>
-                            <div class="card-body">
-
-                                @include('admin.referee.formPage', [
-                                    'item'              => !empty($itemSourceToCopy) ? $itemSourceToCopy : $item,
-                                    'itemSeo'           => !empty($itemSeoSourceToCopy) ? $itemSeoSourceToCopy : $itemSeo,
-                                    'flagCopySource'    => !empty($itemSeoSourceToCopy) ? true : false,
-                                ])
-
+                            <div class="adminFormSection_header_info">
+                                <h2 class="adminFormSection_title">Thông tin trang</h2>
                             </div>
                         </div>
-                    </div>
-                    <div class="pageAdminWithRightSidebar_main_content_item">
-                        <div class="card">
-                            <div class="card-header border-bottom">
-                                <h4 class="card-title">Thông tin SEO</h4>
-                            </div>
-                            <div class="card-body">
-
-                                @include('admin.form.formSeo', [
-                                    'item'              => !empty($itemSourceToCopy) ? $itemSourceToCopy : $item,
-                                    'itemSeo'           => !empty($itemSeoSourceToCopy) ? $itemSeoSourceToCopy : $itemSeo,
-                                    'flagCopySource'    => !empty($itemSeoSourceToCopy) ? true : false,
-                                    'idSeoSource'       => $itemSeoSourceToCopy->id ?? 0
-                                ])
-                                
-                            </div>
+                        <div class="adminFormSection_body">
+                            @include('admin.referee.formPage', [
+                                'item' => !empty($itemSourceToCopy) ? $itemSourceToCopy : $item,
+                                'itemSeo' => !empty($itemSeoSourceToCopy) ? $itemSeoSourceToCopy : $itemSeo,
+                                'flagCopySource' => !empty($itemSeoSourceToCopy) ? true : false,
+                                'language' => $language,
+                                'prompts' => $prompts ?? collect()
+                            ])
                         </div>
                     </div>
 
-                    <!-- thành tích -->
-                    <div class="pageAdminWithRightSidebar_main_content_item repeater">
-                        <div class="card">
-                            <div class="card-header border-bottom">
-                                <h4 class="card-title">
-                                    Thành tích
-                                    <i class="fa-regular fa-circle-plus" data-repeater-create></i>
-                                </h4>
+                    <!-- Thông tin SEO -->
+                    <div class="adminFormSection">
+                        <div class="adminFormSection_header">
+                            <div class="adminFormSection_header_icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                                    <path d="M2 12h20"/>
+                                </svg>
                             </div>
-                            <div class="card-body" data-repeater-list="repeater_referee_achievement">
+                            <div class="adminFormSection_header_info">
+                                <h2 class="adminFormSection_title">Thông tin SEO</h2>
+                            </div>
+                        </div>
+                        <div class="adminFormSection_body">
+                            @include('admin.components.formSeo', [
+                                'item' => !empty($itemSourceToCopy) ? $itemSourceToCopy : $item,
+                                'itemSeo' => !empty($itemSeoSourceToCopy) ? $itemSeoSourceToCopy : $itemSeo,
+                                'language' => $language,
+                                'prompts' => $prompts ?? collect(),
+                                'parents' => $parents ?? collect()
+                            ])
+                        </div>
+                    </div>
+
+                    <!-- Thành tích -->
+                    <div class="adminFormSection adminFormSection--repeater repeater" data-repeater-container>
+                        <div class="adminFormSection_header">
+                            <div class="adminFormSection_header_icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                            </div>
+                            <div class="adminFormSection_header_info">
+                                <h2 class="adminFormSection_title">Thành tích</h2>
+                            </div>
+                            <button type="button" class="adminFormSection_header_action" data-repeater-create>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="12" y1="8" x2="12" y2="16"/>
+                                    <line x1="8" y1="12" x2="16" y2="12"/>
+                                </svg>
+                                <span>Thêm</span>
+                            </button>
+                        </div>
+                        <div class="adminFormSection_body">
+                            <div data-repeater-list="repeater_referee_achievement">
                                 @php
-                                    // Lấy dữ liệu từ old input hoặc fallback về $item->achievements
-                                    $dataAchievements = old('repeater_referee_achievement', $item->achievements);
-
-                                    // Kiểm tra và xử lý các trường hợp
+                                    $dataAchievements = old('repeater_referee_achievement', $item->achievements ?? collect());
                                     if ($dataAchievements instanceof \Illuminate\Support\Collection) {
                                         $dataAchievements = $dataAchievements->isNotEmpty() ? $dataAchievements->toArray() : [null];
                                     } elseif (is_array($dataAchievements)) {
                                         $dataAchievements = !empty($dataAchievements) ? $dataAchievements : [null];
                                     } else {
-                                        $dataAchievements = [null]; // Trường hợp null hoặc không xác định
+                                        $dataAchievements = [null];
                                     }
                                 @endphp
-                                @foreach($dataAchievements as $achi)
-                                    <!-- item -->
-                                    <div class="flexBox" data-repeater-item>
-                                        <div class="flexBox_item">
-                                            <input 
-                                                type="text" 
-                                                class="form-control" 
-                                                name="content" 
-                                                placeholder="Nhập thành tích..." 
-                                                value="{{ is_array($achi) ? ($achi['content'] ?? '') : ($achi->content ?? '') }}" 
-                                                required>
+                                @foreach($dataAchievements as $index => $achi)
+                                    <div class="adminFormRepeater_item" data-repeater-item>
+                                        <div class="adminFormRepeater_item_drag">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <circle cx="9" cy="5" r="1"/>
+                                                <circle cx="9" cy="12" r="1"/>
+                                                <circle cx="9" cy="19" r="1"/>
+                                                <circle cx="15" cy="5" r="1"/>
+                                                <circle cx="15" cy="12" r="1"/>
+                                                <circle cx="15" cy="19" r="1"/>
+                                            </svg>
                                         </div>
-                                        <div class="flexBox_item" style="display: flex; flex: 0 0 30px; justify-content: space-between;">
-                                            <div class="icon-wrapper iconAction">
-                                                <a href="#" class="actionDelete" data-repeater-delete>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-square">
-                                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                                        <line x1="9" y1="9" x2="15" y2="15"></line>
-                                                        <line x1="15" y1="9" x2="9" y2="15"></line>
-                                                    </svg>
-                                                    <div>Xóa</div>
-                                                </a>
-                                            </div>
+                                        <div class="adminFormRepeater_item_content">
+                                            <input type="hidden" name="ordering" value="{{ is_array($achi) ? ($achi['ordering'] ?? $index) : ($achi->ordering ?? $index) }}" class="adminFormRepeater_item_ordering" />
+                                            @include('admin.components.formField', [
+                                                'label' => 'Thành tích',
+                                                'name' => 'content',
+                                                'type' => 'text',
+                                                'required' => true,
+                                                'value' => is_array($achi) ? ($achi['content'] ?? '') : ($achi->content ?? ''),
+                                                'placeholder' => 'Nhập thành tích...'
+                                            ])
                                         </div>
+                                        <button type="button" class="adminFormRepeater_item_delete" data-repeater-delete>
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                                <line x1="6" y1="6" x2="18" y2="18"/>
+                                            </svg>
+                                            <span>Xóa</span>
+                                        </button>
                                     </div>
                                 @endforeach
                             </div>
+                            <!-- Hidden button for repeater plugin to find -->
+                            <button type="button" data-repeater-create style="display:none;"></button>
                         </div>
                     </div>
                     
-                   <!-- kỹ năng -->
-                    <div class="pageAdminWithRightSidebar_main_content_item repeater">
-                        <div class="card">
-                            <div class="card-header border-bottom">
-                                <h4 class="card-title">
-                                    Kỹ năng
-                                    <i class="fa-regular fa-circle-plus" data-repeater-create></i>
-                                </h4>
+                    <!-- Kỹ năng -->
+                    <div class="adminFormSection adminFormSection--repeater repeater" data-repeater-container>
+                        <div class="adminFormSection_header">
+                            <div class="adminFormSection_header_icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                    <path d="M2 17l10 5 10-5"/>
+                                    <path d="M2 12l10 5 10-5"/>
+                                </svg>
                             </div>
-                            <div class="card-body" data-repeater-list="repeater_referee_skill">
+                            <div class="adminFormSection_header_info">
+                                <h2 class="adminFormSection_title">Kỹ năng</h2>
+                            </div>
+                            <button type="button" class="adminFormSection_header_action" data-repeater-create>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="12" y1="8" x2="12" y2="16"/>
+                                    <line x1="8" y1="12" x2="16" y2="12"/>
+                                </svg>
+                                <span>Thêm</span>
+                            </button>
+                        </div>
+                        <div class="adminFormSection_body">
+                            <div data-repeater-list="repeater_referee_skill">
                                 @php
-                                    // Lấy dữ liệu từ old input hoặc fallback về $item->skills
-                                    $dataSkills = old('repeater_referee_skill', $item->skills);
-
-                                    // Kiểm tra và xử lý các trường hợp
+                                    $dataSkills = old('repeater_referee_skill', $item->skills ?? collect());
                                     if ($dataSkills instanceof \Illuminate\Support\Collection) {
                                         $dataSkills = $dataSkills->isNotEmpty() ? $dataSkills->toArray() : [null];
                                     } elseif (is_array($dataSkills)) {
                                         $dataSkills = !empty($dataSkills) ? $dataSkills : [null];
                                     } else {
-                                        $dataSkills = [null]; // Trường hợp null hoặc không xác định
+                                        $dataSkills = [null];
                                     }
                                 @endphp
-                                @foreach($dataSkills as $skill)
-                                    <!-- item -->
-                                    <div class="flexBox" data-repeater-item>
-                                        <div class="flexBox_item">
-                                            <input type="text" class="form-control" name="skill" placeholder="Nhập kỹ năng..." value="{{ is_array($skill) ? ($skill['skill'] ?? '') : ($skill->skill ?? '') }}" required>
+                                @foreach($dataSkills as $index => $skill)
+                                    <div class="adminFormRepeater_item" data-repeater-item>
+                                        <div class="adminFormRepeater_item_drag">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <circle cx="9" cy="5" r="1"/>
+                                                <circle cx="9" cy="12" r="1"/>
+                                                <circle cx="9" cy="19" r="1"/>
+                                                <circle cx="15" cy="5" r="1"/>
+                                                <circle cx="15" cy="12" r="1"/>
+                                                <circle cx="15" cy="19" r="1"/>
+                                            </svg>
                                         </div>
-                                        <div class="flexBox_item" style="width:100px;">
-                                            <input type="number" class="form-control" name="percent" placeholder="%" value="{{ is_array($skill) ? ($skill['percent'] ?? '') : ($skill->percent ?? '') }}" required>
+                                        <div class="adminFormRepeater_item_content adminFormRepeater_item_content--grid">
+                                            <input type="hidden" name="ordering" value="{{ is_array($skill) ? ($skill['ordering'] ?? $index) : ($skill->ordering ?? $index) }}" class="adminFormRepeater_item_ordering" />
+                                            @include('admin.components.formField', [
+                                                'label' => 'Kỹ năng',
+                                                'name' => 'skill',
+                                                'type' => 'text',
+                                                'required' => true,
+                                                'value' => is_array($skill) ? ($skill['skill'] ?? '') : ($skill->skill ?? ''),
+                                                'placeholder' => 'Nhập kỹ năng...',
+                                                'class' => 'adminFormRepeater_item_field'
+                                            ])
+                                            @include('admin.components.formField', [
+                                                'label' => 'Phần trăm',
+                                                'name' => 'percent',
+                                                'type' => 'number',
+                                                'required' => true,
+                                                'value' => is_array($skill) ? ($skill['percent'] ?? '') : ($skill->percent ?? ''),
+                                                'placeholder' => '%',
+                                                'min' => 0,
+                                                'max' => 100,
+                                                'class' => 'adminFormRepeater_item_field adminFormRepeater_item_field--small'
+                                            ])
                                         </div>
-                                        <div class="flexBox_item" style="display: flex; flex: 0 0 30px; justify-content: space-between;">
-                                            <div class="icon-wrapper iconAction">
-                                                <a href="#" class="actionDelete" data-repeater-delete>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-square">
-                                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                                        <line x1="9" y1="9" x2="15" y2="15"></line>
-                                                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                                        <button type="button" class="adminFormRepeater_item_delete" data-repeater-delete>
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                                <line x1="6" y1="6" x2="18" y2="18"/>
                                                     </svg>
-                                                    <div>Xóa</div>
-                                                </a>
-                                            </div>
-                                        </div>
+                                            <span>Xóa</span>
+                                        </button>
                                     </div>
                                 @endforeach
                             </div>
+                            <!-- Hidden button for repeater plugin to find -->
+                            <button type="button" data-repeater-create style="display:none;"></button>
                         </div>
                     </div>
 
-                    <!-- kinh nghiệm -->
-                    <div class="pageAdminWithRightSidebar_main_content_item repeater">
-                        <div class="card" data-repeater-list="repeater_referee_experience">
-                            <div class="card-header border-bottom">
-                                <h4 class="card-title">
-                                    Kinh nghiệm
-                                    <i class="fa-regular fa-circle-plus" data-repeater-create></i>
-                                </h4>
+                    <!-- Kinh nghiệm -->
+                    <div class="adminFormSection adminFormSection--repeater repeater" data-repeater-container>
+                        <div class="adminFormSection_header">
+                            <div class="adminFormSection_header_icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                    <line x1="16" y1="13" x2="8" y2="13"/>
+                                    <line x1="16" y1="17" x2="8" y2="17"/>
+                                    <polyline points="10 9 9 9 8 9"/>
+                                </svg>
                             </div>
-                            @php
-                                // Lấy dữ liệu từ old input hoặc fallback về $item->experiences
-                                $dataExperience = old('repeater_referee_experience', $item->experiences);
-                                // Kiểm tra và xử lý các trường hợp
+                            <div class="adminFormSection_header_info">
+                                <h2 class="adminFormSection_title">Kinh nghiệm</h2>
+                            </div>
+                            <button type="button" class="adminFormSection_header_action" data-repeater-create>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="12" y1="8" x2="12" y2="16"/>
+                                    <line x1="8" y1="12" x2="16" y2="12"/>
+                                </svg>
+                                <span>Thêm</span>
+                            </button>
+                        </div>
+                        <div class="adminFormSection_body">
+                            <div data-repeater-list="repeater_referee_experience">
+                                @php
+                                    $dataExperience = old('repeater_referee_experience', $item->experiences ?? collect());
                                 if ($dataExperience instanceof \Illuminate\Support\Collection) {
                                     $dataExperience = $dataExperience->isNotEmpty() ? $dataExperience : [null];
                                 } elseif (is_array($dataExperience)) {
                                     $dataExperience = !empty($dataExperience) ? $dataExperience : [null];
                                 } else {
-                                    $dataExperience = [null]; // Trường hợp null hoặc không xác định
+                                        $dataExperience = [null];
                                 }
                             @endphp
-                            @foreach($dataExperience as $exp)
-                                <div class="card-body" data-repeater-item>
-                                    <!-- item -->
-                                    <div class="flexBox">
-                                        <div class="flexBox_item">
-                                            <label class="form-label inputRequired">Chức vụ</label>
-                                            <input type="text" class="form-control" name="title" value="{{ is_array($exp) ? ($exp['title'] ?? '') : ($exp->title ?? '') }}" required>
-                                            <div class="invalid-feedback">{{ config('admin.massage_validate.not_empty') }}</div>
+                                @foreach($dataExperience as $index => $exp)
+                                    <div class="adminFormRepeater_item adminFormRepeater_item--block" data-repeater-item>
+                                        <div class="adminFormRepeater_item_drag">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <circle cx="9" cy="5" r="1"/>
+                                                <circle cx="9" cy="12" r="1"/>
+                                                <circle cx="9" cy="19" r="1"/>
+                                                <circle cx="15" cy="5" r="1"/>
+                                                <circle cx="15" cy="12" r="1"/>
+                                                <circle cx="15" cy="19" r="1"/>
+                                            </svg>
                                         </div>
-                                    </div>
-                                    <!-- item -->
-                                    <div class="flexBox">
-                                        <div class="flexBox_item">
-                                            <label class="form-label inputRequired">Đơn vị</label>
-                                            <input type="text" class="form-control" name="company" value="{{ is_array($exp) ? ($exp['company'] ?? '') : ($exp->company ?? '') }}" required>
-                                            <div class="invalid-feedback">{{ config('admin.massage_validate.not_empty') }}</div>
-                                        </div>
-                                    </div>
-                                    <!-- item -->
+                                        <div class="adminFormRepeater_item_content">
+                                            <input type="hidden" name="ordering" value="{{ is_array($exp) ? ($exp['ordering'] ?? $index) : ($exp->ordering ?? $index) }}" class="adminFormRepeater_item_ordering" />
+                                            @include('admin.components.formField', [
+                                                'label' => 'Chức vụ',
+                                                'name' => 'title',
+                                                'type' => 'text',
+                                                'required' => true,
+                                                'value' => is_array($exp) ? ($exp['title'] ?? '') : ($exp->title ?? '')
+                                            ])
+                                            @include('admin.components.formField', [
+                                                'label' => 'Đơn vị',
+                                                'name' => 'company',
+                                                'type' => 'text',
+                                                'required' => true,
+                                                'value' => is_array($exp) ? ($exp['company'] ?? '') : ($exp->company ?? '')
+                                            ])
                                     @php
-                                        $contentExp         = '';
-                                        if(!empty($exp['content'])){ // nếu trong old có thì là content không s (không phải mảng, cứ in ra)
-                                            $contentExp     = $exp['content'];
-                                        }else if(!empty($exp['contents'])){ // nếu trong csdl có là contents là array
+                                                $contentExp = '';
+                                                if(!empty($exp['content'])){
+                                                    $contentExp = $exp['content'];
+                                                }else if(!empty($exp['contents'])){
                                             foreach($exp['contents'] as $c){
                                                 $contentExp .= $c['content']."\r\n";
                                             }
                                         }
                                     @endphp
-                                    <div class="flexBox">
-                                        <div class="flexBox_item">
-                                            <label class="form-label inputRequired">Kỹ năng (mỗi dòng 1 kỹ năng)</label>
-                                            <textarea class="form-control" name="content" rows="5" required>{{ $contentExp }}</textarea>
-                                            <div class="invalid-feedback">{{ config('admin.massage_validate.not_empty') }}</div>
+                                            @include('admin.components.formField', [
+                                                'label' => 'Kỹ năng (mỗi dòng 1 kỹ năng)',
+                                                'name' => 'content',
+                                                'type' => 'textarea',
+                                                'required' => true,
+                                                'value' => $contentExp,
+                                                'rows' => 5
+                                            ])
                                         </div>
+                                        <button type="button" class="adminFormRepeater_item_delete" data-repeater-delete>
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                                <line x1="6" y1="6" x2="18" y2="18"/>
+                                            </svg>
+                                            <span>Xóa</span>
+                                        </button>
                                     </div>
-                                    <div class="flexBox">
-                                        <div class="flexBox_item">
-                                            <button type="button" class="btn btn-danger waves-effect waves-float waves-light" style="float:right;" data-repeater-delete>Xóa</button>
+                                @endforeach
                                         </div>
-                                    </div>
-                                </div>
-                            @endforeach
-
+                            <!-- Hidden button for repeater plugin to find -->
+                            <button type="button" data-repeater-create style="display:none;"></button>
                         </div>
                     </div>
 
-                    <!-- bằng cấp -->
-                    <div class="pageAdminWithRightSidebar_main_content_item repeater">
-                        <div class="card" data-repeater-list="repeater_referee_degree">
-                            <div class="card-header border-bottom">
-                                <h4 class="card-title">
-                                    Bằng cấp
-                                    <i class="fa-regular fa-circle-plus" data-repeater-create></i>
-                                </h4>
+                    <!-- Bằng cấp -->
+                    <div class="adminFormSection adminFormSection--repeater repeater" data-repeater-container>
+                        <div class="adminFormSection_header">
+                            <div class="adminFormSection_header_icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                                    <path d="M6 12v5c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2v-5"/>
+                                </svg>
                             </div>
-                            @php
-                                // Lấy dữ liệu từ old input hoặc fallback về $item->degrees
-                                $dataDegree = old('repeater_referee_degree', $item->degrees);
-
-                                // Kiểm tra và xử lý các trường hợp
+                            <div class="adminFormSection_header_info">
+                                <h2 class="adminFormSection_title">Bằng cấp</h2>
+                            </div>
+                            <button type="button" class="adminFormSection_header_action" data-repeater-create>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="12" y1="8" x2="12" y2="16"/>
+                                    <line x1="8" y1="12" x2="16" y2="12"/>
+                                </svg>
+                                <span>Thêm</span>
+                            </button>
+                        </div>
+                        <div class="adminFormSection_body">
+                            <div data-repeater-list="repeater_referee_degree">
+                                @php
+                                    $dataDegree = old('repeater_referee_degree', $item->degrees ?? collect());
                                 if ($dataDegree instanceof \Illuminate\Support\Collection) {
                                     $dataDegree = $dataDegree->isNotEmpty() ? $dataDegree : [null];
                                 } elseif (is_array($dataDegree)) {
                                     $dataDegree = !empty($dataDegree) ? $dataDegree : [null];
                                 } else {
-                                    $dataDegree = [null]; // Trường hợp null hoặc không xác định
+                                        $dataDegree = [null];
                                 }
                             @endphp
-                            @foreach($dataDegree as $degree)
-                                <div class="card-body" data-repeater-item>
-                                    <!-- item -->
-                                    <div class="flexBox">
-                                        <div class="flexBox_item">
-                                            <label class="form-label inputRequired">Tiêu đề</label>
-                                            <input type="text" class="form-control" name="title" value="{{ is_array($degree) ? ($degree['title'] ?? '') : ($degree->title ?? '') }}" required>
-                                            <div class="invalid-feedback">{{ config('admin.massage_validate.not_empty') }}</div>
+                                @foreach($dataDegree as $index => $degree)
+                                    <div class="adminFormRepeater_item adminFormRepeater_item--block" data-repeater-item>
+                                        <div class="adminFormRepeater_item_drag">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <circle cx="9" cy="5" r="1"/>
+                                                <circle cx="9" cy="12" r="1"/>
+                                                <circle cx="9" cy="19" r="1"/>
+                                                <circle cx="15" cy="5" r="1"/>
+                                                <circle cx="15" cy="12" r="1"/>
+                                                <circle cx="15" cy="19" r="1"/>
+                                            </svg>
                                         </div>
-                                    </div>
-                                    <!-- item -->
-                                    <div class="flexBox">
-                                        <div class="flexBox_item">
-                                            <label class="form-label inputRequired">Trường học</label>
-                                            <input type="text" class="form-control" name="school" value="{{ is_array($degree) ? ($degree['school'] ?? '') : ($degree->school ?? '') }}" required>
-                                            <div class="invalid-feedback">{{ config('admin.massage_validate.not_empty') }}</div>
-                                        </div>
-                                    </div>
-                                    <!-- item -->
-                                    @php
-                                        $contentDegree          = '';
-                                        if(!empty($degree['content'])){ // nếu trong old có thì là content không s (không phải mảng, cứ in ra)
-                                            $contentDegree     = $degree['content'];
-                                        }else if(!empty($degree['contents'])){ // nếu trong csdl có là contents là array
+                                        <div class="adminFormRepeater_item_content">
+                                            <input type="hidden" name="ordering" value="{{ is_array($degree) ? ($degree['ordering'] ?? $index) : ($degree->ordering ?? $index) }}" class="adminFormRepeater_item_ordering" />
+                                            @include('admin.components.formField', [
+                                                'label' => 'Tiêu đề',
+                                                'name' => 'title',
+                                                'type' => 'text',
+                                                'required' => true,
+                                                'value' => is_array($degree) ? ($degree['title'] ?? '') : ($degree->title ?? '')
+                                            ])
+                                            @include('admin.components.formField', [
+                                                'label' => 'Trường học',
+                                                'name' => 'school',
+                                                'type' => 'text',
+                                                'required' => true,
+                                                'value' => is_array($degree) ? ($degree['school'] ?? '') : ($degree->school ?? '')
+                                            ])
+                                            @php
+                                                $contentDegree = '';
+                                                if(!empty($degree['content'])){
+                                                    $contentDegree = $degree['content'];
+                                                }else if(!empty($degree['contents'])){
                                             foreach($degree['contents'] as $c){
                                                 $contentDegree .= $c['content']."\r\n";
                                             }
                                         }
                                     @endphp
-                                    <div class="flexBox">
-                                        <div class="flexBox_item">
-                                            <label class="form-label inputRequired">Kỹ năng (mỗi dòng 1 kỹ năng)</label>
-                                            <textarea class="form-control" name="content" rows="5" required>{{ $contentDegree }}</textarea>
-                                            <div class="invalid-feedback">{{ config('admin.massage_validate.not_empty') }}</div>
+                                            @include('admin.components.formField', [
+                                                'label' => 'Kỹ năng (mỗi dòng 1 kỹ năng)',
+                                                'name' => 'content',
+                                                'type' => 'textarea',
+                                                'required' => true,
+                                                'value' => $contentDegree,
+                                                'rows' => 5
+                                            ])
                                         </div>
+                                        <button type="button" class="adminFormRepeater_item_delete" data-repeater-delete>
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                                <line x1="6" y1="6" x2="18" y2="18"/>
+                                            </svg>
+                                            <span>Xóa</span>
+                                        </button>
                                     </div>
-                                    <div class="flexBox">
-                                        <div class="flexBox_item">
-                                            <button type="button" class="btn btn-danger waves-effect waves-float waves-light" style="float:right;" data-repeater-delete>Xóa</button>
+                                @endforeach
                                         </div>
-                                    </div>
-                                </div>
-                            @endforeach
+                            <!-- Hidden button for repeater plugin to find -->
+                            <button type="button" data-repeater-create style="display:none;"></button>
                         </div>
                     </div>
-
                 </div>
-                <!-- END:: Main content -->
 
-                <!-- START:: Sidebar content -->
-                <div class="pageAdminWithRightSidebar_main_rightSidebar">
-                    <!-- action -->
-                    @include('admin.referee.buttonAction', [
-                        'routeBack' => 'admin.referee.list',
-                    ])
-                    <!-- action support -->
-                    <div class="customScrollBar-y">
-                        <!-- Form Upload -->
-                        <div class="pageAdminWithRightSidebar_main_rightSidebar_item">
-                            @include('admin.form.formAvatarTrainer')
+                <!-- Sidebar -->
+                <div class="adminFormPage_sidebar">
+                    <div class="adminFormSidebar">
+                        <div class="adminFormSidebar_sticky">
+                            <!-- Actions -->
+                            @include('admin.components.formActions', [
+                                'backRoute' => 'admin.referee.list',
+                                'viewUrl' => $viewUrl,
+                                'showIndexGoogle' => true
+                            ])
+
+                            <!-- Image Upload -->
+                            @include('admin.components.formImageUpload', [
+                                'name' => 'image',
+                                'label' => 'Ảnh đại diện 600×800px',
+                                'required' => false,
+                                'currentImage' => $imageUrlSmall,
+                                'aspectRatio' => '600/800',
+                                'imageInfo' => $imageInfo,
+                                'tooltip' => 'Đây là Ảnh đại diện dùng làm Ảnh đại diện trên website, Ảnh đại diện ngoài Google, Ảnh đại diện khi Share link'
+                            ])
                         </div>
-                        {{-- <!-- thêm kinh nghiệm -->
-                        <div class="pageAdminWithRightSidebar_main_rightSidebar_item">
-                            <button class="btn btn-icon btn-primary waves-effect waves-float waves-light" type="button" aria-label="Thêm" style="width:100%;" data-repeater-create data-target-repeater="repeater-sp-version">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus me-25"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                <span>Thêm phiên bản SP</span>
-                            </button>
-                        </div> --}}
                     </div>
                 </div>
-                <!-- END:: Sidebar content -->
+            </div>
             </div>
         </div>
     </form>
+
 @endsection
+
 @push('scriptCustom')
     <script type="text/javascript">
-        $('.repeater').repeater({
-            initEmpty: false, // Nếu muốn danh sách trống khi khởi tạo, đặt thành true
+    // Load repeater plugin dynamically if not already loaded
+    function loadRepeaterPlugin(callback) {
+        if (typeof $.fn.repeater !== 'undefined') {
+            callback();
+            return;
+        }
+        
+        // Try to load from CDN as fallback
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/jquery.repeater@1.2.1/jquery.repeater.min.js';
+        script.onload = function() {
+            callback();
+        };
+        script.onerror = function() {
+            // Try local file
+            const localScript = document.createElement('script');
+            localScript.src = '{{ asset("sources/admin/app-assets/vendors/js/forms/repeater/jquery.repeater.min.js") }}';
+            localScript.onload = function() {
+                callback();
+            };
+            localScript.onerror = function() {
+                // Silent fail - plugin might already be loaded
+            };
+            document.head.appendChild(localScript);
+        };
+        document.head.appendChild(script);
+    }
+    
+    // Initialize repeater
+    function initRepeaters() {
+        // Check if repeater plugin is loaded
+        if (typeof $.fn.repeater === 'undefined') {
+            return;
+        }
+        
+        // Initialize each repeater section
+        $('.adminFormSection--repeater').each(function() {
+            const $section = $(this);
+            const $repeaterList = $section.find('[data-repeater-list]');
+            const $createButton = $section.find('.adminFormSection_header_action');
+            const $hiddenCreateButton = $section.find('[data-repeater-create]').not('.adminFormSection_header_action');
+            
+            if ($repeaterList.length && $hiddenCreateButton.length) {
+                // Initialize repeater on the section body (parent of repeater-list)
+                // The plugin will find the data-repeater-create button in the same container
+                $section.find('.adminFormSection_body').repeater({
+                    initEmpty: false,
             show: function () {
-                $(this).slideDown(); // Hiệu ứng khi thêm mới
+                        $(this).slideDown(300);
+                        // Initialize sortable for new item
+                        initSortable($repeaterList);
+                        // Update ordering after adding new item
+                        updateRepeaterOrdering($repeaterList);
             },
             hide: function (deleteElement) {
-                // if (confirm('Bạn có chắc chắn muốn xóa?')) {
-                    $(this).slideUp(deleteElement); // Hiệu ứng khi xóa
-                // }
+                        $(this).slideUp(300, deleteElement);
+                        // Update ordering after removing item
+                        updateRepeaterOrdering($repeaterList);
+                    },
+                    ready: function (setIndexes) {
+                        setIndexes();
+                        // Initialize sortable
+                        initSortable($repeaterList);
+                        // Update ordering
+                        updateRepeaterOrdering($repeaterList);
+                    }
+                });
+                
+                // Handle click on header button - trigger the hidden button
+                $createButton.off('click.repeater').on('click.repeater', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $hiddenCreateButton.trigger('click');
+                });
             }
+        });
+    }
+    
+    // Initialize sortable for repeater list
+    function initSortable($repeaterList) {
+        if (typeof $.fn.sortable === 'undefined') {
+            return;
+        }
+        
+        $repeaterList.sortable({
+            handle: '.adminFormRepeater_item_drag',
+            items: '[data-repeater-item]',
+            cursor: 'move',
+            opacity: 0.7,
+            tolerance: 'pointer',
+            placeholder: 'adminFormRepeater_item adminFormRepeater_item--placeholder',
+            start: function(e, ui) {
+                ui.placeholder.height(ui.item.height());
+            },
+            stop: function(e, ui) {
+                // Update ordering after sort
+                updateRepeaterOrdering($repeaterList);
+            }
+        });
+    }
+    
+    // Update ordering values based on current position
+    function updateRepeaterOrdering($repeaterList) {
+        $repeaterList.find('[data-repeater-item]').each(function(index) {
+            const $item = $(this);
+            const $orderingInput = $item.find('.adminFormRepeater_item_ordering');
+            if ($orderingInput.length) {
+                $orderingInput.val(index);
+            } else {
+                // Create ordering input if it doesn't exist
+                const $content = $item.find('.adminFormRepeater_item_content');
+                if ($content.length) {
+                    $content.prepend('<input type="hidden" name="ordering" value="' + index + '" class="adminFormRepeater_item_ordering" />');
+                }
+            }
+        });
+    }
+    
+    // Wait for DOM and plugin to be ready
+    $(document).ready(function() {
+        loadRepeaterPlugin(function() {
+            // Small delay to ensure plugin is fully initialized
+            setTimeout(initRepeaters, 50);
+        });
         });
     </script>
 @endpush

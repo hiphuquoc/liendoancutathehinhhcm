@@ -19,8 +19,17 @@ class User extends Authenticatable {
      */
     protected $fillable = [
         'name',
+        'position',
         'email',
         'password',
+        'google_id',
+        'avatar',
+        'wallet_balance',
+        'role',
+        'provider',
+        'provider_id',
+        'address',
+        'phone',
     ];
 
     /**
@@ -40,6 +49,7 @@ class User extends Authenticatable {
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'wallet_balance' => 'decimal:2',
     ];
 
     public static function insertItem($params){
@@ -65,5 +75,13 @@ class User extends Authenticatable {
 
     public function orders() {
         return $this->hasMany(\App\Models\Order::class, 'email', 'email');
+    }
+
+    public function hasRole($role) {
+        return $this->role === $role;
+    }
+
+    public function isAdmin() {
+        return $this->hasRole('admin');
     }
 }

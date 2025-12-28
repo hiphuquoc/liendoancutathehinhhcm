@@ -131,7 +131,9 @@ class CreateTrainer extends Command {
                     "rating_aggregate_count" => "8452",
                     "rating_aggregate_star" => "4.7",
                     /* biến số */
-                    "title" => $nameCover . ' | Huấn luyện viên cá nhân (PT)',
+                    "title" => $nameCover, // For seo table
+                    "name" => $nameCover, // For trainer_info table
+                    "position" => 'Huấn luyện viên cá nhân (PT)', // For trainer_info table
                     "phone" => $trainer['phone'],
                     "email" => $slug.'@liendoancutathehinhhcm.com.vn',
                     "seo_title" => $seoTitle,

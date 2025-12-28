@@ -11,6 +11,8 @@ class Referee extends Model {
     protected $fillable     = [
         'phone',
         'email',
+        'name',
+        'position',
     ];
     public $timestamps = false;
 

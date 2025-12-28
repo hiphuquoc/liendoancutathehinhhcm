@@ -27,9 +27,8 @@
                         @foreach($trainer->seos as $seo)
                             @if(!empty($seo->infoSeo->language) && $seo->infoSeo->language == $language)
                                 @php
-                                    $tmp        = explode('|', $seo->infoSeo->title);
-                                    $fullName   = !empty($tmp[0]) ? $tmp[0] : '';
-                                    $job        = !empty($tmp[1]) ? $tmp[1] : '';
+                                    $fullName   = $trainer->name ?? $seo->infoSeo->title ?? '';
+                                    $job        = $trainer->position ?? '';
 
                                     // Kiểm tra ảnh
                                     $defaultImage = config('image.default'); // ảnh mặc định

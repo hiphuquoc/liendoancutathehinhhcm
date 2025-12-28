@@ -22,7 +22,9 @@ class RefereeRequest extends FormRequest {
      */
     public function rules() {
         return [
-            'title'                     => 'required',
+            'name'                      => 'required',
+            'position'                  => 'nullable',
+            'title'                     => 'required', // For seo table
             'phone'                     => 'required',
             'email'                     => 'required',
             'ordering'                  => 'min:0',
@@ -57,7 +59,8 @@ class RefereeRequest extends FormRequest {
 
     public function messages() {
         return [
-            'title.required'            => 'Họ và tên & Chức vụ không được để trống!',
+            'name.required'             => 'Họ và tên không được để trống!',
+            'title.required'            => 'Tiêu đề SEO không được để trống!',
             'phone.required'            => 'Số điện thoại không được để trống!',
             'email.required'            => 'Email không được để trống!',
             'seo_title.required'        => 'Tiêu đề SEO không được để trống!',

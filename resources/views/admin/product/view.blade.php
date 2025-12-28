@@ -136,12 +136,7 @@
 
     </form>
 @endsection
-@push('modal')
-    <!-- modal chọn thumnail -->
-    @include('admin.form.formModalChooseLanguageBeforeDeletePage')
-    <!-- modal xem danh sách trang đã copy -->
-    @include('admin.product.modalViewProductCopied')
-@endpush
+{{-- Modals removed - features not in use --}}
 @push('scriptCustom')
     <script type="text/javascript">
         $('.pageAdminWithRightSidebar_main').repeater();

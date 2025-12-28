@@ -8,12 +8,17 @@
                 $fullName     = '';
                 $job          = '';
                 $summary      = '';
+                $fullName   = $item->name ?? '';
+                $job        = $item->position ?? '';
+                $summary    = $item->description ?? ''; // Use description from trainer_info first
                 foreach($item->seos as $seo){
                   if(!empty($seo->infoSeo->language) && $seo->infoSeo->language == $language){
-                    $tmp        = explode('|', $seo->infoSeo->title);
-                    $fullName   = !empty($tmp[0]) ? $tmp[0] : '';
-                    $job        = !empty($tmp[1]) ? $tmp[1] : '';
-                    $summary    = $seo->infoSeo->seo_description;
+                    if(empty($fullName)) $fullName = $seo->infoSeo->title ?? '';
+                    if(empty($job)) $job = '';
+                    // Fallback to seo_description if description is empty
+                    if(empty($summary)) {
+                        $summary = $seo->infoSeo->seo_description ?? '';
+                    }
                   }
                 }
 

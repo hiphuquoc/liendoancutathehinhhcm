@@ -134,11 +134,15 @@ class RefereeController extends Controller {
                         'seo_id'        => $idSeo,
                         'phone'         => $request->get('phone'),
                         'email'         => $request->get('email'),
+                        'name'          => $request->get('name'),
+                        'position'      => $request->get('position'),
                     ]);
                 }else {
                     $dataReferee    = [];
                     if(!empty($request->get('phone'))) $dataReferee['phone'] = $request->get('phone');
                     if(!empty($request->get('email'))) $dataReferee['email'] = $request->get('email');
+                    if($request->has('name')) $dataReferee['name'] = $request->get('name');
+                    if($request->has('position')) $dataReferee['position'] = $request->get('position');
                     Referee::updateItem($idReferee, $dataReferee);
                 }
                 /* relation_seo_referee_info */

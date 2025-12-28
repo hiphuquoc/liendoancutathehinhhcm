@@ -9,49 +9,26 @@
   <meta name="author" content="Hitour">
   <title>Trang quản trị nội dung {{ config('main_'.env('APP_NAME').'.info.'.env('APP_NAME').'.company_name') }}</title>
   <link rel="shortcut icon" href="/storage/images/upload/hoaanhtuc-favicon-type-manager-upload.webp" type="image/x-icon">
-  <!-- BEGIN: Vendor CSS-->
-  <link rel="stylesheet" type="text/css" href="{{ asset('sources/admin/app-assets/vendors/css/vendors.min.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ asset('sources/admin/app-assets/vendors/css/pickers/pickadate/pickadate.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ asset('sources/admin/app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ asset('sources/admin/app-assets/vendors/css/forms/select/select2.min.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ asset('sources/admin/app-assets/css/plugins/forms/form-validation.css') }}">
-  <!-- custom tags -->
-  <link rel="stylesheet" type="text/css" href="{{ asset('sources/admin/app-assets/vendors/css/tagify/tagify.css') }}" /> 
-  <!-- END: Vendor CSS-->
-  <!-- BEGIN: Theme CSS-->
-  <link rel="stylesheet" type="text/css" href="{{ asset('sources/admin/app-assets/css/bootstrap.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ asset('sources/admin/app-assets/css/bootstrap-extended.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ asset('sources/admin/app-assets/css/colors.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ asset('sources/admin/app-assets/css/components.css') }}">
-  <!-- BEGIN: Page CSS-->
-  <link rel="stylesheet" type="text/css" href="{{ asset('sources/admin/app-assets/css/core/menu/menu-types/vertical-menu.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ asset('sources/admin/app-assets/css/plugins/forms/pickers/form-flat-pickr.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ asset('sources/admin/app-assets/css/plugins/forms/pickers/form-pickadate.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ asset('sources/admin/app-assets/css/plugins/forms/form-validation.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ asset('sources/admin/app-assets/css/plugins/extensions/ext-component-sweet-alerts.min.css') }}">
-  <!-- END: Page CSS-->
-  <link rel="stylesheet" type="text/css" href="{{ asset('sources/admin/app-assets/vendors/css/extensions/toastr.min.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ asset('sources/admin/app-assets/css/plugins/extensions/ext-component-toastr.css') }}">
-
-  <!-- BEGIN: Custom CSS-->
+  
+  <!-- BEGIN: Custom CSS - Single SCSS File -->
   <style type="text/css">
     /* font */
     @font-face{
         font-family:'SVN-Gilroy Bold';
         font-style:normal;
         font-weight:700;
-        src:url("/fonts/svn-gilroy_semibold.ttf")
+        src:url("{{ asset('fonts/svn-gilroy_semibold.ttf') }}")
     }
     @font-face{
         font-family:'SVN-Gilroy';
         font-style:normal;
         font-weight:500;
-        src:url("/fonts/svn-gilroy_medium.ttf")
+        src:url("{{ asset('fonts/svn-gilroy_medium.ttf') }}")
     }
 </style>
   @vite('resources/sources/admin/style.scss')
-  {{-- <link rel="stylesheet" href="{{ asset('css/admin/style.css') }}?version={{ time() }}"> --}}
   <!-- END: Custom CSS-->
+  
   <!-- BEGIN: FONT AWESOME -->
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
   <!-- END: FONT AWESOME -->

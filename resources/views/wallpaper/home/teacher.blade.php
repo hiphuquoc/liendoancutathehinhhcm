@@ -14,9 +14,8 @@
             @foreach($trainer->seos as $seo)
                 @if(!empty($seo->infoSeo->language)&&$seo->infoSeo->language==$language)
                     @php
-                      $tmp        = explode('|', $seo->infoSeo->title);
-                      $fullName   = !empty($tmp[0]) ? $tmp[0] : '';
-                      $job        = !empty($tmp[1]) ? $tmp[1] : '';
+                      $fullName   = $trainer->name ?? $seo->infoSeo->title ?? '';
+                      $job        = $trainer->position ?? '';
                       $imageSmall = \App\Helpers\Image::getUrlImageSmallByUrlImage($seo->infoSeo->image);
                       $imageMini  = \App\Helpers\Image::getUrlImageMiniByUrlImage($seo->infoSeo->image);
                     @endphp

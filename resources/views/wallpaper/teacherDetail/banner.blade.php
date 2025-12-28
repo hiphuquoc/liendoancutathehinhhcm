@@ -1,14 +1,16 @@
 @php
     $style      = !empty($urlImage) ? 'style="background-image:url('.$urlImage.')"' : '';
-    $title      = '';
+    // Get name from trainer_info/referee_info, fallback to seo title
+    $title      = $item->name ?? '';
+    if(empty($title)) {
     foreach($item->seos as $seo){
       if(!empty($seo->infoSeo->language)&&$seo->infoSeo->language==$language) {
         $title  = $seo->infoSeo->title;
         break;
       }
     }
-    $tmp        = explode('|', $title);
-    $title      = trim($tmp[0]) ?? '';
+    }
+    $title      = trim($title) ?? '';
 @endphp
 
 <section class="hero-about-banner-section" {!! $style !!}>
@@ -23,8 +25,7 @@
           @for($i=0;$i<count($breadcrumb);++$i)
             @php
               if($i==count($breadcrumb)-1){
-                $tmp    = explode('|', $breadcrumb[$i]->title);
-                $title  = trim($tmp[0]) ?? '';
+                $title  = trim($breadcrumb[$i]->title) ?? '';
               }else {
                 $title  = $breadcrumb[$i]->title;
               }

@@ -26,6 +26,7 @@ use App\Models\User;
 use App\Models\UserRole;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class TrainerController extends Controller {
 
@@ -44,11 +45,10 @@ class TrainerController extends Controller {
             $list               = Trainer::getList($params);
             return view('admin.trainer.list', compact('list', 'params', 'viewPerPage'));
         }else if(auth()->user()->hasRole('sub-admin')){
-            $username   = auth()->user()->name;
+            $userId = auth()->user()->id;
             $list       = Trainer::select('*')
-                                    ->whereHas('seo', function($query) use($username){
-                                        $query->where('slug', $username);
-                                    })
+                                    ->where('user_id', $userId)
+                                    ->with('seo')
                                     ->paginate(1);
             return view('admin.trainer.list', compact('list', 'params', 'viewPerPage'));
         }
@@ -56,9 +56,54 @@ class TrainerController extends Controller {
     }
 
     public function view(Request $request){
+        Log::info('=== TrainerController::view() DEBUG START ===');
+        
+        // Clear message from session if it's not from trainer action (e.g., from account profile)
+        $sessionMessage = $request->session()->get('message');
+        if (!empty($sessionMessage) && !empty($sessionMessage['message'])) {
+            // Check if message is from trainer action (contains "Huấn luyện viên" or "trainer")
+            $messageText = $sessionMessage['message'] ?? '';
+            if (stripos($messageText, 'huấn luyện viên') === false && 
+                stripos($messageText, 'trainer') === false &&
+                stripos($messageText, 'thông tin cá nhân') !== false) {
+                // Clear message if it's from account profile
+                $request->session()->forget('message');
+            }
+        }
+        
         $message            = $request->get('message') ?? null;
         $id                 = $request->get('id') ?? 0;
         $language           = $request->get('language') ?? 'vi';
+        
+        Log::info('Request params', [
+            'id' => $id,
+            'language' => $language,
+            'message' => $message
+        ]);
+        
+        $user = auth()->user();
+        Log::info('Current user info', [
+            'user_id' => $user->id ?? 'N/A',
+            'user_name' => $user->name ?? 'N/A',
+            'user_email' => $user->email ?? 'N/A',
+            'user_role_column' => $user->role ?? 'N/A',
+            'hasRole_admin' => $user->hasRole('admin') ? 'YES' : 'NO',
+            'hasRole_sub-admin' => $user->hasRole('sub-admin') ? 'YES' : 'NO',
+        ]);
+        
+        // Check roles via relation if available
+        if (method_exists($user, 'roles')) {
+            try {
+                $userRoles = $user->roles;
+                Log::info('User roles (via relation)', [
+                    'roles_count' => $userRoles ? $userRoles->count() : 0,
+                    'roles' => $userRoles ? $userRoles->pluck('slug', 'name')->toArray() : []
+                ]);
+            } catch (\Exception $e) {
+                Log::warning('Error getting user roles via relation', ['error' => $e->getMessage()]);
+            }
+        }
+        
         /* kiểm tra xem ngôn ngữ có nằm trong danh sách không */
         $flagView           = false;
         foreach(config('language') as $ld){
@@ -67,15 +112,34 @@ class TrainerController extends Controller {
                 break;
             }
         }
+        Log::info('Language check', ['flagView' => $flagView ? 'YES' : 'NO']);
+        
         /* tìm theo ngôn ngữ */
         $item               = Trainer::select('*')
                                 ->where('id', $id)
                                 ->with('seo.contents', 'seos.infoSeo.contents', 'achievements', 'skills', 'experiences.contents', 'degrees.contents')
                                 ->first();
-        if(empty($item)) $flagView = false;
-        $slug               = $item->seo->slug ?? '';
-        $hasAdminRole = auth()->user()->hasRole('admin');
-        if($hasAdminRole || ($flagView == true && $slug == auth()->user()->name)){
+        
+        Log::info('Trainer found', [
+            'trainer_exists' => !empty($item) ? 'YES' : 'NO',
+            'trainer_id' => $item->id ?? 'N/A',
+            'trainer_user_id' => $item->user_id ?? 'NULL',
+            'trainer_name' => $item->name ?? 'N/A',
+            'trainer_seo_id' => $item->seo_id ?? 'N/A',
+        ]);
+        
+        if(empty($item)) {
+            $flagView = false;
+            Log::warning('Trainer not found, setting flagView to false');
+        }
+        
+        // Only admin can access trainer view
+        if(!$user->hasRole('admin')){
+            abort(403, 'Bạn không có quyền truy cập trang này.');
+        }
+        
+        if($flagView && !empty($item)){
+            Log::info('Permission granted, loading view');
             /* lấy item seo theo ngôn ngữ được chọn */
             $itemSeo = [];
             if (!empty($item->seos)) {
@@ -95,13 +159,37 @@ class TrainerController extends Controller {
             $type = $request->get('type') ?? $type;
             /* trang cha */
             $parents = Page::all();
+            
+            // Get message from session and then remove it (flash message - only show once)
+            $sessionMessage = $request->session()->get('message');
+            if (!empty($sessionMessage)) {
+                // Check if message is from trainer action (contains "Huấn luyện viên" or "trainer")
+                $messageText = $sessionMessage['message'] ?? '';
+                if (stripos($messageText, 'huấn luyện viên') !== false || 
+                    stripos($messageText, 'trainer') !== false) {
+                    // This is a trainer message, will be displayed once and then removed
+                    // Message will be removed after view renders (handled in view)
+                } else {
+                    // Not a trainer message, remove it
+                    $request->session()->forget('message');
+                }
+            }
+            
+            Log::info('=== TrainerController::view() DEBUG END - SUCCESS ===');
             return view('admin.trainer.view', compact('item', 'itemSeo', 'prompts', 'type', 'language', 'parents', 'message'));
         } else {
+            Log::warning('=== TrainerController::view() DEBUG END - PERMISSION DENIED ===');
+            Log::warning('Redirecting to trainer list due to permission denial');
             return redirect()->route('admin.trainer.list');
         }
     }
 
     public function createAndUpdate(TrainerRequest $request){
+        // Only admin can access this method
+        if(!auth()->user()->hasRole('admin')){
+            abort(403, 'Bạn không có quyền thực hiện thao tác này.');
+        }
+        
         try {
             DB::beginTransaction();
             /* ngôn ngữ */
@@ -121,7 +209,12 @@ class TrainerController extends Controller {
                 $dataPath       = Upload::uploadWallpaper($request->file('image'), $fileName, $folderUpload);
             }
             /* update page */
-            $seo                = $this->BuildInsertUpdateModel->buildArrayTableSeo($request->all(), $typePage, $dataPath);
+            // For trainer_info, sync description from trainer_info to seo.description
+            $requestData = $request->all();
+            if($typePage === 'trainer_info' && !empty($requestData['description'])) {
+                $requestData['trainer_description'] = $requestData['description'];
+            }
+            $seo                = $this->BuildInsertUpdateModel->buildArrayTableSeo($requestData, $typePage, $dataPath);
             if($action=='edit'){
                 Seo::updateItem($idSeo, $seo);
             }else {
@@ -131,16 +224,78 @@ class TrainerController extends Controller {
             if(!empty($idSeo)){
                 /* insert hoặc update trainer_info */
                 if(empty($idTrainer)){ /* check xem create hay update */
-                    $idTrainer  = Trainer::insertItem([
+                    $trainerData = [
                         'seo_id'        => $idSeo,
                         'phone'         => $request->get('phone'),
                         'email'         => $request->get('email'),
-                    ]);
+                        'name'          => $request->get('name'),
+                        'position'      => $request->get('position'),
+                        'description'   => $request->get('description'),
+                    ];
+                    // Set user_id for sub-admin when creating new trainer
+                    if(auth()->user()->hasRole('sub-admin') && !auth()->user()->hasRole('admin')){
+                        $trainerData['user_id'] = auth()->user()->id;
+                    }
+                    $idTrainer  = Trainer::insertItem($trainerData);
+                    // Generate trainer_code automatically for new trainer
+                    if (!empty($idTrainer)) {
+                        $trainerCode = Trainer::generateTrainerCode($idTrainer, $idSeo);
+                        if (!empty($trainerCode)) {
+                            Trainer::updateItem($idTrainer, ['trainer_code' => $trainerCode]);
+                        }
+                        // Sync description from trainer_info to seo.description for new trainer
+                        if(!empty($trainerData['description'])) {
+                            $seoData = ['description' => $trainerData['description']];
+                            Seo::updateItem($idSeo, $seoData);
+                        }
+                    }
                 }else {
                     $dataTrainer    = [];
                     if(!empty($request->get('phone'))) $dataTrainer['phone'] = $request->get('phone');
                     if(!empty($request->get('email'))) $dataTrainer['email'] = $request->get('email');
+                    if($request->has('name')) $dataTrainer['name'] = $request->get('name');
+                    if($request->has('position')) $dataTrainer['position'] = $request->get('position');
+                    if($request->has('description')) $dataTrainer['description'] = $request->get('description');
+                    // Generate trainer_code if not exists
+                    $trainer = Trainer::find($idTrainer);
+                    if (!empty($trainer) && empty($trainer->trainer_code)) {
+                        $trainerCode = Trainer::generateTrainerCode($idTrainer, $idSeo);
+                        if (!empty($trainerCode)) {
+                            $dataTrainer['trainer_code'] = $trainerCode;
+                        }
+                    }
                     Trainer::updateItem($idTrainer, $dataTrainer);
+                    
+                    // Sync description from trainer_info to seo.description
+                    if(isset($dataTrainer['description'])) {
+                        // Get existing SEO to preserve slug
+                        $existingSeo = Seo::find($idSeo);
+                        $seoData = [
+                            'description' => $dataTrainer['description']
+                        ];
+                        // Preserve slug if exists
+                        if($existingSeo && !empty($existingSeo->slug)) {
+                            $seoData['slug'] = $existingSeo->slug;
+                        }
+                        Seo::updateItem($idSeo, $seoData);
+                    }
+                    
+                    // If admin updated name, sync to users.name (seo.title and trainer_info.name already updated)
+                    $isAdmin = auth()->user()->hasRole('admin');
+                    if ($isAdmin && $request->has('name') && !empty($request->get('name'))) {
+                        $newName = trim($request->get('name'));
+                        
+                        // Update users.name if trainer has user_id
+                        // Note: seo.title is already updated by buildArrayTableSeo
+                        // Note: trainer_info.name is already updated in $dataTrainer above
+                        if (!empty($trainer->user_id)) {
+                            $user = User::find($trainer->user_id);
+                            if ($user && $user->name !== $newName) {
+                                $user->name = $newName;
+                                $user->save();
+                            }
+                        }
+                    }
                 }
                 /* relation_seo_trainer_info */
                 $relationSeoTrainerInfo = RelationSeoTrainerInfo::select('*')
@@ -156,11 +311,12 @@ class TrainerController extends Controller {
                     ->where('trainer_info_id', $idTrainer)
                     ->delete();
                 if(!empty($request->get('repeater_trainer_achievement'))){
-                    foreach($request->get('repeater_trainer_achievement') as $achi){
+                    foreach($request->get('repeater_trainer_achievement') as $index => $achi){
                         if(!empty($achi['content'])){
                             TrainerAchievement::insertItem([
                                 'trainer_info_id'   => $idTrainer,
                                 'content'           => $achi['content'],
+                                'ordering'          => $achi['ordering'] ?? $index,
                             ]);
                         }
                     }
@@ -170,12 +326,13 @@ class TrainerController extends Controller {
                     ->where('trainer_info_id', $idTrainer)
                     ->delete();
                 if(!empty($request->get('repeater_trainer_skill'))){
-                    foreach($request->get('repeater_trainer_skill') as $skill){
+                    foreach($request->get('repeater_trainer_skill') as $index => $skill){
                         if(!empty($skill['skill'])&&!empty($skill['percent'])){
                             TrainerSkill::insertItem([
                                 'trainer_info_id'   => $idTrainer,
                                 'skill'             => $skill['skill'],
                                 'percent'           => $skill['percent'],
+                                'ordering'          => $skill['ordering'] ?? $index,
                             ]);
                         }
                     }
@@ -185,12 +342,13 @@ class TrainerController extends Controller {
                     ->where('trainer_info_id', $idTrainer)
                     ->delete();
                 if(!empty($request->get('repeater_trainer_experience'))){
-                    foreach($request->get('repeater_trainer_experience') as $exper){
+                    foreach($request->get('repeater_trainer_experience') as $index => $exper){
                         if(!empty($exper['title'])&&!empty($exper['company'])&&!empty($exper['content'])){
                             $idTrainerExperience    = TrainerExperience::insertItem([
                                 'trainer_info_id'   => $idTrainer,
                                 'title'             => $exper['title'],
                                 'company'           => $exper['company'],
+                                'ordering'          => $exper['ordering'] ?? $index,
                             ]);
                             /* insert thêm content => ở đây chỉ insert và không xóa content cũ (chấp nhận phình dữ liệu) */
                             $tmp                    = explode("\r\n", $exper['content']);
@@ -208,12 +366,13 @@ class TrainerController extends Controller {
                     ->where('trainer_info_id', $idTrainer)
                     ->delete();
                 if(!empty($request->get('repeater_trainer_degree'))){
-                    foreach($request->get('repeater_trainer_degree') as $degree){
+                    foreach($request->get('repeater_trainer_degree') as $index => $degree){
                         if(!empty($degree['title'])&&!empty($degree['school'])&&!empty($degree['content'])){
                             $idTrainerDegree    = TrainerDegree::insertItem([
                                                         'trainer_info_id'   => $idTrainer,
                                                         'title'             => $degree['title'],
                                                         'school'            => $degree['school'],
+                                                        'ordering'          => $degree['ordering'] ?? $index,
                                                     ]);
                             /* insert thêm content => ở đây chỉ insert và không xóa content cũ (chấp nhận phình dữ liệu) */
                             $tmp                    = explode("\r\n", $degree['content']);
@@ -244,6 +403,12 @@ class TrainerController extends Controller {
             }
         } catch (\Exception $exception){
             DB::rollBack();
+            Log::error('TrainerController::createAndUpdate() ERROR', [
+                'message' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString(),
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine()
+            ]);
         }
         /* có lỗi mặc định Message */
         if(empty($message)){

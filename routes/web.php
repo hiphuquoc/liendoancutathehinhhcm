@@ -36,6 +36,7 @@ use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\Admin\TrainerController;
 use App\Http\Controllers\Admin\RefereeController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\AccountController as AdminAccountController;
 use App\Http\Controllers\Admin\CacheController;
 use App\Http\Controllers\Admin\WallpaperController;
 use App\Http\Controllers\Admin\FreeWallpaperController;
@@ -64,28 +65,52 @@ use App\Http\Controllers\GoogledriveController;
 |
 */
 Route::middleware(['auth', 'role:admin,sub-admin'])->group(function () {
-    Route::prefix('trainer')->group(function(){
-        Route::get('/', [TrainerController::class, 'list'])->name('admin.trainer.list');
-        Route::get('/view', [TrainerController::class, 'view'])->name('admin.trainer.view');
-        Route::post('/createAndUpdate', [TrainerController::class, 'createAndUpdate'])->name('admin.trainer.createAndUpdate');
+    /* ===== Account ===== */
+    // Account routes giữ nguyên vị trí (ngoài /he-thong) vì là routes cá nhân
+    Route::prefix('account')->group(function(){
+        Route::get('/profile', [AdminAccountController::class, 'profile'])->name('admin.account.profile');
+        Route::post('/updateProfile', [AdminAccountController::class, 'updateProfile'])->name('admin.account.updateProfile');
+        Route::get('/changePassword', [AdminAccountController::class, 'changePassword'])->name('admin.account.changePassword');
+        Route::post('/updatePassword', [AdminAccountController::class, 'updatePassword'])->name('admin.account.updatePassword');
+        Route::get('/trainerProfile', [AdminAccountController::class, 'trainerProfile'])->name('admin.account.trainerProfile');
+        Route::post('/updateTrainerProfile', [AdminAccountController::class, 'updateTrainerProfile'])->name('admin.account.updateTrainerProfile');
     });
-    Route::prefix('referee')->group(function(){
-        Route::get('/', [RefereeController::class, 'list'])->name('admin.referee.list');
-        Route::get('/view', [RefereeController::class, 'view'])->name('admin.referee.view');
-        Route::post('/createAndUpdate', [RefereeController::class, 'createAndUpdate'])->name('admin.referee.createAndUpdate');
+    
+    // Redirect từ URL cũ sang URL mới (backward compatibility)
+    Route::get('/trainer', function() {
+        return redirect()->route('admin.trainer.list');
+    });
+    Route::get('/referee', function() {
+        return redirect()->route('admin.referee.list');
     });
 });
 
-Route::middleware('auth', 'role:admin')->group(function () {
+Route::middleware(['auth', 'role:admin,sub-admin'])->group(function () {
     Route::prefix('he-thong')->group(function(){
         /* ===== Trainer ===== */
         Route::prefix('trainer')->group(function(){
+            // List: /he-thong/trainer
+            Route::get('/', [TrainerController::class, 'list'])->name('admin.trainer.list');
+            // View/Form: /he-thong/trainer/view?id={id}&language={lang}&type={create|edit|copy}
+            Route::get('/view', [TrainerController::class, 'view'])->name('admin.trainer.view');
+            // Create/Update: POST /he-thong/trainer/createAndUpdate
+            Route::post('/createAndUpdate', [TrainerController::class, 'createAndUpdate'])->name('admin.trainer.createAndUpdate');
+            // Delete: GET /he-thong/trainer/delete?id={id}
             Route::get('/delete', [TrainerController::class, 'delete'])->name('admin.trainer.delete');
+            // Additional actions
             Route::get('/createUser', [TrainerController::class, 'createUser'])->name('admin.trainer.createUser');
         });
         /* ===== Referee ===== */
         Route::prefix('referee')->group(function(){
+            // List: /he-thong/referee
+            Route::get('/', [RefereeController::class, 'list'])->name('admin.referee.list');
+            // View/Form: /he-thong/referee/view?id={id}&language={lang}&type={create|edit|copy}
+            Route::get('/view', [RefereeController::class, 'view'])->name('admin.referee.view');
+            // Create/Update: POST /he-thong/referee/createAndUpdate
+            Route::post('/createAndUpdate', [RefereeController::class, 'createAndUpdate'])->name('admin.referee.createAndUpdate');
+            // Delete: GET /he-thong/referee/delete?id={id}
             Route::get('/delete', [RefereeController::class, 'delete'])->name('admin.referee.delete');
+            // Additional actions
             Route::get('/createUser', [RefereeController::class, 'createUser'])->name('admin.referee.createUser');
         });
         /* ===== AI ===== */
@@ -154,45 +179,69 @@ Route::middleware('auth', 'role:admin')->group(function () {
             Route::post('/addWallpaperToProductPrice', [ProductPriceController::class, 'addWallpaperToProductPrice'])->name('admin.productPrice.addWallpaperToProductPrice');
             Route::post('/deleteWallpaperToProductPrice', [ProductPriceController::class, 'deleteWallpaperToProductPrice'])->name('admin.productPrice.deleteWallpaperToProductPrice');
         });
-        /* category */
+        /* ===== Category ===== */
         Route::prefix('category')->group(function(){
-            Route::get('/list', [CategoryController::class, 'list'])->name('admin.category.list');
+            // List: /he-thong/category (chuẩn) hoặc /he-thong/category/list (tương thích)
+            Route::get('/', [CategoryController::class, 'list'])->name('admin.category.list');
+            Route::get('/list', [CategoryController::class, 'list']); // Alias for backward compatibility
+            // View/Form: /he-thong/category/view?id={id}&language={lang}&type={create|edit|copy}
             Route::get('/view', [CategoryController::class, 'view'])->name('admin.category.view');
+            // Create/Update: POST /he-thong/category/createAndUpdate
             Route::post('/createAndUpdate', [CategoryController::class, 'createAndUpdate'])->name('admin.category.createAndUpdate');
+            // Delete: GET /he-thong/category/delete?id={id}
             Route::get('/delete', [CategoryController::class, 'delete'])->name('admin.category.delete');
+            // Additional actions
             Route::get('/removeThumnailsOfCategory', [CategoryController::class, 'removeThumnailsOfCategory'])->name('admin.category.removeThumnailsOfCategory');
             Route::post('/loadFreeWallpaperOfCategory', [CategoryController::class, 'loadFreeWallpaperOfCategory'])->name('admin.category.loadFreeWallpaperOfCategory');
             Route::post('/seachFreeWallpaperOfCategory', [CategoryController::class, 'seachFreeWallpaperOfCategory'])->name('admin.category.seachFreeWallpaperOfCategory');
             Route::post('/chooseFreeWallpaperForCategory', [CategoryController::class, 'chooseFreeWallpaperForCategory'])->name('admin.category.chooseFreeWallpaperForCategory');
         });
-        /* tag */
+        /* ===== Tag ===== */
         Route::prefix('tag')->group(function(){
-            Route::get('/list', [TagController::class, 'list'])->name('admin.tag.list');
+            // List: /he-thong/tag (chuẩn) hoặc /he-thong/tag/list (tương thích)
+            Route::get('/', [TagController::class, 'list'])->name('admin.tag.list');
+            Route::get('/list', [TagController::class, 'list']); // Alias for backward compatibility
+            // View/Form: /he-thong/tag/view?id={id}&language={lang}&type={create|edit|copy}
             Route::get('/view', [TagController::class, 'view'])->name('admin.tag.view');
+            // Create/Update: POST /he-thong/tag/createAndUpdate
             Route::post('/createAndUpdate', [TagController::class, 'createAndUpdate'])->name('admin.tag.createAndUpdate');
+            // Delete: GET /he-thong/tag/delete?id={id}
             Route::get('/delete', [TagController::class, 'delete'])->name('admin.tag.delete');
         });
-        /* page */
+        /* ===== Page ===== */
         Route::prefix('page')->group(function(){
-            Route::get('/list', [PageController::class, 'list'])->name('admin.page.list');
+            // List: /he-thong/page (chuẩn) hoặc /he-thong/page/list (tương thích)
+            Route::get('/', [PageController::class, 'list'])->name('admin.page.list');
+            Route::get('/list', [PageController::class, 'list']); // Alias for backward compatibility
+            // View/Form: /he-thong/page/view?id={id}&language={lang}&type={create|edit|copy}
             Route::get('/view', [PageController::class, 'view'])->name('admin.page.view');
+            // Create/Update: POST /he-thong/page/createAndUpdate
             Route::post('/createAndUpdate', [PageController::class, 'createAndUpdate'])->name('admin.page.createAndUpdate');
+            // Delete: GET /he-thong/page/delete?id={id}
             Route::get('/delete', [PageController::class, 'delete'])->name('admin.page.delete');
         });
         /* ===== Category Blog ===== */
         Route::prefix('categoryBlog')->group(function(){
+            // List: /he-thong/categoryBlog
             Route::get('/', [CategoryBlogController::class, 'list'])->name('admin.categoryBlog.list');
-            Route::post('/createAndUpdate', [CategoryBlogController::class, 'createAndUpdate'])->name('admin.categoryBlog.createAndUpdate');
+            // View/Form: /he-thong/categoryBlog/view?id={id}&language={lang}&type={create|edit|copy}
             Route::get('/view', [CategoryBlogController::class, 'view'])->name('admin.categoryBlog.view');
+            // Create/Update: POST /he-thong/categoryBlog/createAndUpdate
+            Route::post('/createAndUpdate', [CategoryBlogController::class, 'createAndUpdate'])->name('admin.categoryBlog.createAndUpdate');
+            // Delete: GET /he-thong/categoryBlog/delete?id={id}
             Route::get('/delete', [CategoryBlogController::class, 'delete'])->name('admin.categoryBlog.delete');
         });
         /* ===== Blog ===== */
         Route::prefix('blog')->group(function(){
+            // List: /he-thong/blog
             Route::get('/', [BlogController::class, 'list'])->name('admin.blog.list');
+            // View/Form: /he-thong/blog/view?id={id}&language={lang}&type={create|edit|copy}
             Route::get('/view', [BlogController::class, 'view'])->name('admin.blog.view');
+            // Create/Update: POST /he-thong/blog/createAndUpdate
             Route::post('/createAndUpdate', [BlogController::class, 'createAndUpdate'])->name('admin.blog.createAndUpdate');
+            // Delete: GET /he-thong/blog/delete?id={id}
             Route::get('/delete', [BlogController::class, 'delete'])->name('admin.blog.delete');
-            /* Delete AJAX */
+            // AJAX Actions
             Route::get('/loadProduct', [BlogController::class, 'loadProduct'])->name('admin.blog.loadProduct');
             Route::get('/chooseProduct', [BlogController::class, 'chooseProduct'])->name('admin.blog.chooseProduct');
             Route::get('/loadThemeProductChoosed', [BlogController::class, 'loadThemeProductChoosed'])->name('admin.blog.loadThemeProductChoosed');
@@ -203,9 +252,13 @@ Route::middleware('auth', 'role:admin')->group(function () {
         });
         /* ===== Document ===== */
         Route::prefix('document')->group(function(){
+            // List: /he-thong/document
             Route::get('/', [DocumentController::class, 'list'])->name('admin.document.list');
+            // View/Form: /he-thong/document/view?id={id}&language={lang}&type={create|edit|copy}
             Route::get('/view', [DocumentController::class, 'view'])->name('admin.document.view');
+            // Create/Update: POST /he-thong/document/createAndUpdate
             Route::post('/createAndUpdate', [DocumentController::class, 'createAndUpdate'])->name('admin.document.createAndUpdate');
+            // Delete: GET /he-thong/document/delete?id={id}
             Route::get('/delete', [DocumentController::class, 'delete'])->name('admin.document.delete');
         });
         /* ===== Order ===== */
@@ -242,10 +295,13 @@ Route::middleware('auth', 'role:admin')->group(function () {
         Route::prefix('source')->group(function(){
             Route::post('/remove', [SourceController::class, 'remove'])->name('admin.source.remove');
         });
-        /* image */
+        /* ===== Image Management ===== */
         Route::prefix('image')->group(function(){
+            // List: /he-thong/image
             Route::get('/', [ImageController::class, 'list'])->name('admin.image.list');
+            // Upload: POST /he-thong/image/uploadImages
             Route::post('/uploadImages', [ImageController::class, 'uploadImages'])->name('admin.image.uploadImages');
+            // AJAX Actions
             Route::get('/loadImage', [ImageController::class, 'loadImage'])->name('admin.image.loadImage');
             Route::get('/loadModal', [ImageController::class, 'loadModal'])->name('admin.image.loadModal');
             Route::post('/changeImage', [ImageController::class, 'changeImage'])->name('admin.image.changeImage');
@@ -347,6 +403,10 @@ Route::get('/searchAjax', [SearchController::class, 'searchAjax'])->name('search
 Route::get('/he-thong', [LoginController::class, 'loginForm'])->name('admin.loginForm');
 Route::post('/loginAdmin', [LoginController::class, 'loginAdmin'])->name('admin.loginAdmin');
 Route::post('/loginCustomer', [LoginController::class, 'loginCustomer'])->name('admin.loginCustomer');
+Route::post('/registerCustomer', [LoginController::class, 'registerCustomer'])->name('admin.registerCustomer');
+Route::post('/forgotPassword', [LoginController::class, 'forgotPassword'])->name('admin.forgotPassword');
+Route::get('/reset-password', [LoginController::class, 'showResetPasswordForm'])->name('password.reset');
+Route::post('/resetPassword', [LoginController::class, 'resetPassword'])->name('admin.resetPassword');
 Route::get('/logout', [LoginController::class, 'logout'])->name('admin.logout');
 Route::get('/createUser', [LoginController::class, 'create'])->name('admin.createUser');
 /* setting */

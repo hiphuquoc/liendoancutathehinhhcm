@@ -81,7 +81,9 @@ class Seo extends Model {
         if(!empty($id)&&!empty($params)){
             $model          = self::find($id);
             // kiểm tra slug_full có phải duy nhất không
-            $slugFullNew    = self::buildFullUrl($params['slug'], $model->parent);
+            // Use existing slug if not provided in params (for partial updates)
+            $slug = $params['slug'] ?? $model->slug ?? '';
+            $slugFullNew    = !empty($slug) ? self::buildFullUrl($slug, $model->parent) : $model->slug_full;
             // lấy slug_full cũ - mới để so sánh
             $slugFullOld    = $model->slug_full;
             foreach($params as $key => $value) $model->{$key}  = $value;

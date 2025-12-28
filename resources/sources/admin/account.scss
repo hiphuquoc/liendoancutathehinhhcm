@@ -1,0 +1,370 @@
+// Account Pages Styles - Modern & Beautiful Design
+// Color Variables
+$primary-color: rgb(1, 116, 190);
+$primary-hover: rgb(1, 100, 170);
+$primary-light: rgba(1, 116, 190, 0.1);
+$primary-lighter: rgba(1, 116, 190, 0.05);
+$text-dark: #2c3e50;
+$text-medium: #5a6c7d;
+$text-light: #8e9aaf;
+$border-color: #e1e8ed;
+$bg-light: #f8f9fa;
+$bg-white: #ffffff;
+$success-color: #28c76f;
+$error-color: #ea5455;
+$shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+$shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+$border-radius: 12px;
+$border-radius-sm: 8px;
+$transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+// Account Container
+.account-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+
+    .account-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        
+        .account-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, $primary-color 0%, lighten($primary-color, 10%) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: $shadow-md;
+            transition: $transition;
+
+            i {
+                font-size: 2rem;
+                color: white;
+            }
+
+            &:hover {
+                transform: translateY(-5px);
+                box-shadow: $shadow-lg;
+            }
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: $text-dark;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            color: $text-medium;
+            font-size: 1rem;
+        }
+    }
+
+    // Card Styles
+    .account-card {
+        background: $bg-white;
+        border-radius: $border-radius;
+        box-shadow: $shadow-sm;
+        border: 1px solid $border-color;
+        overflow: hidden;
+        transition: $transition;
+        margin-bottom: 2rem;
+
+        &:hover {
+            box-shadow: $shadow-md;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, $primary-light 0%, transparent 100%);
+            padding: 1.5rem 2rem;
+            border-bottom: 2px solid $primary-light;
+
+            h4 {
+                font-size: 1.25rem;
+                font-weight: 600;
+                color: $text-dark;
+                margin: 0;
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+
+                i {
+                    color: $primary-color;
+                    font-size: 1.1rem;
+                }
+            }
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .card-footer {
+            padding: 1.5rem 2rem;
+            background: $bg-light;
+            border-top: 1px solid $border-color;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+    }
+
+    // Form Input Styles
+    .form-group {
+        margin-bottom: 1.75rem;
+        position: relative;
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: $text-dark;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            i {
+                color: $primary-color;
+                font-size: 0.9rem;
+            }
+
+            .required {
+                color: $error-color;
+                margin-left: 0.25rem;
+            }
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+
+            .input-icon {
+                position: absolute;
+                left: 1rem;
+                color: $text-light;
+                font-size: 1rem;
+                z-index: 1;
+                transition: $transition;
+            }
+
+            input[type="text"],
+            input[type="email"],
+            input[type="password"] {
+                width: 100%;
+                padding: 0.875rem 1rem 0.875rem 3rem;
+                font-size: 1rem;
+                border: 2px solid $border-color;
+                border-radius: $border-radius-sm;
+                background: $bg-white;
+                color: $text-dark;
+                transition: $transition;
+                font-family: inherit;
+
+                &:focus {
+                    outline: none;
+                    border-color: $primary-color;
+                    box-shadow: 0 0 0 3px $primary-lighter;
+                    background: $bg-white;
+
+                    ~ .input-icon {
+                        color: $primary-color;
+                    }
+                }
+
+                &:hover:not(:focus) {
+                    border-color: darken($border-color, 10%);
+                }
+
+                &::placeholder {
+                    color: $text-light;
+                }
+
+                &.is-invalid {
+                    border-color: $error-color;
+                    
+                    ~ .input-icon {
+                        color: $error-color;
+                    }
+                }
+
+                &.is-valid {
+                    border-color: $success-color;
+                    
+                    ~ .input-icon {
+                        color: $success-color;
+                    }
+                }
+            }
+        }
+
+        .form-text {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: $text-medium;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            i {
+                font-size: 0.75rem;
+            }
+        }
+
+        .invalid-feedback {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: $error-color;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            i {
+                font-size: 0.75rem;
+            }
+        }
+    }
+
+    // Button Styles
+    .btn-primary {
+        background: linear-gradient(135deg, $primary-color 0%, $primary-hover 100%);
+        border: none;
+        padding: 0.875rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: $border-radius-sm;
+        color: white;
+        transition: $transition;
+        box-shadow: $shadow-sm;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        cursor: pointer;
+
+        i {
+            font-size: 0.9rem;
+        }
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: $shadow-md;
+            background: linear-gradient(135deg, $primary-hover 0%, darken($primary-hover, 5%) 100%);
+        }
+
+        &:active {
+            transform: translateY(0);
+        }
+
+        &:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px $primary-lighter, $shadow-md;
+        }
+
+        &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+    }
+
+    // Alert/Info Box
+    .info-box {
+        background: $primary-lighter;
+        border-left: 4px solid $primary-color;
+        border-radius: $border-radius-sm;
+        padding: 1rem 1.25rem;
+        margin-top: 1rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+
+        i {
+            color: $primary-color;
+            font-size: 1.1rem;
+            margin-top: 0.125rem;
+        }
+
+        p {
+            margin: 0;
+            color: $text-medium;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+    }
+
+    // Password Strength Indicator (optional)
+    .password-strength {
+        margin-top: 0.75rem;
+        display: flex;
+        gap: 0.5rem;
+
+        .strength-bar {
+            flex: 1;
+            height: 4px;
+            background: $border-color;
+            border-radius: 2px;
+            transition: $transition;
+
+            &.weak {
+                background: $error-color;
+            }
+
+            &.medium {
+                background: #ffa500;
+            }
+
+            &.strong {
+                background: $success-color;
+            }
+        }
+    }
+
+    // Responsive
+    @media (max-width: 768px) {
+        padding: 1rem 0.5rem;
+
+        .account-header {
+            margin-bottom: 2rem;
+
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        .account-card {
+            .card-header,
+            .card-body,
+            .card-footer {
+                padding: 1.25rem;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+    }
+}
+
+// Animation
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.account-page {
+    animation: fadeInUp 0.5s ease-out;
+}
+

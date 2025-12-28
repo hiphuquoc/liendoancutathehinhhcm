@@ -122,10 +122,7 @@
         </div>
     </form>    
 @endsection
-@push('modal')
-    <!-- modal chọn thumnail -->
-    @include('admin.form.formModalChooseLanguageBeforeDeletePage')
-@endpush
+{{-- Modal removed - feature not in use --}}
 @push('scriptCustom')
     <script type="text/javascript">
 

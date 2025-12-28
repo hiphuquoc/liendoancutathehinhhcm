@@ -8,8 +8,20 @@ class BuildInsertUpdateModel {
     public static function buildArrayTableSeo($dataForm, $type, $dataImage = null){
         $result                                 = [];
         if(!empty($dataForm)){
-            $result['title']                    = !empty($dataForm['title']) ? trim($dataForm['title']) : '';
-            $result['description']              = !empty($dataForm['description']) ? trim($dataForm['description']) : '';
+            // For trainer_info and referee_info, use 'name' for seo title if available
+            // Otherwise fallback to 'title'
+            if(in_array($type, ['trainer_info', 'referee_info']) && !empty($dataForm['name'])) {
+                $result['title']                = trim($dataForm['name']);
+            } else {
+                $result['title']                = !empty($dataForm['title']) ? trim($dataForm['title']) : '';
+            }
+            // For trainer_info, use description from trainer_info table if available
+            // Otherwise use description from form
+            if($type === 'trainer_info' && !empty($dataForm['trainer_description'])) {
+                $result['description']          = trim($dataForm['trainer_description']);
+            } else {
+                $result['description']          = !empty($dataForm['description']) ? trim($dataForm['description']) : '';
+            }
             if(!empty($dataImage)) $result['image'] = $dataImage;
             // page level
             $pageLevel                          = 1;
@@ -25,9 +37,9 @@ class BuildInsertUpdateModel {
             $result['topic']                    = null;
             $result['seo_title']                = !empty($dataForm['seo_title']) ? trim($dataForm['seo_title']) : $result['title'];
             $result['seo_description']          = !empty($dataForm['seo_description']) ? trim($dataForm['seo_description']) : $result['description'];
-            $result['slug']                     = mb_strtolower(trim($dataForm['slug']));
+            $result['slug']                     = !empty($dataForm['slug']) ? mb_strtolower(trim($dataForm['slug'])) : '';
             /* slug full */
-            $result['slug_full']                = Seo::buildFullUrl(mb_strtolower(trim($dataForm['slug'])), $pageParent);
+            $result['slug_full']                = !empty($result['slug']) ? Seo::buildFullUrl($result['slug'], $pageParent) : '';
             /* link canonical */
             if(!empty($dataForm['link_canonical'])){
                 $tmp                            = explode('/', $dataForm['link_canonical']);

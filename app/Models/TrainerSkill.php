@@ -11,6 +11,7 @@ class TrainerSkill extends Model {
     protected $fillable     = [
         'skill',
         'percent',
+        'ordering',
     ];
     public $timestamps = false;
 

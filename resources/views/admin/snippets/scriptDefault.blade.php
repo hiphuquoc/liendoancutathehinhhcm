@@ -1,53 +1,28 @@
 <!-- === START:: Scripts Default === -->
-<script src="{{ asset('sources/admin/app-assets/vendors/js/vendors.min.js') }}"></script>
-<script src="{{ asset('sources/admin/app-assets/vendors/js/forms/validation/jquery.validate.min.js') }}"></script>
-<script src="{{ asset('sources/admin/app-assets/js/core/app-menu.js') }}"></script>
-<!-- === END:: Scripts Default === -->
-<!-- Include jQuery UI library -->
+<!-- jQuery Core -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<!-- jQuery UI -->
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-<!-- BEGIN: Page Vendor JS-->
-<script src="{{ asset('sources/admin/app-assets/vendors/js/pickers/pickadate/picker.js') }}"></script>
-<script src="{{ asset('sources/admin/app-assets/vendors/js/pickers/pickadate/picker.date.js') }}"></script>
-<script src="{{ asset('sources/admin/app-assets/vendors/js/pickers/pickadate/picker.time.js') }}"></script>
-<script src="{{ asset('sources/admin/app-assets/vendors/js/pickers/pickadate/legacy.js') }}"></script>
-<script src="{{ asset('sources/admin/app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}"></script>
-<script src="{{ asset('sources/admin/app-assets/js/scripts/forms/pickers/form-pickers.js') }}"></script>
-<script src="{{ asset('sources/admin/app-assets/vendors/js/forms/select/select2.full.min.js') }}"></script>
-<script src="{{ asset('sources/admin/app-assets/js/scripts/forms/form-select2.min.js') }}"></script>
+<!-- jQuery Repeater Plugin -->
 <script src="{{ asset('sources/admin/app-assets/vendors/js/forms/repeater/jquery.repeater.min.js') }}"></script>
-<script src="{{ asset('sources/admin/app-assets/js/scripts/forms/form-repeater.min.js') }}"></script>
-<!-- custom tag -->
-<script src="{{ asset('sources/admin/app-assets/vendors/js/tagify/tagify.js') }}"></script>
-<!-- BEGIN: SWEET ALERT -->
-<script src="{{ asset('sources/admin/app-assets/vendors/js/extensions/sweetalert2.all.min.js') }}"></script>
-<script src="{{ asset('sources/admin/app-assets/js/scripts/extensions/ext-component-sweet-alerts.js') }}"></script>
-<!-- END: SWEET ALERT -->
-<!-- BEGIN: SLICK -->
-<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-<!-- END: SLICK -->
-<!-- BEGIN: MENU -->
-<script src="{{ asset('sources/admin/app-assets/js/core/app.min.js') }}"></script>
-<script src="{{ asset('sources/admin/app-assets/js/scripts/customizer.min.js') }}"></script>
-<script src="{{ asset('sources/admin/app-assets/js/core/app-menu.min.js') }}"></script>
-<!-- END: MENU -->
-
-<script src="{{ asset('sources/admin/app-assets/vendors/js/extensions/toastr.min.js') }}"></script>
-
-<!-- END: Page Vendor JS-->
+<!-- === END:: Scripts Default === -->
 <script defer>
     $(window).on('load', function () {
-        if (feather) {
-            feather.replace({
-                width: 14,
-                height: 14
-            });
-        }
-        $('[data-bs-toggle="tooltip"]').tooltip();
+        // Feather icons removed - using SVG icons directly instead
+        // if (feather) {
+        //     feather.replace({
+        //         width: 14,
+        //         height: 14
+        //     });
+        // }
+        // Bootstrap tooltip removed - using custom tooltip implementation
+        // $('[data-bs-toggle="tooltip"]').tooltip();
         loadImageFromGoogleCloud();
     })
 
     $(function () {
-        $('[data-toggle="tooltip"]').tooltip({ html : true })
+        // Bootstrap tooltip removed - using custom tooltip implementation
+        // $('[data-toggle="tooltip"]').tooltip({ html : true })
     })
     /* COUNT CHARACTOR */
     $('input, textarea').on('input', function(){
@@ -75,19 +50,33 @@
     }
 
     function submitForm(idForm, addParams = {}){
-        const form = $('#' + idForm);
-        if(form.valid()){
-            // Thêm các tham số bổ sung (nếu có) vào form
-            $.each(addParams, function(key, value) {
-                $('<input>').attr({
-                    type: 'hidden',
-                    name: key,
-                    value: value
-                }).appendTo(form);
-            });
-            // Submit form
-            form.submit();
+        const form = document.getElementById(idForm);
+        if(!form) {
+            console.error('Form not found:', idForm);
+            return;
         }
+        
+        // Check HTML5 validation
+        if (form.checkValidity && !form.checkValidity()) {
+            console.log('Form validation failed');
+            form.reportValidity();
+            return;
+        }
+        
+        // Thêm các tham số bổ sung (nếu có) vào form
+        if (addParams && typeof addParams === 'object') {
+            Object.keys(addParams).forEach(function(key) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = addParams[key];
+                form.appendChild(input);
+            });
+        }
+        
+        // Submit form
+        console.log('Submitting form:', idForm);
+        form.submit();
     }
 
     /* copy to clipboard */
@@ -304,6 +293,152 @@
         const closeButton = toastElement.querySelector('.toast-close-button');
         if (closeButton) {
             closeButton.addEventListener('click', () => toastElement.remove());
+        }
+    }
+
+    /* Admin Sidebar Menu - New Design */
+    // Admin Mobile Menu Toggle - Global function
+    function toggleAdminMobileMenu() {
+        const sidebar = document.getElementById('adminDashboardSidebar');
+        const backdrop = document.getElementById('adminMobileMenuBackdrop');
+        const isOpen = sidebar && sidebar.classList.contains('adminDashboard_sidebar--mobileOpen');
+        
+        if (!isOpen) {
+            // Open menu
+            if (sidebar) {
+                sidebar.classList.add('adminDashboard_sidebar--mobileOpen');
+            }
+            if (backdrop) {
+                backdrop.classList.add('active');
+            }
+            document.body.style.overflow = 'hidden';
+        } else {
+            // Close menu
+            if (sidebar) {
+                sidebar.classList.remove('adminDashboard_sidebar--mobileOpen');
+            }
+            if (backdrop) {
+                backdrop.classList.remove('active');
+            }
+            document.body.style.overflow = '';
+        }
+        }
+    
+    (function() {
+        const menuItems = document.querySelectorAll('.admin-menu-item.has-submenu');
+
+        // Toggle submenu - handled by onclick in HTML for better control
+        // This is just a fallback for any edge cases
+        menuItems.forEach(function(item) {
+            const link = item.querySelector('.admin-menu-link.has-submenu-toggle');
+            if (link && !link.onclick) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    item.classList.toggle('open');
+                });
+            }
+        });
+
+        // Auto open submenu if active
+        menuItems.forEach(function(item) {
+            const activeChild = item.querySelector('.admin-submenu-item.active');
+            if (activeChild) {
+                item.classList.add('open');
+            }
+        });
+
+        // Close menu when clicking backdrop
+        document.addEventListener('DOMContentLoaded', function() {
+            const backdrop = document.getElementById('adminMobileMenuBackdrop');
+            if (backdrop) {
+                backdrop.addEventListener('click', function() {
+                    toggleAdminMobileMenu();
+                });
+            }
+            
+            // Close menu on ESC key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    const sidebar = document.getElementById('adminDashboardSidebar');
+                    if (sidebar && sidebar.classList.contains('adminDashboard_sidebar--mobileOpen')) {
+                        toggleAdminMobileMenu();
+                    }
+                }
+            });
+        });
+
+        // Handle window resize
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                if (window.innerWidth > 1023) {
+                    const sidebar = document.getElementById('adminDashboardSidebar');
+                    const backdrop = document.getElementById('adminMobileMenuBackdrop');
+                    if (sidebar) {
+                        sidebar.classList.remove('adminDashboard_sidebar--mobileOpen');
+                    }
+                    if (backdrop) {
+                        backdrop.classList.remove('active');
+                    }
+                    document.body.style.overflow = '';
+                }
+            }, 250);
+        });
+    })();
+    
+    // Copy trainer code function - Global function for all pages
+    function copyTrainerCode(code, element) {
+        // element can be button or the entire code box
+        var codeBox = element.classList && element.classList.contains('adminPersonnelPage_card_code') ? element : 
+                      element.classList && element.classList.contains('adminSidebar_header_trainerCode') ? element :
+                      element.closest('.adminPersonnelPage_card_code') || element.closest('.adminSidebar_header_trainerCode');
+        if (!codeBox) codeBox = element;
+        
+        // Copy to clipboard
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(code).then(function() {
+                // Show success state
+                codeBox.classList.add('adminPersonnelPage_card_code--copied', 'adminSidebar_header_trainerCode--copied');
+                codeBox.setAttribute('data-tooltip', 'Đã sao chép!');
+                codeBox.setAttribute('title', 'Đã sao chép!');
+                
+                // Reset after 2 seconds
+                setTimeout(function() {
+                    codeBox.classList.remove('adminPersonnelPage_card_code--copied', 'adminSidebar_header_trainerCode--copied');
+                    codeBox.setAttribute('data-tooltip', 'Nhấp để sao chép mã HLV');
+                    codeBox.setAttribute('title', 'Nhấp để sao chép mã HLV');
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Failed to copy:', err);
+                alert('Không thể sao chép mã số. Vui lòng thử lại hoặc sao chép thủ công.');
+            });
+        } else {
+            // Fallback for older browsers
+            var textArea = document.createElement("textarea");
+            textArea.value = code;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                codeBox.classList.add('adminPersonnelPage_card_code--copied', 'adminSidebar_header_trainerCode--copied');
+                codeBox.setAttribute('data-tooltip', 'Đã sao chép!');
+                codeBox.setAttribute('title', 'Đã sao chép!');
+                setTimeout(function() {
+                    codeBox.classList.remove('adminPersonnelPage_card_code--copied', 'adminSidebar_header_trainerCode--copied');
+                    codeBox.setAttribute('data-tooltip', 'Nhấp để sao chép mã HLV');
+                    codeBox.setAttribute('title', 'Nhấp để sao chép mã HLV');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy:', err);
+                alert('Không thể sao chép mã số. Vui lòng thử lại hoặc sao chép thủ công.');
+            }
+            document.body.removeChild(textArea);
         }
     }
 </script>

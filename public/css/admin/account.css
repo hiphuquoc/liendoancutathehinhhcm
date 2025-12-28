@@ -1,0 +1,408 @@
+/* Account Pages Styles - Modern & Beautiful Design - Optimized */
+.account-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+/* Header Section */
+.account-page .account-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.account-page .account-header .account-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, rgb(1, 116, 190) 0%, rgb(30, 140, 210) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.account-page .account-header .account-icon i {
+  font-size: 2rem;
+  color: white;
+}
+
+.account-page .account-header .account-icon:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.account-page .account-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.account-page .account-header p {
+  color: #5a6c7d;
+  font-size: 1rem;
+}
+
+/* Card Styles */
+.account-page .account-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e1e8ed;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-bottom: 2rem;
+}
+
+.account-page .account-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.account-page .account-card .card-header {
+  background: #f8f9fa;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.account-page .account-card .card-header h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.account-page .account-card .card-header h4 i {
+  color: rgb(1, 116, 190);
+  font-size: 1.1rem;
+}
+
+.account-page .account-card .card-body {
+  padding: 2rem;
+}
+
+.account-page .account-card .card-footer {
+  padding: 1.5rem 2rem;
+  background: #f8f9fa;
+  border-top: 1px solid #e1e8ed;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+/* Form Group */
+.account-page .form-group {
+  margin-bottom: 1.75rem;
+  position: relative;
+}
+
+/* Label - Tối ưu, không có icon */
+.account-page .form-group label {
+  display: block;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.account-page .form-group label .required {
+  color: #ea5455;
+  margin-left: 0.25rem;
+  font-weight: 700;
+}
+
+/* Input Wrapper */
+.account-page .form-group .input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.account-page .form-group .input-wrapper .input-icon {
+  position: absolute;
+  left: 1rem;
+  color: #8e9aaf;
+  font-size: 1rem;
+  z-index: 1;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+}
+
+.account-page .form-group .input-wrapper .input-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.account-page .form-group .input-wrapper input[type="text"],
+.account-page .form-group .input-wrapper input[type="email"],
+.account-page .form-group .input-wrapper input[type="password"] {
+  width: 100%;
+  padding: 0.875rem 1rem 0.875rem 3rem;
+  font-size: 1rem;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #2c3e50;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+}
+
+.account-page .form-group .input-wrapper input[type="text"]:focus,
+.account-page .form-group .input-wrapper input[type="email"]:focus,
+.account-page .form-group .input-wrapper input[type="password"]:focus {
+  outline: none;
+  border-color: rgb(1, 116, 190);
+  box-shadow: 0 0 0 3px rgba(1, 116, 190, 0.05);
+  background: #ffffff;
+}
+
+.account-page .form-group .input-wrapper input[type="text"]:focus ~ .input-icon,
+.account-page .form-group .input-wrapper input[type="email"]:focus ~ .input-icon,
+.account-page .form-group .input-wrapper input[type="password"]:focus ~ .input-icon {
+  color: rgb(1, 116, 190);
+}
+
+.account-page .form-group .input-wrapper input[type="text"]:focus ~ .input-icon svg,
+.account-page .form-group .input-wrapper input[type="email"]:focus ~ .input-icon svg,
+.account-page .form-group .input-wrapper input[type="password"]:focus ~ .input-icon svg {
+  stroke: rgb(1, 116, 190);
+}
+
+.account-page .form-group .input-wrapper input[type="text"]:hover:not(:focus),
+.account-page .form-group .input-wrapper input[type="email"]:hover:not(:focus),
+.account-page .form-group .input-wrapper input[type="password"]:hover:not(:focus) {
+  border-color: #c8d4db;
+}
+
+.account-page .form-group .input-wrapper input[type="text"]::placeholder,
+.account-page .form-group .input-wrapper input[type="email"]::placeholder,
+.account-page .form-group .input-wrapper input[type="password"]::placeholder {
+  color: #8e9aaf;
+}
+
+/* Invalid State */
+.account-page .form-group .input-wrapper input[type="text"].is-invalid,
+.account-page .form-group .input-wrapper input[type="email"].is-invalid,
+.account-page .form-group .input-wrapper input[type="password"].is-invalid {
+  border-color: #ea5455;
+}
+
+.account-page .form-group .input-wrapper input[type="text"].is-invalid ~ .input-icon,
+.account-page .form-group .input-wrapper input[type="email"].is-invalid ~ .input-icon,
+.account-page .form-group .input-wrapper input[type="password"].is-invalid ~ .input-icon {
+  color: #ea5455;
+}
+
+.account-page .form-group .input-wrapper input[type="text"].is-invalid ~ .input-icon svg,
+.account-page .form-group .input-wrapper input[type="email"].is-invalid ~ .input-icon svg,
+.account-page .form-group .input-wrapper input[type="password"].is-invalid ~ .input-icon svg {
+  stroke: #ea5455;
+}
+
+/* Valid State */
+.account-page .form-group .input-wrapper input[type="text"].is-valid,
+.account-page .form-group .input-wrapper input[type="email"].is-valid,
+.account-page .form-group .input-wrapper input[type="password"].is-valid {
+  border-color: #28c76f;
+}
+
+.account-page .form-group .input-wrapper input[type="text"].is-valid ~ .input-icon,
+.account-page .form-group .input-wrapper input[type="email"].is-valid ~ .input-icon,
+.account-page .form-group .input-wrapper input[type="password"].is-valid ~ .input-icon {
+  color: #28c76f;
+}
+
+.account-page .form-group .input-wrapper input[type="text"].is-valid ~ .input-icon svg,
+.account-page .form-group .input-wrapper input[type="email"].is-valid ~ .input-icon svg,
+.account-page .form-group .input-wrapper input[type="password"].is-valid ~ .input-icon svg {
+  stroke: #28c76f;
+}
+
+/* Toggle Password Button */
+.account-page .form-group .input-wrapper .btn-toggle-password {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0.5rem;
+  border: none;
+  background: none;
+  color: #8e9aaf;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.account-page .form-group .input-wrapper .btn-toggle-password:hover {
+  color: rgb(1, 116, 190);
+}
+
+.account-page .form-group .input-wrapper .btn-toggle-password:focus {
+  outline: none;
+  color: rgb(1, 116, 190);
+}
+
+.account-page .form-group .input-wrapper .btn-toggle-password .toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+}
+
+.account-page .form-group .input-wrapper .btn-toggle-password .toggle-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Invalid Feedback - Ẩn mặc định, chỉ hiện khi cần */
+.account-page .form-group .invalid-feedback {
+  display: none;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #ea5455;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Hiện invalid-feedback khi form-group có class has-error hoặc form đã được validate */
+.account-page .form-group.has-error .invalid-feedback,
+.account-page .was-validated .form-group .input-wrapper input:invalid ~ *,
+.account-page .was-validated .form-group:has(.input-wrapper input:invalid) .invalid-feedback {
+  display: flex;
+}
+
+/* Fallback cho trình duyệt không hỗ trợ :has() */
+@supports selector(:has(*)) {
+  .account-page .form-group:has(.input-wrapper input.is-invalid) .invalid-feedback {
+    display: flex;
+  }
+}
+
+.account-page .form-group .invalid-feedback i {
+  font-size: 0.75rem;
+}
+
+/* Button Primary */
+.account-page .btn-primary {
+  background: linear-gradient(135deg, rgb(1, 116, 190) 0%, rgb(1, 100, 170) 100%);
+  border: none;
+  padding: 0.875rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  color: white;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.account-page .btn-primary i {
+  font-size: 0.9rem;
+}
+
+.account-page .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(135deg, rgb(1, 100, 170) 0%, rgb(1, 85, 150) 100%);
+}
+
+.account-page .btn-primary:active {
+  transform: translateY(0);
+}
+
+.account-page .btn-primary:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(1, 116, 190, 0.05), 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.account-page .btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Info Box */
+.account-page .info-box {
+  background: rgba(1, 116, 190, 0.05);
+  border-left: 4px solid rgb(1, 116, 190);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-top: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.account-page .info-box i {
+  color: rgb(1, 116, 190);
+  font-size: 1.1rem;
+  margin-top: 0.125rem;
+  flex-shrink: 0;
+}
+
+.account-page .info-box p {
+  margin: 0;
+  color: #5a6c7d;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.account-page .info-box p strong {
+  color: #2c3e50;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .account-page {
+    padding: 1rem 0.5rem;
+  }
+
+  .account-page .account-header {
+    margin-bottom: 2rem;
+  }
+
+  .account-page .account-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .account-page .account-card .card-header,
+  .account-page .account-card .card-body,
+  .account-page .account-card .card-footer {
+    padding: 1.25rem;
+  }
+
+  .account-page .form-group {
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

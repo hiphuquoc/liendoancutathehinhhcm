@@ -10,6 +10,7 @@ class TrainerAchievement extends Model {
     protected $table        = 'trainer_achievement';
     protected $fillable     = [
         'content',
+        'ordering',
     ];
     public $timestamps = false;
 

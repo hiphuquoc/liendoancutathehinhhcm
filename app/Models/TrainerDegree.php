@@ -11,6 +11,7 @@ class TrainerDegree extends Model {
     protected $fillable     = [
         'title',
         'school',
+        'ordering',
     ];
     public $timestamps = false;
 

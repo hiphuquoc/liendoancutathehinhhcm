@@ -11,6 +11,7 @@ class TrainerExperience extends Model {
     protected $fillable     = [
         'title',
         'company',
+        'ordering',
     ];
     public $timestamps = false;
 

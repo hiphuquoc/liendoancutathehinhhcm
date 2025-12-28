@@ -107,12 +107,7 @@
         </div>
     </form>    
 @endsection
-@push('modal')
-    <!-- modal chọn thumnail -->
-    @include('admin.category.formSearchThumnail')
-    <!-- modal chọn thumnail -->
-    @include('admin.form.formModalChooseLanguageBeforeDeletePage')
-@endpush
+{{-- Modals removed - features not in use --}}
 @push('scriptCustom')
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {

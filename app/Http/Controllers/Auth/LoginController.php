@@ -82,11 +82,10 @@ class LoginController extends Controller
 
         // Validate input
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|max:255',
+            'email' => 'required|string|max:255',
             'password' => 'required|string|min:6|max:100',
         ], [
             'email.required' => 'Vui lòng nhập email',
-            'email.email' => 'Email không hợp lệ',
             'password.required' => 'Vui lòng nhập mật khẩu',
             'password.min' => 'Mật khẩu phải có ít nhất 6 ký tự',
         ]);
@@ -100,17 +99,20 @@ class LoginController extends Controller
             ], 422);
         }
 
-        $credentials = [
-            'email' => trim($request->email),
-            'password' => $request->password,
-        ];
-
+        // Determine if login is by username or email
+        $loginValue = trim($request->email);
+        
+        // Find user by username or email
+        $user = User::where('username', $loginValue)
+                    ->orWhere('email', $loginValue)
+                    ->first();
+        
         // Remember me option
         $remember = $request->boolean('remember', false);
 
         // Attempt login
-        if (Auth::attempt($credentials, $remember)) {
-            $user = Auth::user();
+        if ($user && Hash::check($request->password, $user->password)) {
+            Auth::login($user, $remember);
             
             // Check admin role
             if ($user->hasRole('admin') || $user->hasRole('sub-admin')) {
@@ -151,7 +153,7 @@ class LoginController extends Controller
         RateLimiter::hit($throttleKey, self::DECAY_SECONDS);
         $attemptsLeft = self::MAX_ATTEMPTS - RateLimiter::attempts($throttleKey);
 
-        $message = 'Email hoặc mật khẩu không chính xác.';
+        $message = 'Tên đăng nhập/Email hoặc mật khẩu không chính xác.';
         if ($attemptsLeft > 0 && $attemptsLeft <= 3) {
             $message .= " Bạn còn {$attemptsLeft} lần thử.";
         }

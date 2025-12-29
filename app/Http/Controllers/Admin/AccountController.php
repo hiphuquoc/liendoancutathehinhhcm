@@ -47,9 +47,9 @@ class AccountController extends Controller
         $user = Auth::user();
         $isSubAdmin = $user->hasRole('sub-admin') && !$user->hasRole('admin');
 
-        // Sub-admin cannot update name and email
+        // Sub-admin cannot update name, but can update email
         if ($isSubAdmin) {
-            // Validate that name and email haven't changed
+            // Validate that name hasn't changed, but allow email update
             $validator = Validator::make($request->all(), [
                 'name' => [
                     'required',
@@ -59,19 +59,12 @@ class AccountController extends Controller
                         }
                     }
                 ],
-                'email' => [
-                    'required',
-                    'email',
-                    function($attribute, $value, $fail) use ($user) {
-                        if ($user->email !== $value) {
-                            $fail('Bạn không có quyền thay đổi email.');
-                        }
-                    }
-                ],
+                'email' => 'required|email|max:255|unique:users,email,' . $user->id,
             ], [
                 'name.required' => 'Vui lòng nhập họ tên',
                 'email.required' => 'Vui lòng nhập email',
                 'email.email' => 'Email không hợp lệ',
+                'email.unique' => 'Email này đã được sử dụng',
             ]);
         } else {
             // Admin can update name and email
@@ -97,11 +90,14 @@ class AccountController extends Controller
         }
 
         try {
-            // Only update if admin, or if values haven't changed (for sub-admin)
+            DB::beginTransaction();
+            
+            // Update name (only for admin)
             if (!$isSubAdmin) {
                 $user->name = trim($request->name);
-                $user->email = trim($request->email);
             }
+            // All users (admin and sub-admin) can update email
+            $user->email = trim($request->email);
             // Sub-admin can update other fields like address, phone, position if needed
             if ($request->has('address')) {
                 $user->address = trim($request->address);
@@ -113,12 +109,18 @@ class AccountController extends Controller
                 $user->position = trim($request->position);
             }
             $user->save();
+            
+            // Sync to trainer_info if user has trainer profile
+            $this->syncUserToTrainer($user);
+            
+            DB::commit();
 
             $message = [
                 'type' => 'success',
                 'message' => '<strong>Thành công!</strong> Đã cập nhật thông tin cá nhân!'
             ];
         } catch (\Exception $e) {
+            DB::rollBack();
             \Log::error('Error updating user profile', [
                 'user_id' => $user->id,
                 'error' => $e->getMessage(),
@@ -271,12 +273,16 @@ class AccountController extends Controller
                 $dataPath = Upload::uploadWallpaper($request->file('image'), $fileName, $folderUpload);
             }
             
-            // Chỉ update các field có trong request (phone, description, image)
+            // Chỉ update các field có trong request (phone, email, description, image)
             // Các field khác giữ nguyên - KHÔNG gọi buildArrayTableSeo
             $updateData = [];
             
             if ($request->has('phone')) {
                 $updateData['phone'] = trim($request->phone) ?: null;
+            }
+            
+            if ($request->has('email')) {
+                $updateData['email'] = trim($request->email) ?: null;
             }
             
             if ($request->has('description')) {
@@ -286,6 +292,14 @@ class AccountController extends Controller
             // Update trainer_info nếu có thay đổi
             if (!empty($updateData)) {
                 Trainer::updateItem($trainer->id, $updateData);
+            }
+            
+            // Reload trainer to get latest data after update
+            $trainer = Trainer::find($trainer->id);
+            
+            // Sync trainer_info to users (for name, position, phone, email)
+            if (!empty($trainer)) {
+                $this->syncTrainerToUser($trainer);
             }
             
             // Update SEO chỉ với các field có giá trị (không dùng buildArrayTableSeo)
@@ -433,6 +447,92 @@ class AccountController extends Controller
         
         $request->session()->put('message', $message);
         return redirect()->route('admin.account.trainerProfile');
+    }
+    
+    /**
+     * Sync user data to trainer_info
+     * Called when user profile is updated
+     */
+    private function syncUserToTrainer(User $user)
+    {
+        $trainer = Trainer::where('user_id', $user->id)->first();
+        if (empty($trainer)) {
+            return; // No trainer profile to sync
+        }
+        
+        $updateData = [];
+        
+        // Sync name
+        if (!empty($user->name) && $trainer->name !== $user->name) {
+            $updateData['name'] = $user->name;
+        }
+        
+        // Sync position
+        if ($user->position !== $trainer->position) {
+            $updateData['position'] = $user->position;
+        }
+        
+        // Sync phone
+        if ($user->phone !== $trainer->phone) {
+            $updateData['phone'] = $user->phone;
+        }
+        
+        // Sync email
+        if (!empty($user->email) && $trainer->email !== $user->email) {
+            $updateData['email'] = $user->email;
+        }
+        
+        // Update trainer_info if there are changes
+        if (!empty($updateData)) {
+            Trainer::updateItem($trainer->id, $updateData);
+        }
+    }
+    
+    /**
+     * Sync trainer_info data to user
+     * Called when trainer profile is updated
+     */
+    private function syncTrainerToUser(Trainer $trainer)
+    {
+        if (empty($trainer->user_id)) {
+            return; // No user to sync
+        }
+        
+        $user = User::find($trainer->user_id);
+        if (empty($user)) {
+            return;
+        }
+        
+        $hasChanges = false;
+        
+        // Sync name
+        if (!empty($trainer->name) && $user->name !== $trainer->name) {
+            $user->name = $trainer->name;
+            $hasChanges = true;
+        }
+        
+        // Sync position
+        if ($user->position !== $trainer->position) {
+            $user->position = $trainer->position;
+            $hasChanges = true;
+        }
+        
+        // Sync phone
+        if ($user->phone !== $trainer->phone) {
+            $user->phone = $trainer->phone;
+            $hasChanges = true;
+        }
+        
+        // Sync email
+        if (!empty($trainer->email) && $user->email !== $trainer->email) {
+            $user->email = $trainer->email;
+            $hasChanges = true;
+        }
+        
+        // Update user if there are changes
+        if ($hasChanges) {
+            $user->save();
+        }
     }
 }
 

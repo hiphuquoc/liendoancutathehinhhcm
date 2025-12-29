@@ -142,17 +142,18 @@
                                 </div>
                             </div>
                             
-                            {{-- Email (readonly display) --}}
-                            <div class="adminFormField">
-                                <div class="adminFormField_labelWrapper">
-                                    <label class="adminFormField_label">
-                                        <span>Email</span>
-                                    </label>
-                                </div>
-                                <div class="adminPersonnelPage_card_code adminPersonnelPage_card_code--form adminPersonnelPage_card_code--readonly-display">
-                                    <span class="adminPersonnelPage_card_code_text">{{ $trainer->email ?? 'Chưa có' }}</span>
-                                </div>
-                            </div>
+                            {{-- Email (editable) --}}
+                            @php
+                                $emailValue = old('email') ?? ($trainer->email ?? '');
+                            @endphp
+                            @include('admin.components.formField', [
+                                'label' => 'Email',
+                                'name' => 'email',
+                                'type' => 'email',
+                                'required' => false,
+                                'value' => $emailValue,
+                                'tooltip' => 'Đây là Email của Huấn luyện viên hiển thị trên website'
+                            ])
                             
                             {{-- Phone (editable) --}}
                             @include('admin.components.formField', [

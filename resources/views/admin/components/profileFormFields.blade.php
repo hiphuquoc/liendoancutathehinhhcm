@@ -101,29 +101,14 @@
 ])
 
 <!-- Email -->
-@if($isSubAdmin && $formType === 'account')
-    {{-- Sub-admin: readonly display with hidden input --}}
-    <div class="adminFormField">
-        <div class="adminFormField_labelWrapper">
-            <label class="adminFormField_label">
-                <span>Email</span>
-            </label>
-        </div>
-        <input type="hidden" name="email" value="{{ $emailValue }}" />
-        <div class="adminPersonnelPage_card_code adminPersonnelPage_card_code--form adminPersonnelPage_card_code--readonly-display">
-            <span class="adminPersonnelPage_card_code_text">{{ $emailValue ?: 'Chưa có' }}</span>
-        </div>
-    </div>
-@else
-    @include('admin.components.formField', [
-        'label' => 'Email',
-        'name' => 'email',
-        'type' => 'email',
-        'required' => true,
-        'value' => $emailValue,
-        'tooltip' => $formType === 'trainer' ? 'Đây là Email của Huấn luyện viên hiển thị trên website' : 'Email của bạn'
-    ])
-@endif
+@include('admin.components.formField', [
+    'label' => 'Email',
+    'name' => 'email',
+    'type' => 'email',
+    'required' => true,
+    'value' => $emailValue,
+    'tooltip' => $formType === 'trainer' ? 'Đây là Email của Huấn luyện viên hiển thị trên website' : 'Email của bạn'
+])
 
 <!-- Description (only for trainer profile) -->
 @if($formType === 'trainer')

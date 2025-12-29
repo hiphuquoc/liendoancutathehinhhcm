@@ -608,7 +608,7 @@
                             <span>Email</span>
                         </label>
                         <div class="formGroup_input">
-                            <input type="email" 
+                            <input type="text" 
                                    name="email" 
                                    id="email"
                                    placeholder="admin@example.com" 
@@ -772,15 +772,6 @@
                 showAlert('Vui lòng nhập mật khẩu');
                 document.getElementById('password').classList.add('error');
                 document.getElementById('password').focus();
-                return;
-            }
-            
-            // Email format validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showAlert('Email không hợp lệ');
-                document.getElementById('email').classList.add('error');
-                document.getElementById('email').focus();
                 return;
             }
             

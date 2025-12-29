@@ -43,7 +43,7 @@
                 <div class="adminSidebar_header_info">
                     <div class="adminSidebar_header_info_name">{{ $user->name }}</div>
                     <div class="adminSidebar_header_info_email">{{ $user->email }}</div>
-                </div>
+        </div>
             </a>
             
             @if(!empty($trainerCode))

@@ -437,16 +437,16 @@ Route::get('/doi-tac-nha-tai-tro', [HomeController::class, 'sponsor'])->name('ma
 Route::get('/huan-luyen-vien', [HomeController::class, 'teacher'])->name('main.teacher');
 Route::get('/trong-tai', [HomeController::class, 'referee'])->name('main.referee');
 Route::get('/lien-he', [HomeController::class, 'contact'])->name('main.contact');
-// /* trang giỏ hàng */
-// $validCarts     = config('main_'.env('APP_NAME').'.url_cart_page');
-// Route::get('/{slugCart}', [CartController::class, 'index'])
-//     ->where('slugCart', implode('|', $validCarts))
-//     ->name('main.cart');
-// /* trang xác nhận */
-// $validSlugs = config('main_'.env('APP_NAME').'.url_confirm_page');
-// Route::get('/{slug}', [ConfirmController::class, 'confirm'])
-//     ->where('slug', implode('|', $validSlugs))
-//     ->name('main.confirm');
+/* trang giỏ hàng */
+$validCarts     = config('main_'.env('APP_NAME').'.url_cart_page');
+Route::get('/{slugCart}', [CartController::class, 'index'])
+    ->where('slugCart', implode('|', $validCarts))
+    ->name('main.cart');
+/* trang xác nhận */
+$validSlugs = config('main_'.env('APP_NAME').'.url_confirm_page');
+Route::get('/{slug}', [ConfirmController::class, 'confirm'])
+    ->where('slug', implode('|', $validSlugs))
+    ->name('main.confirm');
 /* ROUTING */
 Route::middleware(['checkRedirect'])->group(function () {
     Route::get("/{slug}/{slug2?}/{slug3?}/{slug4?}/{slug5?}/{slug6?}/{slug7?}/{slug8?}/{slug9?}/{slug10?}", [RoutingController::class, 'routing'])->name('routing');

@@ -248,6 +248,44 @@ class TrainerController extends Controller {
                             $seoData = ['description' => $trainerData['description']];
                             Seo::updateItem($idSeo, $seoData);
                         }
+                        
+                        // Sync trainer_info to users (for new trainer)
+                        $trainer = Trainer::find($idTrainer);
+                        if (!empty($trainer) && !empty($trainer->user_id)) {
+                            $user = User::find($trainer->user_id);
+                            if (!empty($user)) {
+                                $hasChanges = false;
+                                
+                                // Sync name
+                                if (!empty($trainerData['name']) && $user->name !== $trainerData['name']) {
+                                    $user->name = $trainerData['name'];
+                                    $hasChanges = true;
+                                }
+                                
+                                // Sync position
+                                if (isset($trainerData['position']) && $user->position !== $trainerData['position']) {
+                                    $user->position = $trainerData['position'];
+                                    $hasChanges = true;
+                                }
+                                
+                                // Sync phone
+                                if (isset($trainerData['phone']) && $user->phone !== $trainerData['phone']) {
+                                    $user->phone = $trainerData['phone'];
+                                    $hasChanges = true;
+                                }
+                                
+                                // Sync email
+                                if (!empty($trainerData['email']) && $user->email !== $trainerData['email']) {
+                                    $user->email = $trainerData['email'];
+                                    $hasChanges = true;
+                                }
+                                
+                                // Update user if there are changes
+                                if ($hasChanges) {
+                                    $user->save();
+                                }
+                            }
+                        }
                     }
                 }else {
                     $dataTrainer    = [];
@@ -280,18 +318,41 @@ class TrainerController extends Controller {
                         Seo::updateItem($idSeo, $seoData);
                     }
                     
-                    // If admin updated name, sync to users.name (seo.title and trainer_info.name already updated)
-                    $isAdmin = auth()->user()->hasRole('admin');
-                    if ($isAdmin && $request->has('name') && !empty($request->get('name'))) {
-                        $newName = trim($request->get('name'));
-                        
-                        // Update users.name if trainer has user_id
-                        // Note: seo.title is already updated by buildArrayTableSeo
-                        // Note: trainer_info.name is already updated in $dataTrainer above
-                        if (!empty($trainer->user_id)) {
-                            $user = User::find($trainer->user_id);
-                            if ($user && $user->name !== $newName) {
-                                $user->name = $newName;
+                    // Reload trainer to get latest data after update
+                    $trainer = Trainer::find($idTrainer);
+                    
+                    // Sync trainer_info to users (for name, position, phone, email)
+                    if (!empty($trainer) && !empty($trainer->user_id)) {
+                        $user = User::find($trainer->user_id);
+                        if (!empty($user)) {
+                            $hasChanges = false;
+                            
+                            // Sync name
+                            if (!empty($trainer->name) && $user->name !== $trainer->name) {
+                                $user->name = $trainer->name;
+                                $hasChanges = true;
+                            }
+                            
+                            // Sync position
+                            if ($user->position !== $trainer->position) {
+                                $user->position = $trainer->position;
+                                $hasChanges = true;
+                            }
+                            
+                            // Sync phone
+                            if ($user->phone !== $trainer->phone) {
+                                $user->phone = $trainer->phone;
+                                $hasChanges = true;
+                            }
+                            
+                            // Sync email
+                            if (!empty($trainer->email) && $user->email !== $trainer->email) {
+                                $user->email = $trainer->email;
+                                $hasChanges = true;
+                            }
+                            
+                            // Update user if there are changes
+                            if ($hasChanges) {
                                 $user->save();
                             }
                         }

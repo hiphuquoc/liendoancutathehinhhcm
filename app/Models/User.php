@@ -21,6 +21,7 @@ class User extends Authenticatable {
         'name',
         'position',
         'email',
+        'username',
         'password',
         'google_id',
         'avatar',

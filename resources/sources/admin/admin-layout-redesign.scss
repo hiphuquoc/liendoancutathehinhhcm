@@ -8775,8 +8775,8 @@ $admin-color-system: (
     border-radius: 0;
     box-shadow: none;
     border: none;
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -9208,10 +9208,6 @@ $admin-color-system: (
     display: flex;
     align-items: flex-start;
     gap: 0.5rem;
-    margin-top: 0.25rem;
-    padding: 0.5rem;
-    background: var(--admin-gray-50);
-    border-radius: var(--admin-radius-sm);
     
     svg {
         width: 1rem;
@@ -9235,10 +9231,7 @@ $admin-color-system: (
     }
     
     @media (max-width: 768px) {
-        padding: 0;
-        margin-top: 0;
         gap: 0.375rem;
-        background: transparent;
         
         svg {
             width: 0.875rem;

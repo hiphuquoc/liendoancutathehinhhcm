@@ -1,0 +1,435 @@
+@extends('layouts.admin')
+
+@section('content')
+@include('admin.components.loadingOverlay', [
+    'id' => 'trainerEmailLoadingOverlay',
+    'message' => 'Đang gửi email...'
+])
+<div class="adminPersonnelPage">
+    <div class="adminPersonnelPage_content">
+        <div class="companyManagementPage_section companyManagementPage_section--tracked">
+            <div class="companyManagementPage_section_header companyManagementPage_section_header--trainer">
+                <div class="companyManagementPage_section_header_left">
+                    <div class="companyManagementPage_section_header_iconWrapper companyManagementPage_section_header_iconWrapper--trainer">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/>
+                        </svg>
+                    </div>
+                    <div class="companyManagementPage_section_header_info">
+                        <h2 class="companyManagementPage_section_title">
+                            Gửi email tài khoản HLV
+                        </h2>
+                        <p class="companyManagementPage_section_desc">Chọn HLV và gửi thông tin tài khoản đăng nhập qua email</p>
+                    </div>
+                </div>
+                <div class="companyManagementPage_section_header_right">
+                    <div class="adminPersonnelPage_stats">
+                        <div class="adminPersonnelPage_stats_item">
+                            <span class="adminPersonnelPage_stats_label">Tổng số:</span>
+                            <span class="adminPersonnelPage_stats_value">{{ $trainers->count() ?? 0 }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="companyManagementPage_section_body">
+                <!-- Search & Filter Bar -->
+                <form id="formSearch" method="get" action="{{ route('admin.trainerEmail.index') }}" class="adminPersonnelPage_searchBar">
+                    <div class="adminPersonnelPage_searchBar_row">
+                        <!-- Search Input -->
+                        <div class="adminPersonnelPage_searchBar_inputWrapper">
+                            <svg class="adminPersonnelPage_searchBar_icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"/>
+                                <path d="m21 21-4.35-4.35"/>
+                            </svg>
+                            <input 
+                                type="text" 
+                                class="adminPersonnelPage_searchBar_input" 
+                                name="search" 
+                                placeholder="Tìm kiếm theo tên, mã HLV hoặc email..." 
+                                value="{{ $search ?? '' }}"
+                            >
+                        </div>
+                        
+                        <!-- Filter & Actions -->
+                        <div class="adminPersonnelPage_searchBar_controls">
+                            <div class="adminPersonnelPage_searchBar_filter">
+                                @php
+                                    $courseOptions = [];
+                                    foreach($courses ?? [] as $course) {
+                                        $courseOptions[$course] = 'Khóa ' . $course;
+                                    }
+                                @endphp
+                                @include('admin.components.formSelect', [
+                                    'name' => 'course',
+                                    'value' => $courseFilter ?? '',
+                                    'options' => $courseOptions,
+                                    'placeholder' => 'Chọn khóa học',
+                                    'class' => 'adminPersonnelPage_searchBar_filterSelect'
+                                ])
+                            </div>
+                            
+                            <div class="adminPersonnelPage_searchBar_actions">
+                                @if(!empty($courseFilter) || !empty($search))
+                                    <a href="{{ route('admin.trainerEmail.index') }}" class="adminButton adminButton--secondary adminButton--sm">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                        <span>Xóa bộ lọc</span>
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Trainer List with Checkbox -->
+                @if(!empty($courseFilter) || !empty($search))
+                    @if($trainers->count() > 0)
+                        <form id="formSendEmail" class="adminTrainerEmail_form">
+                            @csrf
+                            <div class="adminTrainerEmail_actions">
+                                <div class="adminTrainerEmail_actions_left">
+                                    <label class="adminCheckbox">
+                                        <input type="checkbox" id="selectAll">
+                                        <span class="adminCheckbox_label">Chọn tất cả</span>
+                                    </label>
+                                    <span class="adminTrainerEmail_selectedCount" id="selectedCount">Đã chọn: 0</span>
+                                </div>
+                                <div class="adminTrainerEmail_actions_right">
+                                    <button type="button" id="sendSelectedBtn" class="adminButton adminButton--primary adminButton--sm" disabled>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/>
+                                        </svg>
+                                        <span>Gửi email đã chọn</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="adminQrCode_list adminQrCode_list--email">
+                                @foreach($trainers as $trainer)
+                                    <div class="adminQrCode_listItem adminQrCode_listItem--email">
+                                        <div class="adminQrCode_listItem_checkbox">
+                                            <label class="adminCheckbox">
+                                                <input type="checkbox" name="trainer_ids[]" value="{{ $trainer->id }}" class="trainer-checkbox">
+                                                <span class="adminCheckbox_label"></span>
+                                            </label>
+                                        </div>
+                                        <div class="adminQrCode_listItem_info">
+                                            <div class="adminQrCode_listItem_header">
+                                                <div class="adminQrCode_listItem_header_top">
+                                                    <h3 class="adminQrCode_listItem_name">{{ $trainer->name ?? 'N/A' }}</h3>
+                                                    @if(!empty($trainer->trainer_code))
+                                                        <div class="adminQrCode_listItem_code">
+                                                            <span class="adminQrCode_listItem_code_value">{{ $trainer->trainer_code }}</span>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="adminQrCode_listItem_details">
+                                            <div class="adminQrCode_listItem_detail adminQrCode_listItem_detail--contact">
+                                                @if(!empty($trainer->phone))
+                                                    <div class="adminQrCode_listItem_contactItem">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                            <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                                                        </svg>
+                                                        <span>{{ $trainer->phone }}</span>
+                                                    </div>
+                                                @endif
+                                                @if(!empty($trainer->email))
+                                                    <div class="adminQrCode_listItem_contactItem">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                            <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                                        </svg>
+                                                        <span>{{ $trainer->email }}</span>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                                @if(!empty($trainer->profile_url))
+                                                    <div class="adminQrCode_listItem_url">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                            <path d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/>
+                                                        </svg>
+                                                        <a href="{{ $trainer->profile_url }}" target="_blank" class="adminQrCode_listItem_url_link">
+                                                            {{ $trainer->profile_url }}
+                                                        </a>
+                                                    </div>
+                                                @endif
+                                                @if(!empty($trainer->user))
+                                                    <div class="adminQrCode_listItem_detail">
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                            <path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
+                                                        </svg>
+                                                        <span>Tên đăng nhập: <strong>{{ $trainer->user->username }}</strong></span>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </form>
+                    @else
+                        <div class="adminPersonnelPage_empty">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/>
+                            </svg>
+                            <p>Không tìm thấy HLV nào</p>
+                        </div>
+                    @endif
+                @else
+                    <div class="adminPersonnelPage_empty">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/>
+                        </svg>
+                        <h3>Chưa có bộ lọc</h3>
+                        <p>Vui lòng chọn khóa học hoặc nhập từ khóa tìm kiếm để xem danh sách HLV</p>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+
+@endsection
+
+@push('scriptCustom')
+<script>
+(function() {
+    'use strict';
+    
+    const formSearch = document.getElementById('formSearch');
+    const formSendEmail = document.getElementById('formSendEmail');
+    const selectAllCheckbox = document.getElementById('selectAll');
+    const trainerCheckboxes = document.querySelectorAll('.trainer-checkbox');
+    const sendSelectedBtn = document.getElementById('sendSelectedBtn');
+    const selectedCount = document.getElementById('selectedCount');
+    const loadingId = 'trainerEmailLoadingOverlay';
+    
+    // Update selected count
+    function updateSelectedCount() {
+        const checked = document.querySelectorAll('.trainer-checkbox:checked').length;
+        selectedCount.textContent = `Đã chọn: ${checked}`;
+        sendSelectedBtn.disabled = checked === 0;
+    }
+    
+    // Select all checkbox
+    if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', function() {
+            trainerCheckboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+            updateSelectedCount();
+        });
+    }
+    
+    // Individual checkbox change
+    trainerCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            // Update select all checkbox state
+            if (selectAllCheckbox) {
+                const allChecked = document.querySelectorAll('.trainer-checkbox:checked').length === trainerCheckboxes.length;
+                selectAllCheckbox.checked = allChecked && trainerCheckboxes.length > 0;
+                selectAllCheckbox.indeterminate = !allChecked && document.querySelectorAll('.trainer-checkbox:checked').length > 0;
+            }
+            updateSelectedCount();
+        });
+    });
+    
+    // Send email button
+    if (sendSelectedBtn && formSendEmail) {
+        sendSelectedBtn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            const checkedIds = Array.from(document.querySelectorAll('.trainer-checkbox:checked'))
+                .map(cb => cb.value);
+            
+            if (checkedIds.length === 0) {
+                alert('Vui lòng chọn ít nhất một HLV');
+                return;
+            }
+            
+            if (!confirm(`Bạn có chắc chắn muốn gửi email cho ${checkedIds.length} HLV đã chọn?`)) {
+                return;
+            }
+            
+            // Show loading
+            if (typeof showAdminLoading === 'function') {
+                showAdminLoading(loadingId, 'Đang gửi email...', true);
+            }
+            
+            sendSelectedBtn.disabled = true;
+            sendSelectedBtn.innerHTML = '<span>Đang gửi...</span>';
+            
+            try {
+                const formData = new FormData();
+                formData.append('_token', document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}');
+                checkedIds.forEach(id => {
+                    formData.append('trainer_ids[]', id);
+                });
+                
+                const response = await fetch('{{ route("admin.trainerEmail.sendEmails") }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                // Hide loading
+                if (typeof hideAdminLoading === 'function') {
+                    hideAdminLoading(loadingId);
+                }
+                
+                if (data.success) {
+                    alert(data.message);
+                    // Uncheck all
+                    trainerCheckboxes.forEach(cb => cb.checked = false);
+                    if (selectAllCheckbox) selectAllCheckbox.checked = false;
+                    updateSelectedCount();
+                } else {
+                    alert('Lỗi: ' + (data.message || 'Có lỗi xảy ra khi gửi email'));
+                    if (data.errors && data.errors.length > 0) {
+                        console.error('Errors:', data.errors);
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                if (typeof hideAdminLoading === 'function') {
+                    hideAdminLoading(loadingId);
+                }
+                alert('Lỗi: ' + error.message);
+            } finally {
+                sendSelectedBtn.disabled = false;
+                sendSelectedBtn.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/>
+                    </svg>
+                    <span>Gửi email đã chọn</span>
+                `;
+            }
+        });
+    }
+    
+    // Auto submit khi custom selectbox thay đổi
+    function setupCourseSelectAutoSubmit() {
+        const courseSelectContainer = document.querySelector('.adminPersonnelPage_searchBar_filterSelect .adminCustomSelect');
+        if (!courseSelectContainer) return;
+        
+        const hiddenInput = courseSelectContainer.querySelector('input[type="hidden"][name="course"]');
+        if (!hiddenInput) return;
+        
+        let lastValue = hiddenInput.value || '';
+        
+        function submitForm() {
+            if (typeof showAdminLoading === 'function') {
+                showAdminLoading(loadingId, 'Đang tải danh sách HLV...');
+            }
+            formSearch.submit();
+        }
+        
+        // Sử dụng setInterval để kiểm tra thay đổi
+        const checkInterval = setInterval(function() {
+            const currentValue = hiddenInput.value || '';
+            if (currentValue !== lastValue) {
+                lastValue = currentValue;
+                clearInterval(checkInterval);
+                setTimeout(submitForm, 100);
+            }
+        }, 100);
+        
+        // Lắng nghe click trên option
+        const optionsContainer = courseSelectContainer.querySelector('.adminCustomSelect_options');
+        if (optionsContainer) {
+            optionsContainer.addEventListener('click', function(e) {
+                const option = e.target.closest('.adminCustomSelect_option');
+                if (option) {
+                    setTimeout(() => {
+                        const newValue = hiddenInput.value || '';
+                        if (newValue !== lastValue) {
+                            lastValue = newValue;
+                            clearInterval(checkInterval);
+                            submitForm();
+                        }
+                    }, 150);
+                }
+            });
+        }
+        
+        // MutationObserver
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'value') {
+                    const currentValue = hiddenInput.value || '';
+                    if (currentValue !== lastValue) {
+                        lastValue = currentValue;
+                        clearInterval(checkInterval);
+                        setTimeout(submitForm, 100);
+                    }
+                }
+            });
+        });
+        
+        observer.observe(hiddenInput, {
+            attributes: true,
+            attributeFilter: ['value']
+        });
+    }
+    
+    // Debounce cho search input
+    function setupSearchAutoSubmit() {
+        const searchInput = formSearch.querySelector('[name="search"]');
+        if (!searchInput) return;
+        
+        let searchTimeout;
+        
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                if (typeof showAdminLoading === 'function') {
+                    showAdminLoading(loadingId, 'Đang tìm kiếm...');
+                }
+                formSearch.submit();
+            }, 500);
+        });
+        
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                clearTimeout(searchTimeout);
+                if (typeof showAdminLoading === 'function') {
+                    showAdminLoading(loadingId, 'Đang tìm kiếm...');
+                }
+                formSearch.submit();
+            }
+        });
+    }
+    
+    // Show loading khi submit form search
+    if (formSearch) {
+        formSearch.addEventListener('submit', function() {
+            if (typeof showAdminLoading === 'function') {
+                showAdminLoading(loadingId, 'Đang tải danh sách HLV...');
+            }
+        });
+    }
+    
+    // Initialize
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            setupCourseSelectAutoSubmit();
+            setupSearchAutoSubmit();
+            updateSelectedCount();
+        });
+    } else {
+        setTimeout(function() {
+            setupCourseSelectAutoSubmit();
+            setupSearchAutoSubmit();
+            updateSelectedCount();
+        }, 300);
+    }
+})();
+</script>
+@endpush
+

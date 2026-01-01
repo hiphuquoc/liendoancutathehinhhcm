@@ -112,6 +112,11 @@ Route::middleware(['auth', 'role:admin,sub-admin'])->group(function () {
             Route::get('/download', [QrCodeController::class, 'download'])->name('admin.qrcode.download');
             Route::get('/downloadAll', [QrCodeController::class, 'downloadAll'])->name('admin.qrcode.downloadAll');
         });
+        /* ===== Trainer Email ===== */
+        Route::prefix('trainer-email')->group(function(){
+            Route::get('/', [\App\Http\Controllers\Admin\TrainerEmailController::class, 'index'])->name('admin.trainerEmail.index');
+            Route::post('/send', [\App\Http\Controllers\Admin\TrainerEmailController::class, 'sendEmails'])->name('admin.trainerEmail.sendEmails');
+        });
         /* ===== Referee ===== */
         Route::prefix('referee')->group(function(){
             // List: /he-thong/referee

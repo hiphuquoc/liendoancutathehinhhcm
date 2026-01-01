@@ -8761,8 +8761,8 @@ $admin-color-system: (
     }
     
     @media (max-width: 768px) {
-        flex-direction: row;
-        align-items: flex-start;
+        flex-direction: column;
+        align-items: stretch;
         gap: 0.75rem;
         padding: 0.875rem 1rem;
     }
@@ -8780,6 +8780,12 @@ $admin-color-system: (
     display: flex;
     align-items: center;
     justify-content: center;
+    
+    @media (max-width: 768px) {
+        width: 70px;
+        height: 70px;
+        align-self: center;
+    }
     
     .adminQrCode_listItem_qr_img {
         width: 100%;
@@ -8850,6 +8856,11 @@ $admin-color-system: (
     flex-direction: column;
     gap: 0.75rem;
     min-width: 0;
+    
+    @media (max-width: 768px) {
+        width: 100%;
+        gap: 0.625rem;
+    }
 }
 
 .adminQrCode_listItem_header {
@@ -8863,6 +8874,11 @@ $admin-color-system: (
     align-items: center;
     gap: 0.75rem;
     flex-wrap: wrap;
+    
+    @media (max-width: 768px) {
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
 }
 
 .adminQrCode_listItem_name {
@@ -9046,29 +9062,145 @@ $admin-color-system: (
     
     // Contact row (phone + email trên cùng 1 dòng)
     &--contact {
+        display: flex;
         flex-wrap: wrap;
-        gap: 0.5rem;
-        
-        // Icon và span
-        > svg,
-        > span {
-            flex: 0 1 auto;
-        }
-        
-        // Icon email (icon thứ 2 nếu có phone) - thêm margin-left để tách biệt nhóm phone và email
-        > svg:nth-of-type(2) {
-            margin-left: 0.5rem;
-        }
+        gap: 0.5rem 1.5rem;
+        align-items: center;
         
         @media (max-width: 768px) {
             flex-direction: column;
             align-items: flex-start;
             gap: 0.5rem;
-            
-            > svg:nth-of-type(2) {
-                margin-left: 0;
-            }
         }
+    }
+}
+
+// Contact item (icon + text trong 1 box)
+.adminQrCode_listItem_contactItem {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: fit-content;
+    
+    svg {
+        width: 0.875rem;
+        height: 0.875rem;
+        color: var(--admin-gray-400);
+        flex-shrink: 0;
+    }
+    
+    span {
+        font-size: 0.8125rem;
+        color: var(--admin-gray-600);
+        line-height: 1.5;
+        white-space: nowrap;
+    }
+    
+    @media (max-width: 768px) {
+        width: 100%;
+        gap: 0.375rem;
+        
+        span {
+            font-size: 0.75rem;
+            white-space: normal;
+            word-break: break-word;
+        }
+    }
+}
+
+// Trainer Email Page Styles
+.adminCheckbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    
+    input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: var(--admin-primary);
+        flex-shrink: 0;
+    }
+    
+    .adminCheckbox_label {
+        font-size: 0.875rem;
+        color: var(--admin-gray-700);
+        cursor: pointer;
+        user-select: none;
+    }
+}
+
+.adminTrainerEmail_form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.adminTrainerEmail_actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--admin-gray-50);
+    border-radius: var(--admin-radius-md);
+    border: 1px solid var(--admin-gray-200);
+    
+    @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+.adminTrainerEmail_actions_left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.adminTrainerEmail_selectedCount {
+    font-size: 0.875rem;
+    color: var(--admin-gray-600);
+    font-weight: 500;
+}
+
+.adminTrainerEmail_actions_right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-left: auto;
+    
+    @media (max-width: 768px) {
+        margin-left: 0;
+        width: 100%;
+    }
+}
+
+.adminQrCode_listItem_checkbox {
+    flex-shrink: 0;
+    padding-right: 1rem;
+    
+    .adminCheckbox {
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+        }
+    }
+}
+
+.adminQrCode_listItem--email {
+    padding-left: 0.5rem;
+    
+    .adminQrCode_listItem_info {
+        flex: 1;
+    }
+}
+
+.adminQrCode_list--email {
+    .adminQrCode_listItem {
+        align-items: flex-start;
     }
 }
 
@@ -9101,6 +9233,22 @@ $admin-color-system: (
             text-decoration: underline;
         }
     }
+    
+    @media (max-width: 768px) {
+        padding: 0;
+        margin-top: 0;
+        gap: 0.375rem;
+        background: transparent;
+        
+        svg {
+            width: 0.875rem;
+            height: 0.875rem;
+        }
+        
+        .adminQrCode_listItem_url_link {
+            font-size: 0.6875rem;
+        }
+    }
 }
 
 .adminQrCode_listItem_actions {
@@ -9111,6 +9259,7 @@ $admin-color-system: (
     @media (max-width: 768px) {
         width: 100%;
         justify-content: center;
+        margin-top: 0.5rem;
     }
 }
 
@@ -9256,9 +9405,6 @@ $admin-color-system: (
 // TRAINER MANAGEMENT (Upload Excel)
 // ============================================================================
 
-.adminTrainerManagement_form {
-   
-}
 
 .adminTrainerManagement_form_body {
     margin-bottom: 1.5rem;

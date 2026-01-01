@@ -34,6 +34,8 @@ use App\Http\Controllers\Admin\CategoryBlogController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\Admin\TrainerController;
+use App\Http\Controllers\Admin\TrainerManagementController;
+use App\Http\Controllers\Admin\QrCodeController;
 use App\Http\Controllers\Admin\RefereeController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\AccountController as AdminAccountController;
@@ -98,7 +100,17 @@ Route::middleware(['auth', 'role:admin,sub-admin'])->group(function () {
             // Delete: GET /he-thong/trainer/delete?id={id}
             Route::get('/delete', [TrainerController::class, 'delete'])->name('admin.trainer.delete');
             // Additional actions
-            Route::get('/createUser', [TrainerController::class, 'createUser'])->name('admin.trainer.createUser');
+        });
+        /* ===== Trainer Management (Upload Excel) ===== */
+        Route::prefix('trainer-management')->group(function(){
+            Route::get('/', [TrainerManagementController::class, 'index'])->name('admin.trainerManagement.index');
+            Route::post('/uploadExcel', [TrainerManagementController::class, 'uploadExcel'])->name('admin.trainerManagement.uploadExcel');
+        });
+        /* ===== QR Code ===== */
+        Route::prefix('qrcode')->group(function(){
+            Route::get('/', [QrCodeController::class, 'index'])->name('admin.qrcode.index');
+            Route::get('/download', [QrCodeController::class, 'download'])->name('admin.qrcode.download');
+            Route::get('/downloadAll', [QrCodeController::class, 'downloadAll'])->name('admin.qrcode.downloadAll');
         });
         /* ===== Referee ===== */
         Route::prefix('referee')->group(function(){
@@ -345,8 +357,6 @@ Route::get('/downloadSource', [GoogledriveController::class, 'downloadSource'])-
 Route::post('/vnpay/url_ipn', [VNPayController::class, 'handleIPN'])->name('main.vnpay.ipn');
 /* nháp */
 Route::get('/test123', [HomeController::class, 'test'])->name('main.test');
-Route::get('/qrcode', [HomeController::class, 'qrcode'])->name('main.qrcode');
-Route::get('/qrcode-tt', [HomeController::class, 'qrcodeTT'])->name('main.qrcodeTT');
 Route::get('/chatgpt', [HomeController::class, 'chatGPT'])->name('main.chatGPT');
 /* lỗi */
 Route::get('/error', [\App\Http\Controllers\ErrorController::class, 'handle'])->name('error.handle');

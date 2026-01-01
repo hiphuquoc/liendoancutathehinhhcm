@@ -2587,6 +2587,13 @@ $admin-color-system: (
     }
 }
 
+// Search bar không có button - chỉ có input
+.adminPersonnelPage_searchBar_inputWrapper:not(:has(.adminPersonnelPage_searchBar_button)) {
+    .adminPersonnelPage_searchBar_input {
+        padding-right: 1rem;
+    }
+}
+
 .adminPersonnelPage_searchBar_button {
     display: flex;
     align-items: center;
@@ -5671,7 +5678,7 @@ $admin-color-system: (
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
     
     @media (max-width: 1023px) {
         padding: 1.25rem;
@@ -5679,7 +5686,7 @@ $admin-color-system: (
     
     @media (max-width: 768px) {
         padding: 1rem;
-        gap: 1.25rem;
+        gap: 0.75rem;
     }
 }
 
@@ -6898,6 +6905,84 @@ $admin-color-system: (
     }
 }
 
+// File Info Display (for file uploads)
+.adminFormImageUpload_fileInfo {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: #fff;
+    border: 2px solid var(--admin-gray-200);
+    border-radius: var(--admin-radius-md);
+    gap: 1rem;
+}
+
+.adminFormImageUpload_fileInfo_content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.adminFormImageUpload_fileInfo_icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--admin-primary);
+    flex-shrink: 0;
+}
+
+.adminFormImageUpload_fileInfo_text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.adminFormImageUpload_fileInfo_name {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--admin-gray-900);
+    word-break: break-word;
+}
+
+.adminFormImageUpload_fileInfo_size {
+    font-size: 0.8125rem;
+    color: var(--admin-gray-600);
+}
+
+.adminFormImageUpload_fileInfo_remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    background: none;
+    border: none;
+    color: var(--admin-danger);
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    border-radius: var(--admin-radius-sm);
+    
+    svg {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+    
+    &:hover {
+        background: var(--admin-danger-light);
+        transform: scale(1.1);
+    }
+}
+
+.adminFormImageUpload_area--hasFile {
+    .adminFormImageUpload_dropzone {
+        display: none;
+    }
+}
+
 // Current Image Display (when image already exists)
 .adminFormImageUpload_current {
     display: flex;
@@ -8080,5 +8165,1418 @@ $admin-color-system: (
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
     background-color: var(--admin-primary-lighter) !important;
     color: var(--admin-primary) !important;
+}
+
+// ============================================================================
+// ADMIN BUTTONS
+// ============================================================================
+
+.adminButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--admin-radius-md);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    
+    svg {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+    }
+    
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+    
+    &--primary {
+        background: var(--admin-gradient-primary);
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
+        
+        &:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(33, 150, 243, 0.3);
+        }
+        
+        &:active:not(:disabled) {
+            transform: translateY(0);
+        }
+    }
+    
+    &--secondary {
+        background: #fff;
+        color: var(--admin-gray-700);
+        border: 2px solid var(--admin-gray-300);
+        
+        &:hover:not(:disabled) {
+            border-color: var(--admin-primary);
+            color: var(--admin-primary);
+            background: var(--admin-primary-lighter);
+        }
+    }
+    
+    &--success {
+        background: linear-gradient(135deg, var(--admin-success) 0%, #059669 100%);
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(7, 163, 93, 0.2);
+        
+        &:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(7, 163, 93, 0.3);
+        }
+    }
+    
+    &--sm {
+        padding: 0.625rem 1.25rem;
+        font-size: 0.875rem;
+        
+        svg {
+            width: 18px;
+            height: 18px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+// ============================================================================
+// ADMIN FORM PAGE ACTIONS
+// ============================================================================
+
+.adminFormPage_actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: #fff;
+    border-top: 1px solid var(--admin-gray-200);
+    border-radius: 0 0 var(--admin-radius-lg) var(--admin-radius-lg);
+    margin-top: 2rem;
+    flex-wrap: wrap;
+    
+    @media (max-width: 768px) {
+        flex-direction: column;
+        padding: 1rem;
+        gap: 0.75rem;
+        
+        .adminButton {
+            width: 100%;
+        }
+    }
+}
+
+// ============================================================================
+// ADMIN FORM PAGE PROGRESS & RESULTS
+// ============================================================================
+
+.adminFormPage_progress {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: var(--admin-gray-50);
+    border-radius: var(--admin-radius-lg);
+    border: 1px solid var(--admin-gray-200);
+}
+
+.adminFormPage_progress_bar {
+    width: 100%;
+    height: 0.5rem;
+    background: var(--admin-gray-200);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+}
+
+.adminFormPage_progress_bar_fill {
+    height: 100%;
+    background: var(--admin-gradient-primary);
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 999px;
+}
+
+.adminFormPage_progress_text {
+    text-align: center;
+    color: var(--admin-gray-600);
+    font-size: 0.875rem;
+    margin: 0;
+    font-weight: 500;
+}
+
+.adminFormPage_results {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: var(--admin-gray-50);
+    border-radius: var(--admin-radius-lg);
+    border: 1px solid var(--admin-gray-200);
+}
+
+.adminFormPage_results_header {
+    margin-bottom: 1rem;
+    
+    h3 {
+        margin: 0;
+        color: var(--admin-gray-900);
+        font-size: 1.125rem;
+        font-weight: 600;
+    }
+}
+
+.adminFormPage_results_body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.adminFormPage_results_item {
+    padding: 0.75rem 1rem;
+    background: #fff;
+    border-radius: var(--admin-radius-md);
+    border-left: 4px solid var(--admin-primary);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    
+    strong {
+        font-weight: 600;
+        color: var(--admin-gray-900);
+    }
+    
+    &--success {
+        border-left-color: var(--admin-success);
+        background: rgba(7, 163, 93, 0.05);
+        
+        strong {
+            color: var(--admin-success);
+        }
+    }
+    
+    &--error {
+        border-left-color: var(--admin-danger);
+        background: rgba(198, 46, 46, 0.05);
+        
+        strong {
+            color: var(--admin-danger);
+        }
+    }
+    
+    ul {
+        margin: 0.5rem 0 0 0;
+        padding-left: 1.5rem;
+        
+        li {
+            margin-top: 0.25rem;
+            color: var(--admin-gray-700);
+        }
+    }
+}
+
+// ============================================================================
+// ADMIN QR CODE PAGE
+// ============================================================================
+
+.adminPersonnelPage_empty {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--admin-gray-500);
+    
+    svg {
+        width: 4rem;
+        height: 4rem;
+        margin: 0 auto 1rem;
+        opacity: 0.5;
+        color: var(--admin-gray-400);
+    }
+    
+    h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--admin-gray-700);
+        margin: 0 0 0.5rem 0;
+    }
+    
+    p {
+        font-size: 1rem;
+        margin: 0;
+        color: var(--admin-gray-600);
+    }
+}
+
+.adminPersonnelPage_pagination {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    
+    @media (max-width: 768px) {
+        margin-top: 1.5rem;
+    }
+}
+
+// ============================================================================
+// TRAINER MANAGEMENT & QR CODE PAGES - Additional Styles
+// ============================================================================
+
+// File Info Display
+#fileInfo {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--admin-gray-50);
+    border-radius: var(--admin-radius-md);
+    border: 1px solid var(--admin-gray-200);
+    
+    #fileName {
+        color: var(--admin-gray-700);
+        font-size: 0.875rem;
+        font-weight: 500;
+        flex: 1;
+    }
+    
+    button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.25rem;
+        color: var(--admin-danger);
+        display: flex;
+        align-items: center;
+        transition: all 0.2s;
+        
+        svg {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+        
+        &:hover {
+            color: var(--admin-danger);
+            transform: scale(1.1);
+        }
+    }
+}
+
+// Progress Container (override inline styles)
+#progressContainer {
+    margin-top: 2rem !important;
+    padding: 1.5rem !important;
+    background: var(--admin-gray-50) !important;
+    border-radius: var(--admin-radius-lg) !important;
+    border: 1px solid var(--admin-gray-200) !important;
+    
+    > div:first-child {
+        width: 100% !important;
+        height: 0.5rem !important;
+        background: var(--admin-gray-200) !important;
+        border-radius: 999px !important;
+        overflow: hidden !important;
+        margin-bottom: 0.75rem !important;
+        
+        > div {
+            height: 100% !important;
+            background: var(--admin-gradient-primary) !important;
+            width: 0% !important;
+            transition: width 0.3s ease !important;
+            border-radius: 999px !important;
+        }
+    }
+    
+    > p {
+        text-align: center !important;
+        color: var(--admin-gray-600) !important;
+        font-size: 0.875rem !important;
+        margin: 0 !important;
+        font-weight: 500 !important;
+    }
+}
+
+// Results Container (override inline styles)
+#resultsContainer {
+    margin-top: 2rem !important;
+    padding: 1.5rem !important;
+    background: var(--admin-gray-50) !important;
+    border-radius: var(--admin-radius-lg) !important;
+    border: 1px solid var(--admin-gray-200) !important;
+    
+    > div:first-child {
+        margin-bottom: 1rem !important;
+        
+        h3 {
+            margin: 0 !important;
+            color: var(--admin-gray-900) !important;
+            font-size: 1.125rem !important;
+            font-weight: 600 !important;
+        }
+    }
+    
+    #resultsBody {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+        
+        > div {
+            padding: 0.75rem 1rem !important;
+            background: #fff !important;
+            border-radius: var(--admin-radius-md) !important;
+            border-left: 4px solid var(--admin-primary) !important;
+            font-size: 0.9375rem !important;
+            line-height: 1.6 !important;
+            
+            strong {
+                font-weight: 600;
+                color: var(--admin-gray-900);
+            }
+            
+            ul {
+                margin-top: 0.5rem;
+                padding-left: 1.5rem;
+                
+                li {
+                    margin-bottom: 0.25rem;
+                }
+            }
+        }
+    }
+}
+
+// QR Code Page - Search Bar with Filter (ngang cấp)
+.adminPersonnelPage_searchBar_row {
+    display: flex;
+    align-items: stretch;
+    gap: 1rem;
+    flex-wrap: wrap;
+    
+    @media (max-width: 1024px) {
+        gap: 0.75rem;
+    }
+    
+    @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+}
+
+// Ô tìm kiếm chiếm hết phần thừa
+.adminPersonnelPage_searchBar_inputWrapper {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    height: auto;
+}
+
+.adminPersonnelPage_searchBar_controls {
+    display: flex;
+    align-items: stretch;
+    gap: 0.75rem;
+    flex-shrink: 0;
+    
+    @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        gap: 0.5rem;
+    }
+}
+
+.adminPersonnelPage_searchBar_filter {
+    flex: 0 0 auto;
+    min-width: 200px;
+    display: flex;
+    align-items: stretch;
+    
+    .adminPersonnelPage_searchBar_filterSelect {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        
+        .adminFormSelect_labelWrapper {
+            display: none;
+        }
+        
+        .adminCustomSelect {
+            min-width: 200px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            
+            .adminCustomSelect_display {
+                min-height: 48px;
+                height: 100%;
+                display: flex;
+                align-items: center;
+            }
+        }
+    }
+    
+    @media (max-width: 1024px) {
+        min-width: 180px;
+        
+        .adminCustomSelect {
+            min-width: 180px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        width: 100%;
+        min-width: unset;
+        
+        .adminCustomSelect {
+            width: 100%;
+            min-width: unset;
+        }
+    }
+}
+
+.adminPersonnelPage_searchBar_actions {
+    display: flex;
+    align-items: stretch;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    
+    .adminButton {
+        height: 100%;
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    @media (max-width: 768px) {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        
+        .adminButton {
+            min-height: 44px;
+        }
+    }
+}
+
+// QR Code Card Custom Styles - Support inline styles
+.adminPersonnelPage_card {
+    // QR code body with flex column
+    .adminPersonnelPage_card_body {
+        &[style*="flex-direction: column"] {
+            > div:first-child {
+                img {
+                    width: 200px !important;
+                    height: 200px !important;
+                    display: block !important;
+                }
+            }
+            
+            > div:last-child {
+                a {
+                    display: block !important;
+                    font-size: 0.75rem !important;
+                    color: var(--admin-gray-600) !important;
+                    text-decoration: none !important;
+                    word-break: break-all !important;
+                    text-align: center !important;
+                    padding: 0.5rem !important;
+                    background: var(--admin-gray-50) !important;
+                    border-radius: var(--admin-radius-md) !important;
+                    transition: all 0.2s !important;
+                    
+                    &:hover {
+                        color: var(--admin-primary) !important;
+                        background: var(--admin-primary-lighter) !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// ============================================================================
+// QR CODE LIST VIEW
+// ============================================================================
+
+.adminQrCode_list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 0;
+}
+
+.adminQrCode_listItem {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    border-bottom: 1px solid var(--admin-gray-100);
+    transition: background-color 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+    
+    &:hover {
+        background: var(--admin-gray-50);
+    }
+    
+    &:last-child {
+        border-bottom: none;
+    }
+    
+    &--success {
+        background: transparent;
+        
+        &:hover {
+            background: rgba(7, 163, 93, 0.03);
+        }
+    }
+    
+    &--duplicate {
+        background: transparent;
+        
+        &:hover {
+            background: rgba(251, 191, 36, 0.03);
+        }
+    }
+    
+    &--error {
+        background: transparent;
+        
+        &:hover {
+            background: rgba(239, 68, 68, 0.03);
+        }
+    }
+    
+    @media (max-width: 768px) {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.875rem 1rem;
+    }
+}
+
+.adminQrCode_listItem_qr {
+    flex-shrink: 0;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    .adminQrCode_listItem_qr_img {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-radius: var(--admin-radius-sm);
+        
+        svg {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            // Giữ nguyên kích thước trên mobile
+        }
+    }
+    
+    &--empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 80px;
+        height: 80px;
+        min-width: 80px;
+        min-height: 80px;
+        background: var(--admin-gray-50);
+        border-radius: var(--admin-radius-sm);
+        
+        @media (max-width: 768px) {
+            width: 70px;
+            height: 70px;
+            min-width: 70px;
+            min-height: 70px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        width: 70px;
+        height: 70px;
+    }
+}
+
+.adminQrCode_listItem_qr_empty {
+    text-align: center;
+    color: var(--admin-gray-400);
+    
+    svg {
+        width: 32px;
+        height: 32px;
+        margin-bottom: 0.25rem;
+    }
+    
+    p {
+        font-size: 0.6875rem;
+        margin: 0;
+    }
+}
+
+.adminQrCode_listItem_info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-width: 0;
+}
+
+.adminQrCode_listItem_header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.adminQrCode_listItem_header_top {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.adminQrCode_listItem_name {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--admin-gray-900);
+    margin: 0;
+    line-height: 1.4;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    
+    @media (max-width: 768px) {
+        font-size: 0.875rem;
+    }
+}
+
+
+.adminQrCode_listItem_details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 0;
+    width: 100%;
+    overflow: hidden;
+}
+
+.adminQrCode_listItem_statusRow {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    margin-bottom: 0.25rem;
+    
+    svg {
+        width: 14px;
+        height: 14px;
+        flex-shrink: 0;
+    }
+}
+
+.adminQrCode_listItem_statusText {
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: normal;
+    word-break: break-word;
+    max-width: 300px;
+    
+    &--success {
+        color: var(--admin-success);
+    }
+    
+    &--duplicate {
+        color: var(--admin-warning);
+    }
+    
+    &--error {
+        color: var(--admin-danger);
+        white-space: normal;
+        word-break: break-word;
+        max-width: 400px;
+    }
+    
+    @media (max-width: 768px) {
+        max-width: 100%;
+    }
+}
+
+.adminQrCode_listItem_nameRow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0;
+    width: 100%;
+    
+    // Đảm bảo icon status không bị shrink
+    > svg {
+        flex-shrink: 0;
+    }
+    
+    // Tên HLV - chiếm không gian chính
+    .adminQrCode_listItem_name {
+        flex: 1;
+        min-width: 150px;
+        margin-right: auto;
+    }
+    
+    // Mã HLV - không wrap nếu có thể
+    .adminQrCode_listItem_code {
+        flex-shrink: 1;
+        max-width: 100%;
+        
+        @media (max-width: 768px) {
+            max-width: 100%;
+            white-space: normal;
+        }
+    }
+    
+    // Status text - có thể wrap để hiển thị lỗi
+    .adminQrCode_listItem_statusText {
+        flex-shrink: 1;
+        white-space: normal;
+    }
+    
+    @media (max-width: 768px) {
+        gap: 0.375rem;
+        
+        .adminQrCode_listItem_name {
+            min-width: 120px;
+            width: 100%;
+        }
+        
+        .adminQrCode_listItem_code {
+            width: 100%;
+            order: 3;
+        }
+        
+        .adminQrCode_listItem_statusText {
+            order: 2;
+        }
+    }
+}
+
+.adminQrCode_listItem_code {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--admin-primary);
+    font-family: 'Courier New', monospace;
+    padding: 0.25rem 0.5rem;
+    background: var(--admin-primary-lighter);
+    border-radius: var(--admin-radius-sm);
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+    @media (max-width: 768px) {
+        font-size: 0.6875rem;
+        padding: 0.1875rem 0.375rem;
+        white-space: normal;
+        word-break: break-all;
+        text-overflow: initial;
+    }
+}
+
+.adminQrCode_listItem_codeValue {
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem;
+    color: var(--admin-primary);
+    font-weight: 600;
+}
+
+.adminQrCode_listItem_detail {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--admin-gray-600);
+    line-height: 1.5;
+    min-width: 0;
+    
+    svg {
+        width: 0.875rem;
+        height: 0.875rem;
+        color: var(--admin-gray-400);
+        flex-shrink: 0;
+    }
+    
+    span {
+        word-break: break-word;
+        overflow-wrap: break-word;
+        flex: 1;
+        min-width: 0;
+    }
+    
+    @media (max-width: 768px) {
+        font-size: 0.75rem;
+        gap: 0.375rem;
+    }
+    
+    // Contact row (phone + email trên cùng 1 dòng)
+    &--contact {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        
+        // Icon và span
+        > svg,
+        > span {
+            flex: 0 1 auto;
+        }
+        
+        // Icon email (icon thứ 2 nếu có phone) - thêm margin-left để tách biệt nhóm phone và email
+        > svg:nth-of-type(2) {
+            margin-left: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+            
+            > svg:nth-of-type(2) {
+                margin-left: 0;
+            }
+        }
+    }
+}
+
+.adminQrCode_listItem_url {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+    padding: 0.5rem;
+    background: var(--admin-gray-50);
+    border-radius: var(--admin-radius-sm);
+    
+    svg {
+        width: 1rem;
+        height: 1rem;
+        color: var(--admin-gray-500);
+        flex-shrink: 0;
+        margin-top: 0.125rem;
+    }
+    
+    .adminQrCode_listItem_url_link {
+        font-size: 0.75rem;
+        color: var(--admin-gray-600);
+        text-decoration: none;
+        word-break: break-all;
+        transition: all 0.2s;
+        
+        &:hover {
+            color: var(--admin-primary);
+            text-decoration: underline;
+        }
+    }
+}
+
+.adminQrCode_listItem_actions {
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-start;
+    
+    @media (max-width: 768px) {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+.adminButton--sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    
+    svg {
+        width: 1rem;
+        height: 1rem;
+    }
+}
+
+// ============================================================================
+// LOADING OVERLAY (Dùng chung)
+// ============================================================================
+
+.adminLoadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: all;
+}
+
+.adminLoadingOverlay_backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.adminLoadingOverlay_content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem;
+    background: #fff;
+    border-radius: var(--admin-radius-lg);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    min-width: 200px;
+}
+
+.adminLoadingOverlay_spinner {
+    width: 48px;
+    height: 48px;
+    position: relative;
+}
+
+.adminLoadingOverlay_spinner_svg {
+    width: 100%;
+    height: 100%;
+    animation: adminLoadingSpin 1.4s linear infinite;
+    transform-origin: center;
+}
+
+.adminLoadingOverlay_spinner_path {
+    stroke: var(--admin-primary);
+    stroke-linecap: round;
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: 0;
+    animation: adminLoadingDash 1.4s ease-in-out infinite;
+}
+
+.adminLoadingOverlay_message {
+    margin: 0;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--admin-gray-700);
+    text-align: center;
+    line-height: 1.6;
+    white-space: pre-line;
+    max-width: 300px;
+}
+
+.adminLoadingOverlay_progress {
+    width: 100%;
+    max-width: 300px;
+    margin-top: 1rem;
+}
+
+.adminLoadingOverlay_progress_bar {
+    width: 100%;
+    height: 6px;
+    background: var(--admin-gray-200);
+    border-radius: var(--admin-radius-full);
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.adminLoadingOverlay_progress_fill {
+    height: 100%;
+    background: var(--admin-gradient-primary);
+    border-radius: var(--admin-radius-full);
+    transition: width 0.3s ease;
+    width: 0%;
+}
+
+.adminLoadingOverlay_progress_text {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: var(--admin-gray-600);
+    text-align: center;
+}
+
+@keyframes adminLoadingSpin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes adminLoadingDash {
+    0% {
+        stroke-dasharray: 1, 150;
+        stroke-dashoffset: 0;
+    }
+    50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -35;
+    }
+    100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -124;
+    }
+}
+
+// ============================================================================
+// TRAINER MANAGEMENT (Upload Excel)
+// ============================================================================
+
+.adminTrainerManagement_form {
+   
+}
+
+.adminTrainerManagement_form_body {
+    margin-bottom: 1.5rem;
+}
+
+.adminTrainerManagement_form_actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--admin-gray-200);
+}
+
+.adminTrainerManagement_results {
+    margin-top: 2rem;
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    background: #fff;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    border-top: 1px solid var(--admin-gray-200);
+    border-bottom: 1px solid var(--admin-gray-200);
+    overflow: hidden;
+    
+    @media (max-width: 1023px) {
+        margin-left: -1.25rem;
+        margin-right: -1.25rem;
+    }
+    
+    @media (max-width: 768px) {
+        margin-left: -1rem;
+        margin-right: -1rem;
+    }
+}
+
+.adminTrainerManagement_results_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--admin-gray-200);
+    background: var(--admin-gray-50);
+}
+
+.adminTrainerManagement_results_title {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--admin-gray-900);
+}
+
+.adminTrainerManagement_results_stats {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--admin-primary);
+    padding: 0.5rem 1rem;
+    background: #fff;
+    border-radius: var(--admin-radius-md);
+    border: 1px solid var(--admin-gray-200);
+}
+
+.adminTrainerManagement_results_content {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+
+.adminTrainerManagement_progress_bar {
+    width: calc(100% - 3rem);
+    height: 8px;
+    background: var(--admin-gray-200);
+    border-radius: var(--admin-radius-full);
+    overflow: hidden;
+    margin: 0 1.5rem 1rem 1.5rem;
+}
+
+.adminTrainerManagement_progress_bar_fill {
+    height: 100%;
+    background: var(--admin-gradient-primary);
+    border-radius: var(--admin-radius-full);
+    transition: width 0.3s ease;
+    width: 0%;
+}
+
+.adminTrainerManagement_progress_list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.adminTrainerManagement_progress_item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: var(--admin-gray-50);
+    border-radius: var(--admin-radius-md);
+    transition: all 0.2s ease;
+    
+    &--success {
+        background: rgba(7, 163, 93, 0.05);
+    }
+    
+    &--duplicate {
+        background: rgba(251, 191, 36, 0.05);
+    }
+    
+    &--error {
+        background: rgba(239, 68, 68, 0.05);
+    }
+}
+
+.adminTrainerManagement_progress_item_icon {
+    flex-shrink: 0;
+}
+
+.adminTrainerManagement_progress_item_content {
+    flex: 1;
+    min-width: 0;
+}
+
+.adminTrainerManagement_progress_item_name {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--admin-gray-900);
+    margin-bottom: 0.25rem;
+}
+
+.adminTrainerManagement_progress_item_status {
+    font-size: 0.8125rem;
+    color: var(--admin-gray-600);
+}
+
+// Summary
+.adminTrainerManagement_summary {
+    padding: 1.5rem;
+    background: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    border-bottom: 1px solid var(--admin-gray-200);
+    margin-bottom: 0;
+    
+    &--error {
+        background: rgba(239, 68, 68, 0.02);
+    }
+}
+
+.adminTrainerManagement_summary_header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    
+    @media (max-width: 768px) {
+        margin-bottom: 0.75rem;
+    }
+}
+
+.adminTrainerManagement_summary_icon {
+    width: 24px;
+    height: 24px;
+    color: var(--admin-success);
+    flex-shrink: 0;
+    
+    .adminTrainerManagement_summary--error & {
+        color: var(--admin-danger);
+    }
+}
+
+.adminTrainerManagement_summary_title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--admin-gray-900);
+}
+
+.adminTrainerManagement_summary_stats {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    
+    @media (max-width: 768px) {
+        gap: 0.75rem;
+    }
+}
+
+.adminTrainerManagement_summary_stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.625rem 0.875rem;
+    background: var(--admin-gray-50);
+    border-radius: var(--admin-radius-sm);
+    min-width: 80px;
+    border: none;
+    
+    &--success {
+        background: rgba(7, 163, 93, 0.08);
+    }
+    
+    &--duplicate {
+        background: rgba(251, 191, 36, 0.08);
+    }
+    
+    &--error {
+        background: rgba(239, 68, 68, 0.08);
+    }
+    
+    @media (max-width: 768px) {
+        min-width: 70px;
+        padding: 0.5rem 0.75rem;
+    }
+}
+
+.adminTrainerManagement_summary_stat_label {
+    font-size: 0.8125rem;
+    color: var(--admin-gray-600);
+}
+
+.adminTrainerManagement_summary_stat_value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--admin-gray-900);
+}
+
+// Warnings
+.adminTrainerManagement_warning {
+    padding: 1rem;
+    background: rgba(251, 191, 36, 0.05);
+    border-radius: var(--admin-radius-md);
+    margin-bottom: 1rem;
+    border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+.adminTrainerManagement_warning_header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.adminTrainerManagement_warning_icon {
+    width: 20px;
+    height: 20px;
+    color: var(--admin-warning);
+    flex-shrink: 0;
+}
+
+.adminTrainerManagement_warning_title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--admin-warning);
+}
+
+.adminTrainerManagement_warning_list {
+    margin: 0;
+    padding-left: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--admin-gray-700);
+    
+    li {
+        margin-bottom: 0.25rem;
+    }
+}
+
+// QR Code List Item Extensions
+.adminQrCode_listItem_reason {
+    margin-top: 0.5rem;
+    padding: 0.625rem 0.75rem;
+    background: rgba(251, 191, 36, 0.06);
+    border-radius: var(--admin-radius-sm);
+    border: none;
+}
+
+.adminQrCode_listItem_reason_title {
+    font-size: 0.8125rem;
+    color: var(--admin-warning);
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+.adminQrCode_listItem_reason_list {
+    margin: 0;
+    padding-left: 1rem;
+    font-size: 0.75rem;
+    color: var(--admin-gray-600);
+    
+    li {
+        margin-bottom: 0.125rem;
+    }
+}
+
+.adminQrCode_listItem_error {
+    margin-top: 0.5rem;
+    padding: 0.625rem 0.75rem;
+    background: rgba(239, 68, 68, 0.06);
+    border-radius: var(--admin-radius-sm);
+    border: none;
+}
+
+.adminQrCode_listItem_error_title {
+    font-size: 0.8125rem;
+    color: var(--admin-danger);
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+.adminQrCode_listItem_error_message {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--admin-gray-600);
+    line-height: 1.5;
 }
 

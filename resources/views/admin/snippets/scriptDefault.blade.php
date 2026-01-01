@@ -206,31 +206,6 @@
             confirmButtonText: 'Xác nhận'
         })
     }
-    function createUser() {
-        Swal.fire({
-            title: 'Xác nhận tạo Tài Khoản HLV',
-            html: '<div>Hành động này sẽ tiến hành tạo tài khoản cho những HLV còn thiếu (không ảnh hưởng HLV cũ).</div>',
-            showCancelButton: true,
-            confirmButtonText: 'Xác nhận',
-            cancelButtonText: 'Hủy',
-            preConfirm: () => {
-                Swal.showLoading();
-                return $.ajax({
-                    url: '{{ route("admin.trainer.createUser") }}',
-                    type: 'get',
-                    dataType: 'json'
-                }).then(response => {
-                    if (response.status) {
-                        createToast('success', 'Thành công', response.message);
-                    } else {
-                        createToast('error', 'Thất bại', '❌ Không thể tạo tài khoản.');
-                    }
-                }).catch(error => {
-                    createToast('error', 'Lỗi hệ thống', '❌ Đã xảy ra lỗi khi gửi yêu cầu. Vui lòng thử lại.');
-                });
-            }
-        });
-    }
     /* tạo job dịch tự động */
     function createJobTranslateContent(idSeoVI, language){
         $.ajax({

@@ -482,38 +482,6 @@ class TrainerController extends Controller {
         return redirect()->route('admin.trainer.view', ['id' => $idTrainer]);
     }
     
-    public function createUser(){
-        $teachers = Trainer::select('*')->get();
-        $count = 0;
-
-        foreach ($teachers as $teacher) {
-            $slug = $teacher->seo->slug ?? '';
-            $email = str_replace('-', '', $slug);
-
-            $infoUser = User::where('email', $email)->first();
-
-            if (!empty($slug) && empty($infoUser)) {
-                $idUser = User::create([
-                    'name' => $slug,
-                    'email' => $email,
-                    'password' => Hash::make($email)
-                ]);
-
-                UserRole::insertItem([
-                    'user_id' => $idUser->id,
-                    'role_id' => 2,
-                ]);
-
-                if ($idUser) ++$count;
-            }
-        }
-
-        return response()->json([
-            'status' => true,
-            'message' => '👋 Đã tạo thành công <span class="highLight_500">' . $count . '</span> tài khoản HLV mới.',
-            'count' => $count,
-        ]);
-    }
 
     public function delete(Request $request){
         if(!empty($request->get('id'))){

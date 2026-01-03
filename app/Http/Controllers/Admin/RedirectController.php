@@ -11,35 +11,36 @@ use Illuminate\Support\Facades\Cookie;
 class RedirectController extends Controller {
     
     public function list(Request $request){
-        $params             = [];
+        $params = [];
         /* paginate */
-        $viewPerPage        = Cookie::get('viewRedirectInfo') ?? 20;
+        $viewPerPage = Cookie::get('viewRedirectInfo') ?? 20;
         $params['paginate'] = $viewPerPage;
-        $list               = RedirectInfo::getList($params);
+        
+        $list = RedirectInfo::getList($params);
         return view('admin.redirect.list', compact('list', 'viewPerPage'));
     }
 
     public function create(Request $request){
-        $id             = 0;
+        $id = 0;
         /* Message */
-        $message        = [
-            'type'      => 'danger',
-            'message'   => '<strong>Thất bại!</strong> Có lỗi xảy ra, vui lòng thử lại'
+        $message = [
+            'type' => 'danger',
+            'message' => '<strong>Thất bại!</strong> Có lỗi xảy ra, vui lòng thử lại'
         ];
-        if(!empty($request->get('old_url'))&&!empty($request->get('new_url'))){
-            $urlOld     = self::filterUrl($request->get('old_url'));
-            $urlNew     = self::filterUrl($request->get('new_url'));
-            self::createRedirectAndFix($urlOld, $urlNew);
+        if(!empty($request->get('old_url')) && !empty($request->get('new_url'))){
+            $urlOld = self::filterUrl($request->get('old_url'));
+            $urlNew = self::filterUrl($request->get('new_url'));
+            $id = self::createRedirectAndFix($urlOld, $urlNew);
             if(!empty($id)){
                 /* Message */
-                $message        = [
-                    'type'      => 'success',
-                    'message'   => '<strong>Thành công!</strong> Đã thêm redirect mới'
+                $message = [
+                    'type' => 'success',
+                    'message' => '<strong>Thành công!</strong> Đã thêm redirect mới'
                 ];
             }
         }
         $request->session()->put('message', $message);
-        return redirect()->route('admin.redirect.list', ['id' => $id]);
+        return redirect()->route('admin.redirect.list');
     }
 
     public static function createRedirectAndFix($urlOld, $urlNew){

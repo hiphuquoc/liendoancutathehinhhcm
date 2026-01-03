@@ -9,15 +9,25 @@ class RedirectInfo extends Model {
     use HasFactory;
     protected $table        = 'redirect_info';
     protected $fillable     = [
-        'orl_url', 
+        'old_url', 
         'new_url'
     ];
     public $timestamps      = false;
 
-    public static function getList($params = null){
-        $result     = self::select('*')
-                        ->orderBy('id', 'DESC')
-                        ->paginate($params['paginate']);
+    public static function getList($params = []){
+        $query = self::select('*');
+        
+        // Tìm kiếm theo URL cũ hoặc URL mới
+        if (!empty($params['search'])) {
+            $search = $params['search'];
+            $query->where(function($q) use ($search) {
+                $q->where('old_url', 'like', '%' . $search . '%')
+                  ->orWhere('new_url', 'like', '%' . $search . '%');
+            });
+        }
+        
+        $result = $query->orderBy('id', 'DESC')
+                        ->paginate($params['paginate'] ?? 20);
         return $result;
     }
 

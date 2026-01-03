@@ -92,7 +92,7 @@ return [
             ],
         ],
         'tools' => [
-            'title' => 'Công cụ & SEO',
+            'title' => 'Tiện ích',
             'role' => ['admin'],
             'items' => [
                 [

@@ -33,10 +33,14 @@ use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\CategoryBlogController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\DocumentController;
+use App\Http\Controllers\Admin\VideoController;
+use App\Http\Controllers\Admin\VideoAcademyController;
 use App\Http\Controllers\Admin\TrainerController;
 use App\Http\Controllers\Admin\TrainerManagementController;
 use App\Http\Controllers\Admin\QrCodeController;
 use App\Http\Controllers\Admin\RefereeController;
+use App\Http\Controllers\Admin\RefereeManagementController;
+use App\Http\Controllers\Admin\RefereeQrCodeController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\AccountController as AdminAccountController;
 use App\Http\Controllers\Admin\CacheController;
@@ -106,16 +110,27 @@ Route::middleware(['auth', 'role:admin,sub-admin'])->group(function () {
             Route::get('/', [TrainerManagementController::class, 'index'])->name('admin.trainerManagement.index');
             Route::post('/uploadExcel', [TrainerManagementController::class, 'uploadExcel'])->name('admin.trainerManagement.uploadExcel');
         });
-        /* ===== QR Code ===== */
-        Route::prefix('qrcode')->group(function(){
-            Route::get('/', [QrCodeController::class, 'index'])->name('admin.qrcode.index');
-            Route::get('/download', [QrCodeController::class, 'download'])->name('admin.qrcode.download');
-            Route::get('/downloadAll', [QrCodeController::class, 'downloadAll'])->name('admin.qrcode.downloadAll');
+        /* ===== Trainer QR Code ===== */
+        Route::prefix('trainer-qrcode')->group(function(){
+            Route::get('/', [QrCodeController::class, 'index'])->name('admin.trainerQrcode.index');
+            Route::get('/download', [QrCodeController::class, 'download'])->name('admin.trainerQrcode.download');
+            Route::get('/downloadAll', [QrCodeController::class, 'downloadAll'])->name('admin.trainerQrcode.downloadAll');
         });
         /* ===== Trainer Email ===== */
         Route::prefix('trainer-email')->group(function(){
             Route::get('/', [\App\Http\Controllers\Admin\TrainerEmailController::class, 'index'])->name('admin.trainerEmail.index');
             Route::post('/send', [\App\Http\Controllers\Admin\TrainerEmailController::class, 'sendEmails'])->name('admin.trainerEmail.sendEmails');
+        });
+        /* ===== Referee Management (Upload Excel) ===== */
+        Route::prefix('referee-management')->group(function(){
+            Route::get('/', [RefereeManagementController::class, 'index'])->name('admin.refereeManagement.index');
+            Route::post('/uploadExcel', [RefereeManagementController::class, 'uploadExcel'])->name('admin.refereeManagement.uploadExcel');
+        });
+        /* ===== Referee QR Code ===== */
+        Route::prefix('referee-qrcode')->group(function(){
+            Route::get('/', [RefereeQrCodeController::class, 'index'])->name('admin.refereeQrcode.index');
+            Route::get('/download', [RefereeQrCodeController::class, 'download'])->name('admin.refereeQrcode.download');
+            Route::get('/downloadAll', [RefereeQrCodeController::class, 'downloadAll'])->name('admin.refereeQrcode.downloadAll');
         });
         /* ===== Referee ===== */
         Route::prefix('referee')->group(function(){
@@ -277,6 +292,26 @@ Route::middleware(['auth', 'role:admin,sub-admin'])->group(function () {
             Route::post('/createAndUpdate', [DocumentController::class, 'createAndUpdate'])->name('admin.document.createAndUpdate');
             // Delete: GET /he-thong/document/delete?id={id}
             Route::get('/delete', [DocumentController::class, 'delete'])->name('admin.document.delete');
+        });
+        /* ===== Video (Admin) ===== */
+        Route::prefix('video')->group(function(){
+            // List: /he-thong/video
+            Route::get('/', [VideoController::class, 'list'])->name('admin.video.list');
+            // View/Form: /he-thong/video/view?id={id}&type={create|edit}
+            Route::get('/view', [VideoController::class, 'view'])->name('admin.video.view');
+            // Watch: /he-thong/video/watch?id={id}
+            Route::get('/watch', [VideoController::class, 'watch'])->name('admin.video.watch');
+            // Create/Update: POST /he-thong/video/createAndUpdate
+            Route::post('/createAndUpdate', [VideoController::class, 'createAndUpdate'])->name('admin.video.createAndUpdate');
+            // Delete: GET /he-thong/video/delete?id={id}
+            Route::get('/delete', [VideoController::class, 'delete'])->name('admin.video.delete');
+        });
+        /* ===== Video Academy (Sub-admin & Admin) ===== */
+        Route::prefix('video-academy')->group(function(){
+            // Index: /he-thong/video-academy
+            Route::get('/', [VideoAcademyController::class, 'index'])->name('admin.videoAcademy.index');
+            // Show: /he-thong/video-academy/{id}
+            Route::get('/{id}', [VideoAcademyController::class, 'show'])->name('admin.videoAcademy.show');
         });
         /* ===== Order ===== */
         Route::prefix('order')->group(function(){

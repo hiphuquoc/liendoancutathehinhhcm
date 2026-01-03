@@ -12,7 +12,7 @@ use App\Helpers\Charactor;
 class QrCodeController extends Controller
 {
     /**
-     * Hiển thị danh sách QR code với bộ lọc
+     * Hiển thị danh sách QR code HLV với bộ lọc
      */
     public function index(Request $request)
     {
@@ -171,6 +171,17 @@ class QrCodeController extends Controller
         $courseFilter = $request->get('course');
         if (!empty($courseFilter)) {
             $query->where('trainer_code', 'like', '%' . $courseFilter . '%');
+        }
+
+        $search = $request->get('search');
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('trainer_code', 'like', '%' . $search . '%')
+                  ->orWhereHas('seo', function ($subQ) use ($search) {
+                      $subQ->where('title', 'like', '%' . $search . '%');
+                  });
+            });
         }
 
         $trainers = $query->get();

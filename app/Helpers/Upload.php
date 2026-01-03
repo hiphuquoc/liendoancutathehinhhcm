@@ -117,4 +117,47 @@ class Upload {
         return $result;
     }
     
+    public static function uploadVideo($requestFile, $filename, $folderUpload) {
+        $result = null;
+        // Kiểm tra xem có file được chọn không
+        if (!empty($requestFile)) {
+            
+            // ===== Folder upload
+            $videoFile = $requestFile;
+
+            // ===== Set filename & check exists
+            $extension = pathinfo($filename)['extension'];
+
+            // Chỉ chấp nhận file video (mp4, webm, mov, avi, etc.)
+            $allowedExtensions = ['mp4', 'webm', 'mov', 'avi', 'mkv', 'flv'];
+            if (!in_array(strtolower($extension), $allowedExtensions)) {
+                return $result; // Trả về null nếu không phải file video
+            }
+
+            // Đường dẫn lưu file
+            $fileUrl = $folderUpload . $filename;
+
+            // Sử dụng disk GCS (Google Cloud Storage)
+            $gcsDisk = Storage::disk('gcs');
+
+            // Lưu file video trực tiếp lên storage
+            $gcsDisk->put($fileUrl, file_get_contents($videoFile->getRealPath()));
+
+            // Trả về đường dẫn file
+            $result = $fileUrl;
+        }
+
+        return $result;
+    }
+
+    public static function deleteVideo($urlCloud){
+        $flag = false;
+        if(!empty($urlCloud)){
+            /* xóa video trong google_cloud_storage */
+            Storage::disk('gcs')->delete($urlCloud);
+            $flag = true;
+        }
+        return $flag;
+    }
+    
 }

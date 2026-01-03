@@ -10,15 +10,15 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use App\Helpers\Charactor;
-use App\Models\Trainer;
+use App\Models\Referee;
 use App\Models\Seo;
 use App\Models\User;
 use App\Models\UserRole;
 use App\Services\BuildInsertUpdateModel;
-use App\Http\Requests\TrainerRequest;
+use App\Http\Requests\RefereeRequest;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
-class TrainerManagementController extends Controller
+class RefereeManagementController extends Controller
 {
     public function __construct(BuildInsertUpdateModel $BuildInsertUpdateModel)
     {
@@ -26,11 +26,11 @@ class TrainerManagementController extends Controller
     }
 
     /**
-     * Hiển thị trang upload Excel để cập nhật HLV
+     * Hiển thị trang upload Excel để cập nhật Trọng tài
      */
     public function index()
     {
-        return view('admin.trainerManagement.index');
+        return view('admin.refereeManagement.index');
     }
 
     /**
@@ -55,61 +55,12 @@ class TrainerManagementController extends Controller
     }
 
     /**
-     * Tạo trainer_code từ tháng/năm
-     */
-    private function generateTrainerCode($month, $year, $orderNumber)
-    {
-        $monthFormatted = 'T' . $month; // T01, T02, ..., T12
-        $yearFormatted = $year; // 25, 26, etc.
-        $federationCode = 'HWBF'; // Liên Đoàn Cử Tạ - Thể Hình HCM
-        $orderNumberFormatted = str_pad($orderNumber, 3, '0', STR_PAD_LEFT); // 001, 002, etc.
-        
-        return "N.O:{$orderNumberFormatted}.{$monthFormatted}.{$yearFormatted}/HLV-{$federationCode}";
-    }
-
-    /**
-     * Lấy số thứ tự tiếp theo cho trainer_code dựa trên tháng/năm
-     * Tìm trainer_code có số thứ tự cao nhất trong cùng tháng/năm và trả về số tiếp theo
-     */
-    private function getNextOrderNumber($month, $year)
-    {
-        // Pattern để tìm trainer_code có dạng: N.O:XXX.T{month}.{year}/HLV-HWBF
-        // Ví dụ: N.O:001.T01.26/HLV-HWBF
-        $pattern = "%.T{$month}.{$year}/HLV-HWBF";
-        
-        // Tìm tất cả trainer có trainer_code khớp pattern
-        $existingCodes = Trainer::where('trainer_code', 'LIKE', $pattern)
-            ->pluck('trainer_code')
-            ->toArray();
-        
-        if (empty($existingCodes)) {
-            return 1;
-        }
-        
-        // Trích xuất số thứ tự từ mỗi trainer_code và tìm max
-        $maxOrderNumber = 0;
-        foreach ($existingCodes as $code) {
-            // Pattern: N.O:XXX.T...
-            if (preg_match('/^N\.O:(\d+)\./', $code, $matches)) {
-                $orderNumber = (int)$matches[1];
-                if ($orderNumber > $maxOrderNumber) {
-                    $maxOrderNumber = $orderNumber;
-                }
-            }
-        }
-        
-        return $maxOrderNumber + 1;
-    }
-
-    /**
-     * Xử lý upload Excel và tạo trainer + user đồng bộ
+     * Xử lý upload Excel và tạo referee + user đồng bộ
      */
     public function uploadExcel(Request $request)
     {
         $request->validate([
             'excel_file' => 'required|mimes:xlsx,xls|max:10240', // Max 10MB
-            'month' => 'required|string|size:2',
-            'year' => 'required|string|size:2',
         ]);
 
         try {
@@ -119,26 +70,20 @@ class TrainerManagementController extends Controller
             $filePath = $file->store('temp', 'local');
             $fullPath = Storage::path($filePath);
 
-            $month = $request->get('month');
-            $year = $request->get('year');
-
             // Load file Excel
             $spreadsheet = IOFactory::load($fullPath);
             $worksheet = $spreadsheet->getActiveSheet();
 
-            // Lấy parent seo (huan-luyen-vien)
-            $parent = Seo::where('slug', config('main_' . env('APP_NAME') . '.slug_trainer_parent'))
+            // Lấy parent seo (trong-tai)
+            $parent = Seo::where('slug', 'trong-tai')
                 ->first();
 
             if (empty($parent)) {
-                throw new \Exception('Không tìm thấy trang parent "huan-luyen-vien"');
+                throw new \Exception('Không tìm thấy trang parent "trong-tai"');
             }
 
-            // Lấy thông tin mẫu từ một trainer để copy achievements, skills, etc.
-            $trainerExample = Trainer::whereHas('seo', function ($query) {
-                $query->where('slug', 'cao-quoc-viet');
-            })
-                ->with('achievements', 'skills', 'experiences.contents', 'degrees.contents')
+            // Lấy thông tin mẫu từ một referee để copy achievements, skills, etc.
+            $refereeExample = Referee::with('achievements', 'skills', 'experiences.contents', 'degrees.contents')
                 ->first();
 
             $dataAchievements = [];
@@ -146,14 +91,14 @@ class TrainerManagementController extends Controller
             $dataExperiences = [];
             $dataDegrees = [];
 
-            if ($trainerExample) {
-                foreach ($trainerExample->achievements as $achi) {
+            if ($refereeExample) {
+                foreach ($refereeExample->achievements as $achi) {
                     if (!empty($achi->content)) {
                         $dataAchievements[] = ['content' => $achi->content];
                     }
                 }
 
-                foreach ($trainerExample->skills as $skill) {
+                foreach ($refereeExample->skills as $skill) {
                     if (!empty($skill->skill)) {
                         $dataSkills[] = [
                             'percent' => $skill->percent,
@@ -162,7 +107,7 @@ class TrainerManagementController extends Controller
                     }
                 }
 
-                foreach ($trainerExample->experiences as $exper) {
+                foreach ($refereeExample->experiences as $exper) {
                     if (!empty($exper->title) && !empty($exper->company)) {
                         $content = [];
                         foreach ($exper->contents as $t) {
@@ -176,7 +121,7 @@ class TrainerManagementController extends Controller
                     }
                 }
 
-                foreach ($trainerExample->degrees as $degree) {
+                foreach ($refereeExample->degrees as $degree) {
                     if (!empty($degree->title) && !empty($degree->school)) {
                         $content = [];
                         foreach ($degree->contents as $t) {
@@ -194,7 +139,7 @@ class TrainerManagementController extends Controller
             // Đọc tất cả dữ liệu từ Excel trước để kiểm tra trùng
             // Cấu trúc: Cột 1 (STT), Cột 2 (Họ và Tên - BẮT BUỘC), Cột 3 (Ngày tháng năm sinh - tùy chọn), 
             //           Cột 4 (Số CCCD - tùy chọn), Cột 5 (Phone - tùy chọn), Cột 6 (Email - BẮT BUỘC), Cột 7 (Địa chỉ - tùy chọn)
-            $trainersData = [];
+            $refereesData = [];
             foreach ($worksheet->getRowIterator() as $rowIndex => $row) {
                 if ($rowIndex < 5) continue; // Bỏ qua dòng tiêu đề
 
@@ -218,7 +163,7 @@ class TrainerManagementController extends Controller
                 $address = trim($cells[6] ?? '');
 
                 // Lưu tất cả dữ liệu, kể cả trường hợp thiếu name/email để xử lý lỗi sau
-                $trainersData[] = [
+                $refereesData[] = [
                     'row' => $rowIndex,
                     'name' => $name,
                     'name_formatted' => !empty($name) ? mb_convert_case($name, MB_CASE_TITLE, 'UTF-8') : '',
@@ -236,9 +181,9 @@ class TrainerManagementController extends Controller
             $emailMap = [];
             $phoneMap = [];
 
-            foreach ($trainersData as $index => $trainer) {
-                $checkEmail = trim($trainer['email'] ?? '');
-                $checkPhone = trim($trainer['phone'] ?? '');
+            foreach ($refereesData as $index => $referee) {
+                $checkEmail = trim($referee['email'] ?? '');
+                $checkPhone = trim($referee['phone'] ?? '');
                 
                 // Chỉ thêm vào map nếu email hợp lệ
                 if (!empty($checkEmail) && filter_var($checkEmail, FILTER_VALIDATE_EMAIL)) {
@@ -260,16 +205,16 @@ class TrainerManagementController extends Controller
 
             foreach ($emailMap as $email => $indices) {
                 if (count($indices) > 1) {
-                    $duplicateEmails[$email] = array_map(function($idx) use ($trainersData) {
-                        return !empty($trainersData[$idx]['name']) ? $trainersData[$idx]['name'] : '(Không có tên)';
+                    $duplicateEmails[$email] = array_map(function($idx) use ($refereesData) {
+                        return !empty($refereesData[$idx]['name']) ? $refereesData[$idx]['name'] : '(Không có tên)';
                     }, $indices);
                 }
             }
 
             foreach ($phoneMap as $phone => $indices) {
                 if (count($indices) > 1) {
-                    $duplicatePhones[$phone] = array_map(function($idx) use ($trainersData) {
-                        return !empty($trainersData[$idx]['name']) ? $trainersData[$idx]['name'] : '(Không có tên)';
+                    $duplicatePhones[$phone] = array_map(function($idx) use ($refereesData) {
+                        return !empty($refereesData[$idx]['name']) ? $refereesData[$idx]['name'] : '(Không có tên)';
                     }, $indices);
                 }
             }
@@ -277,30 +222,30 @@ class TrainerManagementController extends Controller
             // Kiểm tra trùng với database (chỉ kiểm tra với email/phone hợp lệ)
             $existingEmails = [];
             $existingPhones = [];
-            foreach ($trainersData as $trainer) {
-                $checkEmail = trim($trainer['email'] ?? '');
-                $checkPhone = trim($trainer['phone'] ?? '');
+            foreach ($refereesData as $referee) {
+                $checkEmail = trim($referee['email'] ?? '');
+                $checkPhone = trim($referee['phone'] ?? '');
                 
                 // Chỉ kiểm tra email nếu email hợp lệ
                 if (!empty($checkEmail) && filter_var($checkEmail, FILTER_VALIDATE_EMAIL)) {
-                    $existing = Trainer::where('email', $checkEmail)->first();
+                    $existing = Referee::where('email', $checkEmail)->first();
                     if ($existing) {
                         if (!isset($existingEmails[$checkEmail])) {
                             $existingEmails[$checkEmail] = [];
                         }
-                        $nameForDisplay = !empty($trainer['name']) ? $trainer['name'] : '(Không có tên)';
+                        $nameForDisplay = !empty($referee['name']) ? $referee['name'] : '(Không có tên)';
                         $existingEmails[$checkEmail][] = $nameForDisplay;
                     }
                 }
 
                 // Chỉ kiểm tra phone nếu phone có giá trị
                 if (!empty($checkPhone)) {
-                    $existing = Trainer::where('phone', $checkPhone)->first();
+                    $existing = Referee::where('phone', $checkPhone)->first();
                     if ($existing) {
                         if (!isset($existingPhones[$checkPhone])) {
                             $existingPhones[$checkPhone] = [];
                         }
-                        $nameForDisplay = !empty($trainer['name']) ? $trainer['name'] : '(Không có tên)';
+                        $nameForDisplay = !empty($referee['name']) ? $referee['name'] : '(Không có tên)';
                         $existingPhones[$checkPhone][] = $nameForDisplay;
                     }
                 }
@@ -312,21 +257,18 @@ class TrainerManagementController extends Controller
             $duplicateCount = 0;
             $errorCount = 0;
             
-            // Lấy số thứ tự tiếp theo từ database (đếm tiếp từ số cuối cùng của tháng/năm)
-            $orderNumber = $this->getNextOrderNumber($month, $year);
-
             // Lấy danh sách slug hiện có để kiểm tra trùng
-            $existingSlugs = Seo::where('type', 'trainer_info')
-                ->where('language', 'vi')
-                ->pluck('slug')
+            $existingSlugs = DB::table('seo')
+                ->join('referee_info', 'referee_info.seo_id', '=', 'seo.id')
+                ->pluck('seo.slug')
                 ->toArray();
 
-            // Xử lý từng trainer
-            foreach ($trainersData as $trainerData) {
-                $name = trim($trainerData['name'] ?? '');
-                $email = trim($trainerData['email'] ?? '');
-                $phone = trim($trainerData['phone'] ?? '');
-                $cccd = trim($trainerData['cccd'] ?? '');
+            // Xử lý từng referee
+            foreach ($refereesData as $refereeData) {
+                $name = trim($refereeData['name'] ?? '');
+                $email = trim($refereeData['email'] ?? '');
+                $phone = trim($refereeData['phone'] ?? '');
+                $cccd = trim($refereeData['cccd'] ?? '');
 
                 // VALIDATION: Kiểm tra các trường bắt buộc
                 $validationErrors = [];
@@ -348,7 +290,6 @@ class TrainerManagementController extends Controller
                         'name' => $nameDisplay,
                         'phone' => $phone ?: 'N/A',
                         'email' => $email ?: 'N/A',
-                        'trainer_code' => null,
                         'slug' => null,
                         'error' => implode(', ', $validationErrors),
                         'qr_code' => null,
@@ -397,7 +338,6 @@ class TrainerManagementController extends Controller
                         'name' => $nameCover,
                         'phone' => $phone ?: 'N/A',
                         'email' => $email,
-                        'trainer_code' => null,
                         'slug' => $slug,
                         'reasons' => $duplicateReasons,
                         'qr_code' => null,
@@ -405,17 +345,14 @@ class TrainerManagementController extends Controller
                     continue;
                 }
 
-                // Tạo trainer
+                // Tạo referee
                 try {
-                    $trainerCode = $this->generateTrainerCode($month, $year, $orderNumber);
-                    $orderNumber++;
-
                     // Tạo SEO data
-                    $seoTitle = "Huấn luyện viên {$nameCover} của Liên Đoàn Cử Tạ - Thể Hình HCM | liendoancutathehinhhcm";
+                    $seoTitle = "Trọng tài {$nameCover} của Liên Đoàn Cử Tạ - Thể Hình HCM | liendoancutathehinhhcm";
                     $seoData = [
                         'seo_id' => 0,
                         'seo_id_vi' => 0,
-                        'trainer_info_id' => 0,
+                        'referee_info_id' => 0,
                         'language' => 'vi',
                         'type' => 'copy',
                         'parent' => $parent->id,
@@ -423,87 +360,73 @@ class TrainerManagementController extends Controller
                         'rating_aggregate_star' => '4.7',
                         'title' => $nameCover,
                         'name' => $nameCover,
-                        'position' => 'Huấn luyện viên cá nhân (PT)',
+                        'position' => 'Trọng tài',
                         'phone' => $phone,
                         'email' => $email,
                         'seo_title' => $seoTitle,
                         'seo_description' => 'Viết 1 đoạn giới thiệu về bạn!',
                         'description' => 'Viết 1 đoạn giới thiệu về bạn!',
                         'slug' => $slug,
-                        'repeater_trainer_achievement' => $dataAchievements,
-                        'repeater_trainer_skill' => $dataSkills,
-                        'repeater_trainer_experience' => $dataExperiences,
-                        'repeater_trainer_degree' => $dataDegrees,
+                        'repeater_referee_achievement' => $dataAchievements,
+                        'repeater_referee_skill' => $dataSkills,
+                        'repeater_referee_experience' => $dataExperiences,
+                        'repeater_referee_degree' => $dataDegrees,
                     ];
 
-                    // Tạo request object để sử dụng TrainerRequest validation
-                    $trainerRequest = TrainerRequest::create(
-                        route('admin.trainer.view'),
+                    // Tạo request object để sử dụng RefereeRequest validation
+                    $refereeRequest = RefereeRequest::create(
+                        route('admin.referee.view'),
                         'POST',
                         $seoData
                     );
-                    $trainerRequest->setLaravelSession(session());
+                    $refereeRequest->setLaravelSession(session());
 
-                    // Gọi TrainerController để tạo trainer
-                    $trainerController = app(\App\Http\Controllers\Admin\TrainerController::class);
-                    $result = $trainerController->createAndUpdate($trainerRequest);
+                    // Gọi RefereeController để tạo referee
+                    $refereeController = app(\App\Http\Controllers\Admin\RefereeController::class);
+                    $result = $refereeController->createAndUpdate($refereeRequest);
 
-                    // Lấy trainer vừa tạo
-                    $trainer = Trainer::whereHas('seo', function ($query) use ($slug) {
+                    // Lấy referee vừa tạo
+                    $referee = Referee::whereHas('seo', function ($query) use ($slug) {
                         $query->where('slug', $slug);
                     })->first();
 
-                    if ($trainer) {
-                        // Cập nhật trainer_code
-                        $trainer->trainer_code = $trainerCode;
-                        $trainer->save();
+                    if ($referee) {
+                        // Tạo user cho referee (liên kết qua slug/email, không có user_id field)
+                        $username = str_replace('-', '', $slug);
+                        
+                        // Kiểm tra email/username đã tồn tại chưa
+                        $existingUser = User::where('email', $email)
+                            ->orWhere('username', $username)
+                            ->first();
 
-                        // Tạo user cho trainer
-                        if (empty($trainer->user_id)) {
-                            $username = str_replace('-', '', $slug);
-                            
-                            // Kiểm tra email/username đã tồn tại chưa
-                            $existingUser = User::where('email', $email)
-                                ->orWhere('username', $username)
-                                ->first();
+                        if (!$existingUser) {
+                            $user = User::create([
+                                'name' => $nameCover,
+                                'email' => $email,
+                                'username' => $username,
+                                'password' => Hash::make($username),
+                                'position' => 'Trọng tài',
+                                'phone' => $phone,
+                                'role' => 'sub-admin',
+                            ]);
 
-                            if (!$existingUser) {
-                                $user = User::create([
-                                    'name' => $nameCover,
-                                    'email' => $email,
-                                    'username' => $username,
-                                    'password' => Hash::make($username),
-                                    'position' => 'Huấn luyện viên cá nhân (PT)',
-                                    'phone' => $phone,
-                                    'role' => 'sub-admin',
-                                ]);
+                            // Gán role sub-admin
+                            UserRole::insertItem([
+                                'user_id' => $user->id,
+                                'role_id' => 2,
+                            ]);
 
-                                // Gán role sub-admin
-                                UserRole::insertItem([
-                                    'user_id' => $user->id,
-                                    'role_id' => 2,
-                                ]);
-
-                                // Cập nhật user_id vào trainer
-                                $trainer->user_id = $user->id;
-                                $trainer->save();
-
-                                // Đồng bộ name, position, phone, email từ trainer sang user
-                                $user->name = $trainer->name;
-                                $user->position = $trainer->position;
-                                $user->phone = $trainer->phone;
-                                $user->email = $trainer->email;
-                                $user->save();
-                            } else {
-                                // Nếu user đã tồn tại, chỉ cập nhật user_id vào trainer
-                                $trainer->user_id = $existingUser->id;
-                                $trainer->save();
-                            }
+                            // Đồng bộ name, position, phone, email từ referee sang user
+                            $user->name = $referee->name;
+                            $user->position = $referee->position ?? 'Trọng tài';
+                            $user->phone = $referee->phone;
+                            $user->email = $referee->email;
+                            $user->save();
                         }
 
                         // Tạo QR code
-                        $parentSlug = config('main_' . env('APP_NAME') . '.slug_trainer_parent', 'huan-luyen-vien');
-                        $seo = $trainer->seo;
+                        $parentSlug = 'trong-tai';
+                        $seo = $referee->seo;
                         if ($seo) {
                             if (!empty($seo->slug_full)) {
                                 $url = url('/' . $seo->slug_full);
@@ -533,23 +456,21 @@ class TrainerManagementController extends Controller
                             'name' => $nameCover,
                             'phone' => $phone,
                             'email' => $email,
-                            'trainer_code' => $trainerCode,
                             'slug' => $slug,
                             'qr_code' => $qrCodeSvg,
                             'url' => $url ?? '',
                         ];
                     } else {
-                        throw new \Exception('Không thể tạo trainer');
+                        throw new \Exception('Không thể tạo referee');
                     }
                 } catch (\Exception $e) {
                     $errorCount++;
-                    Log::error("TrainerManagement uploadExcel error for {$nameCover}: " . $e->getMessage());
+                    Log::error("RefereeManagement uploadExcel error for {$nameCover}: " . $e->getMessage());
                     $results[] = [
                         'status' => 'error',
                         'name' => $nameCover,
                         'phone' => $phone,
                         'email' => $email,
-                        'trainer_code' => null,
                         'slug' => $slug,
                         'error' => $e->getMessage(),
                         'qr_code' => null,
@@ -580,7 +501,7 @@ class TrainerManagementController extends Controller
                 Storage::delete($filePath);
             }
 
-            Log::error("TrainerManagement uploadExcel error: " . $e->getMessage());
+            Log::error("RefereeManagement uploadExcel error: " . $e->getMessage());
 
             return response()->json([
                 'status' => false,
@@ -589,3 +510,4 @@ class TrainerManagementController extends Controller
         }
     }
 }
+

@@ -33,7 +33,7 @@
             </div>
             <div class="companyManagementPage_section_body">
                 <!-- Search & Filter Bar -->
-                <form id="formSearch" method="get" action="{{ route('admin.qrcode.index') }}" class="adminPersonnelPage_searchBar">
+                <form id="formSearch" method="get" action="{{ route('admin.trainerQrcode.index') }}" class="adminPersonnelPage_searchBar">
                     <div class="adminPersonnelPage_searchBar_row">
                         <!-- Search Input -->
                         <div class="adminPersonnelPage_searchBar_inputWrapper">
@@ -71,7 +71,7 @@
                             <div class="adminPersonnelPage_searchBar_actions">
                                 @if(!empty($courseFilter) || !empty($search))
                                     @if($trainers->count() > 0)
-                                        <a href="{{ route('admin.qrcode.downloadAll', ['course' => $courseFilter ?? '', 'search' => $search ?? '']) }}" 
+                                        <a href="{{ route('admin.trainerQrcode.downloadAll', ['course' => $courseFilter ?? '', 'search' => $search ?? '']) }}" 
                                            class="adminButton adminButton--primary adminButton--sm qrcode-download-all-btn">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
@@ -79,7 +79,7 @@
                                             <span>Tải QRcode (.zip)</span>
                                         </a>
                                     @endif
-                                    <a href="{{ route('admin.qrcode.index') }}" class="adminButton adminButton--secondary adminButton--sm">
+                                    <a href="{{ route('admin.trainerQrcode.index') }}" class="adminButton adminButton--secondary adminButton--sm">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <path d="M6 18L18 6M6 6l12 12"/>
                                         </svg>
@@ -121,15 +121,15 @@
                                                         <span>{{ $trainer->phone }}</span>
                                                     </div>
                                                 @endif
-                                                @if(!empty($trainer->email))
+                                            @if(!empty($trainer->email))
                                                     <div class="adminQrCode_listItem_contactItem">
-                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                             <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                                                        </svg>
-                                                        <span>{{ $trainer->email }}</span>
-                                                    </div>
-                                                @endif
-                                            </div>
+                                                    </svg>
+                                                    <span>{{ $trainer->email }}</span>
+                                                </div>
+                                            @endif
+                                                </div>
                                             <div class="adminQrCode_listItem_url">
                                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <path d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/>
@@ -141,7 +141,7 @@
                                         </div>
                                     </div>
                                     <div class="adminQrCode_listItem_actions">
-                                        <a href="{{ route('admin.qrcode.download', ['id' => $trainer->id]) }}" 
+                                        <a href="{{ route('admin.trainerQrcode.download', ['id' => $trainer->id]) }}" 
                                            class="adminButton adminButton--primary adminButton--sm qrcode-download-btn"
                                            data-trainer-id="{{ $trainer->id }}">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

@@ -57,6 +57,7 @@ return [
         'freeWallpapers'    => 'freewallpapers/',
         'images'            => 'storage/images/',
         'documents'         => 'documents/',
+        'videos'            => 'videos/',
     ],
     'filter'    => [
         'price' => [

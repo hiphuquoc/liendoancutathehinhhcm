@@ -2,7 +2,7 @@
 
 @section('content')
 @include('admin.components.loadingOverlay', [
-    'id' => 'trainerManagementLoadingOverlay',
+    'id' => 'refereeManagementLoadingOverlay',
     'message' => 'Đang xử lý file Excel...'
 ])
 <div class="adminPersonnelPage">
@@ -12,68 +12,21 @@
                 <div class="companyManagementPage_section_header_left">
                     <div class="companyManagementPage_section_header_iconWrapper companyManagementPage_section_header_iconWrapper--trainer">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9zM12 12.75a.75.75 0 01-.75-.75V9a.75.75 0 011.5 0v3a.75.75 0 01-.75.75zm0 0a.75.75 0 01.75.75v3a.75.75 0 01-1.5 0v-3a.75.75 0 01.75-.75z"/>
+                            <path d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>
                         </svg>
                     </div>
                     <div class="companyManagementPage_section_header_info">
                         <h2 class="companyManagementPage_section_title">
-                            Cập nhật HLV từ Excel
+                            Cập nhật Trọng tài từ Excel
                         </h2>
-                        <p class="companyManagementPage_section_desc">Tải lên file Excel để tạo hàng loạt huấn luyện viên và tài khoản tương ứng</p>
+                        <p class="companyManagementPage_section_desc">Tải lên file Excel để tạo hàng loạt trọng tài và tài khoản tương ứng</p>
                     </div>
                 </div>
             </div>
             <div class="companyManagementPage_section_body">
-                <form id="trainerUploadForm" enctype="multipart/form-data" class="adminTrainerManagement_form">
+                <form id="refereeUploadForm" enctype="multipart/form-data" class="adminTrainerManagement_form">
                     @csrf
                     <div class="adminTrainerManagement_form_body">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                            @php
-                                $currentMonth = date('m');
-                                $currentYear = date('Y');
-                                $yearShort = substr($currentYear, -2);
-                                
-                                $monthOptions = [];
-                                for($i = 1; $i <= 12; $i++) {
-                                    $monthValue = str_pad($i, 2, '0', STR_PAD_LEFT);
-                                    $monthOptions[$monthValue] = 'Tháng ' . $i;
-                                }
-                                
-                                $yearOptions = [];
-                                $startYear = $currentYear - 2;
-                                $endYear = $currentYear + 2;
-                                for($i = $endYear; $i >= $startYear; $i--) {
-                                    $yearValue = substr($i, -2);
-                                    $yearOptions[$yearValue] = 'Năm ' . $i;
-                                }
-                            @endphp
-                            
-                            <div>
-                                @include('admin.components.formSelect', [
-                                    'label' => 'Tháng',
-                                    'name' => 'month',
-                                    'required' => true,
-                                    'value' => old('month', $currentMonth),
-                                    'options' => $monthOptions,
-                                    'placeholder' => 'Chọn tháng'
-                                ])
-                            </div>
-                            
-                            <div>
-                                @include('admin.components.formSelect', [
-                                    'label' => 'Năm',
-                                    'name' => 'year',
-                                    'required' => true,
-                                    'value' => old('year', $yearShort),
-                                    'options' => $yearOptions,
-                                    'placeholder' => 'Chọn năm'
-                                ])
-                            </div>
-                        </div>
-                        <div class="adminFormField_hint" style="margin-bottom: 1.5rem;">
-                            <p style="font-size: 0.8125rem; color: var(--admin-gray-600); margin: 0.25rem 0;">Chọn tháng và năm để tạo mã HLV cho khóa học này (ví dụ: Tháng 12, Năm 2025 → mã sẽ có dạng T12.25)</p>
-                        </div>
-                        
                         @include('admin.components.formFileUpload', [
                             'name' => 'excel_file',
                             'label' => 'File Excel',
@@ -131,9 +84,9 @@
     
     // Đợi DOM load xong
     function initUploadForm() {
-        const form = document.getElementById('trainerUploadForm');
+        const form = document.getElementById('refereeUploadForm');
         if (!form) {
-            console.error('Form trainerUploadForm not found');
+            console.error('Form refereeUploadForm not found');
             return;
         }
         
@@ -150,7 +103,7 @@
             
             // Show loading overlay with progress
             if (typeof showAdminLoading === 'function') {
-                showAdminLoading('trainerManagementLoadingOverlay', 'Đang xử lý file Excel...', true);
+                showAdminLoading('refereeManagementLoadingOverlay', 'Đang xử lý file Excel...', true);
             }
             
             // Disable submit button
@@ -158,7 +111,7 @@
             submitBtn.innerHTML = '<span>Đang xử lý...</span>';
             
             // Hide form and show results container
-            const uploadForm = document.getElementById('trainerUploadForm');
+            const uploadForm = document.getElementById('refereeUploadForm');
             if (uploadForm) {
                 uploadForm.style.display = 'none';
             }
@@ -173,11 +126,11 @@
             
             // Update loading progress
             if (typeof updateAdminLoadingProgress === 'function') {
-                updateAdminLoadingProgress('trainerManagementLoadingOverlay', 10, 'Đang tải file lên server...');
+                updateAdminLoadingProgress('refereeManagementLoadingOverlay', 10, 'Đang tải file lên server...');
             }
     
     try {
-            const response = await fetch('{{ route("admin.trainerManagement.uploadExcel") }}', {
+            const response = await fetch('{{ route("admin.refereeManagement.uploadExcel") }}', {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -195,7 +148,7 @@
             
             // Update progress
             if (typeof updateAdminLoadingProgress === 'function') {
-                updateAdminLoadingProgress('trainerManagementLoadingOverlay', 30, 'Đang đọc file Excel...');
+                updateAdminLoadingProgress('refereeManagementLoadingOverlay', 30, 'Đang đọc file Excel...');
             }
             
             // Simulate progress while processing
@@ -204,7 +157,7 @@
                 if (progressPercent < 90) {
                     progressPercent += 3;
                     if (typeof updateAdminLoadingProgress === 'function') {
-                        updateAdminLoadingProgress('trainerManagementLoadingOverlay', progressPercent, 'Đang xử lý dữ liệu...');
+                        updateAdminLoadingProgress('refereeManagementLoadingOverlay', progressPercent, 'Đang xử lý dữ liệu...');
                     }
                 }
             }, 200);
@@ -216,13 +169,13 @@
             
             // Update loading progress to 100%
             if (typeof updateAdminLoadingProgress === 'function') {
-                updateAdminLoadingProgress('trainerManagementLoadingOverlay', 100, 'Hoàn thành!');
+                updateAdminLoadingProgress('refereeManagementLoadingOverlay', 100, 'Hoàn thành!');
             }
             
             // Hide loading overlay after a short delay
             setTimeout(() => {
                 if (typeof hideAdminLoading === 'function') {
-                    hideAdminLoading('trainerManagementLoadingOverlay');
+                    hideAdminLoading('refereeManagementLoadingOverlay');
                 }
             }, 500);
             
@@ -330,7 +283,6 @@
                                 <div class="adminQrCode_listItem_nameRow">
                                     ${statusIcon}
                                     <h3 class="adminQrCode_listItem_name">${result.name}</h3>
-                                    ${result.trainer_code ? `<span class="adminQrCode_listItem_code">${result.trainer_code}</span>` : ''}
                                     <span class="adminQrCode_listItem_statusText adminQrCode_listItem_statusText--${result.status}">${statusText}</span>
                                 </div>
                                 <div class="adminQrCode_listItem_detail adminQrCode_listItem_detail--contact">
@@ -441,7 +393,7 @@
                 
                 // Hide loading overlay
                 if (typeof hideAdminLoading === 'function') {
-                    hideAdminLoading('trainerManagementLoadingOverlay');
+                    hideAdminLoading('refereeManagementLoadingOverlay');
                 }
                 
                 // Show results container

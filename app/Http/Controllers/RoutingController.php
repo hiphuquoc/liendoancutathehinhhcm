@@ -14,6 +14,7 @@ use App\Models\Page;
 use App\Models\CategoryBlog;
 use App\Models\Referee;
 use App\Models\Trainer;
+use App\Models\Seo;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -31,11 +32,18 @@ class RoutingController extends Controller{
         $arraySlug[count($arraySlug)-1] = preg_replace('#([\?|\#]+).*$#imsU', '', end($arraySlug));
         $urlRequest     = implode('/', $arraySlug);
         /* check url có tồn tại? => lấy thông tin */
-        $itemSeo    = Url::checkUrlExists(end($arraySlug));
+        // Check bằng slug_full (toàn bộ URL) thay vì chỉ slug cuối cùng
+        $itemSeo    = Seo::select('*')
+                        ->where('slug_full', $urlRequest)
+                        ->first();
+        // Nếu không tìm thấy bằng slug_full, thử tìm bằng slug cuối cùng (backward compatibility)
+        if(empty($itemSeo)){
+            $itemSeo    = Url::checkUrlExists(end($arraySlug));
+        }
         /* nếu sai => redirect về link đúng */
-        if(!empty($itemSeo->slug_full)&&$itemSeo->slug_full!=$urlRequest){
+        if(!empty($itemSeo) && !empty($itemSeo->slug_full) && $itemSeo->slug_full != $urlRequest){
             /* ko rút gọn trên 1 dòng được => lỗi */
-            return Redirect::to($itemSeo->slug_full, 301);
+            return Redirect::to('/' . $itemSeo->slug_full, 301);
         }
         /* ============== nếu đúng => xuất dữ liệu */
         if(!empty($itemSeo->type)){

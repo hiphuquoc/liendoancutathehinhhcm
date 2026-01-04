@@ -502,19 +502,20 @@ class TrainerManagementController extends Controller
                         $trainer->trainer_code = $trainerCode;
                         $trainer->save();
 
-                        // Tạo user cho trainer
-                        if (empty($trainer->user_id)) {
-                            // Kiểm tra email đã tồn tại chưa
-                            $existingUserByEmail = User::where('email', $email)->first();
+                        // Tạo user cho trainer (trainer mới tạo sẽ không có user_id)
+                        // Luôn kiểm tra email trước để xem user đã tồn tại chưa
+                        $existingUserByEmail = User::where('email', $email)->first();
+                        
+                        if ($existingUserByEmail) {
+                            // Email đã tồn tại - có thể là cùng 1 người với chức vụ khác (Referee)
+                            // Cho phép dùng chung user (cùng 1 người có 2 chức vụ)
                             
-                            if ($existingUserByEmail) {
-                                // Email đã tồn tại - có thể là cùng 1 người với chức vụ khác (Referee)
-                                // Cho phép dùng chung user (cùng 1 người có 2 chức vụ)
-                                
-                                // Kiểm tra xem user này đã được sử dụng bởi Trainer chưa
-                                $trainerUsingUser = \App\Models\Trainer::where('user_id', $existingUserByEmail->id)->first();
-                                
-                                if ($trainerUsingUser) {
+                            // Kiểm tra xem user này đã được sử dụng bởi Trainer chưa
+                            $trainerUsingUser = \App\Models\Trainer::where('user_id', $existingUserByEmail->id)
+                                ->where('id', '!=', $trainer->id) // Loại trừ chính trainer hiện tại
+                                ->first();
+                            
+                            if ($trainerUsingUser) {
                                     // User đã được sử dụng bởi Trainer (cùng chức vụ) - không cho phép
                                     // Xóa trainer đã tạo và báo lỗi
                                     if ($trainer->seo_id) {

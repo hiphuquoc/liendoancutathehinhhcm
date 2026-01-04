@@ -55,7 +55,7 @@ class RefereeManagementController extends Controller
     }
 
     /**
-     * Tạo username duy nhất, CHỈ kiểm tra trong cùng chức vụ Referee
+     * Tạo username duy nhất trong bảng users (bắt buộc unique)
      */
     private function generateUniqueUsername($baseUsername, $excludeUserId = null)
     {
@@ -63,9 +63,8 @@ class RefereeManagementController extends Controller
         $counter = 2;
         $baseUsernameClean = $username;
         
-        // Kiểm tra username có đang được sử dụng bởi Referee không (CHỈ kiểm tra cùng chức vụ)
+        // Kiểm tra username đã tồn tại trong bảng users chưa (bắt buộc unique)
         while (true) {
-            // Kiểm tra trong bảng users
             $query = \App\Models\User::where('username', $username);
             if ($excludeUserId) {
                 $query->where('id', '!=', $excludeUserId);
@@ -77,16 +76,7 @@ class RefereeManagementController extends Controller
                 break;
             }
             
-            // Kiểm tra xem user này đang được sử dụng bởi Referee (cùng chức vụ)
-            $refereeUsingUser = \App\Models\Referee::where('user_id', $existingUser->id)->first();
-            
-            // Nếu user chưa được sử dụng bởi Referee, có thể sử dụng
-            // Nếu user đã được sử dụng bởi Trainer, cũng có thể sử dụng (cùng 1 người có 2 chức vụ)
-            if (!$refereeUsingUser) {
-                break;
-            }
-            
-            // Username đã được sử dụng bởi Referee (cùng chức vụ), tạo username mới với số
+            // Username đã tồn tại, tạo username mới với số
             if (preg_match('/^(.+?)(\d+)$/', $username, $matches)) {
                 $baseUsernameClean = $matches[1];
                 $counter = (int)$matches[2] + 1;

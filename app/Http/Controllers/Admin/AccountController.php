@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Trainer;
+use App\Models\Referee;
 use App\Http\Requests\SubAdminTrainerProfileRequest;
+use App\Http\Requests\SubAdminRefereeProfileRequest;
 use App\Helpers\Upload;
 use App\Models\Seo;
 use App\Models\TrainerAchievement;
@@ -28,9 +30,9 @@ class AccountController extends Controller
     public function profile()
     {
         $user = Auth::user();
-        // Get trainer code if user is sub-admin and has trainer profile
+        // Get trainer code if user is trainer
         $trainerCode = null;
-        if ($user->hasRole('sub-admin') && !$user->hasRole('admin')) {
+        if ($user->hasRole('trainer') && !$user->hasRole('admin')) {
             $trainer = Trainer::where('user_id', $user->id)->first();
             if ($trainer && !empty($trainer->trainer_code)) {
                 $trainerCode = $trainer->trainer_code;
@@ -45,10 +47,10 @@ class AccountController extends Controller
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
-        $isSubAdmin = $user->hasRole('sub-admin') && !$user->hasRole('admin');
+        $isTrainerOrReferee = ($user->hasRole('trainer') || $user->hasRole('referee')) && !$user->hasRole('admin');
 
-        // Sub-admin cannot update name, but can update email
-        if ($isSubAdmin) {
+        // Trainer and Referee cannot update name, but can update email
+        if ($isTrainerOrReferee) {
             // Validate that name hasn't changed, but allow email update
             $validator = Validator::make($request->all(), [
                 'name' => [
@@ -110,8 +112,9 @@ class AccountController extends Controller
             }
             $user->save();
             
-            // Sync to trainer_info if user has trainer profile
+            // Sync to trainer_info or referee_info if user has profile
             $this->syncUserToTrainer($user);
+            $this->syncUserToReferee($user);
             
             DB::commit();
 
@@ -208,8 +211,8 @@ class AccountController extends Controller
     {
         $user = Auth::user();
         
-        // Chỉ cho phép sub-admin (không phải admin)
-        if ($user->hasRole('admin') || !$user->hasRole('sub-admin')) {
+        // Chỉ cho phép trainer (không phải admin)
+        if ($user->hasRole('admin') || !$user->hasRole('trainer')) {
             $message = [
                 'type' => 'danger',
                 'message' => '<strong>Lỗi!</strong> Bạn không có quyền truy cập trang này.'
@@ -244,8 +247,8 @@ class AccountController extends Controller
     {
         $user = Auth::user();
         
-        // Chỉ cho phép sub-admin (không phải admin)
-        if ($user->hasRole('admin') || !$user->hasRole('sub-admin')) {
+        // Chỉ cho phép trainer (không phải admin)
+        if ($user->hasRole('admin') || !$user->hasRole('trainer')) {
             abort(403, 'Bạn không có quyền thực hiện thao tác này.');
         }
         
@@ -526,6 +529,336 @@ class AccountController extends Controller
         // Sync email
         if (!empty($trainer->email) && $user->email !== $trainer->email) {
             $user->email = $trainer->email;
+            $hasChanges = true;
+        }
+        
+        // Update user if there are changes
+        if ($hasChanges) {
+            $user->save();
+        }
+    }
+    
+    /**
+     * Hiển thị trang chỉnh sửa hồ sơ Trọng tài của sub-admin
+     */
+    public function refereeProfile(Request $request)
+    {
+        $user = Auth::user();
+        
+        // Chỉ cho phép referee (không phải admin)
+        if ($user->hasRole('admin') || !$user->hasRole('referee')) {
+            $message = [
+                'type' => 'danger',
+                'message' => '<strong>Lỗi!</strong> Bạn không có quyền truy cập trang này.'
+            ];
+            $request->session()->put('message', $message);
+            return redirect()->route('admin.account.profile');
+        }
+        
+        // Tìm referee có user_id = user hiện tại
+        $referee = Referee::where('user_id', $user->id)
+            ->with('seo.contents', 'achievements', 'skills', 'experiences.contents', 'degrees.contents')
+            ->first();
+        
+        if (empty($referee)) {
+            $message = [
+                'type' => 'warning',
+                'message' => '<strong>Thông báo!</strong> Bạn chưa có hồ sơ Trọng tài. Vui lòng liên hệ quản trị viên để được tạo hồ sơ.'
+            ];
+            $request->session()->put('message', $message);
+            return redirect()->route('admin.account.profile');
+        }
+        
+        return view('admin.account.refereeProfile', compact('referee'));
+    }
+    
+    /**
+     * Cập nhật hồ sơ Trọng tài của sub-admin (chỉ update các field được phép)
+     */
+    public function updateRefereeProfile(SubAdminRefereeProfileRequest $request)
+    {
+        $user = Auth::user();
+        
+        // Chỉ cho phép referee (không phải admin)
+        if ($user->hasRole('admin') || !$user->hasRole('referee')) {
+            abort(403, 'Bạn không có quyền thực hiện thao tác này.');
+        }
+        
+        // Tìm referee có user_id = user hiện tại
+        $referee = Referee::where('user_id', $user->id)->first();
+        
+        if (empty($referee)) {
+            $message = [
+                'type' => 'danger',
+                'message' => '<strong>Lỗi!</strong> Không tìm thấy hồ sơ Trọng tài.'
+            ];
+            $request->session()->put('message', $message);
+            return redirect()->route('admin.account.refereeProfile');
+        }
+        
+        try {
+            DB::beginTransaction();
+            
+            // Upload image if provided
+            $dataPath = [];
+            if($request->hasFile('image')) {
+                $name = !empty($referee->seo->slug) ? $referee->seo->slug : time();
+                $fileName = $name.'.'.config('image.extension');
+                $folderUpload = config('main_'.env('APP_NAME').'.google_cloud_storage.wallpapers');
+                $dataPath = Upload::uploadWallpaper($request->file('image'), $fileName, $folderUpload);
+            }
+            
+            // Chỉ update các field có trong request (phone, email, image)
+            // Note: referee_info KHÔNG có cột description, nên chỉ update vào seo.description
+            // Các field khác giữ nguyên - KHÔNG gọi buildArrayTableSeo
+            $updateData = [];
+            
+            if ($request->has('phone')) {
+                $updateData['phone'] = trim($request->phone) ?: null;
+            }
+            
+            if ($request->has('email')) {
+                $updateData['email'] = trim($request->email) ?: null;
+            }
+            
+            // Update referee_info nếu có thay đổi (KHÔNG bao gồm description vì bảng không có cột này)
+            if (!empty($updateData)) {
+                Referee::updateItem($referee->id, $updateData);
+            }
+            
+            // Reload referee to get latest data after update
+            $referee = Referee::find($referee->id);
+            
+            // Sync referee_info to users (for name, position, phone, email)
+            if (!empty($referee)) {
+                $this->syncRefereeToUser($referee);
+            }
+            
+            // Update SEO chỉ với các field có giá trị (không dùng buildArrayTableSeo)
+            if (!empty($referee->seo_id)) {
+                $seoUpdateData = [];
+                
+                // Sync description to seo.description (chỉ nếu có giá trị)
+                // Note: referee_info không có cột description, nên chỉ update vào seo
+                if ($request->has('description')) {
+                    $seoUpdateData['description'] = trim($request->description) ?: null;
+                }
+                
+                // Update image if uploaded
+                if (!empty($dataPath)) {
+                    $seoUpdateData['image'] = $dataPath;
+                }
+                
+                // Chỉ update SEO nếu có dữ liệu cần update
+                if (!empty($seoUpdateData)) {
+                    // Preserve existing slug when updating
+                    $existingSeo = Seo::find($referee->seo_id);
+                    if($existingSeo && !empty($existingSeo->slug)) {
+                        $seoUpdateData['slug'] = $existingSeo->slug;
+                    }
+                    Seo::updateItem($referee->seo_id, $seoUpdateData);
+                }
+            }
+            
+            // Handle repeater fields (achievements, skills, experiences, degrees)
+            $idReferee = $referee->id;
+            
+            /* insert thành tích (referee_achievement) */
+            if($request->has('repeater_referee_achievement')) {
+                \App\Models\RefereeAchievement::select('*')
+                    ->where('referee_info_id', $idReferee)
+                    ->delete();
+                if(!empty($request->get('repeater_referee_achievement'))){
+                    foreach($request->get('repeater_referee_achievement') as $index => $achi){
+                        if(!empty($achi['content'])){
+                            \App\Models\RefereeAchievement::insertItem([
+                                'referee_info_id'   => $idReferee,
+                                'content'           => $achi['content'],
+                                'ordering'          => $achi['ordering'] ?? $index,
+                            ]);
+                        }
+                    }
+                }
+            }
+            
+            /* insert kỹ năng (referee_skill) */
+            if($request->has('repeater_referee_skill')) {
+                \App\Models\RefereeSkill::select('*')
+                    ->where('referee_info_id', $idReferee)
+                    ->delete();
+                if(!empty($request->get('repeater_referee_skill'))){
+                    foreach($request->get('repeater_referee_skill') as $index => $skill){
+                        if(!empty($skill['skill'])&&!empty($skill['percent'])){
+                            \App\Models\RefereeSkill::insertItem([
+                                'referee_info_id'   => $idReferee,
+                                'skill'             => $skill['skill'],
+                                'percent'           => $skill['percent'],
+                                'ordering'          => $skill['ordering'] ?? $index,
+                            ]);
+                        }
+                    }
+                }
+            }
+            
+            /* insert kinh nghiệm (referee_experience) */
+            if($request->has('repeater_referee_experience')) {
+                \App\Models\RefereeExperience::select('*')
+                    ->where('referee_info_id', $idReferee)
+                    ->delete();
+                if(!empty($request->get('repeater_referee_experience'))){
+                    foreach($request->get('repeater_referee_experience') as $index => $exper){
+                        if(!empty($exper['title'])&&!empty($exper['company'])&&!empty($exper['content'])){
+                            $idRefereeExperience    = \App\Models\RefereeExperience::insertItem([
+                                'referee_info_id'   => $idReferee,
+                                'title'             => $exper['title'],
+                                'company'           => $exper['company'],
+                                'ordering'          => $exper['ordering'] ?? $index,
+                            ]);
+                            /* insert thêm content */
+                            $tmp                    = explode("\r\n", $exper['content']);
+                            foreach($tmp as $t){
+                                if(!empty(trim($t))) {
+                                    \App\Models\RefereeExperienceContent::insertItem([
+                                        'referee_experience_id' => $idRefereeExperience,
+                                        'content'               => trim($t),
+                                    ]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            /* insert bằng cấp (referee_degree) */
+            if($request->has('repeater_referee_degree')) {
+                \App\Models\RefereeDegree::select('*')
+                    ->where('referee_info_id', $idReferee)
+                    ->delete();
+                if(!empty($request->get('repeater_referee_degree'))){
+                    foreach($request->get('repeater_referee_degree') as $index => $degree){
+                        if(!empty($degree['title'])&&!empty($degree['school'])&&!empty($degree['content'])){
+                            $idRefereeDegree    = \App\Models\RefereeDegree::insertItem([
+                                'referee_info_id'   => $idReferee,
+                                'title'             => $degree['title'],
+                                'school'            => $degree['school'],
+                                'ordering'          => $degree['ordering'] ?? $index,
+                            ]);
+                            /* insert thêm content */
+                            $tmp                    = explode("\r\n", $degree['content']);
+                            foreach($tmp as $t){
+                                if(!empty(trim($t))) {
+                                    \App\Models\RefereeDegreeContent::insertItem([
+                                        'referee_degree_id'     => $idRefereeDegree,
+                                        'content'               => trim($t),
+                                    ]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            DB::commit();
+            
+            $message = [
+                'type' => 'success',
+                'message' => '<strong>Thành công!</strong> Đã cập nhật hồ sơ Trọng tài!'
+            ];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error('Error updating referee profile (sub-admin)', [
+                'user_id' => $user->id,
+                'referee_id' => $referee->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            $message = [
+                'type' => 'danger',
+                'message' => '<strong>Lỗi!</strong> Có lỗi xảy ra: ' . $e->getMessage()
+            ];
+        }
+        
+        $request->session()->put('message', $message);
+        return redirect()->route('admin.account.refereeProfile');
+    }
+    
+    /**
+     * Sync user data to referee_info
+     * Called when user profile is updated
+     */
+    private function syncUserToReferee(User $user)
+    {
+        $referee = Referee::where('user_id', $user->id)->first();
+        if (empty($referee)) {
+            return; // No referee profile to sync
+        }
+        
+        $updateData = [];
+        
+        // Sync name
+        if (!empty($user->name) && $referee->name !== $user->name) {
+            $updateData['name'] = $user->name;
+        }
+        
+        // Sync position
+        if ($user->position !== $referee->position) {
+            $updateData['position'] = $user->position;
+        }
+        
+        // Sync phone
+        if ($user->phone !== $referee->phone) {
+            $updateData['phone'] = $user->phone;
+        }
+        
+        // Sync email
+        if (!empty($user->email) && $referee->email !== $user->email) {
+            $updateData['email'] = $user->email;
+        }
+        
+        // Update referee_info if there are changes
+        if (!empty($updateData)) {
+            Referee::updateItem($referee->id, $updateData);
+        }
+    }
+    
+    /**
+     * Sync referee_info data to user
+     * Called when referee profile is updated
+     */
+    private function syncRefereeToUser(Referee $referee)
+    {
+        if (empty($referee->user_id)) {
+            return; // No user to sync
+        }
+        
+        $user = User::find($referee->user_id);
+        if (empty($user)) {
+            return;
+        }
+        
+        $hasChanges = false;
+        
+        // Sync name
+        if (!empty($referee->name) && $user->name !== $referee->name) {
+            $user->name = $referee->name;
+            $hasChanges = true;
+        }
+        
+        // Sync position
+        if ($user->position !== $referee->position) {
+            $user->position = $referee->position;
+            $hasChanges = true;
+        }
+        
+        // Sync phone
+        if ($user->phone !== $referee->phone) {
+            $user->phone = $referee->phone;
+            $hasChanges = true;
+        }
+        
+        // Sync email
+        if (!empty($referee->email) && $user->email !== $referee->email) {
+            $user->email = $referee->email;
             $hasChanges = true;
         }
         

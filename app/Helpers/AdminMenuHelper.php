@@ -92,6 +92,39 @@ class AdminMenuHelper
                 }
             }
             
+            // Special handling for trainer/referee profile menu item
+            if (isset($item['route']) && $item['route'] === 'admin.account.trainerProfile') {
+                // Kiểm tra role của user
+                $hasTrainerRole = $user->hasRole('trainer');
+                $hasRefereeRole = $user->hasRole('referee');
+                
+                if ($hasRefereeRole && !$hasTrainerRole) {
+                    // User has referee role, show referee profile menu
+                    $menuItem = [
+                        'label' => 'Hồ sơ Trọng tài',
+                        'svg' => $item['svg'] ?? null,
+                        'route' => 'admin.account.refereeProfile',
+                        'url' => route('admin.account.refereeProfile'),
+                        'active' => $currentRoute === 'admin.account.refereeProfile' || 
+                            str_starts_with($currentRoute, 'admin.account.refereeProfile'),
+                    ];
+                    $items[] = $menuItem;
+                } elseif ($hasTrainerRole) {
+                    // User has trainer role, show trainer profile menu
+                    $menuItem = [
+                        'label' => 'Hồ sơ HLV',
+                        'svg' => $item['svg'] ?? null,
+                        'route' => 'admin.account.trainerProfile',
+                        'url' => route('admin.account.trainerProfile'),
+                        'active' => $currentRoute === 'admin.account.trainerProfile' || 
+                            str_starts_with($currentRoute, 'admin.account.trainerProfile'),
+                    ];
+                    $items[] = $menuItem;
+                }
+                // If user has neither role, skip this menu item
+                continue;
+            }
+            
             $menuItem = [
                 'label' => $item['label'],
                 'svg' => $item['svg'] ?? null,

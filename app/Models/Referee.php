@@ -13,6 +13,7 @@ class Referee extends Model {
         'email',
         'name',
         'position',
+        'user_id',
     ];
     public $timestamps = false;
 
@@ -74,5 +75,9 @@ class Referee extends Model {
 
     public function degrees() {
         return $this->hasMany(\App\Models\RefereeDegree::class, 'referee_info_id', 'id');
+    }
+
+    public function user() {
+        return $this->belongsTo(\App\Models\User::class, 'user_id', 'id');
     }
 }

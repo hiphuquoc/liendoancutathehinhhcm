@@ -70,7 +70,7 @@ use App\Http\Controllers\GoogledriveController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::middleware(['auth', 'role:admin,sub-admin'])->group(function () {
+Route::middleware(['auth', 'role:admin,trainer,referee'])->group(function () {
     /* ===== Account ===== */
     // Account routes giữ nguyên vị trí (ngoài /he-thong) vì là routes cá nhân
     Route::prefix('account')->group(function(){
@@ -80,6 +80,8 @@ Route::middleware(['auth', 'role:admin,sub-admin'])->group(function () {
         Route::post('/updatePassword', [AdminAccountController::class, 'updatePassword'])->name('admin.account.updatePassword');
         Route::get('/trainerProfile', [AdminAccountController::class, 'trainerProfile'])->name('admin.account.trainerProfile');
         Route::post('/updateTrainerProfile', [AdminAccountController::class, 'updateTrainerProfile'])->name('admin.account.updateTrainerProfile');
+        Route::get('/refereeProfile', [AdminAccountController::class, 'refereeProfile'])->name('admin.account.refereeProfile');
+        Route::post('/updateRefereeProfile', [AdminAccountController::class, 'updateRefereeProfile'])->name('admin.account.updateRefereeProfile');
     });
     
     // Redirect từ URL cũ sang URL mới (backward compatibility)
@@ -91,7 +93,7 @@ Route::middleware(['auth', 'role:admin,sub-admin'])->group(function () {
     });
 });
 
-Route::middleware(['auth', 'role:admin,sub-admin'])->group(function () {
+Route::middleware(['auth', 'role:admin,trainer,referee'])->group(function () {
     Route::prefix('he-thong')->group(function(){
         /* ===== Trainer ===== */
         Route::prefix('trainer')->group(function(){

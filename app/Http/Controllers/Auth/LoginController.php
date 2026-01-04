@@ -115,14 +115,14 @@ class LoginController extends Controller
             Auth::login($user, $remember);
             
             // Check admin role
-            if ($user->hasRole('admin') || $user->hasRole('sub-admin')) {
+            if ($user->hasRole('admin') || $user->hasRole('trainer') || $user->hasRole('referee')) {
                 // Clear rate limiter on success
                 RateLimiter::clear($throttleKey);
                 
                 // Regenerate session
                 $request->session()->regenerate();
                 
-                // Redirect sub-admin to profile page, admin to trainer list
+                // Redirect trainer/referee to profile page, admin to trainer list
                 $redirectUrl = $user->hasRole('admin') 
                     ? route('admin.trainer.list') 
                     : route('admin.account.profile');

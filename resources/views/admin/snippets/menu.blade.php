@@ -20,9 +20,9 @@
             @php
                 $user = auth()->user();
                 $firstRoute = route('admin.account.profile');
-                // Get trainer code if user is sub-admin
+                // Get trainer code if user is trainer
                 $trainerCode = null;
-                if ($user->hasRole('sub-admin') && !$user->hasRole('admin')) {
+                if ($user->hasRole('trainer') && !$user->hasRole('admin')) {
                     $trainer = \App\Models\Trainer::where('user_id', $user->id)->first();
                     if ($trainer && !empty($trainer->trainer_code)) {
                         $trainerCode = $trainer->trainer_code;

@@ -55,6 +55,50 @@ class RefereeManagementController extends Controller
     }
 
     /**
+     * Tạo username duy nhất, CHỈ kiểm tra trong cùng chức vụ Referee
+     */
+    private function generateUniqueUsername($baseUsername, $excludeUserId = null)
+    {
+        $username = str_replace('-', '', $baseUsername);
+        $counter = 2;
+        $baseUsernameClean = $username;
+        
+        // Kiểm tra username có đang được sử dụng bởi Referee không (CHỈ kiểm tra cùng chức vụ)
+        while (true) {
+            // Kiểm tra trong bảng users
+            $query = \App\Models\User::where('username', $username);
+            if ($excludeUserId) {
+                $query->where('id', '!=', $excludeUserId);
+            }
+            $existingUser = $query->first();
+            
+            if (!$existingUser) {
+                // Username chưa tồn tại, có thể sử dụng
+                break;
+            }
+            
+            // Kiểm tra xem user này đang được sử dụng bởi Referee (cùng chức vụ)
+            $refereeUsingUser = \App\Models\Referee::where('user_id', $existingUser->id)->first();
+            
+            // Nếu user chưa được sử dụng bởi Referee, có thể sử dụng
+            // Nếu user đã được sử dụng bởi Trainer, cũng có thể sử dụng (cùng 1 người có 2 chức vụ)
+            if (!$refereeUsingUser) {
+                break;
+            }
+            
+            // Username đã được sử dụng bởi Referee (cùng chức vụ), tạo username mới với số
+            if (preg_match('/^(.+?)(\d+)$/', $username, $matches)) {
+                $baseUsernameClean = $matches[1];
+                $counter = (int)$matches[2] + 1;
+            }
+            $username = $baseUsernameClean . $counter;
+            $counter++;
+        }
+        
+        return $username;
+    }
+
+    /**
      * Xử lý upload Excel và tạo referee + user đồng bộ
      */
     public function uploadExcel(Request $request)
@@ -219,7 +263,7 @@ class RefereeManagementController extends Controller
                 }
             }
 
-            // Kiểm tra trùng với database (chỉ kiểm tra với email/phone hợp lệ)
+            // Kiểm tra trùng với database (CHỈ kiểm tra trong cùng tính năng Referee, không kiểm tra Trainer)
             $existingEmails = [];
             $existingPhones = [];
             foreach ($refereesData as $referee) {
@@ -228,6 +272,7 @@ class RefereeManagementController extends Controller
                 
                 // Chỉ kiểm tra email nếu email hợp lệ
                 if (!empty($checkEmail) && filter_var($checkEmail, FILTER_VALIDATE_EMAIL)) {
+                    // Chỉ kiểm tra trong bảng referee_info (cùng tính năng)
                     $existing = Referee::where('email', $checkEmail)->first();
                     if ($existing) {
                         if (!isset($existingEmails[$checkEmail])) {
@@ -240,6 +285,7 @@ class RefereeManagementController extends Controller
 
                 // Chỉ kiểm tra phone nếu phone có giá trị
                 if (!empty($checkPhone)) {
+                    // Chỉ kiểm tra trong bảng referee_info (cùng tính năng)
                     $existing = Referee::where('phone', $checkPhone)->first();
                     if ($existing) {
                         if (!isset($existingPhones[$checkPhone])) {
@@ -391,37 +437,102 @@ class RefereeManagementController extends Controller
                     })->first();
 
                     if ($referee) {
-                        // Tạo user cho referee (liên kết qua slug/email, không có user_id field)
-                        $username = str_replace('-', '', $slug);
-                        
-                        // Kiểm tra email/username đã tồn tại chưa
-                        $existingUser = User::where('email', $email)
-                            ->orWhere('username', $username)
-                            ->first();
+                        // Tạo user cho referee
+                        if (empty($referee->user_id)) {
+                            // Kiểm tra email đã tồn tại chưa
+                            $existingUserByEmail = User::where('email', $email)->first();
+                            
+                            if ($existingUserByEmail) {
+                                // Email đã tồn tại - có thể là cùng 1 người với chức vụ khác (Trainer)
+                                // Cho phép dùng chung user (cùng 1 người có 2 chức vụ)
+                                
+                                // Kiểm tra xem user này đã được sử dụng bởi Referee chưa
+                                $refereeUsingUser = \App\Models\Referee::where('user_id', $existingUserByEmail->id)->first();
+                                
+                                if ($refereeUsingUser) {
+                                    // User đã được sử dụng bởi Referee (cùng chức vụ) - không cho phép
+                                    // Xóa referee đã tạo và báo lỗi
+                                    if ($referee->seo_id) {
+                                        $seo = \App\Models\Seo::find($referee->seo_id);
+                                        if ($seo) {
+                                            $seo->delete();
+                                        }
+                                    }
+                                    $referee->delete();
+                                    
+                                    $duplicateCount++;
+                                    $results[] = [
+                                        'status' => 'duplicate',
+                                        'name' => $nameCover,
+                                        'phone' => $phone ?: 'N/A',
+                                        'email' => $email,
+                                        'slug' => $slug,
+                                        'reasons' => ['Email đã tồn tại trong hệ thống (Trọng tài)'],
+                                        'qr_code' => null,
+                                    ];
+                                    continue; // Skip và tiếp tục với record tiếp theo
+                                } else {
+                                    // User chưa được sử dụng bởi Referee - có thể dùng chung (cùng 1 người, 2 chức vụ)
+                                    // Thêm role referee cho user nếu chưa có
+                                    $refereeRoleId = \App\Models\Role::where('slug', 'referee')->value('id');
+                                    if ($refereeRoleId) {
+                                        $existingRole = \App\Models\UserRole::where('user_id', $existingUserByEmail->id)
+                                            ->where('role_id', $refereeRoleId)
+                                            ->first();
+                                        if (!$existingRole) {
+                                            \App\Models\UserRole::insertItem([
+                                                'user_id' => $existingUserByEmail->id,
+                                                'role_id' => $refereeRoleId,
+                                            ]);
+                                        }
+                                    }
+                                    
+                                    // Cập nhật role của user thành referee (hoặc giữ nguyên nếu đã có trainer role)
+                                    if (!$existingUserByEmail->hasRole('referee')) {
+                                        $existingUserByEmail->role = 'referee';
+                                        $existingUserByEmail->save();
+                                    }
+                                    
+                                    $referee->user_id = $existingUserByEmail->id;
+                                    $referee->save();
+                                    // Tiếp tục xử lý QR code và kết quả (không continue)
+                                }
+                            } else {
+                                // Email chưa tồn tại - tạo user mới
+                                // Tạo username duy nhất, CHỈ kiểm tra trong cùng chức vụ Referee
+                                $username = $this->generateUniqueUsername($slug);
+                                
+                                // Tạo user mới
+                                $user = User::create([
+                                    'name' => $nameCover,
+                                    'email' => $email,
+                                    'username' => $username,
+                                    'password' => Hash::make($username),
+                                    'position' => 'Trọng tài',
+                                    'phone' => $phone,
+                                    'role' => 'referee',
+                                ]);
 
-                        if (!$existingUser) {
-                            $user = User::create([
-                                'name' => $nameCover,
-                                'email' => $email,
-                                'username' => $username,
-                                'password' => Hash::make($username),
-                                'position' => 'Trọng tài',
-                                'phone' => $phone,
-                                'role' => 'sub-admin',
-                            ]);
+                                // Gán role referee
+                                $refereeRoleId = \App\Models\Role::where('slug', 'referee')->value('id');
+                                if ($refereeRoleId) {
+                                    UserRole::insertItem([
+                                        'user_id' => $user->id,
+                                        'role_id' => $refereeRoleId,
+                                    ]);
+                                }
 
-                            // Gán role sub-admin
-                            UserRole::insertItem([
-                                'user_id' => $user->id,
-                                'role_id' => 2,
-                            ]);
+                                // Cập nhật user_id vào referee
+                                $referee->user_id = $user->id;
+                                $referee->save();
 
-                            // Đồng bộ name, position, phone, email từ referee sang user
-                            $user->name = $referee->name;
-                            $user->position = $referee->position ?? 'Trọng tài';
-                            $user->phone = $referee->phone;
-                            $user->email = $referee->email;
-                            $user->save();
+                                // Đồng bộ name, position, phone, email từ referee sang user
+                                $user->name = $referee->name;
+                                $user->position = $referee->position ?? 'Trọng tài';
+                                $user->phone = $referee->phone;
+                                $user->email = $referee->email;
+                                $user->save();
+                            }
                         }
 
                         // Tạo QR code

@@ -104,7 +104,7 @@ return [
         ],
         'certification' => [
             'title' => 'Chứng nhận',
-            'role' => ['sub-admin'],
+            'role' => ['trainer', 'referee'],
             'items' => [
                 [
                     'label' => 'Hồ sơ HLV',
@@ -120,7 +120,7 @@ return [
         ],
         'account' => [
             'title' => 'Tài khoản',
-            'role' => ['admin', 'sub-admin'],
+            'role' => ['admin', 'trainer', 'referee'],
             'items' => [
                 [
                     'label' => 'Thông tin cá nhân',

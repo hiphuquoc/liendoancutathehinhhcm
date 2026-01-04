@@ -42,7 +42,7 @@ class RefereeController extends Controller {
         if(auth()->user()->hasRole('admin')){
             $list               = Referee::getList($params);
             return view('admin.referee.list', compact('list', 'params', 'viewPerPage'));
-        }else if(auth()->user()->hasRole('sub-admin')){
+        }else if(auth()->user()->hasRole('referee')){
             $username   = auth()->user()->name;
             $list       = Referee::select('*')
                                     ->whereHas('seo', function($query) use($username){
@@ -159,11 +159,12 @@ class RefereeController extends Controller {
                     ->where('referee_info_id', $idReferee)
                     ->delete();
                 if(!empty($request->get('repeater_referee_achievement'))){
-                    foreach($request->get('repeater_referee_achievement') as $achi){
+                    foreach($request->get('repeater_referee_achievement') as $index => $achi){
                         if(!empty($achi['content'])){
                             RefereeAchievement::insertItem([
                                 'referee_info_id'   => $idReferee,
                                 'content'           => $achi['content'],
+                                'ordering'          => $achi['ordering'] ?? $index,
                             ]);
                         }
                     }
@@ -173,12 +174,13 @@ class RefereeController extends Controller {
                     ->where('referee_info_id', $idReferee)
                     ->delete();
                 if(!empty($request->get('repeater_referee_skill'))){
-                    foreach($request->get('repeater_referee_skill') as $skill){
+                    foreach($request->get('repeater_referee_skill') as $index => $skill){
                         if(!empty($skill['skill'])&&!empty($skill['percent'])){
                             RefereeSkill::insertItem([
                                 'referee_info_id'   => $idReferee,
                                 'skill'             => $skill['skill'],
                                 'percent'           => $skill['percent'],
+                                'ordering'          => $skill['ordering'] ?? $index,
                             ]);
                         }
                     }
@@ -188,12 +190,13 @@ class RefereeController extends Controller {
                     ->where('referee_info_id', $idReferee)
                     ->delete();
                 if(!empty($request->get('repeater_referee_experience'))){
-                    foreach($request->get('repeater_referee_experience') as $exper){
+                    foreach($request->get('repeater_referee_experience') as $index => $exper){
                         if(!empty($exper['title'])&&!empty($exper['company'])&&!empty($exper['content'])){
                             $idRefereeExperience    = RefereeExperience::insertItem([
                                 'referee_info_id'   => $idReferee,
                                 'title'             => $exper['title'],
                                 'company'           => $exper['company'],
+                                'ordering'          => $exper['ordering'] ?? $index,
                             ]);
                             /* insert thêm content => ở đây chỉ insert và không xóa content cũ (chấp nhận phình dữ liệu) */
                             $tmp                    = explode("\r\n", $exper['content']);
@@ -211,13 +214,14 @@ class RefereeController extends Controller {
                     ->where('referee_info_id', $idReferee)
                     ->delete();
                 if(!empty($request->get('repeater_referee_degree'))){
-                    foreach($request->get('repeater_referee_degree') as $degree){
+                    foreach($request->get('repeater_referee_degree') as $index => $degree){
                         if(!empty($degree['title'])&&!empty($degree['school'])&&!empty($degree['content'])){
                             $idRefereeDegree    = RefereeDegree::insertItem([
-                                                        'referee_info_id'   => $idReferee,
-                                                        'title'             => $degree['title'],
-                                                        'school'            => $degree['school'],
-                                                    ]);
+                                'referee_info_id'   => $idReferee,
+                                'title'             => $degree['title'],
+                                'school'            => $degree['school'],
+                                'ordering'          => $degree['ordering'] ?? $index,
+                            ]);
                             /* insert thêm content => ở đây chỉ insert và không xóa content cũ (chấp nhận phình dữ liệu) */
                             $tmp                    = explode("\r\n", $degree['content']);
                             foreach($tmp as $t){
@@ -273,13 +277,17 @@ class RefereeController extends Controller {
                 $idUser = User::create([
                     'name' => $slug,
                     'email' => $email,
-                    'password' => Hash::make($email)
+                    'password' => Hash::make($email),
+                    'role' => 'referee'
                 ]);
 
-                UserRole::insertItem([
-                    'user_id' => $idUser->id,
-                    'role_id' => 2,
-                ]);
+                $refereeRoleId = \App\Models\Role::where('slug', 'referee')->value('id');
+                if ($refereeRoleId) {
+                    UserRole::insertItem([
+                        'user_id' => $idUser->id,
+                        'role_id' => $refereeRoleId,
+                    ]);
+                }
 
                 if ($idUser) ++$count;
             }

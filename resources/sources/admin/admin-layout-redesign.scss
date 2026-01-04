@@ -3475,20 +3475,44 @@ $admin-color-system: (
 
 // Filter for blog category
 .adminContentPage_searchBar_filter {
+    flex: 0 0 auto;
+    min-width: 200px;
     display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
-    background: var(--admin-gray-50);
-    border: 1px solid var(--admin-gray-200);
-    border-radius: var(--admin-radius-md);
-    min-width: 280px;
+    align-items: stretch;
+    
+    .adminContentPage_searchBar_filterSelect {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        
+        .adminFormSelect_labelWrapper {
+            display: none;
+        }
+        
+        .adminCustomSelect {
+            min-width: 200px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            
+            .adminCustomSelect_display {
+                min-height: 48px;
+                height: 100%;
+                display: flex;
+                align-items: center;
+            }
+        }
+    }
+    
+    @media (max-width: 1024px) {
+        min-width: 180px;
+        
+        .adminContentPage_searchBar_filterSelect .adminCustomSelect {
+            min-width: 180px;
+        }
+    }
     
     @media (max-width: 768px) {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-        padding: 0.875rem;
         min-width: auto;
         width: 100%;
     }
@@ -4630,6 +4654,219 @@ $admin-color-system: (
         border-radius: 50%;
         animation: spin 0.6s linear infinite;
     }
+}
+
+// Clear Cache Modal
+.adminClearCacheModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    &--open {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+.adminClearCacheModal_backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.adminClearCacheModal_content {
+    position: relative;
+    width: 90%;
+    max-width: 500px;
+    background: #fff;
+    border-radius: var(--admin-radius-lg);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: scale(0.95);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    .adminClearCacheModal--open & {
+        transform: scale(1);
+    }
+    
+    @media (max-width: 768px) {
+        width: 95%;
+        max-width: 95%;
+    }
+}
+
+.adminClearCacheModal_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--admin-gray-200);
+    
+    @media (max-width: 768px) {
+        padding: 1.25rem;
+    }
+}
+
+.adminClearCacheModal_title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--admin-gray-900);
+    margin: 0;
+    
+    @media (max-width: 768px) {
+        font-size: 1.125rem;
+    }
+}
+
+.adminClearCacheModal_close {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: var(--admin-radius-sm);
+    color: var(--admin-gray-500);
+    cursor: pointer;
+    transition: all 0.2s;
+    
+    svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    &:hover {
+        background: var(--admin-gray-100);
+        color: var(--admin-gray-700);
+    }
+}
+
+.adminClearCacheModal_body {
+    padding: 2rem 1.5rem;
+    text-align: center;
+    
+    @media (max-width: 768px) {
+        padding: 1.5rem 1.25rem;
+    }
+}
+
+.adminClearCacheModal_icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.5rem;
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: 50%;
+    color: var(--admin-danger);
+    
+    svg {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+.adminClearCacheModal_message {
+    color: var(--admin-gray-700);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    
+    p {
+        margin: 0;
+    }
+}
+
+.adminClearCacheModal_footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 1.5rem;
+    border-top: 1px solid var(--admin-gray-200);
+    
+    @media (max-width: 768px) {
+        padding: 1.25rem;
+        flex-direction: column-reverse;
+        
+        button {
+            width: 100%;
+        }
+    }
+}
+
+.adminClearCacheModal_button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--admin-radius-md);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    
+    &--secondary {
+        background: var(--admin-gray-100);
+        color: var(--admin-gray-700);
+        
+        &:hover {
+            background: var(--admin-gray-200);
+        }
+    }
+    
+    &--primary {
+        background: var(--admin-gradient-primary);
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+        
+        &:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
+        }
+        
+        &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    }
+}
+
+.adminClearCacheModal_button_loader {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.adminClearCacheModal_button_spinner {
+    width: 20px;
+    height: 20px;
+}
+
+.adminClearCacheModal_button_spinner_path {
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: 0;
+    animation: spin 0.8s linear infinite;
 }
 
 // Modal Change Image Form

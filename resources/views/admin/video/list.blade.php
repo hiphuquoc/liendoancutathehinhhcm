@@ -44,8 +44,9 @@
             </div>
             <div class="companyManagementPage_section_body">
                 <!-- Search & Filter Bar -->
-                <form id="formSearch" method="get" action="{{ route('admin.video.list') }}" class="adminContentPage_searchBar">
-                    <div class="adminContentPage_searchBar_row">
+                <form id="formSearch" method="get" action="{{ route('admin.video.list') }}" class="adminContentPage_searchBar adminContentPage_searchBar--withFilter">
+                    <div class="adminContentPage_searchBar_grid">
+                        <!-- Search Input -->
                         <div class="adminContentPage_searchBar_inputWrapper">
                             <svg class="adminContentPage_searchBar_icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="11" cy="11" r="8"/>
@@ -55,66 +56,35 @@
                                 type="text" 
                                 class="adminContentPage_searchBar_input" 
                                 name="search_name" 
+                                id="videoSearchInput"
                                 placeholder="Tìm kiếm theo tiêu đề..." 
                                 value="{{ $params['search_name'] ?? '' }}"
                             />
                         </div>
-                        <div class="adminContentPage_searchBar_controls">
-                            @if(!empty($categories))
-                                <div class="adminContentPage_searchBar_filter">
-                                    <select class="adminContentPage_searchBar_filterSelect" name="category" onchange="this.form.submit()">
-                                        <option value="">Tất cả danh mục</option>
-                                        @foreach($categories as $category)
-                                            <option value="{{ $category }}" {{ (isset($params['category']) && $params['category'] == $category) ? 'selected' : '' }}>
-                                                {{ $category }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            @endif
-                            <div class="adminContentPage_searchBar_actions">
-                                <button type="submit" class="adminButton adminButton--primary adminButton--sm">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <circle cx="11" cy="11" r="8"/>
-                                        <path d="m21 21-4.35-4.35"/>
-                                    </svg>
-                                    <span>Tìm kiếm</span>
-                                </button>
-                                @if(!empty($params['search_name']) || !empty($params['category']))
-                                    <a href="{{ route('admin.video.list') }}" class="adminButton adminButton--secondary adminButton--sm">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M6 18L18 6M6 6l12 12"/>
-                                        </svg>
-                                        <span>Xóa bộ lọc</span>
-                                    </a>
-                                @endif
+                        
+                        <!-- Category Filter -->
+                        @if(!empty($categories))
+                            <div class="adminContentPage_searchBar_filter">
+                                @php
+                                    $categoryOptions = [];
+                                    foreach($categories as $category) {
+                                        $categoryOptions[$category] = $category;
+                                    }
+                                @endphp
+                                @include('admin.components.formSelect', [
+                                    'name' => 'category',
+                                    'value' => $params['category'] ?? '',
+                                    'options' => $categoryOptions,
+                                    'placeholder' => 'Tất cả danh mục',
+                                    'class' => 'adminContentPage_searchBar_filterSelect'
+                                ])
                             </div>
-                        </div>
+                        @endif
                     </div>
                 </form>
 
                 <!-- Message -->
-                @if(session('message'))
-                    <div class="adminFormPage_message adminFormPage_message--{{ session('message')['type'] ?? 'info' }}">
-                        <div class="adminFormPage_message_icon">
-                            @if((session('message')['type'] ?? 'info') === 'success')
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                                    <polyline points="22 4 12 14.01 9 11.01"/>
-                                </svg>
-                            @else
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <line x1="12" y1="8" x2="12" y2="12"/>
-                                    <line x1="12" y1="16" x2="12.01" y2="16"/>
-                                </svg>
-                            @endif
-                        </div>
-                        <div class="adminFormPage_message_content">
-                            {!! session('message')['message'] ?? '' !!}
-                        </div>
-                    </div>
-                @endif
+                @include('admin.components.formMessage')
 
                 <!-- Cards Grid -->
                 @if(!empty($list) && $list->isNotEmpty())
@@ -212,17 +182,96 @@ function deleteItem(id) {
     window.location.href = '{{ route("admin.video.delete") }}?id=' + id;
 }
 
-// Auto submit search form on enter
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.querySelector('[name="search_name"]');
-    if (searchInput) {
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                document.getElementById('formSearch').submit();
+// Auto submit khi custom selectbox thay đổi
+function setupCategorySelectAutoSubmit() {
+    const categorySelectContainer = document.querySelector('.adminContentPage_searchBar_filterSelect .adminCustomSelect');
+    if (!categorySelectContainer) return;
+    
+    const hiddenInput = categorySelectContainer.querySelector('input[type="hidden"][name="category"]');
+    if (!hiddenInput) return;
+    
+    let lastValue = hiddenInput.value || '';
+    
+    function submitForm() {
+        document.getElementById('formSearch').submit();
+    }
+    
+    // Sử dụng setInterval để kiểm tra thay đổi (fallback)
+    const checkInterval = setInterval(function() {
+        const currentValue = hiddenInput.value || '';
+        if (currentValue !== lastValue) {
+            lastValue = currentValue;
+            clearInterval(checkInterval);
+            setTimeout(submitForm, 100);
+        }
+    }, 100);
+    
+    // Lắng nghe click trên option để submit ngay
+    const optionsContainer = categorySelectContainer.querySelector('.adminCustomSelect_options');
+    if (optionsContainer) {
+        optionsContainer.addEventListener('click', function(e) {
+            const option = e.target.closest('.adminCustomSelect_option');
+            if (option) {
+                setTimeout(() => {
+                    const newValue = hiddenInput.value || '';
+                    if (newValue !== lastValue) {
+                        lastValue = newValue;
+                        clearInterval(checkInterval);
+                        submitForm();
+                    }
+                }, 150);
             }
         });
     }
+    
+    // MutationObserver để theo dõi thay đổi value
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'value') {
+                const currentValue = hiddenInput.value || '';
+                if (currentValue !== lastValue) {
+                    lastValue = currentValue;
+                    clearInterval(checkInterval);
+                    setTimeout(submitForm, 100);
+                }
+            }
+        });
+    });
+    
+    observer.observe(hiddenInput, {
+        attributes: true,
+        attributeFilter: ['value']
+    });
+}
+
+// Debounce cho search input
+function setupSearchAutoSubmit() {
+    const searchInput = document.getElementById('videoSearchInput');
+    if (!searchInput) return;
+    
+    let searchTimeout;
+    
+    searchInput.addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(function() {
+            document.getElementById('formSearch').submit();
+        }, 500); // 500ms debounce
+    });
+    
+    // Submit on Enter
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            clearTimeout(searchTimeout);
+            document.getElementById('formSearch').submit();
+        }
+    });
+}
+
+// Initialize khi DOM ready
+document.addEventListener('DOMContentLoaded', function() {
+    setupCategorySelectAutoSubmit();
+    setupSearchAutoSubmit();
 });
 </script>
 @endpush

@@ -39,6 +39,7 @@
                 <!-- Search & Filter Bar -->
                 <form id="formSearch" method="get" action="{{ route('admin.blog.list') }}" class="adminContentPage_searchBar adminContentPage_searchBar--withFilter">
                     <div class="adminContentPage_searchBar_grid">
+                        <!-- Search Input -->
                         <div class="adminContentPage_searchBar_inputWrapper">
                             <svg class="adminContentPage_searchBar_icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="11" cy="11" r="8"/>
@@ -48,37 +49,30 @@
                                 type="text" 
                                 class="adminContentPage_searchBar_input" 
                                 name="search_name" 
+                                id="blogSearchInput"
                                 placeholder="Tìm kiếm theo tên bài viết..." 
                                 value="{{ $params['search_name'] ?? '' }}"
                             />
-                            <button type="submit" class="adminContentPage_searchBar_button">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="11" cy="11" r="8"/>
-                                    <path d="m21 21-4.35-4.35"/>
-                                </svg>
-                                <span>Tìm kiếm</span>
-                            </button>
-        </div>
+                        </div>
+                        
+                        <!-- Category Filter -->
                         @if(!empty($categories) && $categories->isNotEmpty())
                             <div class="adminContentPage_searchBar_filter">
-                                <label class="adminContentPage_searchBar_filter_label">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
-                                    </svg>
-                                    Chuyên mục:
-                                </label>
-                                <select class="adminContentPage_searchBar_filter_select" name="search_category" onchange="submitForm('formSearch');">
-                                    <option value="0">Tất cả chuyên mục</option>
-                    @foreach($categories as $category)
-                        @php
-                                            $selected = null;
-                                            if(!empty($params['search_category']) && $params['search_category'] == $category->id) $selected = 'selected';
-                        @endphp
-                        <option value="{{ $category->id }}" {{ $selected }}>{{ $category->seo->title ?? '' }}</option>
-                    @endforeach
-                </select>
-            </div>
-        @endif
+                                @php
+                                    $categoryOptions = [0 => 'Tất cả chuyên mục'];
+                                    foreach($categories as $category) {
+                                        $categoryOptions[$category->id] = $category->seo->title ?? '';
+                                    }
+                                @endphp
+                                @include('admin.components.formSelect', [
+                                    'name' => 'search_category',
+                                    'value' => $params['search_category'] ?? 0,
+                                    'options' => $categoryOptions,
+                                    'placeholder' => 'Tất cả chuyên mục',
+                                    'class' => 'adminContentPage_searchBar_filterSelect'
+                                ])
+                            </div>
+                        @endif
                     </div>
                 </form>
 
@@ -202,8 +196,96 @@
             }
         }
     
-    function submitForm(formId) {
-        document.getElementById(formId).submit();
+    // Auto submit khi custom selectbox thay đổi
+    function setupCategorySelectAutoSubmit() {
+        const categorySelectContainer = document.querySelector('.adminContentPage_searchBar_filterSelect .adminCustomSelect');
+        if (!categorySelectContainer) return;
+        
+        const hiddenInput = categorySelectContainer.querySelector('input[type="hidden"][name="search_category"]');
+        if (!hiddenInput) return;
+        
+        let lastValue = hiddenInput.value || '';
+        
+        function submitForm() {
+            document.getElementById('formSearch').submit();
+        }
+        
+        // Sử dụng setInterval để kiểm tra thay đổi (fallback)
+        const checkInterval = setInterval(function() {
+            const currentValue = hiddenInput.value || '';
+            if (currentValue !== lastValue) {
+                lastValue = currentValue;
+                clearInterval(checkInterval);
+                setTimeout(submitForm, 100);
+            }
+        }, 100);
+        
+        // Lắng nghe click trên option để submit ngay
+        const optionsContainer = categorySelectContainer.querySelector('.adminCustomSelect_options');
+        if (optionsContainer) {
+            optionsContainer.addEventListener('click', function(e) {
+                const option = e.target.closest('.adminCustomSelect_option');
+                if (option) {
+                    setTimeout(() => {
+                        const newValue = hiddenInput.value || '';
+                        if (newValue !== lastValue) {
+                            lastValue = newValue;
+                            clearInterval(checkInterval);
+                            submitForm();
+                        }
+                    }, 150);
+                }
+            });
+        }
+        
+        // MutationObserver để theo dõi thay đổi value
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'value') {
+                    const currentValue = hiddenInput.value || '';
+                    if (currentValue !== lastValue) {
+                        lastValue = currentValue;
+                        clearInterval(checkInterval);
+                        setTimeout(submitForm, 100);
+                    }
+                }
+            });
+        });
+        
+        observer.observe(hiddenInput, {
+            attributes: true,
+            attributeFilter: ['value']
+        });
     }
+
+    // Debounce cho search input
+    function setupSearchAutoSubmit() {
+        const searchInput = document.getElementById('blogSearchInput');
+        if (!searchInput) return;
+        
+        let searchTimeout;
+        
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(function() {
+                document.getElementById('formSearch').submit();
+            }, 500); // 500ms debounce
+        });
+        
+        // Submit on Enter
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                clearTimeout(searchTimeout);
+                document.getElementById('formSearch').submit();
+            }
+        });
+    }
+
+    // Initialize khi DOM ready
+    document.addEventListener('DOMContentLoaded', function() {
+        setupCategorySelectAutoSubmit();
+        setupSearchAutoSubmit();
+    });
     </script>
 @endpush

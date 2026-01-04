@@ -185,27 +185,82 @@
         }
     }
     function clearCacheHtml(){
-        Swal.fire({
-            title: 'Xác nhận xóa CacheHTML',
-            html: '<div>CacheHTML của tất cả các trang sẽ được xóa và làm mới lại.</div>',
-            preConfirm: () => {
-                Swal.showLoading()
-                return new Promise((resolve) => {
-                    setTimeout(() => {
-                        $.ajax({
-                            url         : '{{ route("admin.cache.clearCache") }}',
-                            type        : 'get',
-                            dataType    : 'html',
-                            success     : function(response){
-                                resolve(response)
-                            }
-                        });
-                    }, 500)
-                })
-            },
-            confirmButtonText: 'Xác nhận'
-        })
+        const modal = document.getElementById('adminClearCacheModal');
+        if (modal) {
+            modal.classList.add('adminClearCacheModal--open');
+            document.body.style.overflow = 'hidden';
+        }
     }
+    
+    function closeClearCacheModal(){
+        const modal = document.getElementById('adminClearCacheModal');
+        if (modal) {
+            modal.classList.remove('adminClearCacheModal--open');
+            document.body.style.overflow = '';
+            
+            // Reset button state
+            const confirmBtn = document.getElementById('adminClearCacheModal_confirmBtn');
+            if (confirmBtn) {
+                confirmBtn.disabled = false;
+                const buttonText = confirmBtn.querySelector('.adminClearCacheModal_button_text');
+                const buttonLoader = confirmBtn.querySelector('.adminClearCacheModal_button_loader');
+                if (buttonText) buttonText.style.display = '';
+                if (buttonLoader) buttonLoader.style.display = 'none';
+            }
+        }
+    }
+    
+    function confirmClearCache(){
+        const confirmBtn = document.getElementById('adminClearCacheModal_confirmBtn');
+        const buttonText = confirmBtn.querySelector('.adminClearCacheModal_button_text');
+        const buttonLoader = confirmBtn.querySelector('.adminClearCacheModal_button_loader');
+        
+        // Show loading state
+        confirmBtn.disabled = true;
+        if (buttonText) buttonText.style.display = 'none';
+        if (buttonLoader) buttonLoader.style.display = 'inline-flex';
+        
+        // Call API
+        $.ajax({
+            url: '{{ route("admin.cache.clearCache") }}',
+            type: 'get',
+            dataType: 'html',
+            success: function(response){
+                // Close modal
+                closeClearCacheModal();
+                
+                // Show success message (you can use createToast function if available)
+                if (typeof createToast === 'function') {
+                    createToast('success', 'Thành công', 'Đã xóa cache HTML thành công!');
+                } else {
+                    alert('Đã xóa cache HTML thành công!');
+                }
+            },
+            error: function(xhr, status, error){
+                // Reset button state
+                confirmBtn.disabled = false;
+                if (buttonText) buttonText.style.display = '';
+                if (buttonLoader) buttonLoader.style.display = 'none';
+                
+                // Show error message
+                if (typeof createToast === 'function') {
+                    createToast('error', 'Lỗi', 'Có lỗi xảy ra khi xóa cache. Vui lòng thử lại.');
+                } else {
+                    alert('Có lỗi xảy ra khi xóa cache. Vui lòng thử lại.');
+                }
+            }
+        });
+    }
+    
+    // Close modal on ESC key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('adminClearCacheModal');
+            if (modal && modal.classList.contains('adminClearCacheModal--open')) {
+                closeClearCacheModal();
+            }
+        }
+    });
     /* tạo job dịch tự động */
     function createJobTranslateContent(idSeoVI, language){
         $.ajax({

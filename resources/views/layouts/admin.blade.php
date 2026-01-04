@@ -60,6 +60,7 @@
 
     <!-- === START:: Modal === -->
     @include('admin.modal.fullLoading')
+    @include('admin.modal.clearCache')
     @stack('modal')
     <!-- === END:: Modal === -->
     

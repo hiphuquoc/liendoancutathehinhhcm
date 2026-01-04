@@ -94,23 +94,12 @@ class AdminMenuHelper
             
             // Special handling for trainer/referee profile menu item
             if (isset($item['route']) && $item['route'] === 'admin.account.trainerProfile') {
-                // Kiểm tra role của user
-                $hasTrainerRole = $user->hasRole('trainer');
-                $hasRefereeRole = $user->hasRole('referee');
+                // Kiểm tra hồ sơ thực tế (trainer_info và referee_info) thay vì chỉ kiểm tra role
+                $hasTrainerProfile = \App\Models\Trainer::where('user_id', $user->id)->exists();
+                $hasRefereeProfile = \App\Models\Referee::where('user_id', $user->id)->exists();
                 
-                if ($hasRefereeRole && !$hasTrainerRole) {
-                    // User has referee role, show referee profile menu
-                    $menuItem = [
-                        'label' => 'Hồ sơ Trọng tài',
-                        'svg' => $item['svg'] ?? null,
-                        'route' => 'admin.account.refereeProfile',
-                        'url' => route('admin.account.refereeProfile'),
-                        'active' => $currentRoute === 'admin.account.refereeProfile' || 
-                            str_starts_with($currentRoute, 'admin.account.refereeProfile'),
-                    ];
-                    $items[] = $menuItem;
-                } elseif ($hasTrainerRole) {
-                    // User has trainer role, show trainer profile menu
+                // Nếu có hồ sơ HLV -> hiển thị menu "Hồ sơ HLV"
+                if ($hasTrainerProfile) {
                     $menuItem = [
                         'label' => 'Hồ sơ HLV',
                         'svg' => $item['svg'] ?? null,
@@ -121,7 +110,21 @@ class AdminMenuHelper
                     ];
                     $items[] = $menuItem;
                 }
-                // If user has neither role, skip this menu item
+                
+                // Nếu có hồ sơ Trọng tài -> hiển thị menu "Hồ sơ Trọng tài"
+                if ($hasRefereeProfile) {
+                    $menuItem = [
+                        'label' => 'Hồ sơ Trọng tài',
+                        'svg' => $item['svg'] ?? null,
+                        'route' => 'admin.account.refereeProfile',
+                        'url' => route('admin.account.refereeProfile'),
+                        'active' => $currentRoute === 'admin.account.refereeProfile' || 
+                            str_starts_with($currentRoute, 'admin.account.refereeProfile'),
+                    ];
+                    $items[] = $menuItem;
+                }
+                
+                // Skip item này vì đã được xử lý đặc biệt ở trên
                 continue;
             }
             
@@ -131,7 +134,13 @@ class AdminMenuHelper
                 'url' => null,
                 'route' => null,
                 'active' => false,
+                'onclick' => null,
             ];
+            
+            // Xử lý onclick (nếu có)
+            if (isset($item['onclick'])) {
+                $menuItem['onclick'] = $item['onclick'];
+            }
             
             // Xử lý URL/Route
             if (isset($item['route'])) {

@@ -9,7 +9,7 @@
             $cssFirstView       = $manifest['resources/sources/main/page-first-view.scss']['file'];
         @endphp
         <style type="text/css">
-            {!! file_get_contents(asset('build/' . $cssFirstView)) !!}
+            {!! file_get_contents(public_path('build/' . $cssFirstView)) !!}
         </style>
     @endif
 @endpush

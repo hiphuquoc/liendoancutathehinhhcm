@@ -592,9 +592,8 @@ class TrainerManagementController extends Controller
                             $user->name = $trainer->name;
                             $user->position = $trainer->position;
                             $user->phone = $trainer->phone;
-                                $user->email = $trainer->email;
-                                $user->save();
-                            }
+                            $user->email = $trainer->email;
+                            $user->save();
                         }
 
                         // Tạo QR code

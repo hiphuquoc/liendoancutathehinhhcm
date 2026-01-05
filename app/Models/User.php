@@ -78,6 +78,20 @@ class User extends Authenticatable {
         return $this->hasMany(\App\Models\Order::class, 'email', 'email');
     }
 
+    /**
+     * Relation với Trainer (HLV)
+     */
+    public function hasTrainer() {
+        return $this->hasOne(\App\Models\Trainer::class, 'user_id', 'id');
+    }
+
+    /**
+     * Relation với Referee (Trọng tài)
+     */
+    public function hasReferee() {
+        return $this->hasOne(\App\Models\Referee::class, 'user_id', 'id');
+    }
+
     public function hasRole($role) {
         return $this->role === $role;
     }

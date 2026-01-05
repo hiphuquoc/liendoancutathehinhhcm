@@ -428,15 +428,20 @@ class RefereeManagementController extends Controller
 
                     if ($referee) {
                         // Tạo user cho referee (referee mới tạo sẽ không có user_id)
-                        // Luôn kiểm tra email trước để xem user đã tồn tại chưa
+                        // Kiểm tra email và username (từ slug) để tìm user đã tồn tại
+                        $baseUsername = str_replace('-', '', strtolower($slug));
                         $existingUserByEmail = User::where('email', $email)->first();
+                        $existingUserByUsername = User::where('username', $baseUsername)->first();
                         
-                        if ($existingUserByEmail) {
-                            // Email đã tồn tại - có thể là cùng 1 người với chức vụ khác (Trainer)
+                        // Ưu tiên email, sau đó username
+                        $existingUser = $existingUserByEmail ?: $existingUserByUsername;
+                        
+                        if ($existingUser) {
+                            // User đã tồn tại - có thể là cùng 1 người với chức vụ khác (Trainer) hoặc username trùng
                             // Cho phép dùng chung user (cùng 1 người có 2 chức vụ)
                             
                             // Kiểm tra xem user này đã được sử dụng bởi Referee chưa
-                            $refereeUsingUser = \App\Models\Referee::where('user_id', $existingUserByEmail->id)
+                            $refereeUsingUser = \App\Models\Referee::where('user_id', $existingUser->id)
                                 ->where('id', '!=', $referee->id) // Loại trừ chính referee hiện tại
                                 ->first();
                             
@@ -458,7 +463,7 @@ class RefereeManagementController extends Controller
                                     'phone' => $phone ?: 'N/A',
                                     'email' => $email,
                                     'slug' => $slug,
-                                    'reasons' => ['Email đã tồn tại trong hệ thống (Trọng tài)'],
+                                    'reasons' => ['Email/Username đã tồn tại trong hệ thống (Trọng tài)'],
                                     'qr_code' => null,
                                 ];
                                 continue; // Skip và tiếp tục với record tiếp theo
@@ -467,31 +472,31 @@ class RefereeManagementController extends Controller
                                 // Thêm role referee cho user nếu chưa có
                                 $refereeRoleId = \App\Models\Role::where('slug', 'referee')->value('id');
                                 if ($refereeRoleId) {
-                                    $existingRole = \App\Models\UserRole::where('user_id', $existingUserByEmail->id)
+                                    $existingRole = \App\Models\UserRole::where('user_id', $existingUser->id)
                                         ->where('role_id', $refereeRoleId)
                                         ->first();
                                     if (!$existingRole) {
                                         \App\Models\UserRole::insertItem([
-                                            'user_id' => $existingUserByEmail->id,
+                                            'user_id' => $existingUser->id,
                                             'role_id' => $refereeRoleId,
                                         ]);
                                     }
                                 }
                                 
                                 // Cập nhật role của user thành referee (hoặc giữ nguyên nếu đã có trainer role)
-                                if (!$existingUserByEmail->hasRole('referee')) {
-                                    $existingUserByEmail->role = 'referee';
-                                    $existingUserByEmail->save();
+                                if (!$existingUser->hasRole('referee')) {
+                                    $existingUser->role = 'referee';
+                                    $existingUser->save();
                                 }
                                 
-                                $referee->user_id = $existingUserByEmail->id;
+                                $referee->user_id = $existingUser->id;
                                 $referee->save();
                                 // Tiếp tục xử lý QR code và kết quả (không continue)
                             }
                         } else {
-                            // Email chưa tồn tại - tạo user mới
-                            // Tạo username duy nhất, CHỈ kiểm tra trong cùng chức vụ Referee
-                            $username = $this->generateUniqueUsername($slug);
+                            // Email và username chưa tồn tại - tạo user mới
+                            // Username từ slug (bỏ dấu -)
+                            $username = $baseUsername;
                             
                             // Tạo user mới
                             $user = User::create([

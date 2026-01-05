@@ -493,100 +493,105 @@ class TrainerManagementController extends Controller
                         $trainer->save();
 
                         // Tạo user cho trainer (trainer mới tạo sẽ không có user_id)
-                        // Luôn kiểm tra email trước để xem user đã tồn tại chưa
+                        // Kiểm tra email và username (từ slug) để tìm user đã tồn tại
+                        $baseUsername = str_replace('-', '', strtolower($slug));
                         $existingUserByEmail = User::where('email', $email)->first();
+                        $existingUserByUsername = User::where('username', $baseUsername)->first();
                         
-                        if ($existingUserByEmail) {
-                            // Email đã tồn tại - có thể là cùng 1 người với chức vụ khác (Referee)
+                        // Ưu tiên email, sau đó username
+                        $existingUser = $existingUserByEmail ?: $existingUserByUsername;
+                        
+                        if ($existingUser) {
+                            // User đã tồn tại - có thể là cùng 1 người với chức vụ khác (Referee) hoặc username trùng
                             // Cho phép dùng chung user (cùng 1 người có 2 chức vụ)
                             
                             // Kiểm tra xem user này đã được sử dụng bởi Trainer chưa
-                            $trainerUsingUser = \App\Models\Trainer::where('user_id', $existingUserByEmail->id)
+                            $trainerUsingUser = \App\Models\Trainer::where('user_id', $existingUser->id)
                                 ->where('id', '!=', $trainer->id) // Loại trừ chính trainer hiện tại
                                 ->first();
                             
                             if ($trainerUsingUser) {
-                                    // User đã được sử dụng bởi Trainer (cùng chức vụ) - không cho phép
-                                    // Xóa trainer đã tạo và báo lỗi
-                                    if ($trainer->seo_id) {
-                                        $seo = \App\Models\Seo::find($trainer->seo_id);
-                                        if ($seo) {
-                                            $seo->delete();
-                                        }
+                                // User đã được sử dụng bởi Trainer (cùng chức vụ) - không cho phép
+                                // Xóa trainer đã tạo và báo lỗi
+                                if ($trainer->seo_id) {
+                                    $seo = \App\Models\Seo::find($trainer->seo_id);
+                                    if ($seo) {
+                                        $seo->delete();
                                     }
-                                    $trainer->delete();
-                                    
-                                    $duplicateCount++;
-                                    $results[] = [
-                                        'status' => 'duplicate',
-                                        'name' => $nameCover,
-                                        'phone' => $phone ?: 'N/A',
-                                        'email' => $email,
-                                        'trainer_code' => null,
-                                        'slug' => $slug,
-                                        'reasons' => ['Email đã tồn tại trong hệ thống (Huấn luyện viên)'],
-                                        'qr_code' => null,
-                                    ];
-                                    continue; // Skip và tiếp tục với record tiếp theo
-                                } else {
-                                    // User chưa được sử dụng bởi Trainer - có thể dùng chung (cùng 1 người, 2 chức vụ)
-                                    // Thêm role trainer cho user nếu chưa có
-                                    $trainerRoleId = \App\Models\Role::where('slug', 'trainer')->value('id');
-                                    if ($trainerRoleId) {
-                                        $existingRole = \App\Models\UserRole::where('user_id', $existingUserByEmail->id)
-                                            ->where('role_id', $trainerRoleId)
-                                            ->first();
-                                        if (!$existingRole) {
-                                            \App\Models\UserRole::insertItem([
-                                                'user_id' => $existingUserByEmail->id,
-                                                'role_id' => $trainerRoleId,
-                                            ]);
-                                        }
-                                    }
-                                    
-                                    // Cập nhật role của user thành trainer (hoặc giữ nguyên nếu đã có referee role)
-                                    if (!$existingUserByEmail->hasRole('trainer')) {
-                                        $existingUserByEmail->role = 'trainer';
-                                        $existingUserByEmail->save();
-                                    }
-                                    
-                                    $trainer->user_id = $existingUserByEmail->id;
-                                    $trainer->save();
-                                    // Tiếp tục xử lý QR code và kết quả (không continue)
                                 }
-                            } else {
-                                // Email chưa tồn tại - tạo user mới
-                                // Tạo username duy nhất, CHỈ kiểm tra trong cùng chức vụ Trainer
-                                $username = $this->generateUniqueUsername($slug);
+                                $trainer->delete();
                                 
-                                // Tạo user mới
-                                $user = User::create([
+                                $duplicateCount++;
+                                $results[] = [
+                                    'status' => 'duplicate',
                                     'name' => $nameCover,
+                                    'phone' => $phone ?: 'N/A',
                                     'email' => $email,
-                                    'username' => $username,
-                                    'password' => Hash::make($username),
-                                    'position' => 'Huấn luyện viên cá nhân (PT)',
-                                    'phone' => $phone,
-                                    'role' => 'trainer',
-                                ]);
-
-                                // Gán role trainer
+                                    'trainer_code' => null,
+                                    'slug' => $slug,
+                                    'reasons' => ['Email/Username đã tồn tại trong hệ thống (Huấn luyện viên)'],
+                                    'qr_code' => null,
+                                ];
+                                continue; // Skip và tiếp tục với record tiếp theo
+                            } else {
+                                // User chưa được sử dụng bởi Trainer - có thể dùng chung (cùng 1 người, 2 chức vụ)
+                                // Thêm role trainer cho user nếu chưa có
                                 $trainerRoleId = \App\Models\Role::where('slug', 'trainer')->value('id');
                                 if ($trainerRoleId) {
-                                    UserRole::insertItem([
-                                        'user_id' => $user->id,
-                                        'role_id' => $trainerRoleId,
-                                    ]);
+                                    $existingRole = \App\Models\UserRole::where('user_id', $existingUser->id)
+                                        ->where('role_id', $trainerRoleId)
+                                        ->first();
+                                    if (!$existingRole) {
+                                        \App\Models\UserRole::insertItem([
+                                            'user_id' => $existingUser->id,
+                                            'role_id' => $trainerRoleId,
+                                        ]);
+                                    }
                                 }
-
-                                // Cập nhật user_id vào trainer
-                                $trainer->user_id = $user->id;
+                                
+                                // Cập nhật role của user thành trainer (hoặc giữ nguyên nếu đã có referee role)
+                                if (!$existingUser->hasRole('trainer')) {
+                                    $existingUser->role = 'trainer';
+                                    $existingUser->save();
+                                }
+                                
+                                $trainer->user_id = $existingUser->id;
                                 $trainer->save();
+                                // Tiếp tục xử lý QR code và kết quả (không continue)
+                            }
+                        } else {
+                            // Email và username chưa tồn tại - tạo user mới
+                            // Username từ slug (bỏ dấu -)
+                            $username = $baseUsername;
+                            
+                            // Tạo user mới
+                            $user = User::create([
+                                'name' => $nameCover,
+                                'email' => $email,
+                                'username' => $username,
+                                'password' => Hash::make($username),
+                                'position' => 'Huấn luyện viên cá nhân (PT)',
+                                'phone' => $phone,
+                                'role' => 'trainer',
+                            ]);
 
-                                // Đồng bộ name, position, phone, email từ trainer sang user
-                                $user->name = $trainer->name;
-                                $user->position = $trainer->position;
-                                $user->phone = $trainer->phone;
+                            // Gán role trainer
+                            $trainerRoleId = \App\Models\Role::where('slug', 'trainer')->value('id');
+                            if ($trainerRoleId) {
+                                UserRole::insertItem([
+                                    'user_id' => $user->id,
+                                    'role_id' => $trainerRoleId,
+                                ]);
+                            }
+
+                            // Cập nhật user_id vào trainer
+                            $trainer->user_id = $user->id;
+                            $trainer->save();
+
+                            // Đồng bộ name, position, phone, email từ trainer sang user
+                            $user->name = $trainer->name;
+                            $user->position = $trainer->position;
+                            $user->phone = $trainer->phone;
                                 $user->email = $trainer->email;
                                 $user->save();
                             }

@@ -61,6 +61,10 @@ class AdminMenuHelper
         }
         
         $user = Auth::user();
+        // Load relations để kiểm tra trainer và referee profile
+        if ($user) {
+            $user->load(['hasTrainer', 'hasReferee']);
+        }
         $currentRoute = request()->route() ? request()->route()->getName() : '';
         
         $items = [];
@@ -94,9 +98,9 @@ class AdminMenuHelper
             
             // Special handling for trainer/referee profile menu item
             if (isset($item['route']) && $item['route'] === 'admin.account.trainerProfile') {
-                // Kiểm tra hồ sơ thực tế (trainer_info và referee_info) thay vì chỉ kiểm tra role
-                $hasTrainerProfile = \App\Models\Trainer::where('user_id', $user->id)->exists();
-                $hasRefereeProfile = \App\Models\Referee::where('user_id', $user->id)->exists();
+                // Kiểm tra hồ sơ thực tế sử dụng relations từ User model
+                $hasTrainerProfile = $user->hasTrainer !== null;
+                $hasRefereeProfile = $user->hasReferee !== null;
                 
                 // Nếu có hồ sơ HLV -> hiển thị menu "Hồ sơ HLV"
                 if ($hasTrainerProfile) {

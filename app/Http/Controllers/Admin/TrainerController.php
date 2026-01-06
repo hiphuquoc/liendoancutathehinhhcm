@@ -215,6 +215,13 @@ class TrainerController extends Controller {
                 $requestData['trainer_description'] = $requestData['description'];
             }
             $seo                = $this->BuildInsertUpdateModel->buildArrayTableSeo($requestData, $typePage, $dataPath);
+            
+            // Tạo giá trị mặc định cho seo_description khi tạo mới (nếu chưa có)
+            if($action=='create' && empty($seo['seo_description'])) {
+                $trainerName = $request->get('name') ?? '';
+                $seo['seo_description'] = "Huấn luyện viên {$trainerName} là chuyên gia giàu kinh nghiệm trong lĩnh vực cử tạ - thể hình. Với kiến thức chuyên sâu và phương pháp đào tạo hiện đại, {$trainerName} cam kết giúp học viên đạt được mục tiêu thể hình một cách an toàn và hiệu quả.";
+            }
+            
             if($action=='edit'){
                 Seo::updateItem($idSeo, $seo);
             }else {

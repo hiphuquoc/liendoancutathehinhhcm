@@ -36,7 +36,9 @@ class BuildInsertUpdateModel {
             if(!empty($dataForm['ordering'])) $result['ordering'] = $dataForm['ordering'];
             $result['topic']                    = null;
             $result['seo_title']                = !empty($dataForm['seo_title']) ? trim($dataForm['seo_title']) : $result['title'];
-            $result['seo_description']          = !empty($dataForm['seo_description']) ? trim($dataForm['seo_description']) : $result['description'];
+            // seo_description dùng riêng cho SEO, không tự động đồng bộ từ description
+            // Nếu không có seo_description trong form, giữ nguyên giá trị cũ hoặc để trống
+            $result['seo_description']          = !empty($dataForm['seo_description']) ? trim($dataForm['seo_description']) : '';
             $result['slug']                     = !empty($dataForm['slug']) ? mb_strtolower(trim($dataForm['slug'])) : '';
             /* slug full */
             $result['slug_full']                = !empty($result['slug']) ? Seo::buildFullUrl($result['slug'], $pageParent) : '';

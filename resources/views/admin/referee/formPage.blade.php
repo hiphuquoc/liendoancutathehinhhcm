@@ -63,4 +63,34 @@
         'value' => old('email') ?? $item->email ?? null,
         'tooltip' => 'Đây là Email của Trọng tài hiển thị trên website'
     ])
+    
+    @php
+        // Lấy description từ seo.description (referee_info không có cột description)
+        $descriptionValue = old('description');
+        if (is_null($descriptionValue)) {
+            // Nếu có itemSeo, lấy từ seo.description
+            if (!empty($itemSeo->description)) {
+                $descriptionValue = $itemSeo->description;
+            } elseif (!empty($item->seo->description)) {
+                $descriptionValue = $item->seo->description;
+            } elseif (empty($item->id)) {
+                // Nếu tạo mới và chưa có giá trị, đặt giá trị mặc định
+                $descriptionValue = 'Viết giới thiệu ngắn về bạn!';
+            } else {
+                $descriptionValue = '';
+            }
+        }
+    @endphp
+    
+    @include('admin.components.formField', [
+        'label' => 'Giới thiệu ngắn',
+        'name' => 'description',
+        'type' => 'textarea',
+        'required' => false,
+        'value' => $descriptionValue,
+        'tooltip' => 'Giới thiệu ngắn về trọng tài (sẽ được đồng bộ với mô tả SEO)',
+        'charCount' => true,
+        'maxLength' => 2000,
+        'rows' => 7
+    ])
         @endif

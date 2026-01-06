@@ -309,7 +309,8 @@ class AccountController extends Controller
             if (!empty($trainer->seo_id)) {
                 $seoUpdateData = [];
                 
-                // Sync description to seo.description (chỉ nếu có giá trị)
+                // Update description vào seo.description (dùng cho hiển thị)
+                // KHÔNG đồng bộ với seo_description (dùng riêng cho SEO, chỉ admin chỉnh sửa)
                 if ($request->has('description') && !empty(trim($request->description))) {
                     $seoUpdateData['description'] = trim($request->description);
                 }
@@ -638,8 +639,9 @@ class AccountController extends Controller
             if (!empty($referee->seo_id)) {
                 $seoUpdateData = [];
                 
-                // Sync description to seo.description (chỉ nếu có giá trị)
-                // Note: referee_info không có cột description, nên chỉ update vào seo
+                // Update description vào seo.description (dùng cho hiển thị)
+                // Note: referee_info không có cột description, nên chỉ update vào seo.description
+                // KHÔNG đồng bộ với seo_description (dùng riêng cho SEO, chỉ admin chỉnh sửa)
                 if ($request->has('description')) {
                     $seoUpdateData['description'] = trim($request->description) ?: null;
                 }

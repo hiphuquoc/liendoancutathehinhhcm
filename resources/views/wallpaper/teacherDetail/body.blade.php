@@ -10,14 +10,16 @@
                 $summary      = '';
                 $fullName   = $item->name ?? '';
                 $job        = $item->position ?? '';
-                $summary    = $item->description ?? ''; // Use description from trainer_info first
+                // Ưu tiên lấy description từ trainer_info/referee_info (nếu có)
+                $summary    = $item->description ?? '';
+                // Nếu không có, lấy từ seo.description (không dùng seo_description nữa)
                 foreach($item->seos as $seo){
                   if(!empty($seo->infoSeo->language) && $seo->infoSeo->language == $language){
                     if(empty($fullName)) $fullName = $seo->infoSeo->title ?? '';
                     if(empty($job)) $job = '';
-                    // Fallback to seo_description if description is empty
+                    // Lấy từ seo.description (dùng cho hiển thị), không dùng seo_description (dùng cho SEO)
                     if(empty($summary)) {
-                        $summary = $seo->infoSeo->seo_description ?? '';
+                        $summary = $seo->infoSeo->description ?? '';
                     }
                   }
                 }

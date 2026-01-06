@@ -121,6 +121,13 @@ class RefereeController extends Controller {
             }
             /* update page */
             $seo                = $this->BuildInsertUpdateModel->buildArrayTableSeo($request->all(), $typePage, $dataPath);
+            
+            // Tạo giá trị mặc định cho seo_description khi tạo mới (nếu chưa có)
+            if($action=='create' && empty($seo['seo_description'])) {
+                $refereeName = $request->get('name') ?? '';
+                $seo['seo_description'] = "Trọng tài {$refereeName} là chuyên gia uy tín, được đào tạo bài bản trong lĩnh vực cử tạ - thể hình. Với tinh thần công tâm và chuyên nghiệp, {$refereeName} đảm bảo mọi giải đấu diễn ra công bằng, minh bạch và đúng chuẩn quốc gia - quốc tế.";
+            }
+            
             if($action=='edit'){
                 Seo::updateItem($idSeo, $seo);
             }else {

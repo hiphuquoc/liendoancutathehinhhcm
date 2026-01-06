@@ -84,12 +84,26 @@
     ])
 
     <!-- SEO Description -->
+    @php
+        $seoDescriptionValue = old('seo_description') ?? $itemSeo['seo_description'] ?? '';
+        // Tạo giá trị mặc định khi tạo mới (chỉ cho trainer_info và referee_info)
+        if(empty($seoDescriptionValue)) {
+            $itemType = $itemSeo['type'] ?? $item->seo->type ?? null;
+            $itemName = $item->name ?? '';
+            
+            if($itemType === 'trainer_info' && !empty($itemName)) {
+                $seoDescriptionValue = "Huấn luyện viên {$itemName} là chuyên gia giàu kinh nghiệm trong lĩnh vực cử tạ - thể hình. Với kiến thức chuyên sâu và phương pháp đào tạo hiện đại, {$itemName} cam kết giúp học viên đạt được mục tiêu thể hình một cách an toàn và hiệu quả.";
+            } elseif($itemType === 'referee_info' && !empty($itemName)) {
+                $seoDescriptionValue = "Trọng tài {$itemName} là chuyên gia uy tín, được đào tạo bài bản trong lĩnh vực cử tạ - thể hình. Với tinh thần công tâm và chuyên nghiệp, {$itemName} đảm bảo mọi giải đấu diễn ra công bằng, minh bạch và đúng chuẩn quốc gia - quốc tế.";
+            }
+        }
+    @endphp
     @include('admin.components.formField', [
         'label' => 'Mô tả SEO',
         'name' => 'seo_description',
         'type' => 'textarea',
         'required' => true,
-        'value' => old('seo_description') ?? $itemSeo['seo_description'] ?? '',
+        'value' => $seoDescriptionValue,
         'tooltip' => 'Đây là Mô tả được hiển thị ngoài Google... Tốt nhất nên từ 140 - 160 ký tự, có chứa từ khóa chính tranh top và mô tả được cái người dùng đang cần',
         'charCount' => true,
         'maxLength' => 500,

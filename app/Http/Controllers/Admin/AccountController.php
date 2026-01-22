@@ -11,8 +11,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Trainer;
 use App\Models\Referee;
-use App\Http\Requests\SubAdminTrainerProfileRequest;
-use App\Http\Requests\SubAdminRefereeProfileRequest;
+use App\Http\Requests\TrainerProfileRequest;
+use App\Http\Requests\RefereeProfileRequest;
 use App\Helpers\Upload;
 use App\Models\Seo;
 use App\Models\TrainerAchievement;
@@ -95,12 +95,12 @@ class AccountController extends Controller
             DB::beginTransaction();
             
             // Update name (only for admin)
-            if (!$isSubAdmin) {
+            if (!$isTrainerOrReferee) {
                 $user->name = trim($request->name);
             }
-            // All users (admin and sub-admin) can update email
+            // All users (admin, trainer, and referee) can update email
             $user->email = trim($request->email);
-            // Sub-admin can update other fields like address, phone, position if needed
+            // Trainer and referee can update other fields like address, phone, position if needed
             if ($request->has('address')) {
                 $user->address = trim($request->address);
             }
@@ -205,7 +205,7 @@ class AccountController extends Controller
     }
 
     /**
-     * Hiển thị trang chỉnh sửa hồ sơ HLV của sub-admin
+     * Hiển thị trang chỉnh sửa hồ sơ HLV của trainer
      */
     public function trainerProfile(Request $request)
     {
@@ -241,9 +241,9 @@ class AccountController extends Controller
     }
     
     /**
-     * Cập nhật hồ sơ HLV của sub-admin (chỉ update các field được phép)
+     * Cập nhật hồ sơ HLV của trainer (chỉ update các field được phép)
      */
-    public function updateTrainerProfile(SubAdminTrainerProfileRequest $request)
+    public function updateTrainerProfile(TrainerProfileRequest $request)
     {
         $user = Auth::user();
         
@@ -437,7 +437,7 @@ class AccountController extends Controller
             ];
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('Error updating trainer profile (sub-admin)', [
+            \Log::error('Error updating trainer profile', [
                 'user_id' => $user->id,
                 'trainer_id' => $trainer->id,
                 'error' => $e->getMessage(),
@@ -540,7 +540,7 @@ class AccountController extends Controller
     }
     
     /**
-     * Hiển thị trang chỉnh sửa hồ sơ Trọng tài của sub-admin
+     * Hiển thị trang chỉnh sửa hồ sơ Trọng tài của referee
      */
     public function refereeProfile(Request $request)
     {
@@ -574,9 +574,9 @@ class AccountController extends Controller
     }
     
     /**
-     * Cập nhật hồ sơ Trọng tài của sub-admin (chỉ update các field được phép)
+     * Cập nhật hồ sơ Trọng tài của referee (chỉ update các field được phép)
      */
-    public function updateRefereeProfile(SubAdminRefereeProfileRequest $request)
+    public function updateRefereeProfile(RefereeProfileRequest $request)
     {
         $user = Auth::user();
         
@@ -768,7 +768,7 @@ class AccountController extends Controller
             ];
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('Error updating referee profile (sub-admin)', [
+            \Log::error('Error updating referee profile', [
                 'user_id' => $user->id,
                 'referee_id' => $referee->id,
                 'error' => $e->getMessage(),

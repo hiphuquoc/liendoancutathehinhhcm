@@ -10,7 +10,7 @@
 --}}
 @php
     $user = $user ?? auth()->user();
-    $isSubAdmin = $user->hasRole('sub-admin') && !$user->hasRole('admin');
+    $isTrainerOrReferee = ($user->hasRole('trainer') || $user->hasRole('referee')) && !$user->hasRole('admin');
     
     // For trainer profile, get values from trainer model
     $nameValue = old('name') ?? ($item->name ?? $user->name ?? '');
@@ -38,8 +38,8 @@
 @endif
 
 <!-- Name -->
-@if($isSubAdmin && $formType === 'account')
-    {{-- Sub-admin: readonly display with hidden input --}}
+@if($isTrainerOrReferee && $formType === 'account')
+    {{-- Trainer/Referee: readonly display with hidden input --}}
     <div class="adminFormField">
         <div class="adminFormField_labelWrapper">
             <label class="adminFormField_label">
@@ -64,8 +64,8 @@
 @endif
 
 <!-- Position -->
-@if($isSubAdmin && $formType === 'account')
-    {{-- Sub-admin: readonly display with hidden input --}}
+@if($isTrainerOrReferee && $formType === 'account')
+    {{-- Trainer/Referee: readonly display with hidden input --}}
     <div class="adminFormField">
         <div class="adminFormField_labelWrapper">
             <label class="adminFormField_label">

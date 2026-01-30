@@ -94,7 +94,7 @@ class VideoController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'video_file' => 'required_without:video_info_id|file|mimes:mp4,webm,mov,avi,mkv,flv|max:102400', // Max 100GB
-            'thumbnail' => 'nullable|url|max:1000',
+            'thumbnail' => 'nullable|string|max:1000', // Allow both URL and GCS path
             'thumbnail_file' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:5120', // Max 5MB
             'category' => 'nullable|string|max:100',
             'ordering' => 'nullable|integer|min:0',
@@ -106,7 +106,7 @@ class VideoController extends Controller
             'video_file.file' => 'File video không hợp lệ.',
             'video_file.mimes' => 'File video phải có định dạng: mp4, webm, mov, avi, mkv, flv.',
             'video_file.max' => 'File video không được vượt quá 100GB.',
-            'thumbnail.url' => 'URL thumbnail không hợp lệ.',
+            'thumbnail.max' => 'URL thumbnail không được vượt quá 1000 ký tự.',
             'thumbnail_file.image' => 'File thumbnail phải là ảnh.',
             'thumbnail_file.mimes' => 'File thumbnail phải có định dạng: jpeg, jpg, png, gif.',
             'thumbnail_file.max' => 'File thumbnail không được vượt quá 5MB.',
@@ -142,13 +142,29 @@ class VideoController extends Controller
                 }
             }
 
+            // Handle status - checkbox sends '1' when checked, hidden input sends '0' when unchecked
+            $status = 0;
+            if ($request->has('status')) {
+                $statusValue = $request->get('status');
+                // Checkbox sends '1' when checked, or we get 'on' from old checkbox behavior
+                $status = ($statusValue == '1' || $statusValue == 'on') ? 1 : 0;
+            } else {
+                // If no status sent, check old value for edit mode
+                if (!empty($id) && $type === 'edit') {
+                    $existingVideo = Video::find($id);
+                    if ($existingVideo) {
+                        $status = $existingVideo->status ? 1 : 0;
+                    }
+                }
+            }
+
             $data = [
                 'title' => $request->get('title'),
                 'description' => $request->get('description'),
                 'thumbnail' => $thumbnailUrl,
                 'category' => $request->get('category'),
                 'ordering' => $request->get('ordering') ? (int)$request->get('ordering') : 0,
-                'status' => $request->has('status') && $request->get('status') == 'on' ? 1 : 0,
+                'status' => $status,
             ];
 
             // Chỉ cập nhật file_cloud nếu có file mới

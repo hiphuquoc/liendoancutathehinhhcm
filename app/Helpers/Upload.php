@@ -181,6 +181,16 @@ class Upload {
                     'fileUrl' => $fileUrl,
                 ]);
 
+                if ($putResult !== true) {
+                    Log::channel('single')->error('[VideoUpload] GCS put() returned false - upload failed', [
+                        'fileUrl' => $fileUrl,
+                        'bucket' => config('filesystems.disks.gcs.bucket'),
+                    ]);
+                    throw new \RuntimeException(
+                        'Không thể tải video lên Google Cloud Storage. Kiểm tra quyền ghi bucket và credentials (service account) trên server.'
+                    );
+                }
+
                 $result = $fileUrl;
             } catch (\Throwable $e) {
                 Log::channel('single')->error('[VideoUpload] Exception in uploadVideo', [

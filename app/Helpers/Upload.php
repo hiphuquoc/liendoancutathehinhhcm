@@ -159,39 +159,38 @@ class Upload {
                     'bucket' => config('filesystems.disks.gcs.bucket') ?? 'not_set',
                 ]);
 
-                Log::channel('single')->info('[VideoUpload] Reading file contents...');
-                $contents = file_get_contents($realPath);
-                $contentsSize = $contents !== false ? strlen($contents) : 0;
-                Log::channel('single')->info('[VideoUpload] File contents read', [
-                    'contentsSize' => $contentsSize,
-                    'memory_usage_mb' => round(memory_get_usage(true) / 1024 / 1024, 2),
-                ]);
-
-                if ($contents === false || $contentsSize === 0) {
-                    Log::channel('single')->error('[VideoUpload] file_get_contents failed or empty', [
-                        'realPath' => $realPath,
-                    ]);
-                    return $result;
+                // Dùng stream thay vì load cả file vào RAM → ổn định hơn với file lớn, tránh hết memory
+                Log::channel('single')->info('[VideoUpload] Opening stream for GCS put...');
+                $stream = fopen($realPath, 'r');
+                if ($stream === false) {
+                    Log::channel('single')->error('[VideoUpload] fopen failed', ['realPath' => $realPath]);
+                    throw new \RuntimeException('Không thể mở file video để upload.');
                 }
 
-                Log::channel('single')->info('[VideoUpload] Calling gcsDisk->put()...');
-                $putResult = $gcsDisk->put($fileUrl, $contents);
-                Log::channel('single')->info('[VideoUpload] GCS put completed', [
-                    'putResult' => $putResult,
-                    'fileUrl' => $fileUrl,
-                ]);
-
-                if ($putResult !== true) {
-                    Log::channel('single')->error('[VideoUpload] GCS put() returned false - upload failed', [
+                try {
+                    Log::channel('single')->info('[VideoUpload] Calling gcsDisk->put() with stream...');
+                    $putResult = $gcsDisk->put($fileUrl, $stream);
+                    Log::channel('single')->info('[VideoUpload] GCS put completed', [
+                        'putResult' => $putResult,
                         'fileUrl' => $fileUrl,
-                        'bucket' => config('filesystems.disks.gcs.bucket'),
                     ]);
-                    throw new \RuntimeException(
-                        'Không thể tải video lên Google Cloud Storage. Kiểm tra quyền ghi bucket và credentials (service account) trên server.'
-                    );
-                }
 
-                $result = $fileUrl;
+                    if ($putResult !== true) {
+                        Log::channel('single')->error('[VideoUpload] GCS put() returned false', [
+                            'fileUrl' => $fileUrl,
+                            'bucket' => config('filesystems.disks.gcs.bucket'),
+                        ]);
+                        throw new \RuntimeException(
+                            'Không thể tải video lên Google Cloud Storage. Kiểm tra quyền ghi bucket và credentials (service account) trên server.'
+                        );
+                    }
+
+                    $result = $fileUrl;
+                } finally {
+                    if (is_resource($stream)) {
+                        fclose($stream);
+                    }
+                }
             } catch (\Throwable $e) {
                 Log::channel('single')->error('[VideoUpload] Exception in uploadVideo', [
                     'message' => $e->getMessage(),

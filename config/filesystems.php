@@ -79,6 +79,7 @@ return [
 
         'gcs' => [
             'driver' => 'gcs',
+            'throw' => true, // Bật để thấy lỗi thật từ GCS (permission, ACL, ...) thay vì put() chỉ trả false
             // 'key_file_path' => env('GOOGLE_CLOUD_KEY_FILE', base_path('credentials.json')),
             'key_file' => [
                 "type"=> "service_account",

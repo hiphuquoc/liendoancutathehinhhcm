@@ -6,6 +6,10 @@
 .env
 .env.backup
 .env.production
+# Không commit file key Google Cloud (Service Account JSON)
+/storage/app/gcs-key.json
+/storage/app/*-gcs*.json
+/credentials.json
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml

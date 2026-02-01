@@ -93,7 +93,7 @@ class VideoController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'video_file' => 'required_without:video_info_id|file|mimes:mp4,webm,mov,avi,mkv,flv|max:102400', // Max 100GB
+            'video_file' => 'required_without:video_info_id|file|mimes:mp4,webm,mov,avi,mkv,flv|max:104857600', // Max 100GB (value in KB: 100*1024*1024)
             'thumbnail' => 'nullable|string|max:1000', // Allow both URL and GCS path
             'thumbnail_file' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:5120', // Max 5MB
             'category' => 'nullable|string|max:100',

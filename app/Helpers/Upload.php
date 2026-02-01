@@ -5,6 +5,7 @@ namespace App\Helpers;
 use Intervention\Image\ImageManagerStatic;
 use App\Models\SystemFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class Upload {
     
@@ -119,34 +120,83 @@ class Upload {
     
     public static function uploadVideo($requestFile, $filename, $folderUpload) {
         $result = null;
-        // Kiểm tra xem có file được chọn không
+
+        Log::channel('single')->info('[VideoUpload] START', [
+            'filename' => $filename,
+            'folderUpload' => $folderUpload,
+            'has_request_file' => !empty($requestFile),
+            'request_file_class' => $requestFile ? get_class($requestFile) : null,
+        ]);
+
         if (!empty($requestFile)) {
-            
-            // ===== Folder upload
-            $videoFile = $requestFile;
+            try {
+                $videoFile = $requestFile;
+                $extension = pathinfo($filename, PATHINFO_EXTENSION);
 
-            // ===== Set filename & check exists
-            $extension = pathinfo($filename)['extension'];
+                $allowedExtensions = ['mp4', 'webm', 'mov', 'avi', 'mkv', 'flv'];
+                if (!in_array(strtolower($extension), $allowedExtensions)) {
+                    Log::channel('single')->warning('[VideoUpload] Extension not allowed', [
+                        'extension' => $extension,
+                        'allowed' => $allowedExtensions,
+                    ]);
+                    return $result;
+                }
 
-            // Chỉ chấp nhận file video (mp4, webm, mov, avi, etc.)
-            $allowedExtensions = ['mp4', 'webm', 'mov', 'avi', 'mkv', 'flv'];
-            if (!in_array(strtolower($extension), $allowedExtensions)) {
-                return $result; // Trả về null nếu không phải file video
+                $fileUrl = $folderUpload . $filename;
+                $realPath = $videoFile->getRealPath();
+                $fileSizeBytes = $realPath && file_exists($realPath) ? filesize($realPath) : null;
+
+                Log::channel('single')->info('[VideoUpload] Before GCS put', [
+                    'fileUrl' => $fileUrl,
+                    'fileSizeBytes' => $fileSizeBytes,
+                    'fileSizeMB' => $fileSizeBytes ? round($fileSizeBytes / 1024 / 1024, 2) : null,
+                    'gcs_disk_exists' => Storage::hasMacro('disk') ? 'yes' : 'check',
+                ]);
+
+                $gcsDisk = Storage::disk('gcs');
+                Log::channel('single')->info('[VideoUpload] GCS disk obtained', [
+                    'driver' => config('filesystems.disks.gcs.driver') ?? 'unknown',
+                    'bucket' => config('filesystems.disks.gcs.bucket') ?? 'not_set',
+                ]);
+
+                Log::channel('single')->info('[VideoUpload] Reading file contents...');
+                $contents = file_get_contents($realPath);
+                $contentsSize = $contents !== false ? strlen($contents) : 0;
+                Log::channel('single')->info('[VideoUpload] File contents read', [
+                    'contentsSize' => $contentsSize,
+                    'memory_usage_mb' => round(memory_get_usage(true) / 1024 / 1024, 2),
+                ]);
+
+                if ($contents === false || $contentsSize === 0) {
+                    Log::channel('single')->error('[VideoUpload] file_get_contents failed or empty', [
+                        'realPath' => $realPath,
+                    ]);
+                    return $result;
+                }
+
+                Log::channel('single')->info('[VideoUpload] Calling gcsDisk->put()...');
+                $putResult = $gcsDisk->put($fileUrl, $contents);
+                Log::channel('single')->info('[VideoUpload] GCS put completed', [
+                    'putResult' => $putResult,
+                    'fileUrl' => $fileUrl,
+                ]);
+
+                $result = $fileUrl;
+            } catch (\Throwable $e) {
+                Log::channel('single')->error('[VideoUpload] Exception in uploadVideo', [
+                    'message' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'exception_class' => get_class($e),
+                ]);
+                Log::channel('single')->error('[VideoUpload] Stack trace: ' . $e->getTraceAsString());
+                throw $e;
             }
-
-            // Đường dẫn lưu file
-            $fileUrl = $folderUpload . $filename;
-
-            // Sử dụng disk GCS (Google Cloud Storage)
-            $gcsDisk = Storage::disk('gcs');
-
-            // Lưu file video trực tiếp lên storage
-            $gcsDisk->put($fileUrl, file_get_contents($videoFile->getRealPath()));
-
-            // Trả về đường dẫn file
-            $result = $fileUrl;
+        } else {
+            Log::channel('single')->warning('[VideoUpload] requestFile is empty, returning null');
         }
 
+        Log::channel('single')->info('[VideoUpload] END', ['result' => $result]);
         return $result;
     }
 

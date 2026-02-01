@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Video;
 use App\Helpers\Upload;
+use Illuminate\Support\Facades\Log;
 
 class VideoController extends Controller
 {
@@ -124,10 +125,24 @@ class VideoController extends Controller
             // Upload video file nếu có
             $videoFileCloud = null;
             if ($request->hasFile('video_file')) {
+                Log::info('[VideoController] Video upload START', [
+                    'has_file' => true,
+                    'client_name' => $request->file('video_file')->getClientOriginalName(),
+                    'client_size' => $request->file('video_file')->getSize(),
+                ]);
                 $name = !empty($request->get('title')) ? \Illuminate\Support\Str::slug($request->get('title')) : time();
                 $fileName = $name . '-' . time() . '.' . $request->file('video_file')->getClientOriginalExtension();
                 $folderUpload = config('main_' . env('APP_NAME') . '.google_cloud_storage.videos');
+                Log::info('[VideoController] Before Upload::uploadVideo', [
+                    'fileName' => $fileName,
+                    'folderUpload' => $folderUpload,
+                    'config_key' => 'main_' . env('APP_NAME') . '.google_cloud_storage.videos',
+                ]);
                 $videoFileCloud = Upload::uploadVideo($request->file('video_file'), $fileName, $folderUpload);
+                Log::info('[VideoController] After Upload::uploadVideo', [
+                    'videoFileCloud' => $videoFileCloud,
+                    'is_null' => $videoFileCloud === null,
+                ]);
             }
 
             // Upload thumbnail nếu có file
@@ -204,8 +219,15 @@ class VideoController extends Controller
 
             return redirect()->route('admin.video.list')->with('message', $message);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             DB::rollBack();
+            Log::error('[VideoController] Exception in createAndUpdate', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'exception_class' => get_class($e),
+            ]);
+            Log::error('[VideoController] Stack trace: ' . $e->getTraceAsString());
             $message = [
                 'type' => 'danger',
                 'message' => '<strong>Lỗi!</strong> ' . $e->getMessage()

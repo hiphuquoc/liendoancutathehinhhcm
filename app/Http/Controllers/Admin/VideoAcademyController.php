@@ -216,23 +216,67 @@ class VideoAcademyController extends Controller
             }
             
             // Upload thumbnail
+            $thumbnailUrl = trim($request->get('thumbnail_url') ?? '');
+            $removeImage = $request->get('remove_image');
+            
             if ($request->hasFile('thumbnail')) {
+                // Ưu tiên 1: Upload file mới
                 $fileName = time() . '_thumb_' . $request->file('thumbnail')->getClientOriginalName();
                 $folderUpload = config('main_' . env('APP_NAME') . '.google_cloud_storage.wallpapers', 'wallpapers');
                 $dataPath = Upload::uploadWallpaper($request->file('thumbnail'), $fileName, $folderUpload);
                 if (!empty($dataPath)) {
                     $data['thumbnail'] = $dataPath;
+                    
+                    // Xóa file cũ trên cloud storage nếu có (khi edit)
+                    if ($type === 'edit' && !empty($id)) {
+                        $existingVideo = Video::find($id);
+                        if ($existingVideo && !empty($existingVideo->thumbnail) && !filter_var($existingVideo->thumbnail, FILTER_VALIDATE_URL)) {
+                            try {
+                                Upload::deleteWallpaper($existingVideo->thumbnail);
+                            } catch (\Exception $e) {
+                                // Log error nhưng không dừng quá trình
+                            }
+                        }
+                    }
                 }
-            } elseif ($type === 'edit' && !empty($request->get('thumbnail_url'))) {
-                // Giữ nguyên thumbnail nếu không upload mới
+            } elseif (!empty($removeImage) && empty($thumbnailUrl)) {
+                // Ưu tiên 2: Xóa thumbnail nếu có remove_image và không có URL mới
+                $data['thumbnail'] = null;
+                
+                // Xóa file trên cloud storage nếu có
+                if ($type === 'edit' && !empty($id)) {
+                    $existingVideo = Video::find($id);
+                    if ($existingVideo && !empty($existingVideo->thumbnail) && !filter_var($existingVideo->thumbnail, FILTER_VALIDATE_URL)) {
+                        try {
+                            Upload::deleteWallpaper($existingVideo->thumbnail);
+                        } catch (\Exception $e) {
+                            // Log error nhưng không dừng quá trình
+                        }
+                    }
+                }
+            } elseif (!empty($thumbnailUrl)) {
+                // Ưu tiên 3: Sử dụng URL mới (từ input) - ưu tiên hơn remove_image
+                $data['thumbnail'] = $thumbnailUrl;
+                
+                // Xóa file cũ trên cloud storage nếu có (khi edit và chuyển từ file sang URL)
+                if ($type === 'edit' && !empty($id)) {
+                    $existingVideo = Video::find($id);
+                    if ($existingVideo && !empty($existingVideo->thumbnail) && !filter_var($existingVideo->thumbnail, FILTER_VALIDATE_URL)) {
+                        try {
+                            Upload::deleteWallpaper($existingVideo->thumbnail);
+                        } catch (\Exception $e) {
+                            // Log error nhưng không dừng quá trình
+                        }
+                    }
+                }
+            } elseif ($type === 'edit' && !empty($id)) {
+                // Giữ nguyên thumbnail cũ khi edit và không có thay đổi
                 $existingVideo = Video::find($id);
                 if ($existingVideo && !empty($existingVideo->thumbnail)) {
                     $data['thumbnail'] = $existingVideo->thumbnail;
                 }
-            } elseif (!empty($request->get('thumbnail_url'))) {
-                // Nếu là URL trực tiếp
-                $data['thumbnail'] = $request->get('thumbnail_url');
             }
+            // Nếu là create và không có gì -> không set thumbnail (để null)
             
             // Set created_by / updated_by
             if ($type === 'create') {

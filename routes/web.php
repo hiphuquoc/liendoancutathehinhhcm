@@ -298,10 +298,8 @@ Route::middleware(['auth', 'role:admin,trainer,referee'])->group(function () {
         Route::prefix('video-academy')->group(function(){
             // Index: /he-thong/video-academy (xem video - tất cả roles)
             Route::get('/', [VideoAcademyController::class, 'index'])->name('admin.videoAcademy.index');
-            // Show: /he-thong/video-academy/{id} (xem chi tiết - tất cả roles)
-            Route::get('/{id}', [VideoAcademyController::class, 'show'])->name('admin.videoAcademy.show');
             
-            // Admin CRUD routes (chỉ admin)
+            // Admin CRUD routes (chỉ admin) - Phải đặt trước route {id} để tránh conflict
             Route::middleware('role:admin')->group(function(){
                 // List management: /he-thong/video-academy/list
                 Route::get('/list', [VideoAcademyController::class, 'list'])->name('admin.videoAcademy.list');
@@ -312,6 +310,9 @@ Route::middleware(['auth', 'role:admin,trainer,referee'])->group(function () {
                 // Delete: GET /he-thong/video-academy/delete?id={id}
                 Route::get('/delete', [VideoAcademyController::class, 'delete'])->name('admin.videoAcademy.delete');
             });
+            
+            // Show: /he-thong/video-academy/{id} (xem chi tiết - tất cả roles) - Phải đặt sau các route cụ thể
+            Route::get('/{id}', [VideoAcademyController::class, 'show'])->name('admin.videoAcademy.show');
         });
         /* ===== Order ===== */
         Route::prefix('order')->group(function(){

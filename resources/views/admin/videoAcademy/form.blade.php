@@ -10,20 +10,27 @@
     
     // Thumbnail URL
     $thumbnailUrl = null;
-    if(!empty($item->thumbnail)) {
+    $thumbnailUrlSmall = null;
+    if(!empty($item) && !empty($item->thumbnail)) {
         $thumbnailUrl = $item->thumbnail_url;
+        // Try to get small version if available
+        if(filter_var($thumbnailUrl, FILTER_VALIDATE_URL)) {
+            $thumbnailUrlSmall = $thumbnailUrl;
+        } else {
+            $thumbnailUrlSmall = \App\Helpers\Image::getUrlImageSmallByUrlImage($item->thumbnail);
+        }
     }
     
     // Video URL
     $videoUrl = null;
-    if(!empty($item->file_cloud)) {
+    if(!empty($item) && !empty($item->file_cloud)) {
         $videoUrl = $item->video_url;
     }
 @endphp
 
 <form id="formAction" action="{{ route($submit) }}" method="POST" enctype="multipart/form-data" class="adminFormPage_form">
     @csrf
-    <input type="hidden" id="id" name="id" value="{{ !empty($item->id) && $type != 'copy' ? $item->id : 0 }}" />
+    <input type="hidden" id="id" name="id" value="{{ !empty($item) && !empty($item->id) && $type != 'copy' ? $item->id : 0 }}" />
     <input type="hidden" id="type" name="type" value="{{ $type }}" />
 
     <div class="adminFormPage">
@@ -85,7 +92,7 @@
                                 'name' => 'title',
                                 'type' => 'textarea',
                                 'required' => true,
-                                'value' => old('title') ?? $item->title ?? null,
+                                'value' => old('title') ?? (!empty($item) ? $item->title : null),
                                 'tooltip' => 'Tiêu đề của video',
                                 'charCount' => true,
                                 'maxLength' => 255,
@@ -96,7 +103,7 @@
                                 'label' => 'Mô tả',
                                 'name' => 'description',
                                 'type' => 'textarea',
-                                'value' => old('description') ?? $item->description ?? null,
+                                'value' => old('description') ?? (!empty($item) ? $item->description : null),
                                 'tooltip' => 'Mô tả về video',
                                 'rows' => 4
                             ])
@@ -105,7 +112,7 @@
                                 'label' => 'Danh mục',
                                 'name' => 'category',
                                 'type' => 'text',
-                                'value' => old('category') ?? $item->category ?? null,
+                                'value' => old('category') ?? (!empty($item) ? $item->category : null),
                                 'tooltip' => 'Danh mục của video',
                                 'placeholder' => 'Nhập tên danh mục...'
                             ])
@@ -119,13 +126,16 @@
                                 'label' => 'Thứ tự',
                                 'name' => 'ordering',
                                 'type' => 'number',
-                                'value' => old('ordering') ?? $item->ordering ?? 0,
+                                'value' => old('ordering') ?? (!empty($item) ? $item->ordering : 0),
                                 'tooltip' => 'Thứ tự hiển thị (số càng nhỏ càng hiển thị trước)',
                                 'min' => 0
                             ])
 
                             @php
-                                $statusChecked = !empty($item->status) && ($item->status == 1);
+                                $statusChecked = false;
+                                if(!empty($item) && !empty($item->status) && ($item->status == 1)) {
+                                    $statusChecked = true;
+                                }
                                 if(old('status') !== null) {
                                     $statusChecked = old('status') === 'on';
                                 }
@@ -157,92 +167,134 @@
                         </div>
                         <div class="adminFormSection_body">
                             @if(!empty($videoUrl))
-                                <div class="adminFormPage_preview" style="margin-bottom: 16px;">
+                                <div class="adminFormPage_preview" style="margin-bottom: 1.5rem;">
                                     <div class="adminFormPage_preview_label">Video hiện tại:</div>
-                                    <video controls style="max-width: 100%; max-height: 400px; border-radius: 8px;">
-                                        <source src="{{ $videoUrl }}" type="video/mp4">
-                                        Trình duyệt của bạn không hỗ trợ video HTML5.
-                                    </video>
+                                    <div style="position: relative; width: 100%; max-width: 800px; margin-top: 0.75rem; background: #000; border-radius: var(--admin-radius-md); overflow: hidden;">
+                                        <video controls style="width: 100%; display: block;">
+                                            <source src="{{ $videoUrl }}" type="video/mp4">
+                                            <source src="{{ $videoUrl }}" type="video/webm">
+                                            Trình duyệt của bạn không hỗ trợ video HTML5.
+                                        </video>
+                                    </div>
                                     <input type="hidden" name="file_cloud_url" value="{{ $videoUrl }}" />
                                 </div>
                             @endif
                             
-                            @include('admin.components.formField', [
-                                'label' => 'Upload Video',
+                            @include('admin.components.formFileUpload', [
                                 'name' => 'file_cloud',
-                                'type' => 'file',
-                                'value' => null,
-                                'tooltip' => 'Upload file video (MP4, WebM, ...)',
-                                'accept' => 'video/*'
-                            ])
-                        </div>
-                    </div>
-
-                    <!-- Thumbnail -->
-                    <div class="adminFormSection">
-                        <div class="adminFormSection_header">
-                            <div class="adminFormSection_header_icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                                    <circle cx="8.5" cy="8.5" r="1.5"/>
-                                    <polyline points="21 15 16 10 5 21"/>
-                                </svg>
-                            </div>
-                            <div class="adminFormSection_header_info">
-                                <h2 class="adminFormSection_title">Ảnh đại diện</h2>
-                            </div>
-                        </div>
-                        <div class="adminFormSection_body">
-                            @if(!empty($thumbnailUrl))
-                                <div class="adminFormPage_preview" style="margin-bottom: 16px;">
-                                    <div class="adminFormPage_preview_label">Ảnh đại diện hiện tại:</div>
-                                    <img src="{{ $thumbnailUrl }}?v={{ time() }}" alt="Thumbnail" style="max-width: 300px; border-radius: 8px;" />
-                                    <input type="hidden" name="thumbnail_url" value="{{ $thumbnailUrl }}" />
-                                </div>
-                            @endif
-                            
-                            @include('admin.components.formField', [
-                                'label' => 'Upload Ảnh đại diện',
-                                'name' => 'thumbnail',
-                                'type' => 'file',
-                                'value' => null,
-                                'tooltip' => 'Upload ảnh thumbnail cho video',
-                                'accept' => 'image/*'
-                            ])
-                            
-                            @include('admin.components.formField', [
-                                'label' => 'Hoặc nhập URL ảnh',
-                                'name' => 'thumbnail_url',
-                                'type' => 'text',
-                                'value' => old('thumbnail_url') ?? ($thumbnailUrl && !filter_var($thumbnailUrl, FILTER_VALIDATE_URL) ? null : $thumbnailUrl),
-                                'tooltip' => 'Nhập URL ảnh đại diện nếu không upload file'
+                                'label' => 'Upload Video',
+                                'required' => false,
+                                'accept' => 'video/*',
+                                'tooltip' => 'Upload file video (MP4, WebM, ...). Nếu upload file mới sẽ thay thế file hiện tại.'
                             ])
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Footer Actions -->
-            <div class="adminFormPage_footer">
-                <div class="adminFormPage_footer_actions">
-                    <a href="{{ route('admin.videoAcademy.list') }}" class="adminButton adminButton--secondary">
-                        <span>Hủy</span>
-                    </a>
-                    <button type="submit" class="adminButton adminButton--primary">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-                            <polyline points="17 21 17 13 7 13 7 21"/>
-                            <polyline points="7 3 7 8 15 8"/>
-                        </svg>
-                        <span>{{ $type == 'edit' ? 'Cập nhật' : 'Tạo mới' }}</span>
-                    </button>
+                <!-- Sidebar -->
+                <div class="adminFormPage_sidebar">
+                    <div class="adminFormSidebar">
+                        <div class="adminFormSidebar_sticky">
+                            <!-- Actions -->
+                            @include('admin.components.formActions', [
+                                'backRoute' => 'admin.videoAcademy.list'
+                            ])
+
+                            <!-- Thumbnail Upload -->
+                            @include('admin.components.formImageUpload', [
+                                'name' => 'thumbnail',
+                                'label' => 'Ảnh đại diện',
+                                'required' => false,
+                                'currentImage' => $thumbnailUrlSmall,
+                                'aspectRatio' => '16/9',
+                                'tooltip' => 'Ảnh thumbnail cho video (tỷ lệ 16:9)'
+                            ])
+                            
+                            <!-- Thumbnail URL Input -->
+                            <div style="margin-top: 1.5rem;">
+                                @include('admin.components.formField', [
+                                    'label' => 'Hoặc nhập URL ảnh',
+                                    'name' => 'thumbnail_url',
+                                    'type' => 'text',
+                                    'value' => old('thumbnail_url') ?? ($thumbnailUrl && filter_var($thumbnailUrl, FILTER_VALIDATE_URL) ? $thumbnailUrl : null),
+                                    'tooltip' => 'Nhập URL ảnh đại diện nếu không upload file',
+                                    'placeholder' => 'https://...'
+                                ])
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </form>
 
-@endsection
-
-
+@push('scriptCustom')
+<script>
+// Character count update
+document.addEventListener('DOMContentLoaded', function() {
+    const charCountFields = document.querySelectorAll('.adminFormField_charCount');
+    
+    charCountFields.forEach(function(charCount) {
+        const fieldId = charCount.getAttribute('data-field');
+        const field = document.getElementById(fieldId);
+        const currentSpan = charCount.querySelector('.adminFormField_charCount_current');
+        
+        if (field && currentSpan) {
+            // Update on input
+            field.addEventListener('input', function() {
+                const length = this.value ? this.value.length : 0;
+                currentSpan.textContent = length;
+            });
+            
+            // Initial count
+            if (field.value) {
+                currentSpan.textContent = field.value.length;
+            }
+        }
+    });
+    
+    // Handle thumbnail URL input and remove_image logic
+    const thumbnailUrlInput = document.querySelector('input[name="thumbnail_url"]');
+    const form = document.getElementById('formAction');
+    
+    if (thumbnailUrlInput && form) {
+        // When user enters a new URL, remove the remove_image flag
+        thumbnailUrlInput.addEventListener('input', function() {
+            const removeImageInput = form.querySelector('input[name="remove_image"]');
+            if (removeImageInput && this.value.trim() !== '') {
+                // User is entering a new URL, so remove the remove_image flag
+                removeImageInput.remove();
+            }
+        });
+        
+        // Override removeCurrentImage function for thumbnail to also clear thumbnail_url
+        const originalRemoveCurrentImage = window.removeCurrentImage;
+        if (originalRemoveCurrentImage) {
+            window.removeCurrentImage = function(inputId, previewId, uploadAreaId) {
+                // Call original function
+                originalRemoveCurrentImage(inputId, previewId, uploadAreaId);
+                
+                // If this is the thumbnail input, clear thumbnail_url
+                if (inputId === 'thumbnail' || inputId.includes('thumbnail')) {
+                    thumbnailUrlInput.value = '';
+                }
+            };
+        }
+        
+        // Also handle the remove button directly
+        setTimeout(function() {
+            const thumbnailRemoveBtn = form.querySelector('button[onclick*="removeCurrentImage"][onclick*="thumbnail"]');
+            if (thumbnailRemoveBtn) {
+                const originalOnClick = thumbnailRemoveBtn.getAttribute('onclick');
+                thumbnailRemoveBtn.addEventListener('click', function(e) {
+                    // Clear thumbnail_url when removing thumbnail
+                    thumbnailUrlInput.value = '';
+                });
+            }
+        }, 500);
+    }
+});
+</script>
 @endpush
+@endsection

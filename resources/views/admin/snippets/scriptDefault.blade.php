@@ -5,6 +5,9 @@
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 <!-- jQuery Repeater Plugin -->
 <script src="{{ asset('sources/admin/app-assets/vendors/js/forms/repeater/jquery.repeater.min.js') }}"></script>
+<!-- START:: TIPTAP (thay TinyMCE) -->
+<script type="module" src="{{ asset('sources/admin/app-assets/js/tiptap-editor.js') }}"></script>
+<!-- END:: TIPTAP -->
 <!-- === END:: Scripts Default === -->
 <script defer>
     $(window).on('load', function () {
@@ -135,10 +138,7 @@
     /* ai chatgpt */
     function chatGpt(input, id, language, id_prompt, id_content){ /* id_content hiện chỉ dùng cho content do có nhiều phần tử content dùng chung 1 prompt */
         addAndRemoveClass($(input), 'inputLoading', 'inputSuccess inputError');
-        /* vô hiệu hóa box dùng tiny */ 
         const idBox = $(input).attr('id');
-        var editor = tinymce.get(idBox);
-        if (editor) editor.getBody().setAttribute('contenteditable', false);
         $.ajax({
             url         : '{{ route("main.chatGpt") }}',
             type        : 'get',
@@ -147,38 +147,25 @@
                 id, language, id_prompt, id_content
             }
         }).done(function(data){
-            /* điền dữ liệu vào */
             if(data.error=='') {
                 addAndRemoveClass($(input), 'inputSuccess', 'inputLoading inputError');
                 $(input).val(data.content);
+                if (typeof window.setTiptapContent === 'function' && idBox) {
+                    window.setTiptapContent(idBox, data.content);
+                }
             }else {
                 addAndRemoveClass($(input), 'inputError', 'inputLoading inputSuccess');
             }
-            /* Cập nhật nội dung Tiny */
-            if($(input).is('textarea')){
-                const idBox = $(input).attr('id');
-                if (editor) {
-                    editor.setContent(data.content);
-                    editor.getBody().setAttribute('contenteditable', true);
-                }
-            }
-            /* đếm lại kí tụ nếu có */
-            const idInput           = $(input).attr('id');
+            const idInput = $(input).attr('id');
             if(idInput){
-                const lengthInput   = $(input).val().length;
-                const elemtShow     = $(document).find("[data-charactor='" + idInput + "']");
+                const lengthInput = $(input).val().length;
+                const elemtShow = $(document).find("[data-charactor='" + idInput + "']");
                 elemtShow.html(lengthInput);
             }
         })
     }
     function addAndRemoveClass(input, add, remove){
         $(input).addClass(add).removeClass(remove);
-        /* kiểm tra có phải input tiny */ 
-        var inputTiny = $(input).next();
-        if(inputTiny.hasClass('tox-tinymce')){
-            inputTiny.addClass(add).removeClass(remove);
-        }
-        /* kiểm tra có phải input tag */
         var inputTag = $(input).prev();
         if(inputTag.is('tags')){
             inputTag.addClass(add).removeClass(remove);

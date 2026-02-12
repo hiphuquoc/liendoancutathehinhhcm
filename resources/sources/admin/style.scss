@@ -1840,7 +1840,7 @@ html .content {
     border: 2px dashed #000 !important;
 }
 .boxInputLoading {
-    .select2, .tox-tinymce, .tagify {
+    .select2, .tiptap-editor-wrapper, .tagify {
         border: 2px dashed #000 !important;
     }
 }
@@ -1848,7 +1848,7 @@ html .content {
     border: 2px dashed #D80032 !important;
 }
 .boxInputError {
-    .select2, .tox-tinymce, .tagify {
+    .select2, .tiptap-editor-wrapper, .tagify {
         border: 2px dashed #D80032 !important;
     }
 }
@@ -1856,7 +1856,7 @@ html .content {
     border: 2px dashed #28c76f !important;
 }
 .boxInputSuccess {
-    .select2, .tox-tinymce, .tagify {
+    .select2, .tiptap-editor-wrapper, .tagify {
         border: 2px dashed #28c76f !important;
     }
 }
@@ -2063,6 +2063,101 @@ html .content {
 }
 .toast .toast-close-button {
     top: -10px !important;
+}
+
+// ===== Tiptap Editor (thay TinyMCE) =====
+.tiptap-editor-wrapper {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.tiptap-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 8px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+.tiptap-toolbar-btn {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  color: #495057;
+  transition: background 0.15s;
+  &:hover { background: #e9ecef; }
+  &.is-active, &--active {
+    background: $color-primary-01;
+    color: $color-primary;
+  }
+}
+.tiptap-toolbar-sep {
+  width: 1px;
+  height: 20px;
+  background: #dee2e6;
+  margin: 0 4px;
+}
+.tiptap-editor-box { min-height: 280px; }
+.tiptap-html-source-wrap {
+  padding: 0;
+  min-height: 280px;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  position: relative;
+  background: #282c34;
+}
+.tiptap-html-source-textarea {
+  width: 100%;
+  min-height: 280px;
+  padding: 12px 14px;
+  font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  border: none;
+  outline: none;
+  resize: vertical;
+  background: #282c34;
+  color: #abb2bf;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
+}
+.tiptap-html-source-textarea::placeholder {
+  color: rgba(171, 178, 191, 0.5);
+}
+.tiptap-prose {
+  padding: 12px 14px;
+  min-height: 256px;
+  outline: none;
+  font-size: 15px;
+  line-height: 1.6;
+  p { margin: 0 0 0.75em; }
+  h1, h2, h3 { margin: 1em 0 0.5em; font-weight: 600; }
+  h1 { font-size: 1.5em; }
+  h2 { font-size: 1.25em; }
+  h3 { font-size: 1.1em; }
+  ul, ol { padding-left: 1.5em; margin: 0.5em 0; }
+  blockquote { border-left: 4px solid #dee2e6; padding-left: 1em; margin: 1em 0; color: #6c757d; }
+  code { background: #f1f3f4; padding: 0.2em 0.4em; border-radius: 4px; font-size: 0.9em; }
+  pre { background: #2d2d2d; color: #f8f8f2; padding: 1em; border-radius: 6px; overflow-x: auto; }
+  pre code { background: none; padding: 0; }
+  a { color: $color-link; text-decoration: underline; }
+  table { border-collapse: collapse; width: 100%; margin: 1em 0; }
+  th, td { border: 1px solid #dee2e6; padding: 8px 12px; text-align: left; }
+  th { background: #f8f9fa; font-weight: 600; }
+  img { max-width: 100%; height: auto; }
 }
 
 @import 'order.scss';

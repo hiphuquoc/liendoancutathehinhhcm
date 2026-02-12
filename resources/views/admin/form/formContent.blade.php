@@ -25,8 +25,8 @@
                     <i class="fa-solid fa-arrow-rotate-left reloadContentIcon" onclick="{{ $chatgptDataAndEvent['eventChatgpt'] ?? null }}"></i>
                 @endif
             </div>
-            <div class="{{ !empty($flagCopySource)&&$flagCopySource==true ? 'boxInputSuccess' : '' }}">
-                <textarea class="form-control tinySelector" id="{{ $idBox }}"  name="content[{{ $ordering }}]" rows="30" {{ $chatgptDataAndEvent['dataChatgpt'] ?? null }}>{!! is_array($content) ? implode('', $content) : $content !!}</textarea>
+            <div class="{{ !empty($flagCopySource)&&$flagCopySource==true ? 'boxInputSuccess' : '' }} tiptap-editor-wrapper">
+                <textarea class="form-control tiptap-textarea" id="{{ $idBox }}" name="content[{{ $ordering }}]" rows="30" {{ $chatgptDataAndEvent['dataChatgpt'] ?? null }}>{!! is_array($content) ? implode('', $content) : $content !!}</textarea>
             </div>
         </div>
         {{-- <div class="formBox_full_item">
@@ -34,33 +34,3 @@
         </div> --}}
     </div>
 </div>
-
-@pushonce('scriptCustom')
-    <!-- Place the first <script> tag in your HTML's <head> -->
-    
-    <script src="https://cdn.tiny.cloud/1/{{ env('TINY_API_KEY') }}/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
-    <script>
-        // plugins: 'code anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount linkchecker',
-        tinymce.init({
-            selector: '.tinySelector',
-            menubar: false,
-            plugins: 'code anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags typography inlinecss',
-            toolbar: 'code | blocks | bold italic underline strikethrough | link image media table | align lineheight | checklist numlist bullist indent | emoticons charmap | removeformat',
-            tinycomments_mode: 'embedded',
-            tinycomments_author: 'Author name',
-            mergetags_list: [
-            { value: 'First.Name', title: 'First Name' },
-            { value: 'Email', title: 'Email' },
-            ],
-            ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
-            entity_encoding : "raw",
-            init_instance_callback: function (editor) {
-                editor.on('change', function () {
-                    Prism.highlightAll();
-                });
-            }
-        });
-
-    </script>
-
-@endpushonce

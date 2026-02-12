@@ -33,7 +33,6 @@ use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\CategoryBlogController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\DocumentController;
-use App\Http\Controllers\Admin\VideoController;
 use App\Http\Controllers\Admin\VideoAcademyController;
 use App\Http\Controllers\Admin\TrainerController;
 use App\Http\Controllers\Admin\TrainerManagementController;
@@ -295,25 +294,24 @@ Route::middleware(['auth', 'role:admin,trainer,referee'])->group(function () {
             // Delete: GET /he-thong/document/delete?id={id}
             Route::get('/delete', [DocumentController::class, 'delete'])->name('admin.document.delete');
         });
-        /* ===== Video (Admin) ===== */
-        Route::prefix('video')->group(function(){
-            // List: /he-thong/video
-            Route::get('/', [VideoController::class, 'list'])->name('admin.video.list');
-            // View/Form: /he-thong/video/view?id={id}&type={create|edit}
-            Route::get('/view', [VideoController::class, 'view'])->name('admin.video.view');
-            // Watch: /he-thong/video/watch?id={id}
-            Route::get('/watch', [VideoController::class, 'watch'])->name('admin.video.watch');
-            // Create/Update: POST /he-thong/video/createAndUpdate
-            Route::post('/createAndUpdate', [VideoController::class, 'createAndUpdate'])->name('admin.video.createAndUpdate');
-            // Delete: GET /he-thong/video/delete?id={id}
-            Route::get('/delete', [VideoController::class, 'delete'])->name('admin.video.delete');
-        });
-        /* ===== Video Academy (Sub-admin & Admin) ===== */
+        /* ===== Video Academy ===== */
         Route::prefix('video-academy')->group(function(){
-            // Index: /he-thong/video-academy
+            // Index: /he-thong/video-academy (xem video - tất cả roles)
             Route::get('/', [VideoAcademyController::class, 'index'])->name('admin.videoAcademy.index');
-            // Show: /he-thong/video-academy/{id}
+            // Show: /he-thong/video-academy/{id} (xem chi tiết - tất cả roles)
             Route::get('/{id}', [VideoAcademyController::class, 'show'])->name('admin.videoAcademy.show');
+            
+            // Admin CRUD routes (chỉ admin)
+            Route::middleware('role:admin')->group(function(){
+                // List management: /he-thong/video-academy/list
+                Route::get('/list', [VideoAcademyController::class, 'list'])->name('admin.videoAcademy.list');
+                // View/Form: /he-thong/video-academy/view?id={id}&type={create|edit|copy}
+                Route::get('/view', [VideoAcademyController::class, 'view'])->name('admin.videoAcademy.view');
+                // Create/Update: POST /he-thong/video-academy/createAndUpdate
+                Route::post('/createAndUpdate', [VideoAcademyController::class, 'createAndUpdate'])->name('admin.videoAcademy.createAndUpdate');
+                // Delete: GET /he-thong/video-academy/delete?id={id}
+                Route::get('/delete', [VideoAcademyController::class, 'delete'])->name('admin.videoAcademy.delete');
+            });
         });
         /* ===== Order ===== */
         Route::prefix('order')->group(function(){

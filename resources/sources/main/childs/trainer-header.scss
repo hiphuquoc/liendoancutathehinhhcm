@@ -9,16 +9,24 @@
 
 .hero-trainers {
     position: relative;
-    padding: 60px 0 80px;
+    padding: 80px 0 100px;
     background: #fff; // Default to white
     overflow: hidden;
+
+    @media (max-width: 1199px) {
+        padding: 70px 0 90px;
+    }
 
     @media (max-width: 991px) {
         padding: 50px 0 60px;
     }
 
-    @media (max-width: 576px) {
+    @media (max-width: 768px) {
         padding: 40px 0 50px;
+    }
+
+    @media (max-width: 576px) {
+        padding: 30px 0 40px;
     }
 }
 
@@ -31,9 +39,7 @@
     margin-right: auto;
     padding: 0 15px;
 
-    @media(max-width: 576px) {
-        margin-bottom: 30px;
-    }
+
 
     // Badge
     .section-badge {
@@ -63,6 +69,10 @@
 
     @media(max-width: 991px) {
         margin-bottom: 40px;
+    }
+
+    @media(max-width: 576px) {
+        margin-bottom: 30px;
     }
 
     .header-title {

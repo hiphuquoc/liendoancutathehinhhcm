@@ -5,28 +5,67 @@
 
 .homeAboutUs {
     position: relative;
-    padding: 80px 0;
+    padding: 80px 0 100px;
     overflow: hidden;
     background: #fff;
     font-family: $fontText;
 
+    @media (max-width: 1199px) {
+        padding: 70px 0 90px;
+    }
+
     @media (max-width: 991px) {
-        padding: 50px 0;
+        padding: 50px 0 60px;
     }
 
     @media (max-width: 576px) {
-        padding: 40px 0;
+        padding: 30px 0 40px;
+    }
+
+    // Custom Container
+    &_container {
+        width: 100%;
+        max-width: 1230px;
+        margin: 0 auto;
+        padding: 0 15px;
+
+        @media (max-width: 1250px) {
+            max-width: 1140px;
+        }
+
+        @media (max-width: 991px) {
+            max-width: 100%;
+            padding: 0 20px;
+        }
+    }
+
+    // Custom Grid Wrapper
+    &_wrapper {
+        display: flex;
+        align-items: center;
+        gap: 60px;
+
+        @media (max-width: 1199px) {
+            gap: 40px;
+        }
+
+        @media (max-width: 991px) {
+            flex-direction: column;
+            gap: 50px;
+        }
     }
 
     // ===== LEFT SIDE: IMAGES =====
     &_images {
         position: relative;
-        padding-right: 20px;
-        padding-bottom: 20px;
+        width: 50%; // Column width
+        padding-right: 0;
 
         @media (max-width: 991px) {
-            margin-bottom: 40px;
+            width: 100%;
             max-width: 500px;
+            padding-bottom: 20px;
+            margin-bottom: 0;
             margin-left: auto;
             margin-right: auto;
             padding-right: 0;
@@ -176,7 +215,12 @@
 
     // ===== RIGHT SIDE: CONTENT =====
     &_content {
-        padding-left: 30px;
+        width: 50%; // Column width
+        padding-left: 0;
+
+        @media (max-width: 991px) {
+            width: 100%;
+        }
 
         @media (max-width: 991px) {
             padding-left: 0;
@@ -204,43 +248,7 @@
             }
         }
 
-        .section-title {
-            font-family: $fontTitle;
-            font-size: 2.5rem;
-            font-weight: 800;
-            line-height: 1.25;
-            color: $colorTitle;
-            margin-bottom: 25px;
 
-            @media (max-width: 1199px) {
-                font-size: 2.2rem;
-            }
-
-            @media (max-width: 576px) {
-                font-size: 1.8rem;
-                margin-bottom: 20px;
-            }
-
-            .highlight {
-                color: $colorLv1;
-                position: relative;
-                z-index: 1;
-                display: inline-block;
-
-                // Underline accent
-                &::after {
-                    content: '';
-                    position: absolute;
-                    bottom: 4px;
-                    left: 0;
-                    right: 0;
-                    height: 8px;
-                    background: rgba($colorLv1, 0.15);
-                    z-index: -1;
-                    border-radius: 4px;
-                }
-            }
-        }
     }
 
     &_desc {

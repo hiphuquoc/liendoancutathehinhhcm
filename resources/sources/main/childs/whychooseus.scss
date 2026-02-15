@@ -4,27 +4,31 @@
 
 .why-choose-us {
     position: relative;
-    padding: 60px 0 80px;
+    padding: 80px 0 100px;
     overflow: hidden;
     // Brand Gradient for the whole section
     background: linear-gradient(135deg, rgba($colorLv1, 0.96), rgba($colorLv2, 0.96));
     color: #fff;
 
+    @media (max-width: 1199px) {
+        padding: 70px 0 90px;
+    }
+
     @media (max-width: 991px) {
         padding: 50px 0 60px;
     }
 
-    @media (max-width: 576px) {
+    @media (max-width: 768px) {
         padding: 40px 0 50px;
+    }
+
+    @media (max-width: 576px) {
+        padding: 30px 0 40px;
     }
 
     // Title Section
     .section-title {
-        font-family: $fontTitle;
-        font-size: 2.4rem;
-        font-weight: 800;
         margin-bottom: 20px;
-        line-height: 1.25;
         color: #fff; // White title
         text-transform: uppercase;
         background: none !important;
@@ -47,10 +51,6 @@
                 z-index: -1;
                 border-radius: 4px;
             }
-        }
-
-        @media (max-width: 576px) {
-            font-size: 1.8rem;
         }
     }
 
@@ -76,7 +76,16 @@
 
         .feature-item {
             background: #fff; // White cards for contrast
-            padding: 24px;
+            padding: 1.5rem;
+
+            @media(max-width: 1199px) {
+                padding: 1.25rem;
+            }
+
+            @media(max-width: 768px) {
+                padding: 1rem;
+            }
+
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

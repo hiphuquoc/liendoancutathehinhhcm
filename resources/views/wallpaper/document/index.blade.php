@@ -46,9 +46,8 @@
     <!-- content -->
     <div class="breadcrumbMobileBox"><!-- dùng để chống nhảy padding - margin so với các trang có breadcrumb --></div>
     <!-- Item Category Grid Box -->
-    @include('wallpaper.snippets.banner', [
-        'urlImage' => 'https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/course-bg-img.webp',
-    ])
+    <!-- Item Category Grid Box -->
+    {{-- Banner removed to use modern header style --}}
     @include('wallpaper.document.body')
 @endsection
 @push('modal')

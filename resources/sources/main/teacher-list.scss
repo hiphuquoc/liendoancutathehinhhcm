@@ -1,6 +1,7 @@
 @import 'childs/default.scss';
 @import 'childs/base.scss';
 
+@import 'childs/modal.scss';
 // ============================================
 // TRAINER LIST PAGE — Premium Design
 // Synced with trainer-detail.scss design language
@@ -27,13 +28,38 @@
         margin-bottom: 50px;
         position: relative;
 
+        @media(max-width: 991px) {
+            margin-bottom: 40px;
+        }
+
         @media(max-width: 576px) {
             margin-bottom: 30px;
         }
 
+        // Section Badge
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 24px;
+            background: rgba($colorLv1, 0.05);
+            border: 1px solid rgba($colorLv1, 0.1);
+            border-radius: 50px;
+            margin-bottom: 20px;
 
-        @media(max-width: 991px) {
-            margin-bottom: 40px;
+            i {
+                color: $colorLv1;
+                font-size: 0.9rem;
+            }
+
+            span {
+                font-family: $fontTitle;
+                font-size: 0.8rem;
+                font-weight: 700;
+                color: $colorLv1;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
         }
 
         .header-title {

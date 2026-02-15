@@ -61,6 +61,31 @@
         effectDropdown();
         effectLeftToRight();
         effectBottomToTop();
+
+        /* Header Scroll Behavior for Mobile (<991px) */
+        let lastScrollTop = 0;
+        const headerMain = document.querySelector('.header-main');
+        
+        window.addEventListener('scroll', function() {
+            // Only apply on mobile/tablet (<= 991px)
+            if (window.innerWidth > 991) {
+                if(headerMain) headerMain.style.transform = '';
+                return;
+            }
+            
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            if(scrollTop < 0) scrollTop = 0; // Prevent negative scroll (iOS bounce)
+            
+            // Threshold of 60px to avoid flickering at top
+            if (scrollTop > lastScrollTop && scrollTop > 60) {
+                // Scroll Down -> Hide
+                if(headerMain) headerMain.style.transform = 'translateY(-100%)';
+            } else {
+                // Scroll Up -> Show
+                if(headerMain) headerMain.style.transform = 'translateY(0)';
+            }
+            lastScrollTop = scrollTop;
+        });
     });
 
     /* Hiệu ứng fade in */

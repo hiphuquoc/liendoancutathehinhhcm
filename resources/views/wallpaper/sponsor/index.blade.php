@@ -2,11 +2,11 @@
 @push('cssFirstView')
     <!-- trường hợp là local thì dùng vite để chạy npm run dev lúc code -->
     @if(env('APP_ENV')=='local')
-        @vite('resources/sources/main/contact-first-view.scss')
+        @vite('resources/sources/main/page-first-view.scss')
     @else
         @php
             $manifest           = json_decode(file_get_contents(public_path('build/manifest.json')), true);
-            $cssFirstView       = $manifest['resources/sources/main/contact-first-view.scss']['file'];
+            $cssFirstView       = $manifest['resources/sources/main/page-first-view.scss']['file'];
         @endphp
         <style type="text/css">
             {!! file_get_contents(public_path('build/' . $cssFirstView)) !!}

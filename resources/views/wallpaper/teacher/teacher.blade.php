@@ -4,6 +4,10 @@
 
         {{-- ═══ Header Section ═══ --}}
         <div class="trainer-list-header">
+            <div class="section-badge">
+                <i class="fa-solid fa-users-gear"></i>
+                <span>Đội ngũ chuyên gia</span>
+            </div>
             <h1 class="header-title">Huấn Luyện Viên <span>Của Chúng Tôi</span></h1>
             <p class="header-desc">
                 Đội ngũ huấn luyện viên của chúng tôi là những chuyên gia hàng đầu, sở hữu kinh nghiệm thực tế 

@@ -63,7 +63,7 @@ class HomeController extends Controller {
                             $q->whereNotNull('image')->where('image', '!=', '');
                         })
                         ->inRandomOrder()
-                        ->take(3)
+                        ->take(20)
                         ->get();
             /* lấy sliders */
             $sliders = \App\Models\Slider::getActiveSliders($language);

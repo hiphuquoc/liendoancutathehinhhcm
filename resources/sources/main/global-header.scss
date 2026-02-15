@@ -27,6 +27,10 @@ $shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0
     align-items: center; // Critical for vertical centering
     padding: 0; // Reset padding to avoid asymmetry
 
+    @media (max-width: 991px) {
+        height: 55px; // Optimized concise height
+    }
+
     // Override potential external 'shrink' class
     &.shrink,
     &.scrolled {
@@ -37,6 +41,10 @@ $shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0
         padding: 0 !important; // Force remove padding
         display: flex;
         align-items: center;
+
+        @media (max-width: 991px) {
+            height: 55px !important; // Maintain consistent mobile height
+        }
     }
 
     .container {
@@ -66,7 +74,7 @@ $shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0
             object-fit: contain; // Maintain aspect ratio
 
             @media(max-width: 991px) {
-                height: 40px;
+                height: 32px; // Adjusted for 52.5px header
             }
         }
     }
@@ -76,7 +84,7 @@ $shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0
         height: 45px;
 
         @media(max-width: 991px) {
-            height: 35px;
+            height: 32px; // Maintain consistent mobile logo size
         }
     }
 
@@ -89,6 +97,53 @@ $shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0
         @media (min-width: 992px) {
             display: flex;
             gap: 20px;
+        }
+
+        // Horizontal Scroll for Laptop screens (Nav List ONLY)
+        @media (min-width: 992px) and (max-width: 1199px) {
+            display: flex;
+            align-items: center;
+            overflow: hidden; // Wrapper does NOT scroll
+            width: auto;
+            flex: 1; // Take available space
+            min-width: 0; // Essential for flex child scrolling
+
+            .nav-list {
+                flex: 1; // Take remaining space
+                overflow-x: auto; // SCROLL THIS
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+                padding-bottom: 0px;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+
+                // Refined Scrollbar
+                &::-webkit-scrollbar {
+                    height: 3px;
+                }
+
+                &::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+
+                &::-webkit-scrollbar-thumb {
+                    background: rgba($colorLv1, 0.3);
+                    border-radius: 4px;
+
+                    &:hover {
+                        background: rgba($colorLv1, 0.6);
+                    }
+                }
+            }
+
+            // Ensure button doesn't shrink and stays fixed
+            >a,
+            .btn,
+            .nav-button {
+                flex-shrink: 0;
+                margin-left: 10px;
+            }
         }
 
         .nav-list {
@@ -647,4 +702,8 @@ $shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0
 
 body {
     padding-top: $header-height;
+
+    @media (max-width: 991px) {
+        padding-top: 55px;
+    }
 }

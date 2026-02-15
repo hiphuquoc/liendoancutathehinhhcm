@@ -10,6 +10,8 @@
 // @import 'childs/right.scss';
 // @import 'childs/login.scss';
 @import 'childs/modal.scss';
+@import 'childs/sponsor.scss';
+@import 'teacher-list.scss';
 
 .pagePageBox {
     width: 100%;
@@ -51,7 +53,8 @@
         }
     }
 
-    thead, tbody {
+    thead,
+    tbody {
         tr {
             th {
                 font-size: 0.95rem;
@@ -60,16 +63,19 @@
                 font-weight: bold;
                 white-space: nowrap; // Ngăn văn bản xuống dòng
             }
+
             td {
                 font-size: 0.95rem;
                 padding: 0.75rem;
                 white-space: nowrap; // Ngăn văn bản xuống dòng
+
                 &.action {
                     display: flex;
                     justify-content: flex-end;
                     align-items: center;
                     gap: 0.5rem;
-                    > * {
+
+                    >* {
                         width: 35px;
                         height: 26px;
                         display: flex;
@@ -78,6 +84,7 @@
                         font-size: 1.3rem;
                         color: $bg-07;
                         cursor: pointer;
+
                         &:hover {
                             color: $colorLv2;
                         }
@@ -87,6 +94,7 @@
         }
     }
 }
+
 .noteDocument {
     font-size: 0.95rem;
     color: $colorLv2;

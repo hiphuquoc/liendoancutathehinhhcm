@@ -4,6 +4,10 @@
 
         {{-- ═══ Header Section ═══ --}}
         <div class="trainer-list-header">
+            <div class="section-badge">
+                <i class="fa-solid fa-scale-balanced"></i>
+                <span>Công bằng - Chính trực</span>
+            </div>
             <h1 class="header-title">Trọng Tài <span>Của Chúng Tôi</span></h1>
             <p class="header-desc">
                 Đội ngũ trọng tài của chúng tôi là những chuyên gia uy tín, được đào tạo bài bản 

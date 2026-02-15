@@ -14,6 +14,9 @@ class Referee extends Model {
         'name',
         'position',
         'user_id',
+        'total_learner',
+        'total_teaching_hour',
+        'total_prize',
     ];
     public $timestamps = false;
 

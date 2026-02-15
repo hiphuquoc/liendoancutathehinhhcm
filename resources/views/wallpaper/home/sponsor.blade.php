@@ -1,35 +1,63 @@
-<!-- start trainer section -->
-<section class="hero-trainers">
-  <div class="container effectFadeIn">
+<section class="hero-sponsors effectFadeIn">
+  <div class="container">
     <div class="row">
-      <div class="col-lg-12 col-sm-12 col-xs-12">
-        <div class="trainer-header">
-          <h2>ĐỐI TÁC – NHÀ TÀI TRỢ</h2>
-          <p>Chúng tôi trân trọng sự đồng hành của các đối tác và nhà tài trợ – những thương hiệu, doanh nghiệp và tổ chức uy tín đã góp phần tạo nên sự phát triển bền vững của Liên đoàn Cử tạ – Thể hình TP.HCM. Thông qua hợp tác và tài trợ, quý đối tác không chỉ nâng cao hình ảnh thương hiệu mà còn cùng chúng tôi lan tỏa giá trị thể thao, sức khỏe và tinh thần vươn lên đến cộng đồng.</p>
+      <div class="col-12">
+        <div class="sponsor-header">
+          <div class="section-badge">
+            <i class="fa-solid fa-handshake"></i>
+            <span>Đồng hành cùng chúng tôi</span>
+          </div>
+          <h2 class="section-title">ĐỐI TÁC <br> <span class="highlight">NHÀ TÀI TRỢ</span></h2>
+          <p>Chúng tôi trân trọng sự đồng hành của các đối tác và nhà tài trợ – những thương hiệu, doanh nghiệp và tổ chức uy tín đã góp phần tạo nên sự phát triển bền vững của Liên đoàn Cử tạ – Thể hình TP.HCM.</p>
         </div>
       </div>
-      <div class="traninerFlex col-lg-12 col-sm-12 col-xs-12">
-        <div class="carousel owl-carousel owl-theme ss_carousel owl-loaded owl-drag" id="slider2">
+      
+      <div class="col-12">
+        <div class="row">
           @for($i=0;$i<6;++$i)
-            <div class="trainer_box">
-                <div class="img_trainer">
-                    <a href="/doi-tac-nha-tai-tro/test" class="img_wrapper">
-                        <img class="lazyload" src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/phong-tap-mau-mini.webp" data-src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/phong-tap-mau-large.webp" alt="Trần Tuấn Anh " title="Trần Tuấn Anh " loading="lazy" style="">
-                        <div class="sponsor_sign">Đối tác kim cương</div>
-                    </a>
-                </div>  
-                <div class="trainer_con">
-                    <a href="/doi-tac-nha-tai-tro/test"><h3>Gym Center Q3</h3></a>
-                    <p>219 Lý Thường Kiệt, Phường 15, Quận 11, TP. Hồ Chí Minh</p>
+            <div class="col-lg-4 col-md-6 col-12 mb-4">
+                <div class="sponsor-card">
+                    <div class="card-img">
+                        <!-- Partner Level Badge -->
+                        <div class="card-badge">
+                            <i class="fa-solid fa-gem"></i> Đối tác kim cương
+                        </div>
+                        
+                        <a href="/doi-tac-nha-tai-tro/test" class="img-link">
+                            <img class="lazyload" 
+                                 src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/phong-tap-mau-mini.webp" 
+                                 data-src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/phong-tap-mau-large.webp" 
+                                 alt="Gym Center Q3" 
+                                 loading="lazy">
+                        </a>
+                    </div>
+                    
+                    <div class="card-content">
+                        <div class="content-top">
+                            <h3><a href="/doi-tac-nha-tai-tro/test">Gym Center Q3</a></h3>
+                            <p>Hệ thống phòng tập đạt chuẩn quốc tế với trang thiết bị hiện đại hàng đầu Việt Nam.</p>
+                        </div>
+                        
+                        <div class="card-info">
+                            <div class="info-item">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>219 Lý Thường Kiệt, P.15, Q.11, TP.HCM</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
           @endfor
         </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="course-button"> <a href="/doi-tac-nha-tai-tro" class="course-btn">Xem tất cả</a> </div>
+    
+      <div class="col-12">
+        <div class="buttons-container"> 
+            <a href="/doi-tac-nha-tai-tro" class="btn-view-all">
+                Xem tất cả đối tác <i class="fa-solid fa-arrow-right"></i>
+            </a> 
+        </div>
+      </div>
     </div>
   </div>
 </section>
-<!-- start trainer section -->

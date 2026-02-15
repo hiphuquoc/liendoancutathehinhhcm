@@ -1,0 +1,879 @@
+@import 'childs/default.scss';
+@import 'childs/base.scss';
+
+// Variables from default.scss:
+// $colorLv1: #00adef; 
+// $bg-02: #EDF2F7;
+// $colorText: #2c3e50;
+
+.trainer-profile-container {
+    padding: 60px 0;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    font-family: $fontText;
+    color: $colorText;
+
+    .trainer-profile-grid {
+        display: grid;
+        grid-template-columns: 350px 1fr;
+        gap: 30px;
+
+        @media (max-width: 991px) {
+            grid-template-columns: 1fr;
+            gap: 20px; // Reduce gap on tablet/mobile
+        }
+
+        @media (max-width: 576px) {
+            gap: 15px; // Less gap on small screens
+        }
+    }
+
+    // Sidebar Mobile Adjustments
+    @media(max-width: 991px) {
+        .profile-sidebar {
+            position: relative;
+            top: 0;
+
+            .sidebar-card {
+                padding: 20px; // Reduce padding
+            }
+        }
+    }
+
+    // Sidebar Styles
+    .profile-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        // position: sticky;
+        // top: 20px;
+        height: fit-content;
+
+        @media (max-width: 991px) {
+            position: relative;
+        }
+
+        .sidebar-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            overflow: hidden;
+
+            &.profile-card {
+                text-align: center;
+                padding-top: 40px;
+                position: relative;
+
+                // Add a decorative top pattern
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100px;
+                    background: linear-gradient(135deg, $colorLv1 0%, $colorLv2 100%);
+                    opacity: 0.1;
+                    z-index: 0;
+                }
+
+                .profile-image-wrapper {
+                    position: relative;
+                    margin: 0 auto 20px;
+                    width: 180px;
+                    height: 180px;
+                    z-index: 1;
+
+                    .profile-image {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        border-radius: 50%;
+                        border: 5px solid #fff;
+                        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+                    }
+
+                    .status-badge {
+                        position: absolute;
+                        bottom: 10px;
+                        right: 10px;
+                        background: #fff;
+                        padding: 6px 12px;
+                        border-radius: 20px;
+                        font-size: 0.8rem;
+                        font-weight: bold;
+                        color: $colorSuccess;
+                        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                        display: inline-flex; // Changed to inline-flex
+                        align-items: center;
+                        justify-content: center; // Center content
+                        gap: 6px; // Slightly increased gap
+                        line-height: 1; // Reset line-height for alignment
+
+                        i {
+                            color: $colorSuccess !important; // Force icon color
+                            font-size: 0.9rem;
+                            display: flex; // Ensure icon behaves as a block for alignment
+                            align-items: center;
+                            position: relative;
+                            top: 1px; // Micro-adjustment if needed depending on font
+                        }
+                    }
+                }
+
+                .profile-name {
+                    font-family: $fontTitle;
+                    font-size: 1.8rem;
+                    color: $colorTitle;
+                    margin-bottom: 5px;
+                    z-index: 1;
+                    position: relative;
+                }
+
+                .profile-title {
+                    color: $bg-07;
+                    margin-bottom: 15px;
+                    font-size: 1rem;
+                }
+
+                .profile-rating {
+                    margin-bottom: 25px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 5px;
+
+                    i {
+                        color: #ffc107;
+                    }
+
+                    span {
+                        color: $bg-07;
+                        font-size: 0.9rem;
+                        margin-left: 5px;
+                    }
+                }
+
+                .profile-actions {
+                    .btn-primary {
+                        background: $colorLv1;
+                        border: none;
+                        padding: 12px 30px;
+                        border-radius: 50px;
+                        font-weight: 600;
+                        transition: all 0.3s ease;
+                        width: 100%;
+
+                        &:hover {
+                            background: $colorLv2;
+                            transform: translateY(-2px);
+                            box-shadow: 0 4px 12px rgba($colorLv1, 0.3);
+                        }
+                    }
+                }
+            }
+
+            // Personal Info Card
+            &.info-card {
+                margin-top: 30px;
+                padding: 30px;
+
+                @media(max-width: 991px) {
+                    margin-top: 20px;
+                    padding: 24px;
+                }
+
+                @media(max-width: 576px) {
+                    margin-top: 15px;
+                    padding: 15px;
+                }
+
+                .card-title {
+                    font-family: $fontTitle;
+                    font-size: 1.25rem;
+                    color: $colorTitle;
+                    margin-bottom: 25px;
+                    padding-bottom: 15px;
+                    border-bottom: 1px solid $bg-03;
+                    font-weight: 700;
+                }
+
+                .info-list {
+                    list-style: none;
+                    padding: 0;
+                    margin: 0;
+
+                    li {
+                        display: flex;
+                        align-items: flex-start;
+                        margin-bottom: 20px;
+                        gap: 15px;
+
+                        &:last-child {
+                            margin-bottom: 0;
+                        }
+
+                        .icon-wrap {
+                            width: 40px;
+                            height: 40px;
+                            min-width: 40px;
+                            background: linear-gradient(135deg, rgba($colorLv1, 0.1), rgba($colorLv2, 0.05));
+                            border-radius: 10px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            color: $colorLv1;
+                            font-size: 1.1rem;
+                        }
+
+                        .info-content {
+                            display: flex;
+                            flex-direction: column;
+                            overflow: hidden; // For text-break
+
+                            .label {
+                                font-size: 0.9rem;
+                                color: $bg-07;
+                                margin-bottom: 4px;
+                            }
+
+                            .value {
+                                font-size: 1rem;
+                                color: $colorTitle;
+                                font-weight: 600;
+                                line-height: 1.4;
+
+                                &.text-break {
+                                    word-break: break-word;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            &.skills-card {
+                .card-title {
+                    font-family: $fontTitle;
+                    font-size: 1.2rem;
+                    color: $colorTitle;
+                    margin-bottom: 20px;
+                    padding-bottom: 10px;
+                    border-bottom: 1px solid $bg-03;
+                }
+            }
+
+            .skill-item {
+                margin-bottom: 15px;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+
+                .skill-info {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 5px;
+                    font-size: 0.9rem;
+                    font-weight: 600;
+                    color: $colorTitle;
+                }
+
+                .progress-bar {
+                    width: 100%;
+                    height: 8px;
+                    background: $bg-03;
+                    border-radius: 4px;
+                    overflow: hidden;
+
+                    .fill {
+                        height: 100%;
+                        background: linear-gradient(90deg, $colorLv1, $colorLv2);
+                        border-radius: 4px;
+                    }
+                }
+            }
+        }
+    }
+
+    // Main Content Styles
+    .profile-content {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+
+        .content-box {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+
+            .section-title {
+                font-family: $fontTitle;
+                font-size: 1.5rem;
+                color: $colorTitle;
+                margin-bottom: 25px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+
+                i {
+                    color: $colorLv1;
+                }
+
+                &::after {
+                    content: '';
+                    flex: 1;
+                    height: 1px;
+                    background: $bg-03;
+                    margin-left: 20px;
+                }
+            }
+
+            .content-text {
+                line-height: 1.8;
+                color: $colorText;
+                font-size: 1rem;
+
+                p {
+                    margin-bottom: 15px;
+                }
+            }
+        }
+
+        // Stats Grid 
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+
+            @media(max-width: 576px) {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card {
+                background: #fff;
+                border-radius: 16px;
+                padding: 25px;
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+                transition: transform 0.3s;
+
+                &:hover {
+                    transform: translateY(-5px);
+                }
+
+                .icon-box {
+                    width: 60px;
+                    height: 60px;
+                    background: linear-gradient(135deg, rgba($colorLv1, 0.1) 0%, rgba($colorLv2, 0.1) 100%);
+                    color: $colorLv1;
+                    border-radius: 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 1.5rem;
+                }
+
+                .stat-info {
+                    display: flex;
+                    flex-direction: column;
+
+                    .number {
+                        font-family: $fontTitle;
+                        font-size: 1.5rem;
+                        color: $colorTitle;
+                        font-weight: 800;
+                    }
+
+                    .label {
+                        color: $bg-07;
+                        font-size: 0.9rem;
+                    }
+                }
+            }
+        }
+
+        // --- Experience Section (Timeline) ---
+        .experience-section {
+            .timeline-content {
+                position: relative;
+                padding-left: 20px;
+                border-left: 2px solid $bg-03;
+                margin-left: 10px;
+
+                .timeline-item {
+                    position: relative;
+                    margin-bottom: 40px;
+
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+
+                    // Dot
+                    &::before {
+                        content: '';
+                        position: absolute;
+                        left: -29px;
+                        top: 5px;
+                        width: 16px;
+                        height: 16px;
+                        background: #fff;
+                        border: 3px solid $colorLv1;
+                        border-radius: 50%;
+                        z-index: 1;
+                    }
+
+                    .timeline-header {
+                        margin-bottom: 12px;
+
+                        .timeline-title {
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            color: $colorTitle;
+                            margin-bottom: 5px;
+                            font-family: $fontTitle;
+                        }
+
+                        .timeline-company {
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 8px;
+                            font-size: 0.95rem;
+                            color: $colorTitle; // Darker text for readability
+                            font-weight: 600;
+                            background: $bg-02;
+                            padding: 6px 12px; // Slightly more padding
+                            border-radius: 6px;
+
+                            i {
+                                color: $colorLv1;
+                                font-size: 0.85rem;
+                            }
+                        }
+                    }
+
+                    .timeline-details {
+                        list-style: none;
+                        padding: 0;
+                        margin: 0;
+
+                        li {
+                            position: relative;
+                            padding-left: 20px;
+                            margin-bottom: 8px;
+                            color: $colorText;
+                            line-height: 1.6;
+                            font-size: 0.95rem;
+
+                            &::before {
+                                content: '•';
+                                position: absolute;
+                                left: 0;
+                                color: $colorLv1;
+                                font-weight: bold;
+                            }
+
+                            &:last-child {
+                                margin-bottom: 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // --- Degree Section ---
+        .degree-section {
+            .degree-list {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+
+                .degree-item {
+                    display: flex;
+                    gap: 20px;
+                    padding: 20px;
+                    background: #f8f9fa;
+                    border-radius: 12px;
+                    border: 1px solid rgba(0, 0, 0, 0.03);
+                    transition: all 0.3s ease;
+
+                    &:hover {
+                        background: #fff;
+                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+                        border-color: rgba($colorLv1, 0.2);
+                        transform: translateY(-2px);
+                    }
+
+                    .degree-icon {
+                        width: 50px;
+                        height: 50px;
+                        min-width: 50px;
+                        background: #fff;
+                        border-radius: 12px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 1.5rem;
+                        color: $colorLv1;
+                        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+                    }
+
+                    .degree-info {
+                        flex: 1;
+
+                        .degree-title {
+                            font-size: 1.1rem;
+                            font-weight: 700;
+                            color: $colorTitle;
+                            margin-bottom: 4px;
+                            font-family: $fontTitle;
+                        }
+
+                        .degree-school {
+                            font-size: 0.95rem;
+                            color: $bg-07;
+                            margin-bottom: 10px;
+                            font-weight: 500;
+                        }
+
+                        .degree-details {
+                            font-size: 0.9rem;
+                            color: $colorText;
+                            line-height: 1.5;
+
+                            .detail-line {
+                                margin-bottom: 4px;
+
+                                &:last-child {
+                                    margin-bottom: 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // --- Achievement Section ---
+        .achievement-section {
+            .achievement-list {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+
+                .achievement-item {
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 15px;
+                    padding: 15px 0;
+                    border-bottom: 1px solid $bg-03;
+
+                    &:last-child {
+                        border-bottom: none;
+                        padding-bottom: 0;
+                    }
+
+                    &:first-child {
+                        padding-top: 0;
+                    }
+
+                    .achievement-icon {
+                        width: 36px;
+                        height: 36px;
+                        min-width: 36px;
+                        background: rgba(#ffc107, 0.15); // Gold background
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: #d4a017; // darker gold
+                        font-size: 1rem;
+                        margin-top: 2px;
+                    }
+
+                    .achievement-content {
+                        color: $colorText;
+                        font-size: 1rem;
+                        line-height: 1.6;
+
+                        strong {
+                            color: $colorTitle;
+                        }
+                    }
+                }
+            }
+        }
+
+        // --- Skills Section (Main) ---
+        .skills-section-main {
+            .skills-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+
+                @media(max-width: 768px) {
+                    grid-template-columns: 1fr;
+                    gap: 20px;
+                }
+
+                .skill-item-main {
+                    .skill-header {
+                        display: flex;
+                        justify-content: space-between;
+                        margin-bottom: 8px;
+                        font-weight: 700;
+                        color: $colorTitle;
+                        font-family: $fontTitle;
+                        font-size: 1rem;
+                    }
+
+                    .progress-bar-main {
+                        width: 100%;
+                        height: 10px;
+                        background: $bg-03;
+                        border-radius: 5px;
+                        overflow: hidden;
+
+                        .fill {
+                            height: 100%;
+                            background: linear-gradient(90deg, $colorLv1, $colorLv2);
+                            border-radius: 5px;
+                            position: relative;
+                            transition: width 1s ease-in-out;
+                        }
+                    }
+                }
+            }
+        }
+
+        // --- SEO/Additional Section ---
+        .seo-section {
+            .article-content {
+                font-size: 1rem;
+                line-height: 1.8;
+                color: $colorText;
+
+                p {
+                    margin-bottom: 15px;
+                }
+
+                img {
+                    max-width: 100%;
+                    border-radius: 8px;
+                    margin: 15px 0;
+                }
+            }
+        }
+
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+
+            @media(min-width: 768px) {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .gallery-item {
+                border-radius: 12px;
+                overflow: hidden;
+                aspect-ratio: 1/1;
+                cursor: pointer;
+                transition: transform 0.3s;
+
+                &:hover {
+                    transform: scale(1.03);
+                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+                }
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+        }
+    }
+}
+
+// Breadcrumb Section Styles
+// Breadcrumb Section Styles
+.breadcrumb-container {
+    background: #e9ecef; // Slightly darker/more refined background
+    padding: 24px 0;
+    margin-bottom: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    position: relative;
+
+    @media(max-width: 576px) {
+        padding: 15px 0; // Less vertical padding
+    }
+
+    .container {
+        position: relative;
+        z-index: 1;
+    }
+
+    .breadcrumb {
+        display: inline-flex;
+        flex-wrap: wrap;
+        padding: 10px 25px;
+        margin: 0;
+        list-style: none;
+        background-color: #ffffff;
+        border-radius: 8px; // Less rounded, more modern box
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        align-items: center;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+
+        @media(max-width: 576px) {
+            width: 100%;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+            color: $bg-06;
+            font-weight: 500;
+            line-height: 1.5;
+
+            a {
+                color: $bg-07;
+                text-decoration: none;
+                transition: all 0.2s ease;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                i {
+                    font-size: 0.9rem;
+                    color: $bg-07; // Darker icon color
+                    opacity: 0.8;
+                }
+
+                &:hover {
+                    color: $colorLv1;
+
+                    i {
+                        color: $colorLv1;
+                        opacity: 1;
+                    }
+                }
+            }
+
+            // Active State (Last Item)
+            &.active {
+                span {
+                    color: $colorTitle; // Dark text for readability
+                    font-weight: 600;
+                    padding-left: 5px;
+                    // Removed border-left as requested
+                }
+            }
+
+            // Separator
+            +.breadcrumb-item {
+                &::before {
+                    content: '\f105';
+                    font-family: "Font Awesome 6 Free";
+                    font-weight: 900;
+                    padding: 0 10px;
+                    color: $colorTitle; // Darker arrow color
+                    font-size: 0.85rem;
+                    display: flex;
+                    align-items: center;
+                    float: none;
+                    opacity: 0.6;
+                }
+            }
+        }
+    }
+}
+
+// Adjust top padding of the main container below to correct spacing
+.trainer-profile-container {
+    padding-top: 40px !important;
+    background-color: #f8f9fa;
+
+    @media(max-width: 576px) {
+        padding-top: 20px !important; // Reduce top padding on mobile
+        padding-bottom: 30px;
+    }
+
+    // Update Section Title Line Thickness
+    .profile-content .content-box .section-title::after {
+        height: 2px !important; // Thicker line as requested
+        background: $bg-03;
+        opacity: 0.7;
+    }
+
+    // Mobile Optimization for Degree List - Transform to Timeline Style
+    @media(max-width: 576px) {
+        .degree-section {
+            .degree-list {
+                position: relative;
+                padding-left: 20px;
+                border-left: 2px solid $bg-03;
+                margin-left: 10px;
+                gap: 0; // Reset gap
+
+                .degree-item {
+                    display: block; // Stack vertically
+                    padding: 0; // Remove box padding
+                    margin-bottom: 30px;
+                    background: transparent;
+                    border: none;
+                    box-shadow: none;
+                    position: relative;
+                    gap: 0;
+
+                    &:hover {
+                        transform: none;
+                        background: transparent;
+                        box-shadow: none;
+                    }
+
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+
+                    // Strict Timeline Dot matching Experience Section
+                    &::before {
+                        content: '';
+                        position: absolute;
+                        left: -29px; // Match experience section calc
+                        top: 5px;
+                        width: 16px;
+                        height: 16px;
+                        background: #fff;
+                        border: 3px solid $colorLv1;
+                        border-radius: 50%;
+                        z-index: 1;
+                    }
+
+                    // Hide original large icon
+                    .degree-icon {
+                        display: none !important;
+                    }
+
+                    .degree-info {
+                        .degree-title {
+                            font-size: 1.1rem;
+                            color: $colorTitle;
+                            margin-bottom: 5px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

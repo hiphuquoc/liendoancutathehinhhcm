@@ -18,6 +18,9 @@ class Trainer extends Model {
         'description',
         'trainer_code',
         'user_id',
+        'total_learner',
+        'total_teaching_hour',
+        'total_prize',
     ];
     public $timestamps = false;
 

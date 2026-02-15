@@ -17,6 +17,6 @@ class SettingController extends Controller {
     }
 
     public static function slider(Request $request){
-        return view('admin.setting.slider');
+        return redirect()->route('admin.slider.list');
     }
 }

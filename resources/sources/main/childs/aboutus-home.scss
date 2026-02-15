@@ -1,0 +1,397 @@
+// ============================================
+// ABOUT US - HOMEPAGE SECTION
+// Based on Trainer List Design System
+// ============================================
+
+.homeAboutUs {
+    position: relative;
+    padding: 80px 0;
+    overflow: hidden;
+    background: #fff;
+    font-family: $fontText;
+
+    @media (max-width: 991px) {
+        padding: 50px 0;
+    }
+
+    @media (max-width: 576px) {
+        padding: 40px 0;
+    }
+
+    // ===== LEFT SIDE: IMAGES =====
+    &_images {
+        position: relative;
+        padding-right: 20px;
+        padding-bottom: 20px;
+
+        @media (max-width: 991px) {
+            margin-bottom: 40px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-right: 0;
+        }
+
+        &_main {
+            position: relative;
+            z-index: 1;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            aspect-ratio: 4/3;
+            width: 85%;
+            margin-left: auto;
+            transition: transform 0.4s ease;
+
+            @media (max-width: 576px) {
+                width: 100%;
+                border-radius: 16px;
+            }
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.6s ease;
+            }
+
+            &:hover {
+                img {
+                    transform: scale(1.05);
+                }
+            }
+        }
+
+        &_sub {
+            position: absolute;
+            bottom: 0px;
+            left: 0;
+            z-index: 2;
+            width: 45%;
+            aspect-ratio: 1;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 6px solid #fff;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            transition: transform 0.4s ease;
+
+            @media (max-width: 576px) {
+                width: 40%;
+                border-width: 4px;
+                left: -10px;
+                bottom: -10px;
+            }
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            &:hover {
+                transform: translateY(-5px);
+            }
+        }
+
+        &_badge {
+            position: absolute;
+            top: 30px;
+            left: -20px;
+            z-index: 3;
+            background: linear-gradient(135deg, $colorLv1, darken($colorLv1, 10%));
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 14px;
+            box-shadow: 0 8px 25px rgba($colorLv1, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 4px solid #fff;
+
+            @media (max-width: 576px) {
+                top: 20px;
+                left: -10px;
+                padding: 10px 18px;
+                border-width: 3px;
+                gap: 10px;
+            }
+
+            .badge-icon {
+                font-size: 1.8rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 40px;
+                height: 40px;
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 50%;
+
+                @media (max-width: 576px) {
+                    width: 32px;
+                    height: 32px;
+                    font-size: 1.4rem;
+                }
+            }
+
+            .badge-text {
+                display: flex;
+                flex-direction: column;
+
+                .badget-text-big {
+                    font-family: $fontTitle;
+                    font-weight: 800;
+                    font-size: 1.6rem;
+                    line-height: 1;
+
+                    @media (max-width: 576px) {
+                        font-size: 1.3rem;
+                    }
+                }
+
+                .badge-text-small {
+                    font-size: 0.8rem;
+                    opacity: 0.9;
+                    white-space: nowrap;
+                    font-weight: 500;
+
+                    @media (max-width: 576px) {
+                        font-size: 0.7rem;
+                    }
+                }
+            }
+        }
+
+        &_pattern {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 150px;
+            height: 150px;
+            background-image: radial-gradient($colorLv2 2px, transparent 2px);
+            background-size: 20px 20px;
+            opacity: 0.2;
+            z-index: 0;
+        }
+    }
+
+    // ===== RIGHT SIDE: CONTENT =====
+    &_content {
+        padding-left: 30px;
+
+        @media (max-width: 991px) {
+            padding-left: 0;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+
+            .icon {
+                color: $colorLv1;
+                font-size: 1rem;
+            }
+
+            .text {
+                color: $colorLv1;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                font-size: 0.9rem;
+                font-family: $fontTitle;
+            }
+        }
+
+        .section-title {
+            font-family: $fontTitle;
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1.25;
+            color: $colorTitle;
+            margin-bottom: 25px;
+
+            @media (max-width: 1199px) {
+                font-size: 2.2rem;
+            }
+
+            @media (max-width: 576px) {
+                font-size: 1.8rem;
+                margin-bottom: 20px;
+            }
+
+            .highlight {
+                color: $colorLv1;
+                position: relative;
+                z-index: 1;
+                display: inline-block;
+
+                // Underline accent
+                &::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 4px;
+                    left: 0;
+                    right: 0;
+                    height: 8px;
+                    background: rgba($colorLv1, 0.15);
+                    z-index: -1;
+                    border-radius: 4px;
+                }
+            }
+        }
+    }
+
+    &_desc {
+        color: $bg-07;
+        font-size: 1.05rem;
+        line-height: 1.7;
+        margin-bottom: 30px;
+
+        @media (max-width: 576px) {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        p {
+            margin-bottom: 15px;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    &_stats {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 35px;
+
+        @media (max-width: 991px) {
+            justify-content: center;
+        }
+
+        @media (max-width: 576px) {
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #f8f9fa;
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+
+            @media (max-width: 576px) {
+                padding: 10px 15px;
+                gap: 10px;
+                flex: 1;
+                min-width: 140px;
+            }
+
+            .stat-icon {
+                width: 45px;
+                height: 45px;
+                background: #fff;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: $colorLv1;
+                font-size: 1.2rem;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            }
+
+            .stat-info {
+                display: flex;
+                flex-direction: column;
+
+                .stat-value {
+                    font-family: $fontTitle;
+                    font-weight: 800;
+                    font-size: 1.4rem;
+                    color: $colorTitle;
+                    line-height: 1;
+
+                    @media (max-width: 576px) {
+                        font-size: 1.2rem;
+                    }
+                }
+
+                .stat-label {
+                    font-size: 0.8rem;
+                    color: $bg-07;
+                    font-weight: 500;
+                }
+            }
+
+            &:hover {
+                transform: translateY(-3px);
+                background: #fff;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+                border-color: rgba($colorLv1, 0.1);
+
+                .stat-icon {
+                    background: $colorLv1;
+                    color: #fff;
+                }
+            }
+        }
+    }
+
+    // Custom button style
+    .btn-brand-outline {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 30px;
+        border: 2px solid $colorLv1;
+        color: $colorLv1;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.95rem;
+        border-radius: 50px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        background: transparent;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: $colorLv1;
+            transition: width 0.3s ease;
+            z-index: -1;
+        }
+
+        &:hover {
+            color: #fff;
+            box-shadow: 0 10px 20px rgba($colorLv1, 0.3);
+
+            &::before {
+                width: 100%;
+            }
+
+            i {
+                transform: translateX(4px);
+            }
+        }
+
+        i {
+            transition: transform 0.3s ease;
+        }
+    }
+}

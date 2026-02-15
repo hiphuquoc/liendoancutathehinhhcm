@@ -1,0 +1,312 @@
+// ============================================
+// NEWS SECTION - TIN TỨC MỚI NHẤT
+// ============================================
+
+.hero-blog-section {
+    position: relative;
+    padding: 60px 0 80px;
+    background: #fdfdfd; // Very subtle difference from pure white
+    overflow: hidden;
+
+    @media (max-width: 991px) {
+        padding: 50px 0 60px;
+    }
+
+    @media (max-width: 576px) {
+        padding: 40px 0 50px;
+    }
+
+    // ==========================================
+    // SECTION HEADER
+    // ==========================================
+    .blog-header {
+        text-align: center;
+        margin-bottom: 40px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 0 15px;
+
+        // Badge
+        .section-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 24px;
+            background: rgba($colorLv1, 0.05);
+            border: 1px solid rgba($colorLv1, 0.1);
+            border-radius: 50px;
+            margin-bottom: 24px;
+
+            i {
+                color: $colorLv1;
+                font-size: 0.9rem;
+            }
+
+            span {
+                font-family: $fontTitle;
+                font-size: 0.8rem;
+                font-weight: 700;
+                color: $colorLv1;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+        }
+
+
+
+        p {
+            color: $bg-07;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            font-family: $fontText;
+            font-weight: 300;
+        }
+    }
+
+    // ==========================================
+    // BLOG CARD
+    // ==========================================
+    .blog-box {
+        background: #fff;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+        border: 1px solid rgba(0, 0, 0, 0.02);
+        transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+
+        &:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
+
+            .blog-img {
+                img {
+                    transform: scale(1.1);
+                }
+
+                .img-overlay {
+                    opacity: 1;
+                }
+            }
+
+            .date-badge {
+                background: $colorLv1;
+                color: #fff;
+                transform: translateY(-2px);
+            }
+
+            .blog-content h2 a {
+                color: $colorLv1;
+            }
+
+            .read-more-link {
+                color: $colorLv1;
+
+                i {
+                    transform: translateX(5px);
+                }
+            }
+        }
+
+        // Image Container
+        .blog-img {
+            width: 100%;
+            aspect-ratio: 16/10;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+
+            a {
+                display: block;
+                width: 100%;
+                height: 100%;
+            }
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.6s ease;
+            }
+
+            .img-overlay {
+                position: absolute;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.2);
+                opacity: 0;
+                transition: opacity 0.4s ease;
+            }
+
+            // Date Badge
+            .date-badge {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                background: #fff;
+                color: $colorTitle;
+                padding: 6px 14px;
+                border-radius: 8px;
+                font-family: $fontTitle;
+                font-weight: 700;
+                font-size: 0.85rem;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                transition: all 0.3s ease;
+                z-index: 2;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                line-height: 1.1;
+                min-width: 50px;
+
+                .day {
+                    font-size: 1.2rem;
+                    color: $colorLv1;
+                }
+
+                .month {
+                    font-size: 0.7rem;
+                    text-transform: uppercase;
+                    color: $bg-07;
+                }
+            }
+        }
+
+        // Content
+        .blog-content {
+            padding: 28px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+
+            // Meta info (Admin, Category, etc - Optional, currently mostly date)
+            .meta-info {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                font-size: 0.85rem;
+                color: $bg-07;
+                margin-bottom: 12px;
+
+                span {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+
+                    i {
+                        color: $colorLv1;
+                    }
+                }
+            }
+
+            h2 {
+                font-family: $fontTitle;
+                font-size: 1.25rem;
+                font-weight: 700;
+                line-height: 1.4;
+                margin-bottom: 12px;
+                min-height: 3.2rem; // ensure alignment for 2 lines
+
+                a {
+                    color: $colorTitle;
+                    text-decoration: none;
+                    transition: color 0.3s ease;
+                    // maxLine handled by utility or flex text overflow
+                }
+            }
+
+            p,
+            .blog-desc {
+                color: $bg-07;
+                font-size: 0.95rem;
+                line-height: 1.6;
+                margin-bottom: 20px;
+                flex-grow: 1;
+                // maxLine handled by class
+            }
+
+            // Read More Link
+            .read-more-link {
+                margin-top: auto;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                font-family: $fontTitle;
+                font-weight: 600;
+                font-size: 0.9rem;
+                color: $colorTitle;
+                text-decoration: none;
+                transition: all 0.3s ease;
+
+                i {
+                    font-size: 0.8rem;
+                    transition: transform 0.3s ease;
+                    color: $colorLv1;
+                }
+            }
+        }
+    }
+
+    // ==========================================
+    // VIEW ALL BUTTON
+    // ==========================================
+    .buttons-container {
+        text-align: center;
+        margin-top: 40px;
+
+        .btn-view-all {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 30px;
+            border: 2px solid $colorLv1;
+            color: $colorLv1;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            background: transparent;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            box-shadow: none;
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 0%;
+                height: 100%;
+                background: $colorLv1;
+                transition: width 0.3s ease;
+                z-index: -1;
+            }
+
+            &:hover {
+                color: #fff;
+                box-shadow: 0 10px 20px rgba($colorLv1, 0.3);
+                transform: none;
+
+                &::before {
+                    width: 100%;
+                }
+
+                i {
+                    transform: translateX(4px);
+                    color: #fff;
+                }
+            }
+
+            i {
+                transition: transform 0.3s ease;
+                font-size: 0.9rem;
+            }
+        }
+    }
+}

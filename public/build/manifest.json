@@ -5,8 +5,8 @@
     "isEntry": true
   },
   "resources/sources/main/aboutus-first-view.scss": {
-    "file": "assets/home-first-view.css",
-    "src": "resources/sources/main/home-first-view.scss",
+    "file": "assets/aboutus-first-view.css",
+    "src": "resources/sources/main/aboutus-first-view.scss",
     "isEntry": true
   },
   "resources/sources/main/aboutus-non-first-view.scss": {
@@ -29,9 +29,9 @@
     "src": "resources/sources/main/contact-first-view.scss",
     "isEntry": true
   },
-  "resources/sources/main/contact-non-first-view.scss": {
-    "file": "assets/home-non-first-view.css",
-    "src": "resources/sources/main/home-non-first-view.scss",
+  "resources/sources/main/global-header.scss": {
+    "file": "assets/global-header.css",
+    "src": "resources/sources/main/global-header.scss",
     "isEntry": true
   },
   "resources/sources/main/home-first-view.scss": {
@@ -52,6 +52,16 @@
   "resources/sources/main/page-non-first-view.scss": {
     "file": "assets/home-non-first-view.css",
     "src": "resources/sources/main/home-non-first-view.scss",
+    "isEntry": true
+  },
+  "resources/sources/main/teacher-list.scss": {
+    "file": "assets/teacher-list.css",
+    "src": "resources/sources/main/teacher-list.scss",
+    "isEntry": true
+  },
+  "resources/sources/main/trainer-detail.scss": {
+    "file": "assets/trainer-detail.css",
+    "src": "resources/sources/main/trainer-detail.scss",
     "isEntry": true
   }
 }

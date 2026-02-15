@@ -65,8 +65,10 @@ class HomeController extends Controller {
                         ->inRandomOrder()
                         ->take(3)
                         ->get();
+            /* lấy sliders */
+            $sliders = \App\Models\Slider::getActiveSliders($language);
             /* Ghi dữ liệu - Xuất kết quả */
-            $xhtml                  = view('wallpaper.home.index', compact('item', 'itemSeo', 'trainers', 'blogs', 'language'))->render();
+            $xhtml                  = view('wallpaper.home.index', compact('item', 'itemSeo', 'trainers', 'blogs', 'language', 'sliders'))->render();
             if(env('APP_CACHE_HTML')==true) Storage::put(config('main_'.env('APP_NAME').'.cache.folderSave').$nameCache, $xhtml);
         }
         echo $xhtml;
@@ -280,7 +282,10 @@ class HomeController extends Controller {
                     }
                 }
             }
-            $trainers   = Trainer::all();
+            $trainers   = Trainer::whereHas('seo', function ($q) {
+                            $q->whereNotNull('image')->where('image', '!=', '');
+                        })
+                        ->inRandomOrder()->get();
             /* breadcrumb */
             $breadcrumb = Url::buildBreadcrumb($itemSeo->slug_full);
             $xhtml      = view('wallpaper.teacher.index', compact('item', 'itemSeo', 'trainers', 'language', 'breadcrumb'))->render();

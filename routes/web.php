@@ -338,6 +338,10 @@ Route::middleware(['auth', 'role:admin,trainer,referee'])->group(function () {
         });
         /* slider */
         Route::prefix('slider')->group(function(){
+            Route::get('/', [SliderController::class, 'list'])->name('admin.slider.list');
+            Route::get('/view', [SliderController::class, 'view'])->name('admin.slider.view');
+            Route::post('/createAndUpdate', [SliderController::class, 'createAndUpdate'])->name('admin.slider.createAndUpdate');
+            Route::get('/delete', [SliderController::class, 'delete'])->name('admin.slider.delete');
             Route::post('/remove', [SliderController::class, 'remove'])->name('admin.slider.remove');
         });
         /* gallery */

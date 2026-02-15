@@ -1,29 +1,41 @@
-@php
-    $style      = !empty($urlImage) ? 'style="background-image:url('.$urlImage.')"' : '';
-    $title      = '';
-    foreach($item->seos as $seo){
-      if(!empty($seo->infoSeo->language)&&$seo->infoSeo->language==$language) {
-        $title  = $seo->infoSeo->title;
-        break;
-      }
-    }
-@endphp
+<div class="breadcrumb-container">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+                <!-- Home Item -->
+                <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                    <a href="/" itemprop="item" aria-label="Trang chủ">
+                        <i class="fa-solid fa-house"></i>
+                        <span itemprop="name">Trang chủ</span>
+                    </a>
+                    <meta itemprop="position" content="1" />
+                </li>
 
-<section class="hero-about-banner-section" {!! $style !!}>
-  <div class="container">
-    <div class="banner-content-section">
-      <div class="banner-img-section">
-        <h2>{{ $title }}</h2>
-      </div>
-      <div class="content-section">
-        <p>
-          <a href="/">Trang chủ</a> 
-          @for($i=0;$i<count($breadcrumb);++$i)
-            <span><i class="fa-solid fa-angle-right" style="padding:0 5px;color:rgb(88, 196, 255);"></i></span> 
-            <a href="/{{ $breadcrumb[$i]->slug_full ?? null }}" title="{{ $breadcrumb[$i]->title }}">{{ $breadcrumb[$i]->title ?? null }}</a>
-          @endfor
-        </p>
-      </div>
+                <!-- Dynamic Items -->
+                @if(!empty($breadcrumb))
+                    @foreach($breadcrumb as $key => $item)
+                        @php
+                            // Handle object or array access if necessary, assuming object based on previous usage
+                            $title = $item->title ?? $item->name ?? '';
+                            $slug  = $item->slug_full ?? $item->slug ?? '#';
+                            $isLast = $loop->last;
+                            $position = $key + 2;
+                        @endphp
+                        
+                        <li class="breadcrumb-item {{ $isLast ? 'active' : '' }}" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                            @if(!$isLast)
+                                <a href="/{{ $slug }}" title="{{ $title }}" itemprop="item">
+                                    <span itemprop="name">{{ $title }}</span>
+                                </a>
+                            @else
+                                <span itemprop="name" title="{{ $title }}">{{ $title }}</span>
+                                <meta itemprop="item" content="{{ url()->current() }}" /> 
+                            @endif
+                            <meta itemprop="position" content="{{ $position }}" />
+                        </li>
+                    @endforeach
+                @endif
+            </ol>
+        </nav>
     </div>
-  </div>
-</section>
+</div>

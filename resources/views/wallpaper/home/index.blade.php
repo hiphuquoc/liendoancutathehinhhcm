@@ -49,7 +49,7 @@
     @include('wallpaper.home.slider')
     @include('wallpaper.home.aboutus')
     @include('wallpaper.home.benefit')
-    @include('wallpaper.home.course')
+    {{-- @include('wallpaper.home.course') --}}
     @if(!empty($trainers)&&$trainers->isNotEmpty())
         @include('wallpaper.home.teacher')
     @endif

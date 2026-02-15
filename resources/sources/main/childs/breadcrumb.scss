@@ -1,35 +1,94 @@
-.breadcrumbBox {
-    overflow: hidden;
-    @include colorOpacity('color', $colorText, 0.7);
-    font-size: 0.9rem;
-    font-weight: normal;
-    // margin-top: 0.75rem;
-    a {
-        color: $colorText;
-        &:hover {
-            color: $colorTextLight;
+// Breadcrumb Section Styles
+.breadcrumb-container {
+    background: #e9ecef; // Slightly darker/more refined background
+    padding: 24px 0;
+    margin-bottom: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    position: relative;
+
+    @media(max-width: 576px) {
+        padding: 15px 0; // Less vertical padding
+    }
+
+    .container {
+        position: relative;
+        z-index: 1;
+    }
+
+    .breadcrumb {
+        display: inline-flex;
+        flex-wrap: wrap;
+        padding: 10px 25px;
+        margin: 0;
+        list-style: none;
+        background-color: #ffffff;
+        border-radius: 8px; // Less rounded, more modern box
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        align-items: center;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+
+        @media(max-width: 576px) {
+            width: 100%;
+            justify-content: center;
+            padding: 10px;
         }
-        &:after {
-            @include fontAwesome;
-            content: '\f101';
-            margin-right: 0.5rem;
-            margin-left: 0.75rem;
-            font-size: 0.6rem;
+
+        .breadcrumb-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
             color: $bg-06;
+            font-weight: 500;
+            line-height: 1.5;
+
+            a {
+                color: $bg-07;
+                text-decoration: none;
+                transition: all 0.2s ease;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                i {
+                    font-size: 0.9rem;
+                    color: $bg-07; // Darker icon color
+                    opacity: 0.8;
+                }
+
+                &:hover {
+                    color: $colorLv1;
+
+                    i {
+                        color: $colorLv1;
+                        opacity: 1;
+                    }
+                }
+            }
+
+            // Active State (Last Item)
+            &.active {
+                span {
+                    color: $colorTitle; // Dark text for readability
+                    font-weight: 600;
+                    padding-left: 5px;
+                }
+            }
+
+            // Separator
+            +.breadcrumb-item {
+                &::before {
+                    content: '\f105';
+                    font-family: "Font Awesome 6 Free";
+                    font-weight: 900;
+                    padding: 0 10px;
+                    color: $colorTitle; // Darker arrow color
+                    font-size: 0.85rem;
+                    display: flex;
+                    align-items: center;
+                    float: none;
+                    opacity: 0.6;
+                }
+            }
         }
     }
-    // @media(max-width: 991px){
-    //     margin-top: 0.5rem;
-    // }
-    // @media(max-width: 767px){
-    //     font-size: 0.85rem;
-    // }
 }
-
-// .breadcrumbMobileBox {
-//     display: flex;
-//     // display: none;
-//     // @media(max-width: 991px){
-//     //     display: flex;
-//     // }
-// }

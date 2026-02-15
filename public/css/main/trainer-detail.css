@@ -1,232 +1,722 @@
-.layoutTeacherDetail {
-    display: flex;
-    gap: 30px; /* Khoảng cách giữa các khối */
-    align-items: flex-start;
-    padding: 50px 0;
-}
-.layoutTeacherDetail_info {
-    width: 380px;
-    display: flex;
-    flex-direction: column;
-    gap: 35px;
-    text-align: justify;
-}
-.layoutTeacherDetail_detail {
-    width: calc(100% - 380px - 30px);
-    display: flex;
-    flex-direction: column;
-    gap: 35px;
-    text-align: justify;
-    border-left: 5px solid #dee2e6;
-    padding-left: 30px;
-}
-.teacherDetailImg {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-    padding-top: calc(100% * (4 / 3)); /* Tỷ lệ 3:4 */
-    border-radius: 12px; /* Làm tròn khung ngoài */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng đổ bóng */
+/* ============================================================================
+   TRAINER PROFILE PAGE - Professional Design for Fitness Trainers
+   ============================================================================
+   Modern, professional profile page design with optimal spacing and UX/UI
+   Brand Color: #008ac0 (Primary Blue)
+   ============================================================================ */
+
+:root {
+    --trainer-primary: #008ac0;
+    --trainer-primary-dark: #006a9a;
+    --trainer-primary-light: #00a0d6;
+    --trainer-primary-lighter: rgba(0, 138, 192, 0.1);
+    --trainer-primary-lightest: rgba(0, 138, 192, 0.05);
+    
+    --trainer-secondary: #319795;
+    --trainer-accent: #f59e0b;
+    
+    --trainer-text-primary: #1a202c;
+    --trainer-text-secondary: #4a5568;
+    --trainer-text-muted: #718096;
+    
+    --trainer-bg: #f7fafc;
+    --trainer-card-bg: #ffffff;
+    --trainer-border: #e2e8f0;
+    
+    --trainer-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    --trainer-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --trainer-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --trainer-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    
+    --trainer-radius: 12px;
+    --trainer-radius-lg: 16px;
+    
+    --trainer-spacing-xs: 0.5rem;
+    --trainer-spacing-sm: 1rem;
+    --trainer-spacing-md: 1.5rem;
+    --trainer-spacing-lg: 2rem;
+    --trainer-spacing-xl: 3rem;
 }
 
-.teacherDetailImg img {
+/* ============================================================================
+   BASE STYLES
+   ============================================================================ */
+.trainerProfile {
+    background: var(--trainer-bg);
+    min-height: 100vh;
+    padding-bottom: 4rem;
+}
+
+/* ============================================================================
+   HERO SECTION - White Background
+   ============================================================================ */
+.trainerProfile_hero {
+    background: #ffffff;
+    padding: 4rem 0 3rem;
+    position: relative;
+    border-bottom: 1px solid var(--trainer-border);
+}
+
+.trainerProfile_hero_content {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+}
+
+.trainerProfile_hero_image {
+    flex: 0 0 300px;
+}
+
+.trainerProfile_hero_image_wrapper {
+    position: relative;
+    width: 300px;
+    height: 375px;
+    border-radius: var(--trainer-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--trainer-shadow-xl);
+    border: 4px solid var(--trainer-primary-lighter);
+    background: var(--trainer-card-bg);
+}
+
+.trainerProfile_hero_image_wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.trainerProfile_hero_info {
+    flex: 1;
+    color: var(--trainer-text-primary);
+}
+
+.trainerProfile_hero_badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.625rem 1.25rem;
+    background: var(--trainer-primary-lighter);
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1.75rem;
+    color: var(--trainer-primary);
+    border: 1px solid var(--trainer-primary-lighter);
+}
+
+.trainerProfile_hero_badge svg {
+    width: 18px;
+    height: 18px;
+}
+
+.trainerProfile_hero_name {
+    font-size: 3.25rem;
+    font-weight: 800;
+    margin: 0 0 1rem 0;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: var(--trainer-text-primary);
+    background: linear-gradient(135deg, var(--trainer-primary) 0%, var(--trainer-primary-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.trainerProfile_hero_position {
+    font-size: 1.625rem;
+    font-weight: 600;
+    margin-bottom: 2.5rem;
+    color: var(--trainer-text-secondary);
+}
+
+.trainerProfile_hero_contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+}
+
+.trainerProfile_hero_contact_item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.875rem 1.75rem;
+    background: var(--trainer-primary);
+    border-radius: 50px;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    transition: all 0.3s ease;
+    box-shadow: var(--trainer-shadow-md);
+}
+
+.trainerProfile_hero_contact_item:hover {
+    background: var(--trainer-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--trainer-shadow-lg);
+    color: #ffffff;
+}
+
+.trainerProfile_hero_contact_item svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+/* ============================================================================
+   CONTENT LAYOUT
+   ============================================================================ */
+.trainerProfile_content {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 2.5rem;
+    margin-top: 2.5rem;
+}
+
+/* ============================================================================
+   CARDS
+   ============================================================================ */
+.trainerProfile_card {
+    background: var(--trainer-card-bg);
+    border-radius: var(--trainer-radius-lg);
+    box-shadow: var(--trainer-shadow-md);
+    overflow: hidden;
+    margin-bottom: 2rem;
+    border: 1px solid var(--trainer-border);
+    transition: all 0.3s ease;
+}
+
+.trainerProfile_card:hover {
+    box-shadow: var(--trainer-shadow-lg);
+    transform: translateY(-2px);
+}
+
+.trainerProfile_card_header {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--trainer-primary-lighter) 0%, var(--trainer-primary-lightest) 100%);
+    border-bottom: 2px solid var(--trainer-primary-lighter);
+}
+
+.trainerProfile_card_icon {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--trainer-primary);
+    border-radius: var(--trainer-radius);
+    color: #ffffff;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 138, 192, 0.2);
+}
+
+.trainerProfile_card_icon svg {
+    width: 26px;
+    height: 26px;
+}
+
+.trainerProfile_card_title {
+    font-size: 1.625rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--trainer-text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.trainerProfile_card_body {
+    padding: 2rem;
+}
+
+/* ============================================================================
+   ACHIEVEMENTS - Clean List Style with Optimal Spacing
+   ============================================================================ */
+.trainerProfile_achievements {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.trainerProfile_achievement_item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding: 0;
+    position: relative;
+}
+
+.trainerProfile_achievement_marker {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--trainer-primary);
+    margin-top: 0.5rem;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 4px var(--trainer-primary-lightest);
+}
+
+.trainerProfile_achievement_content {
+    flex: 1;
+    color: var(--trainer-text-primary);
+    line-height: 1.75;
+    font-size: 1rem;
+    font-weight: 400;
+    padding: 0;
+}
+
+/* ============================================================================
+   SKILLS - Professional Progress Bars with Enhanced Design
+   ============================================================================ */
+.trainerProfile_skills {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.trainerProfile_skill_item {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.trainerProfile_skill_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.trainerProfile_skill_label {
+    font-weight: 600;
+    color: var(--trainer-text-primary);
+    font-size: 1.0625rem;
+    letter-spacing: 0.01em;
+}
+
+.trainerProfile_skill_value {
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 0.9375rem;
+    background: linear-gradient(135deg, var(--trainer-primary) 0%, var(--trainer-primary-dark) 100%);
+    padding: 0.375rem 1rem;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 138, 192, 0.25);
+    min-width: 60px;
+    text-align: center;
+    letter-spacing: 0.02em;
+}
+
+.trainerProfile_skill_track {
+    height: 12px;
+    background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%);
+    border-radius: 50px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.trainerProfile_skill_fill {
+    height: 100%;
+    background: linear-gradient(90deg, 
+        var(--trainer-primary) 0%, 
+        var(--trainer-primary-light) 50%,
+        var(--trainer-primary) 100%);
+    background-size: 200% 100%;
+    border-radius: 50px;
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 138, 192, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+.trainerProfile_skill_fill::before {
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Hình ảnh lấp đầy khung */
-    border-radius: 12px;
-}
-
-.sponsor_sign {
-    background-color: #319795;
-    display: flex;
-    -webkit-box-align: center;
-    align-items: center;
-    min-width: 50px;
-    height: 32px;
-    border-radius: 7px 0 0 7px;
-    position: absolute;
     right: 0;
-    top: 20px;
-    padding: 5px 12px;
-    font-size: 14px;
-    font-weight: 700;
-    color: #fff;
-    z-index: 1;
+    bottom: 0;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.4) 50%, 
+        transparent 100%);
+    animation: shimmer 2.5s infinite;
+    border-radius: 50px;
 }
 
-.teacherInfoBox {
+.trainerProfile_skill_fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, 
+        rgba(255, 255, 255, 0.2) 0%, 
+        transparent 50%,
+        rgba(0, 0, 0, 0.1) 100%);
+    border-radius: 50px;
+}
+
+@keyframes shimmer {
+    0% { 
+        transform: translateX(-100%) skewX(-15deg);
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% { 
+        transform: translateX(200%) skewX(-15deg);
+        opacity: 0;
+    }
+}
+
+/* Enhanced hover effect */
+.trainerProfile_skill_item:hover .trainerProfile_skill_fill {
+    box-shadow: 0 2px 12px rgba(0, 138, 192, 0.4),
+                0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+}
+
+.trainerProfile_skill_item:hover .trainerProfile_skill_value {
+    box-shadow: 0 4px 12px rgba(0, 138, 192, 0.35);
+    transform: scale(1.05);
+    transition: all 0.2s ease;
+}
+
+/* ============================================================================
+   ABOUT SECTION
+   ============================================================================ */
+.trainerProfile_about {
+    color: var(--trainer-text-secondary);
+    line-height: 1.875;
+    font-size: 1.0625rem;
+}
+
+.trainerProfile_about p {
+    margin: 0 0 1.25rem 0;
+}
+
+.trainerProfile_about p:last-child {
+    margin-bottom: 0;
+}
+
+/* ============================================================================
+   EXPERIENCES
+   ============================================================================ */
+.trainerProfile_experiences {
     display: flex;
     flex-direction: column;
+    gap: 2.5rem;
 }
 
-.teacherInfoBox2 {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-}
-
-.teacherInfoBox2 .teacherInfoBox2_info {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.teacherInfoBox2 h1 {
-    text-transform: uppercase;
-    font-size: 30px;
-    font-weight: bold;
-    color: #008ac0;
-    margin-bottom: 0 !important; 
-}
-
-.teacherInfoBox2 .teacherInfoBox2_image {
-    display: none;
+.trainerProfile_experience {
     position: relative;
+    padding-left: 2.5rem;
 }
 
-.teacherInfoBox2 .teacherInfoBox2_image img {
-    width: 100%;
-    border-radius: 12px;
-    object-fit: cover;
+.trainerProfile_experience::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--trainer-primary) 0%, var(--trainer-primary-light) 100%);
+    border-radius: 2px;
 }
 
-.teacherInfoBox2 .teacherInfoBox2_info_sub {
-    font-weight: bold;
-    font-size: 22px;
-    margin-bottom: 0 !important;
+.trainerProfile_experience_header {
+    margin-bottom: 1.25rem;
 }
 
-.teacherInfoBox2 .teacherInfoBox2_info_contact {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.trainerProfile_experience_title {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--trainer-text-primary);
+    margin: 0 0 0.625rem 0;
+    line-height: 1.4;
 }
-.teacherInfoBox2 .teacherInfoBox2_info_contact i {
-    color: #008ac0;
-    font-size: 16px;
+
+.trainerProfile_experience_company {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--trainer-primary);
+    margin-bottom: 0;
+}
+
+.trainerProfile_experience_list {
+    list-style: none;
+    padding: 0;
     margin: 0;
-    height: unset;
-    width: unset;
-}
-
-.teacherInfoBox2 .teacherInfoBox2_info_contact .teacherInfoBox2_info_contact_item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    height: 35px;
-}
-.teacherInfoBox2 .teacherInfoBox2_info_contact .line {
-    width: 75px;
-    height: 25px;
-    background: #008ac0;
-    border-radius: 12px 0 0 12px;
-}
-.teacherInfoBox2 .teacherInfoBox2_content {
-    display: flex;
-    gap: 1rem;
-}
-.teacherInfoBox > *:last-child {
-    margin-bottom: 0 !important;
-}
-.teacherInfoBox .teacherInfoBox2_content .teacherInfoBox2_content_image {
-    flex:0 0 200px;
-}
-.teacherInfoBox .teacherInfoBox2_content .teacherInfoBox2_content_image img {
-    width: 100%;
-    object-fit: cover;
-    border-radius: 12px;
-}
-.teacherInfoBox h2 {
-    font-weight: bold;
-    font-size: 22px;
-    text-transform: uppercase;
-    background: url(https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/line-bottom-header.webp) left bottom no-repeat;
-    background-size: 150px 3px;
-    background-position-x: left;
-    padding-bottom: 12px;
-    margin-bottom: 15px;
-}
-
-.teacherInfoBox h3 {
-    font-size: 18px;
-    font-weight: bold;
-    /* margin-bottom: 0 !important; */
-}
-.teacherInfoBox .teacherInfoBox_company {
-    margin-bottom: 0.5rem;
-}
-.teacherInfoBox .container-skills {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    padding-bottom: 8px;
+    gap: 0.75rem;
 }
-.teacherInfoBox .container-skills .bar {
+
+.trainerProfile_experience_list li {
+    color: var(--trainer-text-secondary);
+    line-height: 1.75;
+    padding-left: 1.75rem;
+    position: relative;
+    font-size: 1rem;
+}
+
+.trainerProfile_experience_list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--trainer-primary);
+    font-weight: bold;
+    font-size: 1.125rem;
+}
+
+/* ============================================================================
+   DEGREES
+   ============================================================================ */
+.trainerProfile_degrees {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.trainerProfile_degree {
+    position: relative;
+    padding-left: 2.5rem;
+}
+
+.trainerProfile_degree::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--trainer-secondary) 0%, var(--trainer-primary-light) 100%);
+    border-radius: 2px;
+}
+
+.trainerProfile_degree_header {
+    margin-bottom: 1.25rem;
+}
+
+.trainerProfile_degree_title {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--trainer-text-primary);
+    margin: 0 0 0.625rem 0;
+    line-height: 1.4;
+}
+
+.trainerProfile_degree_school {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--trainer-secondary);
+    margin-bottom: 0;
+}
+
+.trainerProfile_degree_list {
+    list-style: none;
+    padding: 0;
     margin: 0;
-}
-.teacherInfoBox .container-skills .bar-title, .teacherInfoBox .container-skills .percent {
-    color: #212529;
-}
-
-.teacherInfoBox .container-skills .bar-fill-html {
-    background: #008ac0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
 }
 
-@media(max-width: 990px){
-    .layoutTeacherDetail {
+.trainerProfile_degree_list li {
+    color: var(--trainer-text-secondary);
+    line-height: 1.75;
+    padding-left: 1.75rem;
+    position: relative;
+    font-size: 1rem;
+}
+
+.trainerProfile_degree_list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--trainer-secondary);
+    font-weight: bold;
+    font-size: 1.125rem;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+@media (max-width: 1200px) {
+    .trainerProfile_content {
+        grid-template-columns: 360px 1fr;
+        gap: 2rem;
+    }
+    
+    .trainerProfile_hero_image {
+        flex: 0 0 260px;
+    }
+    
+    .trainerProfile_hero_image_wrapper {
+        width: 260px;
+        height: 325px;
+    }
+    
+    .trainerProfile_hero_name {
+        font-size: 2.75rem;
+    }
+    
+    .trainerProfile_hero_content {
+        gap: 3rem;
+    }
+}
+
+@media (max-width: 990px) {
+    .trainerProfile_hero {
+        padding: 3rem 0 2rem;
+    }
+    
+    .trainerProfile_hero_content {
         flex-direction: column;
+        text-align: center;
+        gap: 2.5rem;
     }
-    .layoutTeacherDetail_info {
-        display: none;
+    
+    .trainerProfile_hero_image {
+        flex: 0 0 auto;
     }
-    .layoutTeacherDetail_detail {
-        gap: 20px;
-        border-left: none;
-        padding-left: unset;
+    
+    .trainerProfile_hero_image_wrapper {
+        width: 220px;
+        height: 275px;
+        margin: 0 auto;
     }
-    .teacherInfoBox2 .teacherInfoBox2_image {
+    
+    .trainerProfile_hero_name {
+        font-size: 2.25rem;
+    }
+    
+    .trainerProfile_hero_position {
+        font-size: 1.375rem;
+    }
+    
+    .trainerProfile_hero_contact {
+        justify-content: center;
+    }
+    
+    .trainerProfile_content {
+        grid-template-columns: 1fr;
+        margin-top: 2rem;
+        gap: 2rem;
+    }
+    
+    .trainerProfile_sidebar {
+        order: 2;
+    }
+    
+    .trainerProfile_main {
+        order: 1;
+    }
+}
+
+@media (max-width: 567px) {
+    .trainerProfile_hero {
+        padding: 2rem 0 1.5rem;
+    }
+    
+    .trainerProfile_hero_image_wrapper {
         width: 180px;
-        display: flex;
+        height: 225px;
     }
-    .teacherInfoBox2 .teacherInfoBox2_info_contact {
+    
+    .trainerProfile_hero_name {
+        font-size: 1.875rem;
+    }
+    
+    .trainerProfile_hero_position {
+        font-size: 1.125rem;
+        margin-bottom: 2rem;
+    }
+    
+    .trainerProfile_hero_contact {
         flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        gap: 0; 
+        gap: 1rem;
     }
-    .teacherInfoBox2 .teacherInfoBox2_info_contact .line {
-        display: none;
-    }
-    .teacherInfoBox h2, .teacherInfoBox2 .teacherInfoBox2_info_sub {
-        font-size: 20px;
-    }
-    .teacherInfoBox2 h1 {
-        font-size: 26px;
-    }
-    .teacherInfoBox2 .teacherInfoBox2_info {
-        width: calc(100% - 180px);
-
-    }
-    .layoutTeacherDetail_detail {
+    
+    .trainerProfile_hero_contact_item {
         width: 100%;
+        justify-content: center;
+    }
+    
+    .trainerProfile_card_header {
+        padding: 1.5rem;
+        gap: 1rem;
+    }
+    
+    .trainerProfile_card_icon {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .trainerProfile_card_icon svg {
+        width: 22px;
+        height: 22px;
+    }
+    
+    .trainerProfile_card_title {
+        font-size: 1.375rem;
+    }
+    
+    .trainerProfile_card_body {
+        padding: 1.5rem;
+    }
+    
+    .trainerProfile_experience,
+    .trainerProfile_degree {
+        padding-left: 2rem;
+    }
+    
+    .trainerProfile_achievements {
+        gap: 1.25rem;
+    }
+    
+    .trainerProfile_skills {
+        gap: 1.75rem;
     }
 }
 
-@media(max-width: 567px){
-    .teacherInfoBox2 {
-        flex-direction: column;
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
     }
-    .teacherInfoBox2 .teacherInfoBox2_image, .teacherInfoBox2 .teacherInfoBox2_info {
-        width: 100%;
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
-    .teacherInfoBox h2, .teacherInfoBox2 .teacherInfoBox2_info_sub {
-        font-size: 18px;
-    }
-    .teacherInfoBox2 h1 {
-        font-size: 22px;
-    }
+}
+
+.trainerProfile_card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.trainerProfile_card:nth-child(1) { animation-delay: 0.1s; }
+.trainerProfile_card:nth-child(2) { animation-delay: 0.2s; }
+.trainerProfile_card:nth-child(3) { animation-delay: 0.3s; }
+.trainerProfile_card:nth-child(4) { animation-delay: 0.4s; }
+
+/* ============================================================================
+   LEGACY SUPPORT (Hide old classes)
+   ============================================================================ */
+.layoutTeacherDetail,
+.teacherDetailImg,
+.teacherInfoBox,
+.teacherInfoBox2 {
+    display: none !important;
 }

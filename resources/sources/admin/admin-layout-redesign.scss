@@ -12,7 +12,8 @@
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     margin: 0;
     padding: 0;
     font-family: "SVN-Gilroy", "Tahoma", sans-serif;
@@ -26,7 +27,7 @@ html, body {
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 1rem;
-    
+
     @media (max-width: 768px) {
         padding: 0 0.75rem;
     }
@@ -37,7 +38,7 @@ html, body {
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 1rem;
-    
+
     @media (max-width: 768px) {
         padding: 0 0.75rem;
     }
@@ -52,11 +53,11 @@ html, body {
     --admin-primary-dark: #1976D2;
     --admin-primary-light: #4da3d9;
     --admin-primary-lighter: rgba(33, 150, 243, 0.1);
-    
+
     // Secondary/Accent colors
     --admin-secondary: #FFA500;
     --admin-secondary-dark: #FF8C00;
-    
+
     // Status colors
     --admin-success: #07A35D;
     --admin-success-light: rgba(7, 163, 93, 0.1);
@@ -64,12 +65,12 @@ html, body {
     --admin-warning-light: rgba(255, 165, 0, 0.1);
     --admin-danger: #C62E2E;
     --admin-danger-light: rgba(198, 46, 46, 0.1);
-    
+
     // Text colors
     --admin-text-title: #2a2a2e;
     --admin-text-body: #2e3038;
     --admin-text-desc: #585961;
-    
+
     // Gray scale
     --admin-gray-50: #fcfcfd;
     --admin-gray-100: #edf2f7;
@@ -81,17 +82,17 @@ html, body {
     --admin-gray-700: #343a40;
     --admin-gray-800: #212529;
     --admin-gray-900: #1a1d21;
-    
+
     // Gradients
     --admin-gradient-primary: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
     --admin-gradient-secondary: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
-    
+
     // Radius
     --admin-radius-sm: 0.5rem;
     --admin-radius-md: 0.75rem;
     --admin-radius-lg: 1rem;
     --admin-radius-xl: 1.5rem;
-    
+
     // Shadows
     --admin-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     --admin-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
@@ -115,7 +116,7 @@ html, body {
         grid-template-columns: 1fr;
         gap: 1.5rem;
         padding-top: 1.25rem; // Space for mobile menu trigger
-        
+
         // Sidebar sẽ được hiển thị dạng side drawer trên mobile
         .adminDashboard_sidebar {
             display: block;
@@ -132,13 +133,13 @@ html, body {
             background: #fff;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
-            
+
             &--mobileOpen {
                 transform: translateX(0);
             }
         }
     }
-    
+
     @media (max-width: 768px) {
         padding-top: 1rem;
     }
@@ -147,7 +148,7 @@ html, body {
 // Mobile Menu Trigger Button
 .adminDashboard_mobileMenuTrigger {
     display: none;
-    
+
     @media (max-width: 1023px) {
         display: flex;
         align-items: center;
@@ -166,61 +167,62 @@ html, body {
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.08);
         cursor: pointer;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        
+
         svg {
             width: 24px;
             height: 24px;
             color: var(--admin-gray-700);
             transition: all 0.3s ease;
-            
+
             .adminDashboard_mobileMenuTrigger_line {
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 transform-origin: center;
-                
+
                 &--1 {
                     transform: translateY(0) rotate(0deg);
                 }
-                
+
                 &--2 {
                     opacity: 1;
                 }
-                
+
                 &--3 {
                     transform: translateY(0) rotate(0deg);
                 }
             }
         }
-        
+
         &:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
             border-color: var(--admin-primary);
             background: var(--admin-primary-lighter);
-            
+
             svg {
                 color: var(--admin-primary);
-                
+
                 .adminDashboard_mobileMenuTrigger_line {
                     &--1 {
                         transform: translateY(6px) rotate(45deg);
                     }
-                    
+
                     &--2 {
                         opacity: 0;
                     }
-                    
+
                     &--3 {
                         transform: translateY(-6px) rotate(-45deg);
                     }
                 }
             }
         }
-        
+
         &:active {
             transform: translateY(0);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
         }
     }
+
     @media (max-width: 768px) {
         top: 0.75rem;
         left: 0.75rem;
@@ -230,7 +232,7 @@ html, body {
 // Mobile Menu Backdrop
 .adminDashboard_mobileMenuBackdrop {
     display: none;
-    
+
     @media (max-width: 1023px) {
         display: block;
         position: fixed;
@@ -244,7 +246,7 @@ html, body {
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.3s ease, visibility 0.3s ease;
-        
+
         &.active {
             opacity: 1;
             visibility: visible;
@@ -258,7 +260,7 @@ html, body {
 .adminSidebar {
     background: #fff;
     border-radius: var(--admin-radius-xl);
-    box-shadow: 
+    box-shadow:
         0 4px 24px rgba(0, 0, 0, 0.06),
         0 1px 4px rgba(0, 0, 0, 0.04);
     overflow: hidden;
@@ -275,11 +277,11 @@ html, body {
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        
+
         .adminSidebar_header {
             flex-shrink: 0;
         }
-        
+
         .adminSidebar_nav {
             flex: 1;
             min-height: 0;
@@ -292,7 +294,7 @@ html, body {
 // Mobile Close Button
 .adminSidebar_mobileClose {
     display: none;
-    
+
     @media (max-width: 1023px) {
         display: flex;
         align-items: center;
@@ -310,19 +312,19 @@ html, body {
         color: rgba(255, 255, 255, 0.9);
         cursor: pointer;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        
+
         svg {
             width: 16px;
             height: 16px;
         }
-        
+
         &:hover {
             background: rgba(255, 255, 255, 0.25);
             border-color: rgba(255, 255, 255, 0.35);
             transform: scale(1.1);
             color: #fff;
         }
-        
+
         &:active {
             transform: scale(0.95);
         }
@@ -341,7 +343,7 @@ html, body {
     overflow: hidden;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
     flex-shrink: 0;
-    
+
     // Link chứa avatar và info
     &_link {
         text-decoration: none;
@@ -353,7 +355,7 @@ html, body {
         grid-column: 1 / -1;
         gap: 1rem;
         align-items: start;
-        
+
         &:hover {
             .adminSidebar_header_avatar {
                 transform: scale(1.05);
@@ -373,7 +375,7 @@ html, body {
     overflow: hidden;
     pointer-events: none;
     z-index: 0;
-    
+
     &::before {
         content: '';
         position: absolute;
@@ -385,7 +387,7 @@ html, body {
         background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
         animation: adminSidebarFloat1 8s ease-in-out infinite;
     }
-    
+
     &::after {
         content: '';
         position: absolute;
@@ -403,7 +405,7 @@ html, body {
 .adminSidebar_header_bg_circle {
     position: absolute;
     border-radius: 50%;
-    
+
     &--1 {
         width: 80px;
         height: 80px;
@@ -412,7 +414,7 @@ html, body {
         background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
         animation: adminSidebarPulse 5s ease-in-out infinite;
     }
-    
+
     &--2 {
         width: 50px;
         height: 50px;
@@ -421,7 +423,7 @@ html, body {
         background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
         animation: adminSidebarPulse 6s ease-in-out infinite 1s;
     }
-    
+
     &--3 {
         width: 35px;
         height: 35px;
@@ -434,24 +436,61 @@ html, body {
 
 // Sidebar header animations
 @keyframes adminSidebarFloat1 {
-    0%, 100% { transform: translate(0, 0); opacity: 1; }
-    50% { transform: translate(-6px, 6px); opacity: 0.85; }
+
+    0%,
+    100% {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translate(-6px, 6px);
+        opacity: 0.85;
+    }
 }
 
 @keyframes adminSidebarFloat2 {
-    0%, 100% { transform: translate(0, 0); opacity: 1; }
-    50% { transform: translate(5px, -5px); opacity: 0.9; }
+
+    0%,
+    100% {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translate(5px, -5px);
+        opacity: 0.9;
+    }
 }
 
 @keyframes adminSidebarFloat3 {
-    0%, 100% { transform: translate(0, 0); }
-    33% { transform: translate(4px, -4px); }
-    66% { transform: translate(-3px, 3px); }
+
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+
+    33% {
+        transform: translate(4px, -4px);
+    }
+
+    66% {
+        transform: translate(-3px, 3px);
+    }
 }
 
 @keyframes adminSidebarPulse {
-    0%, 100% { transform: scale(1); opacity: 0.7; }
-    50% { transform: scale(1.1); opacity: 1; }
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
 }
 
 // Avatar (thay cho logo)
@@ -463,7 +502,7 @@ html, body {
     flex-shrink: 0;
     border: 3px solid rgba(255, 255, 255, 0.4);
     background: #fff;
-    box-shadow: 
+    box-shadow:
         0 4px 16px rgba(0, 0, 0, 0.15),
         inset 0 1px 0 rgba(255, 255, 255, 0.2);
     position: relative;
@@ -547,7 +586,7 @@ html, body {
     user-select: none;
     grid-column: 1 / -1; // Chiếm toàn bộ chiều rộng của grid
     width: 100%;
-    
+
     // Shine effect on hover
     &::before {
         content: '';
@@ -560,17 +599,17 @@ html, body {
         transition: left 0.5s ease;
         border-radius: var(--admin-radius-md);
     }
-    
+
     &:hover {
         background: rgba(255, 255, 255, 0.18);
         border-color: rgba(255, 255, 255, 0.3);
         transform: translateY(-2px);
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-        
+
         &::before {
             left: 100%;
         }
-        
+
         &::after {
             content: attr(data-tooltip);
             position: absolute;
@@ -591,7 +630,7 @@ html, body {
             animation: tooltipFadeIn 0.2s ease;
         }
     }
-    
+
     &_value {
         font-size: 0.875rem;
         font-weight: 700;
@@ -604,19 +643,19 @@ html, body {
         text-align: center;
         word-break: break-all;
     }
-    
+
     &--copied {
         background: rgba(7, 163, 93, 0.3);
         border-color: var(--admin-success);
-        
+
         &::after {
             content: 'Đã sao chép!';
         }
     }
-    
+
     @media (max-width: 1023px) {
         padding: 0.75rem 0.875rem;
-        
+
         &_value {
             font-size: 0.8125rem;
         }
@@ -631,7 +670,7 @@ html, body {
     -webkit-overflow-scrolling: touch;
     flex: 1;
     min-height: 0; // Important for flex scrolling
-    
+
     @media (max-width: 1023px) {
         padding-bottom: 2rem;
         overflow-y: auto;
@@ -642,7 +681,7 @@ html, body {
 // Navigation Sections
 .adminSidebar_nav_section {
     margin-bottom: 0.5rem;
-    
+
     &_title {
         font-size: 0.6875rem;
         font-weight: 600;
@@ -652,7 +691,7 @@ html, body {
         padding: 0.75rem 0.75rem 0.5rem;
         margin: 0;
     }
-    
+
     &:not(:first-child) {
         border-top: 1px solid var(--admin-gray-100);
         margin-top: 0.75rem;
@@ -685,7 +724,7 @@ html, body {
         justify-content: center;
         flex-shrink: 0;
         transition: all 0.2s ease;
-        
+
         svg {
             width: 17px;
             height: 17px;
@@ -694,7 +733,7 @@ html, body {
         }
     }
 
-    > span:not(.adminSidebar_nav_item_badge):not(.adminSidebar_nav_item_balance):not(.adminSidebar_nav_item_tag) {
+    >span:not(.adminSidebar_nav_item_badge):not(.adminSidebar_nav_item_balance):not(.adminSidebar_nav_item_tag) {
         flex: 1;
         font-size: 0.95rem;
     }
@@ -702,9 +741,10 @@ html, body {
     &:hover {
         background: rgba(33, 150, 243, 0.06);
         color: #1976D2;
-        
+
         .adminSidebar_nav_item_icon {
             background: rgba(33, 150, 243, 0.12);
+
             svg {
                 color: #1976D2;
             }
@@ -719,6 +759,7 @@ html, body {
         .adminSidebar_nav_item_icon {
             background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
             box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+
             svg {
                 color: #fff;
             }
@@ -747,34 +788,35 @@ html, body {
 
 .admin-menu-item {
     margin-bottom: 0.25rem;
-    
+
     &.has-submenu {
         .admin-menu-link {
             position: relative;
         }
     }
-    
+
     &.open {
         .admin-menu-arrow {
             transform: rotate(90deg);
         }
-        
+
         .admin-submenu {
             max-height: 1000px;
             opacity: 1;
         }
     }
-    
+
     &.active {
-        > .admin-menu-link {
+        >.admin-menu-link {
             background: rgba(33, 150, 243, 0.1);
             color: #1565C0;
 
             .admin-menu-icon {
                 background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
                 box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
-                
-                svg, i {
+
+                svg,
+                i {
                     color: #fff;
                 }
             }
@@ -806,15 +848,16 @@ html, body {
     position: relative;
     font-weight: 500;
     font-size: 0.9rem;
-    
+
     &:hover {
         background: rgba(33, 150, 243, 0.06);
         color: #1976D2;
-        
+
         .admin-menu-icon {
             background: rgba(33, 150, 243, 0.12);
-            
-            svg, i {
+
+            svg,
+            i {
                 color: #1976D2;
             }
         }
@@ -831,8 +874,9 @@ html, body {
     justify-content: center;
     flex-shrink: 0;
     transition: all 0.2s ease;
-    
-    svg, i {
+
+    svg,
+    i {
         width: 17px;
         height: 17px;
         color: var(--admin-gray-500);
@@ -851,7 +895,7 @@ html, body {
     color: var(--admin-gray-400);
     transition: transform 0.2s ease;
     flex-shrink: 0;
-    
+
     svg {
         width: 100%;
         height: 100%;
@@ -872,16 +916,17 @@ html, body {
 
 .admin-submenu-item {
     margin-bottom: 0.25rem;
-    
+
     &.active {
         .admin-submenu-link {
             background: rgba(33, 150, 243, 0.08);
             color: #1565C0;
-            
+
             .admin-submenu-icon {
                 background: rgba(33, 150, 243, 0.15);
-                
-                svg, i {
+
+                svg,
+                i {
                     color: #1976D2;
                 }
             }
@@ -900,15 +945,16 @@ html, body {
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: 500;
     font-size: 0.875rem;
-    
+
     &:hover {
         background: rgba(33, 150, 243, 0.06);
         color: #1976D2;
-        
+
         .admin-submenu-icon {
             background: rgba(33, 150, 243, 0.12);
-            
-            svg, i {
+
+            svg,
+            i {
                 color: #1976D2;
             }
         }
@@ -925,8 +971,9 @@ html, body {
     justify-content: center;
     flex-shrink: 0;
     transition: all 0.2s ease;
-    
-    svg, i {
+
+    svg,
+    i {
         width: 14px;
         height: 14px;
         color: var(--admin-gray-500);
@@ -964,7 +1011,7 @@ html, body {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     flex-shrink: 0;
     white-space: nowrap;
-    
+
     // Shine effect on hover
     &::before {
         content: '';
@@ -976,45 +1023,45 @@ html, body {
         background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
         transition: left 0.5s ease;
     }
-    
+
     svg {
         flex-shrink: 0;
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    
+
     span {
         position: relative;
         z-index: 1;
     }
-    
+
     &:hover {
         transform: translateY(-2px);
-        
+
         &::before {
             left: 100%;
         }
-        
+
         svg {
             transform: rotate(90deg) scale(1.1);
         }
     }
-    
+
     &:active {
         transform: translateY(0);
     }
-    
+
     // SIZE VARIANTS
     &--sm {
         padding: 0.5rem 1rem;
         font-size: 0.8125rem;
         border-radius: var(--admin-radius-sm);
-        
+
         svg {
             width: 16px;
             height: 16px;
         }
     }
-    
+
     &--md {
         padding: 0.875rem 1.5rem;
         font-size: 0.9375rem;
@@ -1025,149 +1072,149 @@ html, body {
             height: 20px;
         }
     }
-    
+
     &--lg {
         padding: 1rem 2rem;
         font-size: 1rem;
         border-radius: var(--admin-radius-md);
-        
+
         svg {
             width: 22px;
             height: 22px;
         }
     }
-    
+
     // COLOR VARIANTS
     &--primary {
         background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
         color: #fff !important;
         box-shadow: 0 4px 16px rgba(33, 150, 243, 0.35);
-        
+
         svg {
             color: #fff !important;
         }
-        
+
         &:hover {
             box-shadow: 0 8px 24px rgba(33, 150, 243, 0.45);
             background: linear-gradient(135deg, #1976D2 0%, #2196F3 100%);
         }
     }
-    
+
     &--success {
         background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         color: #fff !important;
         box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
-        
+
         svg {
             color: #fff !important;
         }
-        
+
         &:hover {
             box-shadow: 0 8px 24px rgba(16, 185, 129, 0.45);
             background: linear-gradient(135deg, #059669 0%, #10b981 100%);
         }
     }
-    
+
     &--warning {
         background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
         color: #fff !important;
         box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);
-        
+
         svg {
             color: #fff !important;
         }
-        
+
         &:hover {
             box-shadow: 0 8px 24px rgba(245, 158, 11, 0.45);
             background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
         }
     }
-    
+
     &--danger {
         background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
         color: #fff !important;
         box-shadow: 0 4px 16px rgba(239, 68, 68, 0.35);
-        
+
         svg {
             color: #fff !important;
         }
-        
+
         &:hover {
             box-shadow: 0 8px 24px rgba(239, 68, 68, 0.45);
             background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
         }
     }
-    
+
     &--secondary {
         background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
         color: #fff !important;
         box-shadow: 0 4px 16px rgba(107, 114, 128, 0.35);
-        
+
         svg {
             color: #fff !important;
         }
-        
+
         &:hover {
             box-shadow: 0 8px 24px rgba(107, 114, 128, 0.45);
             background: linear-gradient(135deg, #4b5563 0%, #6b7280 100%);
         }
     }
-    
+
     &--outline {
         background: transparent;
         color: #2196F3 !important;
         border: 2px solid #2196F3;
         box-shadow: none;
-        
+
         svg {
             color: #2196F3 !important;
         }
-        
+
         &:hover {
             background: rgba(33, 150, 243, 0.08);
             box-shadow: 0 4px 16px rgba(33, 150, 243, 0.2);
         }
     }
-    
+
     &--ghost {
         background: linear-gradient(135deg, #fff 0%, var(--admin-gray-50) 100%);
         color: var(--admin-gray-700) !important;
         border: 2px solid var(--admin-gray-200);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        
+
         svg {
             color: var(--admin-gray-600) !important;
         }
-        
+
         &:hover {
             border-color: #2196F3;
             color: #fff !important;
             box-shadow: 0 4px 16px rgba(33, 150, 243, 0.3);
-            
+
             &::before {
                 left: 0;
                 background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
             }
-            
+
             svg {
                 color: #fff !important;
             }
         }
     }
-    
+
     &--disabled,
     &:disabled {
         opacity: 0.6;
         cursor: not-allowed;
         pointer-events: none;
-        
+
         &:hover {
             transform: none;
-            
+
             svg {
                 transform: none;
             }
-            
+
             &::before {
                 left: -100%;
             }
@@ -1180,8 +1227,7 @@ html, body {
 // ============================================================================
 // Color system for section boxes
 $admin-color-system: (
-    'primary': (
-        'base': #2196F3,
+    'primary': ('base': #2196F3,
         'dark': #1976D2,
         'light': rgba(33, 150, 243, 0.12),
         'bg-start': rgba(33, 150, 243, 0.04),
@@ -1192,10 +1238,8 @@ $admin-color-system: (
         'icon-bg-end': rgba(33, 150, 243, 0.22),
         'icon-border': rgba(33, 150, 243, 0.25),
         'icon-color': #1E88E5,
-        'badge-shadow': rgba(33, 150, 243, 0.35)
-    ),
-    'success': (
-        'base': #07A35D,
+        'badge-shadow': rgba(33, 150, 243, 0.35)),
+    'success': ('base': #07A35D,
         'dark': #059669,
         'light': rgba(7, 163, 93, 0.1),
         'bg-start': rgba(7, 163, 93, 0.03),
@@ -1206,10 +1250,8 @@ $admin-color-system: (
         'icon-bg-end': rgba(7, 163, 93, 0.25),
         'icon-border': rgba(7, 163, 93, 0.2),
         'icon-color': #07A35D,
-        'badge-shadow': rgba(7, 163, 93, 0.3)
-    ),
-    'warning': (
-        'base': #FFA500,
+        'badge-shadow': rgba(7, 163, 93, 0.3)),
+    'warning': ('base': #FFA500,
         'dark': #d97706,
         'light': rgba(245, 158, 11, 0.1),
         'bg-start': rgba(245, 158, 11, 0.03),
@@ -1220,10 +1262,8 @@ $admin-color-system: (
         'icon-bg-end': rgba(245, 158, 11, 0.25),
         'icon-border': rgba(245, 158, 11, 0.2),
         'icon-color': #f59e0b,
-        'badge-shadow': rgba(245, 158, 11, 0.3)
-    ),
-    'danger': (
-        'base': #C62E2E,
+        'badge-shadow': rgba(245, 158, 11, 0.3)),
+    'danger': ('base': #C62E2E,
         'dark': #b91c1c,
         'light': rgba(198, 46, 46, 0.1),
         'bg-start': rgba(198, 46, 46, 0.03),
@@ -1234,10 +1274,8 @@ $admin-color-system: (
         'icon-bg-end': rgba(198, 46, 46, 0.25),
         'icon-border': rgba(198, 46, 46, 0.2),
         'icon-color': #C62E2E,
-        'badge-shadow': rgba(198, 46, 46, 0.3)
-    ),
-    'info': (
-        'base': #3b82f6,
+        'badge-shadow': rgba(198, 46, 46, 0.3)),
+    'info': ('base': #3b82f6,
         'dark': #2563eb,
         'light': rgba(59, 130, 246, 0.1),
         'bg-start': rgba(59, 130, 246, 0.03),
@@ -1248,10 +1286,8 @@ $admin-color-system: (
         'icon-bg-end': rgba(59, 130, 246, 0.25),
         'icon-border': rgba(59, 130, 246, 0.2),
         'icon-color': #3b82f6,
-        'badge-shadow': rgba(59, 130, 246, 0.3)
-    ),
-    'neutral': (
-        'base': #6b7280,
+        'badge-shadow': rgba(59, 130, 246, 0.3)),
+    'neutral': ('base': #6b7280,
         'dark': #4b5563,
         'light': rgba(107, 114, 128, 0.08),
         'bg-start': #fff,
@@ -1262,8 +1298,7 @@ $admin-color-system: (
         'icon-bg-end': rgba(107, 114, 128, 0.15),
         'icon-border': rgba(107, 114, 128, 0.18),
         'icon-color': #6b7280,
-        'badge-shadow': rgba(107, 114, 128, 0.25)
-    )
+        'badge-shadow': rgba(107, 114, 128, 0.25))
 );
 
 // Mixin: Generate color variant styles
@@ -1273,22 +1308,22 @@ $admin-color-system: (
         border-color: map-get($color-map, 'border');
         box-shadow: 0 4px 20px map-get($color-map, 'shadow');
     }
-    
+
     .adminSectionBox_header--#{$color-name} {
         background: linear-gradient(135deg, map-get($color-map, 'bg-start') 0%, map-get($color-map, 'bg-end') 100%);
         border-bottom-color: map-get($color-map, 'border');
-        
+
         .adminSectionBox_header_iconWrapper--#{$color-name} {
             background: linear-gradient(135deg, map-get($color-map, 'icon-bg-start') 0%, map-get($color-map, 'icon-bg-end') 100%);
             border-color: map-get($color-map, 'icon-border');
             box-shadow: 0 4px 10px map-get($color-map, 'shadow');
-            
+
             svg {
                 color: map-get($color-map, 'icon-color');
             }
         }
     }
-    
+
     .adminSectionBox_header_badge--#{$color-name} {
         background: linear-gradient(135deg, map-get($color-map, 'base') 0%, map-get($color-map, 'dark') 100%);
         box-shadow: 0 4px 12px map-get($color-map, 'badge-shadow');
@@ -1304,7 +1339,7 @@ $admin-color-system: (
     border: 1px solid rgba(0, 0, 0, 0.05);
     overflow: hidden;
     position: relative;
-    
+
     // Generate all color variants
     @each $color-name, $color-map in $admin-color-system {
         @include admin-section-color-variant($color-name, $color-map);
@@ -1326,15 +1361,15 @@ $admin-color-system: (
     border-bottom: 1px solid rgba(33, 150, 243, 0.08);
     position: relative;
     overflow: hidden;
-    
+
     @media (max-width: 1023px) {
         padding: 1.25rem;
     }
-    
+
     @media (max-width: 768px) {
         padding: 1rem;
     }
-    
+
     &::before {
         content: '';
         position: absolute;
@@ -1346,7 +1381,7 @@ $admin-color-system: (
         border-radius: 50%;
         pointer-events: none;
     }
-    
+
     &::after {
         content: '';
         position: absolute;
@@ -1385,7 +1420,7 @@ $admin-color-system: (
     justify-content: center;
     border-radius: 6px 6px 2px 2px;
     margin-top: -2px;
-    
+
     // Ribbon fishtail bottom
     &::after {
         content: '';
@@ -1400,7 +1435,7 @@ $admin-color-system: (
         clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 60%, 0% 100%);
         z-index: -1;
     }
-    
+
     svg {
         width: 22px;
         height: 22px;
@@ -1408,13 +1443,13 @@ $admin-color-system: (
         position: relative;
         z-index: 1;
         transition: transform 0.3s ease;
-        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
     }
-    
+
     &:hover {
         transform: translateY(2px);
         box-shadow: 0 6px 15px rgba(33, 150, 243, 0.2);
-        
+
         svg {
             transform: scale(1.1);
         }
@@ -1474,12 +1509,12 @@ $admin-color-system: (
     position: relative;
     overflow: hidden;
     transition: all 0.3s ease;
-    
+
     &:hover {
         transform: translateY(-2px) scale(1.05);
         box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
     }
-    
+
     &_number {
         display: inline-flex;
         align-items: center;
@@ -1495,14 +1530,14 @@ $admin-color-system: (
         z-index: 1;
         backdrop-filter: blur(4px);
     }
-    
+
     &_label {
         position: relative;
         z-index: 1;
         font-weight: 600;
         letter-spacing: 0.02em;
     }
-    
+
     // Generate badge color variants
     @each $color-name, $color-map in $admin-color-system {
         &--#{$color-name} {
@@ -1516,11 +1551,11 @@ $admin-color-system: (
 .adminSectionBox_body {
     padding: 1.5rem;
     position: relative;
-    
+
     @media (max-width: 1023px) {
         padding: 1.25rem;
     }
-    
+
     @media (max-width: 768px) {
         padding: 1rem;
     }
@@ -1563,6 +1598,7 @@ $admin-color-system: (
         opacity: 0;
         transform: translateY(-10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -1572,109 +1608,109 @@ $admin-color-system: (
 // ============================================================================
 // RESPONSIVE STYLES
 // ============================================================================
-    @media (max-width: 1199px) {
-        .adminSidebar {
-            border-radius: 0;
-        }
-        
-        .adminSidebar_header {
-            padding: 1.25rem;
-            gap: 1rem 0.875rem;
-            grid-template-columns: 50px 1fr;
-        }
-        
-        .adminSidebar_header_avatar {
-            width: 50px;
-            height: 50px;
-            border-width: 2.5px;
-        }
-        
-        .adminSidebar_header_avatar_placeholder {
-            font-size: 1.25rem;
-        }
-        
-        .adminSidebar_header_info_name {
-            font-size: 1.0625rem;
-        }
-        
-        .adminSidebar_header_info_email {
-            font-size: 0.75rem;
-        }
-    
+@media (max-width: 1199px) {
+    .adminSidebar {
+        border-radius: 0;
+    }
+
+    .adminSidebar_header {
+        padding: 1.25rem;
+        gap: 1rem 0.875rem;
+        grid-template-columns: 50px 1fr;
+    }
+
+    .adminSidebar_header_avatar {
+        width: 50px;
+        height: 50px;
+        border-width: 2.5px;
+    }
+
+    .adminSidebar_header_avatar_placeholder {
+        font-size: 1.25rem;
+    }
+
+    .adminSidebar_header_info_name {
+        font-size: 1.0625rem;
+    }
+
+    .adminSidebar_header_info_email {
+        font-size: 0.75rem;
+    }
+
     .adminSidebar_nav {
         padding: 0.625rem;
     }
-    
+
     .adminSidebar_nav_section {
         margin-bottom: 0.375rem;
-        
+
         &_title {
             font-size: 0.625rem;
             padding: 0.625rem 0.625rem 0.375rem;
         }
-        
+
         &:not(:first-child) {
             margin-top: 0.625rem;
             padding-top: 0.375rem;
         }
     }
-    
+
     .adminSidebar_nav_item {
         gap: 0.625rem;
         padding: 0.5rem 0.625rem;
         margin-bottom: 0.1875rem;
-        
+
         &_icon {
             width: 32px;
             height: 32px;
-            
+
             svg {
                 width: 16px;
                 height: 16px;
             }
         }
-        
-        > span:not(.adminSidebar_nav_item_badge):not(.adminSidebar_nav_item_balance):not(.adminSidebar_nav_item_tag) {
+
+        >span:not(.adminSidebar_nav_item_badge):not(.adminSidebar_nav_item_balance):not(.adminSidebar_nav_item_tag) {
             font-size: 0.85rem;
         }
     }
 }
 
-    @media (max-width: 1023px) {
-        .adminSidebar_header {
-            padding: 1.375rem 1.25rem;
-            padding-right: 3.5rem; // Space for close button
-            gap: 1rem 0.875rem;
-            grid-template-columns: 52px 1fr;
-        }
-        
-        .adminSidebar_header_avatar {
-            width: 52px;
-            height: 52px;
-        }
-        
-        .adminSidebar_header_avatar_placeholder {
-            font-size: 1.25rem;
-        }
-        
-        .adminSidebar_header_info_name {
-            font-size: 1.0625rem;
-            max-width: 160px;
-        }
-        
-        .adminSidebar_header_info_email {
-            font-size: 0.75rem;
-            max-width: 160px;
-        }
-    
+@media (max-width: 1023px) {
+    .adminSidebar_header {
+        padding: 1.375rem 1.25rem;
+        padding-right: 3.5rem; // Space for close button
+        gap: 1rem 0.875rem;
+        grid-template-columns: 52px 1fr;
+    }
+
+    .adminSidebar_header_avatar {
+        width: 52px;
+        height: 52px;
+    }
+
+    .adminSidebar_header_avatar_placeholder {
+        font-size: 1.25rem;
+    }
+
+    .adminSidebar_header_info_name {
+        font-size: 1.0625rem;
+        max-width: 160px;
+    }
+
+    .adminSidebar_header_info_email {
+        font-size: 0.75rem;
+        max-width: 160px;
+    }
+
     .adminSidebar_nav {
         padding: 0.75rem;
     }
-    
+
     .adminSidebar_nav_item {
         padding: 0.625rem 0.75rem;
-        
-        > span:not(.adminSidebar_nav_item_badge):not(.adminSidebar_nav_item_balance):not(.adminSidebar_nav_item_tag) {
+
+        >span:not(.adminSidebar_nav_item_badge):not(.adminSidebar_nav_item_balance):not(.adminSidebar_nav_item_tag) {
             font-size: 0.875rem;
         }
     }
@@ -1685,26 +1721,26 @@ $admin-color-system: (
         padding: 1rem;
         gap: 0.875rem;
     }
-    
+
     .adminSectionBox_title {
         font-size: 1.25rem;
         gap: 0.5rem;
     }
-    
+
     .adminSectionBox_desc {
         font-size: 0.8125rem;
     }
-    
+
     .adminSectionBox_header_iconWrapper {
         width: 36px;
         height: 44px;
-        
+
         svg {
             width: 18px;
             height: 18px;
         }
     }
-    
+
     .adminSectionBox_body {
         padding: 1.25rem;
     }
@@ -1716,8 +1752,7 @@ $admin-color-system: (
 
 // Color system for section headers
 $admin-color-system: (
-    'primary': (
-        'bg-start': rgba(33, 150, 243, 0.04),
+    'primary': ('bg-start': rgba(33, 150, 243, 0.04),
         'bg-end': rgba(33, 150, 243, 0.1),
         'border': rgba(33, 150, 243, 0.18),
         'shadow': rgba(33, 150, 243, 0.15),
@@ -1726,8 +1761,7 @@ $admin-color-system: (
         'icon-border': rgba(33, 150, 243, 0.25),
         'icon-color': #1E88E5,
     ),
-    'success': (
-        'bg-start': rgba(7, 163, 93, 0.03),
+    'success': ('bg-start': rgba(7, 163, 93, 0.03),
         'bg-end': rgba(7, 163, 93, 0.08),
         'border': rgba(7, 163, 93, 0.15),
         'shadow': rgba(7, 163, 93, 0.12),
@@ -1736,8 +1770,7 @@ $admin-color-system: (
         'icon-border': rgba(7, 163, 93, 0.2),
         'icon-color': #07A35D,
     ),
-    'info': (
-        'bg-start': rgba(59, 130, 246, 0.03),
+    'info': ('bg-start': rgba(59, 130, 246, 0.03),
         'bg-end': rgba(59, 130, 246, 0.08),
         'border': rgba(59, 130, 246, 0.15),
         'shadow': rgba(59, 130, 246, 0.12),
@@ -1746,8 +1779,7 @@ $admin-color-system: (
         'icon-border': rgba(59, 130, 246, 0.2),
         'icon-color': #3b82f6,
     ),
-    'purple': (
-        'bg-start': rgba(139, 92, 246, 0.03),
+    'purple': ('bg-start': rgba(139, 92, 246, 0.03),
         'bg-end': rgba(139, 92, 246, 0.08),
         'border': rgba(139, 92, 246, 0.15),
         'shadow': rgba(139, 92, 246, 0.12),
@@ -1756,8 +1788,7 @@ $admin-color-system: (
         'icon-border': rgba(139, 92, 246, 0.2),
         'icon-color': #8b5cf6,
     ),
-    'cyan': (
-        'bg-start': rgba(6, 182, 212, 0.03),
+    'cyan': ('bg-start': rgba(6, 182, 212, 0.03),
         'bg-end': rgba(6, 182, 212, 0.08),
         'border': rgba(6, 182, 212, 0.15),
         'shadow': rgba(6, 182, 212, 0.12),
@@ -1766,8 +1797,7 @@ $admin-color-system: (
         'icon-border': rgba(6, 182, 212, 0.2),
         'icon-color': #06b6d4,
     ),
-    'warning': (
-        'bg-start': rgba(245, 158, 11, 0.03),
+    'warning': ('bg-start': rgba(245, 158, 11, 0.03),
         'bg-end': rgba(245, 158, 11, 0.08),
         'border': rgba(245, 158, 11, 0.15),
         'shadow': rgba(245, 158, 11, 0.12),
@@ -1786,14 +1816,14 @@ $admin-color-system: (
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     border: 1px solid var(--admin-gray-200);
     position: relative;
-    
+
     &--tracked {
         // Color variants applied via header classes
         // Variants are handled by header modifier classes (e.g., --referee, --trainer)
         // This modifier exists for semantic clarity
         position: relative; // Ensure positioning context
     }
-    
+
     @media (max-width: 768px) {
         border-radius: var(--admin-radius-md);
     }
@@ -1813,14 +1843,14 @@ $admin-color-system: (
     border-bottom: 1px solid rgba(33, 150, 243, 0.08);
     position: relative;
     overflow: hidden;
-    
+
     .companyManagementPage_section--tracked & {
         border-radius: 0;
         border: none;
         border-bottom: 1px solid rgba(0, 0, 0, 0.06);
         margin-bottom: 0;
     }
-    
+
     &::before {
         content: '';
         position: absolute;
@@ -1832,7 +1862,7 @@ $admin-color-system: (
         border-radius: 50%;
         pointer-events: none;
     }
-    
+
     &::after {
         content: '';
         position: absolute;
@@ -1844,11 +1874,11 @@ $admin-color-system: (
         border-radius: 50%;
         pointer-events: none;
     }
-    
+
     @media (max-width: 1023px) {
         padding: 1.25rem;
     }
-    
+
     @media (max-width: 768px) {
         padding: 1rem;
     }
@@ -1862,15 +1892,15 @@ $admin-color-system: (
     min-width: 0;
     position: relative;
     z-index: 1;
-    
+
     @media (max-width: 1199px) {
         gap: 0.9375rem;
     }
-    
+
     @media (max-width: 990px) {
         gap: 0.875rem;
     }
-    
+
     @media (max-width: 768px) {
         gap: 0.75rem;
     }
@@ -1890,7 +1920,7 @@ $admin-color-system: (
     justify-content: center;
     border-radius: 6px 6px 2px 2px;
     margin-top: -2px;
-    
+
     // Ribbon fishtail bottom
     &::after {
         content: '';
@@ -1905,7 +1935,7 @@ $admin-color-system: (
         clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 60%, 0% 100%);
         z-index: -1;
     }
-    
+
     // Decorative dot at top
     &::before {
         content: '';
@@ -1919,16 +1949,16 @@ $admin-color-system: (
         border-radius: 50%;
         z-index: 2;
     }
-    
+
     &:hover {
         transform: translateY(2px);
         box-shadow: 0 6px 15px rgba(33, 150, 243, 0.25);
-        
+
         svg {
             transform: scale(1.1);
         }
     }
-    
+
     svg {
         width: 22px;
         height: 22px;
@@ -1936,28 +1966,28 @@ $admin-color-system: (
         position: relative;
         z-index: 1;
         transition: transform 0.3s ease;
-        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
     }
-    
+
     @media (max-width: 1199px) {
         width: 40px;
         height: 48px;
-        
+
         svg {
             width: 20px;
             height: 20px;
         }
     }
-    
+
     @media (max-width: 768px) {
         width: 36px;
         height: 44px;
-        
+
         &::after {
             bottom: -8px;
             height: 10px;
         }
-        
+
         svg {
             width: 18px;
             height: 18px;
@@ -1982,22 +2012,22 @@ $admin-color-system: (
     margin: 0 0 0.375rem 0;
     line-height: 1.25;
     letter-spacing: -0.01em;
-    
+
     @media (max-width: 1199px) {
         font-size: 1.4375rem;
         gap: 0.6875rem;
     }
-    
+
     @media (max-width: 1023px) {
         font-size: 1.375rem;
         gap: 0.625rem;
     }
-    
+
     @media (max-width: 990px) {
         font-size: 1.25rem;
         gap: 0.5625rem;
     }
-    
+
     @media (max-width: 768px) {
         font-size: 1.125rem;
         gap: 0.5rem;
@@ -2011,15 +2041,15 @@ $admin-color-system: (
     line-height: 1.6;
     font-weight: 400;
     max-width: 600px;
-    
+
     @media (max-width: 1199px) {
         font-size: 0.84375rem;
     }
-    
+
     @media (max-width: 990px) {
         font-size: 0.8125rem;
     }
-    
+
     @media (max-width: 768px) {
         font-size: 0.75rem;
     }
@@ -2028,11 +2058,11 @@ $admin-color-system: (
 .companyManagementPage_section_body {
     padding: 1.5rem;
     position: relative;
-    
+
     @media (max-width: 1023px) {
         padding: 1.25rem;
     }
-    
+
     @media (max-width: 768px) {
         padding: 1rem;
     }
@@ -2042,16 +2072,16 @@ $admin-color-system: (
 @mixin header-color-variant($color-name, $color-map) {
     background: linear-gradient(135deg, map-get($color-map, 'bg-start') 0%, map-get($color-map, 'bg-end') 100%);
     border-bottom-color: map-get($color-map, 'border');
-    
+
     .companyManagementPage_section--tracked & {
         background: transparent;
         border-bottom-color: map-get($color-map, 'border');
     }
-    
+
     &::before {
         background: radial-gradient(circle, map-get($color-map, 'bg-end') 0%, transparent 70%);
     }
-    
+
     &::after {
         background: radial-gradient(circle, map-get($color-map, 'bg-start') 0%, transparent 70%);
     }
@@ -2061,12 +2091,12 @@ $admin-color-system: (
     background: linear-gradient(135deg, map-get($color-map, 'icon-bg-start') 0%, map-get($color-map, 'icon-bg-end') 100%);
     border-color: map-get($color-map, 'icon-border');
     box-shadow: 0 4px 10px map-get($color-map, 'shadow');
-    
+
     &::after {
         background: inherit;
         border-color: inherit;
     }
-    
+
     svg {
         color: map-get($color-map, 'icon-color');
     }
@@ -2107,13 +2137,13 @@ $admin-color-system: (
     border-radius: 8px;
     margin-bottom: 1.5rem;
     font-size: 0.9375rem;
-    
+
     @media (max-width: 1023px) {
         padding: 0.875rem;
         margin-bottom: 1.25rem;
         font-size: 0.875rem;
     }
-    
+
     @media (max-width: 768px) {
         padding: 0.75rem;
         margin-bottom: 1rem;
@@ -2139,7 +2169,7 @@ $admin-color-system: (
     width: 20px;
     height: 20px;
     flex-shrink: 0;
-    
+
     @media (max-width: 768px) {
         width: 18px;
         height: 18px;
@@ -2150,19 +2180,19 @@ $admin-color-system: (
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    
+
     @media (max-width: 1199px) {
         gap: 1.375rem;
     }
-    
+
     @media (max-width: 1023px) {
         gap: 1.25rem;
     }
-    
+
     @media (max-width: 990px) {
         gap: 1.125rem;
     }
-    
+
     @media (max-width: 768px) {
         gap: 1rem;
     }
@@ -2172,7 +2202,7 @@ $admin-color-system: (
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    
+
     @media (max-width: 768px) {
         gap: 0.375rem;
     }
@@ -2185,7 +2215,7 @@ $admin-color-system: (
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    
+
     @media (max-width: 768px) {
         font-size: 0.8125rem;
     }
@@ -2209,7 +2239,7 @@ $admin-color-system: (
     color: #9ca3af;
     pointer-events: none;
     z-index: 1;
-    
+
     @media (max-width: 768px) {
         left: 0.875rem;
         width: 18px;
@@ -2226,42 +2256,42 @@ $admin-color-system: (
     color: #111827;
     background-color: #ffffff;
     transition: all 0.2s;
-    
+
     @media (max-width: 1023px) {
         padding: 0.8125rem 2.75rem 0.8125rem 2.75rem;
     }
-    
+
     @media (max-width: 768px) {
         padding: 0.75rem 2.5rem 0.75rem 2.5rem;
         font-size: 0.875rem;
         border-radius: 6px;
         border-width: 1.5px;
     }
-    
+
     &::placeholder {
         color: #9ca3af;
         opacity: 1;
         font-weight: 400;
     }
-    
+
     &:not(:placeholder-shown) {
         color: var(--admin-primary);
         font-weight: 600;
     }
-    
+
     &:placeholder-shown {
         color: #9ca3af;
     }
-    
+
     &:focus {
         outline: none;
         border-color: var(--admin-primary);
         box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
-        
+
         &::placeholder {
             color: #d1d5db;
         }
-        
+
         &:not(:placeholder-shown) {
             color: var(--admin-primary);
         }
@@ -2281,11 +2311,11 @@ $admin-color-system: (
     color: #9ca3af;
     transition: color 0.2s;
     z-index: 2;
-    
+
     &:hover {
         color: #6b7280;
     }
-    
+
     svg {
         width: 20px;
         height: 20px;
@@ -2300,7 +2330,7 @@ $admin-color-system: (
 
 .adminAccountPage_actions {
     margin-top: 0.5rem;
-    
+
     @media (max-width: 768px) {
         margin-top: 0.375rem;
     }
@@ -2320,24 +2350,24 @@ $admin-color-system: (
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    
+
     @media (max-width: 1023px) {
         padding: 0.8125rem 1.375rem;
         font-size: 0.9375rem;
     }
-    
+
     @media (max-width: 768px) {
         padding: 0.75rem 1.25rem;
         font-size: 0.875rem;
         border-radius: 6px;
         gap: 0.4375rem;
     }
-    
+
     &:hover:not(:disabled) {
         transform: translateY(-2px);
         box-shadow: 0 10px 20px rgba(33, 150, 243, 0.3);
     }
-    
+
     &:disabled {
         opacity: 0.7;
         cursor: not-allowed;
@@ -2355,7 +2385,7 @@ $admin-color-system: (
 .adminAccountPage_submit_text svg {
     width: 20px;
     height: 20px;
-    
+
     @media (max-width: 768px) {
         width: 18px;
         height: 18px;
@@ -2366,7 +2396,7 @@ $admin-color-system: (
     width: 20px;
     height: 20px;
     animation: spin 1s linear infinite;
-    
+
     @media (max-width: 768px) {
         width: 18px;
         height: 18px;
@@ -2377,6 +2407,7 @@ $admin-color-system: (
     from {
         transform: rotate(0deg);
     }
+
     to {
         transform: rotate(360deg);
     }
@@ -2404,12 +2435,12 @@ $admin-color-system: (
     border: 1px solid rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(8px);
     flex-wrap: wrap;
-    
+
     @media (max-width: 1023px) {
         gap: 0.75rem;
         padding: 0.5625rem 0.875rem;
     }
-    
+
     @media (max-width: 768px) {
         flex-direction: column;
         align-items: flex-start;
@@ -2423,7 +2454,7 @@ $admin-color-system: (
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    
+
     @media (max-width: 768px) {
         width: 100%;
         justify-content: space-between;
@@ -2435,7 +2466,7 @@ $admin-color-system: (
     color: var(--admin-gray-600);
     font-weight: 500;
     white-space: nowrap;
-    
+
     @media (max-width: 768px) {
         font-size: 0.8125rem;
     }
@@ -2446,7 +2477,7 @@ $admin-color-system: (
     font-weight: 700;
     color: var(--admin-primary);
     white-space: nowrap;
-    
+
     @media (max-width: 768px) {
         font-size: 1rem;
     }
@@ -2456,7 +2487,7 @@ $admin-color-system: (
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    
+
     @media (max-width: 768px) {
         width: 100%;
         justify-content: space-between;
@@ -2468,7 +2499,7 @@ $admin-color-system: (
     color: var(--admin-gray-600);
     font-weight: 500;
     white-space: nowrap;
-    
+
     @media (max-width: 768px) {
         font-size: 0.8125rem;
     }
@@ -2490,24 +2521,24 @@ $admin-color-system: (
     background-position: right 0.625rem center;
     background-size: 16px;
     min-width: 80px;
-    
+
     &:hover {
         border-color: var(--admin-primary);
         background-color: var(--admin-primary-lighter);
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%232196F3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     }
-    
+
     &:focus {
         outline: none;
         border-color: var(--admin-primary);
         box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
         background-color: #fff;
     }
-    
+
     &:active {
         transform: scale(0.98);
     }
-    
+
     @media (max-width: 768px) {
         flex: 1;
         max-width: 120px;
@@ -2522,7 +2553,7 @@ $admin-color-system: (
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    
+
     @media (max-width: 768px) {
         margin-bottom: 1.5rem;
         gap: 0.75rem;
@@ -2539,12 +2570,12 @@ $admin-color-system: (
     border-radius: var(--admin-radius-md);
     padding: 0.5rem;
     transition: all 0.2s;
-    
+
     &:focus-within {
         border-color: var(--admin-primary);
         box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
     }
-    
+
     @media (max-width: 768px) {
         flex-direction: column;
         gap: 0.5rem;
@@ -2560,7 +2591,7 @@ $admin-color-system: (
     color: var(--admin-gray-400);
     pointer-events: none;
     z-index: 1;
-    
+
     @media (max-width: 768px) {
         position: static;
         align-self: flex-start;
@@ -2575,11 +2606,11 @@ $admin-color-system: (
     font-size: 0.9375rem;
     color: var(--admin-gray-900);
     background: transparent;
-    
+
     &::placeholder {
         color: var(--admin-gray-400);
     }
-    
+
     @media (max-width: 768px) {
         padding: 0.625rem 0.75rem;
         font-size: 0.875rem;
@@ -2608,21 +2639,21 @@ $admin-color-system: (
     cursor: pointer;
     transition: all 0.2s;
     white-space: nowrap;
-    
+
     svg {
         width: 18px;
         height: 18px;
     }
-    
+
     &:hover {
         transform: translateY(-2px);
         box-shadow: 0 8px 16px rgba(33, 150, 243, 0.3);
     }
-    
+
     &:active {
         transform: translateY(0);
     }
-    
+
     @media (max-width: 768px) {
         width: 100%;
         justify-content: center;
@@ -2637,12 +2668,12 @@ $admin-color-system: (
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 1.5rem;
-    
+
     @media (max-width: 1199px) {
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 1.25rem;
     }
-    
+
     @media (max-width: 768px) {
         grid-template-columns: 1fr;
         gap: 1rem;
@@ -2659,7 +2690,7 @@ $admin-color-system: (
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
-    
+
     &:hover {
         transform: translateY(-4px);
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
@@ -2674,12 +2705,12 @@ $admin-color-system: (
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    
+
     @media (max-width: 1023px) {
         padding: 1.25rem;
         padding-bottom: 0;
     }
-    
+
     @media (max-width: 768px) {
         padding: 1rem;
         padding-bottom: 0;
@@ -2695,18 +2726,18 @@ $admin-color-system: (
     background: var(--admin-gray-100);
     flex-shrink: 0;
     transition: all 0.3s;
-    
+
     img {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
-    
+
     .adminPersonnelPage_card:hover & {
         border-color: var(--admin-primary);
         box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
     }
-    
+
     @media (max-width: 768px) {
         width: 70px;
         height: 70px;
@@ -2718,11 +2749,11 @@ $admin-color-system: (
     gap: 0.5rem;
     opacity: 0;
     transition: opacity 0.3s;
-    
+
     .adminPersonnelPage_card:hover & {
         opacity: 1;
     }
-    
+
     @media (max-width: 768px) {
         opacity: 1;
     }
@@ -2741,28 +2772,28 @@ $admin-color-system: (
     text-decoration: none;
     transition: all 0.2s;
     cursor: pointer;
-    
+
     svg {
         width: 18px;
         height: 18px;
     }
-    
+
     &:hover {
         background: var(--admin-primary);
         border-color: var(--admin-primary);
         color: #fff;
         transform: scale(1.1);
     }
-    
+
     &--danger:hover {
         background: var(--admin-danger);
         border-color: var(--admin-danger);
     }
-    
+
     @media (max-width: 768px) {
         width: 32px;
         height: 32px;
-        
+
         svg {
             width: 16px;
             height: 16px;
@@ -2774,12 +2805,12 @@ $admin-color-system: (
     padding: 1.5rem;
     padding-top: 1rem;
     flex: 1;
-    
+
     @media (max-width: 1023px) {
         padding: 1.25rem;
         padding-top: 1rem;
     }
-    
+
     @media (max-width: 768px) {
         padding: 1rem;
         padding-top: 1rem;
@@ -2797,7 +2828,7 @@ $admin-color-system: (
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    
+
     @media (max-width: 768px) {
         font-size: 1rem;
         margin-bottom: 0.875rem;
@@ -2817,24 +2848,24 @@ $admin-color-system: (
     gap: 0.625rem;
     font-size: 0.875rem;
     color: var(--admin-gray-600);
-    
+
     svg {
         width: 18px;
         height: 18px;
         color: var(--admin-gray-400);
         flex-shrink: 0;
     }
-    
+
     span {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
-    
+
     @media (max-width: 768px) {
         font-size: 0.8125rem;
         gap: 0.5rem;
-        
+
         svg {
             width: 16px;
             height: 16px;
@@ -2856,7 +2887,7 @@ $admin-color-system: (
     color: var(--admin-primary-dark);
     margin-bottom: 1rem;
     position: relative;
-    
+
     &_text {
         font-family: 'Courier New', monospace;
         letter-spacing: 0.025em;
@@ -2864,7 +2895,7 @@ $admin-color-system: (
         word-break: break-all;
         min-width: 0;
     }
-    
+
     &_copy {
         position: relative;
         display: flex;
@@ -2881,13 +2912,13 @@ $admin-color-system: (
         transition: all 0.2s ease;
         flex-shrink: 0;
         pointer-events: none; // Disable click on icon when parent is clickable
-        
+
         svg {
             width: 16px;
             height: 16px;
             transition: all 0.2s ease;
         }
-        
+
         .adminPersonnelPage_card_code_copy_icon--check {
             position: absolute;
             opacity: 0;
@@ -2895,41 +2926,41 @@ $admin-color-system: (
             color: var(--admin-success);
         }
     }
-    
+
     // Clickable version - entire box is clickable
     &--clickable {
         cursor: pointer;
         transition: all 0.2s ease;
         user-select: none;
-        
+
         // Disabled/readonly state - show not-allowed cursor
         &[readonly],
         &[disabled] {
             cursor: not-allowed;
             opacity: 0.7;
-            
+
             &:hover {
                 transform: none;
                 background: var(--admin-primary-lighter);
                 border-color: var(--admin-primary-light);
             }
         }
-        
+
         &:hover {
             background: var(--admin-primary);
             color: #ffffff;
             transform: translateY(-1px);
             box-shadow: var(--admin-shadow-md);
-            
+
             .adminPersonnelPage_card_code_text {
                 color: #ffffff;
             }
-            
+
             .adminPersonnelPage_card_code_copy {
                 color: #ffffff;
                 background: rgba(255, 255, 255, 0.2);
             }
-            
+
             &::after {
                 content: attr(data-tooltip);
                 position: absolute;
@@ -2949,7 +2980,7 @@ $admin-color-system: (
                 box-shadow: var(--admin-shadow-md);
                 animation: tooltipFadeIn 0.2s ease;
             }
-            
+
             &::before {
                 content: '';
                 position: absolute;
@@ -2967,84 +2998,84 @@ $admin-color-system: (
                 animation: tooltipFadeIn 0.2s ease;
             }
         }
-        
+
         &:active {
             transform: translateY(0);
         }
-        
+
         &--copied {
             background: var(--admin-success);
             color: #ffffff;
             border-color: var(--admin-success);
-            
+
             .adminPersonnelPage_card_code_text {
                 color: #ffffff;
             }
-            
+
             .adminPersonnelPage_card_code_copy {
                 color: #ffffff;
-                
+
                 svg:first-child {
                     opacity: 0;
                     transform: scale(0);
                 }
-                
+
                 .adminPersonnelPage_card_code_copy_icon--check {
                     opacity: 1;
                     transform: scale(1);
                 }
             }
-            
+
             &::after {
                 content: 'Đã sao chép!';
             }
         }
     }
-    
+
     &--form {
         margin-bottom: 0;
         width: 100%;
-        
+
         // Ensure spacing matches other form fields
         .adminFormField & {
             margin-bottom: 0;
         }
     }
-    
+
     // Readonly display version - no hover, no copy, no tooltip
     &--readonly,
     &--readonly-display {
         cursor: default;
         user-select: text;
-        
+
         &:hover {
             background: var(--admin-primary-lighter);
             border-color: var(--admin-primary-light);
             transform: none;
             box-shadow: none;
-            
+
             .adminPersonnelPage_card_code_text {
                 color: var(--admin-primary-dark);
             }
         }
-        
+
         // No tooltip on hover
         &::after,
         &::before {
             display: none !important;
         }
     }
-    
+
     @media (max-width: 768px) {
         font-size: 0.75rem;
         padding: 0.4375rem 0.625rem;
         margin-bottom: 0.875rem;
         gap: 0.5rem;
-        
+
         &_copy {
             width: 24px;
             height: 24px;
-            
+
             svg {
                 width: 14px;
                 height: 14px;
@@ -3058,6 +3089,7 @@ $admin-color-system: (
         opacity: 0;
         transform: translateX(-50%) translateY(4px);
     }
+
     to {
         opacity: 1;
         transform: translateX(-50%) translateY(0);
@@ -3074,14 +3106,14 @@ $admin-color-system: (
     font-size: 0.8125rem;
     color: var(--admin-gray-600);
     word-break: break-all;
-    
+
     svg {
         width: 16px;
         height: 16px;
         color: var(--admin-gray-400);
         flex-shrink: 0;
     }
-    
+
     @media (max-width: 768px) {
         font-size: 0.75rem;
         padding: 0.4375rem 0.625rem;
@@ -3092,7 +3124,7 @@ $admin-color-system: (
     padding: 1rem 1.5rem;
     border-top: 1px solid var(--admin-gray-100);
     background: var(--admin-gray-50);
-    
+
     @media (max-width: 768px) {
         padding: 0.875rem 1.25rem;
     }
@@ -3113,13 +3145,13 @@ $admin-color-system: (
     font-size: 0.8125rem;
     color: var(--admin-gray-600);
     font-weight: 500;
-    
+
     svg {
         width: 16px;
         height: 16px;
         color: #fbbf24;
     }
-    
+
     @media (max-width: 768px) {
         font-size: 0.75rem;
     }
@@ -3131,13 +3163,13 @@ $admin-color-system: (
     gap: 0.375rem;
     font-size: 0.8125rem;
     color: var(--admin-gray-500);
-    
+
     svg {
         width: 16px;
         height: 16px;
         color: var(--admin-gray-400);
     }
-    
+
     @media (max-width: 768px) {
         font-size: 0.75rem;
     }
@@ -3147,40 +3179,40 @@ $admin-color-system: (
 .adminPersonnelPage_empty {
     text-align: center;
     padding: 4rem 2rem;
-    
+
     svg {
         width: 80px;
         height: 80px;
         color: var(--admin-gray-300);
         margin: 0 auto 1.5rem;
     }
-    
+
     h3 {
         font-size: 1.25rem;
         font-weight: 700;
         color: var(--admin-gray-700);
         margin: 0 0 0.5rem 0;
     }
-    
+
     p {
         font-size: 0.9375rem;
         color: var(--admin-gray-500);
         margin: 0;
     }
-    
+
     @media (max-width: 768px) {
         padding: 3rem 1.5rem;
-        
+
         svg {
             width: 64px;
             height: 64px;
             margin-bottom: 1.25rem;
         }
-        
+
         h3 {
             font-size: 1.125rem;
         }
-        
+
         p {
             font-size: 0.875rem;
         }
@@ -3192,7 +3224,7 @@ $admin-color-system: (
     margin-top: 2rem;
     display: flex;
     justify-content: center;
-    
+
     @media (max-width: 768px) {
         margin-top: 1.5rem;
     }
@@ -3225,7 +3257,7 @@ $admin-color-system: (
     align-items: center;
     gap: 1rem;
     padding: 1.5rem 0;
-    
+
     @media (max-width: 768px) {
         gap: 0.875rem;
         padding: 1.25rem 0;
@@ -3241,7 +3273,7 @@ $admin-color-system: (
     padding: 0;
     flex-wrap: wrap;
     justify-content: center;
-    
+
     @media (max-width: 768px) {
         gap: 0.375rem;
     }
@@ -3270,31 +3302,31 @@ $admin-color-system: (
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     position: relative;
-    
+
     svg {
         width: 18px;
         height: 18px;
         color: var(--admin-gray-600);
         transition: color 0.2s;
     }
-    
+
     &:hover:not(.adminPagination_link--active):not([aria-disabled="true"]) {
         color: var(--admin-primary);
         border-color: var(--admin-primary);
         background: var(--admin-primary-lighter);
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(33, 150, 243, 0.15);
-        
+
         svg {
             color: var(--admin-primary);
         }
     }
-    
+
     &:active:not(.adminPagination_link--active):not([aria-disabled="true"]) {
         transform: translateY(0);
         box-shadow: 0 2px 6px rgba(33, 150, 243, 0.1);
     }
-    
+
     &--active {
         color: #fff;
         background: var(--admin-gradient-primary);
@@ -3302,30 +3334,30 @@ $admin-color-system: (
         box-shadow: 0 4px 12px rgba(33, 150, 243, 0.25);
         cursor: default;
         font-weight: 700;
-        
+
         &:hover {
             transform: none;
             box-shadow: 0 4px 12px rgba(33, 150, 243, 0.25);
         }
     }
-    
+
     &--prev,
     &--next {
         padding: 0 0.625rem;
         min-width: 40px;
     }
-    
+
     @media (max-width: 768px) {
         min-width: 36px;
         height: 36px;
         padding: 0 0.625rem;
         font-size: 0.875rem;
-        
+
         svg {
             width: 16px;
             height: 16px;
         }
-        
+
         &--prev,
         &--next {
             padding: 0 0.5rem;
@@ -3341,11 +3373,11 @@ $admin-color-system: (
         border-color: var(--admin-gray-200);
         cursor: not-allowed;
         opacity: 0.5;
-        
+
         svg {
             color: var(--admin-gray-400);
         }
-        
+
         &:hover {
             transform: none;
             box-shadow: none;
@@ -3363,7 +3395,7 @@ $admin-color-system: (
     color: var(--admin-gray-600);
     flex-wrap: wrap;
     justify-content: center;
-    
+
     @media (max-width: 768px) {
         font-size: 0.8125rem;
         gap: 0.5rem;
@@ -3376,7 +3408,7 @@ $admin-color-system: (
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    
+
     strong {
         font-weight: 700;
         color: var(--admin-gray-900);
@@ -3386,7 +3418,7 @@ $admin-color-system: (
 .adminPagination_info_separator {
     color: var(--admin-gray-400);
     font-weight: 300;
-    
+
     @media (max-width: 768px) {
         display: none;
     }
@@ -3437,14 +3469,14 @@ $admin-color-system: (
 // Search Bar (reuse from adminPersonnelPage)
 .adminContentPage_searchBar {
     @extend .adminPersonnelPage_searchBar;
-    
+
     &--withFilter {
         .adminContentPage_searchBar_grid {
             display: grid;
             grid-template-columns: 1fr auto;
             gap: 1rem;
             align-items: start;
-            
+
             @media (max-width: 768px) {
                 grid-template-columns: 1fr;
                 gap: 0.875rem;
@@ -3479,22 +3511,22 @@ $admin-color-system: (
     min-width: 200px;
     display: flex;
     align-items: stretch;
-    
+
     .adminContentPage_searchBar_filterSelect {
         width: 100%;
         display: flex;
         flex-direction: column;
-        
+
         .adminFormSelect_labelWrapper {
             display: none;
         }
-        
+
         .adminCustomSelect {
             min-width: 200px;
             height: 100%;
             display: flex;
             flex-direction: column;
-            
+
             .adminCustomSelect_display {
                 min-height: 48px;
                 height: 100%;
@@ -3503,15 +3535,15 @@ $admin-color-system: (
             }
         }
     }
-    
+
     @media (max-width: 1024px) {
         min-width: 180px;
-        
+
         .adminContentPage_searchBar_filterSelect .adminCustomSelect {
             min-width: 180px;
         }
     }
-    
+
     @media (max-width: 768px) {
         min-width: auto;
         width: 100%;
@@ -3526,13 +3558,13 @@ $admin-color-system: (
     font-weight: 600;
     color: var(--admin-gray-700);
     white-space: nowrap;
-    
+
     svg {
         width: 18px;
         height: 18px;
         color: var(--admin-gray-500);
     }
-    
+
     @media (max-width: 768px) {
         font-size: 0.8125rem;
         width: 100%;
@@ -3555,20 +3587,20 @@ $admin-color-system: (
     background-position: right 0.625rem center;
     background-size: 16px;
     min-width: 200px;
-    
+
     &:hover {
         border-color: var(--admin-primary);
         background-color: var(--admin-primary-lighter);
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%232196F3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     }
-    
+
     &:focus {
         outline: none;
         border-color: var(--admin-primary);
         box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
         background-color: #fff;
     }
-    
+
     @media (max-width: 768px) {
         width: 100%;
         min-width: auto;
@@ -3592,7 +3624,7 @@ $admin-color-system: (
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
-    
+
     &:hover {
         transform: translateY(-4px);
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
@@ -3606,7 +3638,7 @@ $admin-color-system: (
     padding-top: 56.25%; // 16:9 aspect ratio
     overflow: hidden;
     background: var(--admin-gray-100);
-    
+
     img {
         position: absolute;
         top: 0;
@@ -3616,7 +3648,7 @@ $admin-color-system: (
         object-fit: cover;
         transition: transform 0.3s ease;
     }
-    
+
     .adminContentPage_card:hover & {
         img {
             transform: scale(1.05);
@@ -3632,11 +3664,11 @@ $admin-color-system: (
     gap: 0.5rem;
     opacity: 0;
     transition: opacity 0.3s;
-    
+
     .adminContentPage_card:hover & {
         opacity: 1;
     }
-    
+
     @media (max-width: 768px) {
         opacity: 1;
         top: 0.5rem;
@@ -3659,28 +3691,28 @@ $admin-color-system: (
     transition: all 0.2s;
     cursor: pointer;
     backdrop-filter: blur(8px);
-    
+
     svg {
         width: 18px;
         height: 18px;
     }
-    
+
     &:hover {
         background: var(--admin-primary);
         border-color: var(--admin-primary);
         color: #fff;
         transform: scale(1.1);
     }
-    
+
     &--danger:hover {
         background: var(--admin-danger);
         border-color: var(--admin-danger);
     }
-    
+
     @media (max-width: 768px) {
         width: 32px;
         height: 32px;
-        
+
         svg {
             width: 16px;
             height: 16px;
@@ -3694,11 +3726,11 @@ $admin-color-system: (
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    
+
     @media (max-width: 1023px) {
         padding: 1.25rem;
     }
-    
+
     @media (max-width: 768px) {
         padding: 1rem;
         gap: 0.625rem;
@@ -3716,7 +3748,7 @@ $admin-color-system: (
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    
+
     @media (max-width: 768px) {
         font-size: 1rem;
     }
@@ -3732,7 +3764,7 @@ $admin-color-system: (
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    
+
     @media (max-width: 768px) {
         font-size: 0.8125rem;
     }
@@ -3748,14 +3780,14 @@ $admin-color-system: (
     font-size: 0.8125rem;
     color: var(--admin-gray-600);
     word-break: break-all;
-    
+
     svg {
         width: 16px;
         height: 16px;
         color: var(--admin-gray-400);
         flex-shrink: 0;
     }
-    
+
     @media (max-width: 768px) {
         font-size: 0.75rem;
         padding: 0.4375rem 0.625rem;
@@ -3766,7 +3798,7 @@ $admin-color-system: (
     padding: 1rem 1.5rem;
     border-top: 1px solid var(--admin-gray-100);
     background: var(--admin-gray-50);
-    
+
     @media (max-width: 768px) {
         padding: 0.875rem 1.25rem;
     }
@@ -3787,13 +3819,13 @@ $admin-color-system: (
     font-size: 0.8125rem;
     color: var(--admin-gray-600);
     font-weight: 500;
-    
+
     svg {
         width: 16px;
         height: 16px;
         color: #fbbf24;
     }
-    
+
     @media (max-width: 768px) {
         font-size: 0.75rem;
     }
@@ -3805,13 +3837,13 @@ $admin-color-system: (
     gap: 0.375rem;
     font-size: 0.8125rem;
     color: var(--admin-gray-500);
-    
+
     svg {
         width: 16px;
         height: 16px;
         color: var(--admin-gray-400);
     }
-    
+
     @media (max-width: 768px) {
         font-size: 0.75rem;
     }
@@ -3846,34 +3878,34 @@ $admin-color-system: (
     box-shadow: 0 8px 24px rgba(33, 150, 243, 0.3);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 100;
-    
+
     svg {
         width: 24px;
         height: 24px;
     }
-    
+
     &:hover {
         transform: translateY(-4px);
         box-shadow: 0 12px 32px rgba(33, 150, 243, 0.4);
         color: #fff;
     }
-    
+
     &:active {
         transform: translateY(-2px);
     }
-    
+
     @media (max-width: 768px) {
         bottom: 1.5rem;
         right: 1.5rem;
         padding: 0.875rem 1.25rem;
         font-size: 0.9375rem;
         gap: 0.625rem;
-        
+
         svg {
             width: 20px;
             height: 20px;
         }
-        
+
         span {
             display: none;
         }
@@ -3957,7 +3989,7 @@ $admin-color-system: (
     grid-template-columns: 1fr auto;
     gap: 1.5rem;
     // margin-bottom: 2rem;
-    
+
     @media (max-width: 768px) {
         grid-template-columns: 1fr;
         gap: 1rem;
@@ -4004,23 +4036,23 @@ $admin-color-system: (
     border-radius: var(--admin-radius-md);
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     &:hover {
         border-color: var(--admin-primary);
         background: var(--admin-primary-lighter);
     }
-    
+
     &--dragover {
         border-color: var(--admin-primary);
         background: var(--admin-primary-lighter);
         transform: scale(1.01);
     }
-    
+
     &--hasFiles {
         border-color: var(--admin-success);
         background: rgba(7, 163, 93, 0.05);
     }
-    
+
     @media (max-width: 768px) {
         height: 52px;
         padding: 0 1rem;
@@ -4049,11 +4081,11 @@ $admin-color-system: (
     color: var(--admin-gray-400);
     transition: color 0.3s;
     flex-shrink: 0;
-    
+
     .adminImagePage_upload_area:hover & {
         color: var(--admin-primary);
     }
-    
+
     @media (max-width: 768px) {
         width: 20px;
         height: 20px;
@@ -4076,7 +4108,7 @@ $admin-color-system: (
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    
+
     @media (max-width: 768px) {
         font-size: 0.8125rem;
     }
@@ -4088,7 +4120,7 @@ $admin-color-system: (
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    
+
     @media (max-width: 768px) {
         font-size: 0.6875rem;
     }
@@ -4113,26 +4145,26 @@ $admin-color-system: (
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
-    
+
     svg {
         width: 20px;
         height: 20px;
     }
-    
+
     &:hover:not(:disabled) {
         transform: translateY(-2px);
         box-shadow: 0 6px 16px rgba(33, 150, 243, 0.3);
     }
-    
+
     &:active:not(:disabled) {
         transform: translateY(0);
     }
-    
+
     &:disabled {
         opacity: 0.6;
         cursor: not-allowed;
     }
-    
+
     @media (max-width: 768px) {
         padding: 0.75rem 1.25rem;
         font-size: 0.875rem;
@@ -4144,17 +4176,17 @@ $admin-color-system: (
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1.5rem;
-    
+
     @media (max-width: 1024px) {
         grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
         gap: 1.25rem;
     }
-    
+
     @media (max-width: 768px) {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 1rem;
     }
-    
+
     @media (max-width: 480px) {
         grid-template-columns: 1fr;
     }
@@ -4170,7 +4202,7 @@ $admin-color-system: (
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
-    
+
     &:hover {
         transform: translateY(-4px);
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
@@ -4184,7 +4216,7 @@ $admin-color-system: (
     padding-top: 75%; // 4:3 aspect ratio
     overflow: hidden;
     background: var(--admin-gray-100);
-    
+
     img {
         position: absolute;
         top: 0;
@@ -4194,7 +4226,7 @@ $admin-color-system: (
         object-fit: cover;
         transition: transform 0.3s ease;
     }
-    
+
     .adminImagePage_card:hover & {
         img {
             transform: scale(1.05);
@@ -4214,7 +4246,7 @@ $admin-color-system: (
     justify-content: center;
     opacity: 0;
     transition: opacity 0.3s;
-    
+
     .adminImagePage_card:hover & {
         opacity: 1;
     }
@@ -4238,28 +4270,28 @@ $admin-color-system: (
     cursor: pointer;
     transition: all 0.2s;
     backdrop-filter: blur(8px);
-    
+
     svg {
         width: 20px;
         height: 20px;
     }
-    
+
     &:hover {
         background: var(--admin-primary);
         border-color: var(--admin-primary);
         color: #fff;
         transform: scale(1.1);
     }
-    
+
     &--danger:hover {
         background: var(--admin-danger);
         border-color: var(--admin-danger);
     }
-    
+
     @media (max-width: 768px) {
         width: 40px;
         height: 40px;
-        
+
         svg {
             width: 18px;
             height: 18px;
@@ -4272,7 +4304,7 @@ $admin-color-system: (
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    
+
     @media (max-width: 768px) {
         padding: 1rem;
         gap: 0.875rem;
@@ -4302,14 +4334,14 @@ $admin-color-system: (
     overflow: visible;
     word-break: break-all;
     white-space: normal;
-    
+
     &:focus {
         outline: none;
         border-color: rgba(33, 150, 243, 0.4);
         background: rgba(33, 150, 243, 0.05);
         box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
     }
-    
+
     @media (max-width: 768px) {
         font-size: 0.75rem;
         padding: 0.5rem 2.5rem 0.5rem 0.75rem;
@@ -4332,21 +4364,21 @@ $admin-color-system: (
     color: var(--admin-gray-500);
     cursor: pointer;
     transition: all 0.2s;
-    
+
     svg {
         width: 16px;
         height: 16px;
     }
-    
+
     &:hover {
         background: var(--admin-primary-lighter);
         color: var(--admin-primary);
     }
-    
+
     @media (max-width: 768px) {
         width: 28px;
         height: 28px;
-        
+
         svg {
             width: 14px;
             height: 14px;
@@ -4368,18 +4400,18 @@ $admin-color-system: (
     gap: 0.625rem;
     font-size: 0.8125rem;
     color: var(--admin-gray-600);
-    
+
     svg {
         width: 16px;
         height: 16px;
         color: var(--admin-gray-400);
         flex-shrink: 0;
     }
-    
+
     @media (max-width: 768px) {
         font-size: 0.75rem;
         gap: 0.5rem;
-        
+
         svg {
             width: 14px;
             height: 14px;
@@ -4396,40 +4428,40 @@ $admin-color-system: (
     justify-content: center;
     padding: 4rem 2rem;
     text-align: center;
-    
+
     svg {
         width: 80px;
         height: 80px;
         color: var(--admin-gray-300);
         margin-bottom: 1.5rem;
     }
-    
+
     h3 {
         font-size: 1.25rem;
         font-weight: 700;
         color: var(--admin-gray-700);
         margin: 0 0 0.5rem 0;
     }
-    
+
     p {
         font-size: 0.9375rem;
         color: var(--admin-gray-500);
         margin: 0;
     }
-    
+
     @media (max-width: 768px) {
         padding: 3rem 1.5rem;
-        
+
         svg {
             width: 64px;
             height: 64px;
             margin-bottom: 1.25rem;
         }
-        
+
         h3 {
             font-size: 1.125rem;
         }
-        
+
         p {
             font-size: 0.875rem;
         }
@@ -4453,7 +4485,9 @@ $admin-color-system: (
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 // Modal
@@ -4470,7 +4504,7 @@ $admin-color-system: (
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     &--open {
         opacity: 1;
         visibility: visible;
@@ -4500,11 +4534,11 @@ $admin-color-system: (
     overflow: hidden;
     transform: scale(0.95);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     .adminImagePage_modal--open & {
         transform: scale(1);
     }
-    
+
     @media (max-width: 768px) {
         width: 95%;
         max-height: 95vh;
@@ -4517,11 +4551,11 @@ $admin-color-system: (
     justify-content: space-between;
     padding: 1.5rem;
     border-bottom: 1px solid var(--admin-gray-200);
-    
+
     @media (max-width: 1023px) {
         padding: 1.25rem;
     }
-    
+
     @media (max-width: 768px) {
         padding: 1rem;
     }
@@ -4532,7 +4566,7 @@ $admin-color-system: (
     font-weight: 700;
     color: var(--admin-gray-900);
     margin: 0;
-    
+
     @media (max-width: 768px) {
         font-size: 1.125rem;
     }
@@ -4550,12 +4584,12 @@ $admin-color-system: (
     color: var(--admin-gray-500);
     cursor: pointer;
     transition: all 0.2s;
-    
+
     svg {
         width: 20px;
         height: 20px;
     }
-    
+
     &:hover {
         background: var(--admin-gray-100);
         color: var(--admin-gray-700);
@@ -4566,11 +4600,11 @@ $admin-color-system: (
     padding: 1.5rem;
     overflow-y: auto;
     flex: 1;
-    
+
     @media (max-width: 1023px) {
         padding: 1.25rem;
     }
-    
+
     @media (max-width: 768px) {
         padding: 1rem;
     }
@@ -4593,15 +4627,15 @@ $admin-color-system: (
     gap: 0.75rem;
     padding: 1.5rem;
     border-top: 1px solid var(--admin-gray-200);
-    
+
     @media (max-width: 1023px) {
         padding: 1.25rem;
     }
-    
+
     @media (max-width: 768px) {
         padding: 1rem;
         flex-direction: column-reverse;
-        
+
         button {
             width: 100%;
         }
@@ -4620,32 +4654,32 @@ $admin-color-system: (
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
-    
+
     &--secondary {
         background: var(--admin-gray-100);
         color: var(--admin-gray-700);
-        
+
         &:hover {
             background: var(--admin-gray-200);
         }
     }
-    
+
     &--primary {
         background: var(--admin-gradient-primary);
         color: #fff;
         box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
-        
+
         &:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 6px 16px rgba(33, 150, 243, 0.3);
         }
-        
+
         &:disabled {
             opacity: 0.6;
             cursor: not-allowed;
         }
     }
-    
+
     .spinner {
         width: 16px;
         height: 16px;
@@ -4670,7 +4704,7 @@ $admin-color-system: (
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     &--open {
         opacity: 1;
         visibility: visible;
@@ -4699,11 +4733,11 @@ $admin-color-system: (
     overflow: hidden;
     transform: scale(0.95);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     .adminClearCacheModal--open & {
         transform: scale(1);
     }
-    
+
     @media (max-width: 768px) {
         width: 95%;
         max-width: 95%;
@@ -4716,7 +4750,7 @@ $admin-color-system: (
     justify-content: space-between;
     padding: 1.5rem;
     border-bottom: 1px solid var(--admin-gray-200);
-    
+
     @media (max-width: 768px) {
         padding: 1.25rem;
     }
@@ -4727,7 +4761,7 @@ $admin-color-system: (
     font-weight: 700;
     color: var(--admin-gray-900);
     margin: 0;
-    
+
     @media (max-width: 768px) {
         font-size: 1.125rem;
     }
@@ -4745,12 +4779,12 @@ $admin-color-system: (
     color: var(--admin-gray-500);
     cursor: pointer;
     transition: all 0.2s;
-    
+
     svg {
         width: 20px;
         height: 20px;
     }
-    
+
     &:hover {
         background: var(--admin-gray-100);
         color: var(--admin-gray-700);
@@ -4760,7 +4794,7 @@ $admin-color-system: (
 .adminClearCacheModal_body {
     padding: 2rem 1.5rem;
     text-align: center;
-    
+
     @media (max-width: 768px) {
         padding: 1.5rem 1.25rem;
     }
@@ -4776,7 +4810,7 @@ $admin-color-system: (
     background: rgba(239, 68, 68, 0.1);
     border-radius: 50%;
     color: var(--admin-danger);
-    
+
     svg {
         width: 32px;
         height: 32px;
@@ -4787,7 +4821,7 @@ $admin-color-system: (
     color: var(--admin-gray-700);
     font-size: 0.9375rem;
     line-height: 1.6;
-    
+
     p {
         margin: 0;
     }
@@ -4800,11 +4834,11 @@ $admin-color-system: (
     gap: 0.75rem;
     padding: 1.5rem;
     border-top: 1px solid var(--admin-gray-200);
-    
+
     @media (max-width: 768px) {
         padding: 1.25rem;
         flex-direction: column-reverse;
-        
+
         button {
             width: 100%;
         }
@@ -4823,26 +4857,26 @@ $admin-color-system: (
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
-    
+
     &--secondary {
         background: var(--admin-gray-100);
         color: var(--admin-gray-700);
-        
+
         &:hover {
             background: var(--admin-gray-200);
         }
     }
-    
+
     &--primary {
         background: var(--admin-gradient-primary);
         color: #fff;
         box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
-        
+
         &:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
         }
-        
+
         &:disabled {
             opacity: 0.6;
             cursor: not-allowed;
@@ -4889,7 +4923,7 @@ $admin-color-system: (
     font-size: 0.9375rem;
     font-weight: 600;
     color: var(--admin-gray-700);
-    
+
     svg {
         width: 20px;
         height: 20px;
@@ -4906,11 +4940,11 @@ $admin-color-system: (
     color: var(--admin-gray-700);
     cursor: pointer;
     transition: all 0.2s;
-    
+
     &:hover {
         border-color: var(--admin-primary);
     }
-    
+
     &:focus {
         outline: none;
         border-color: var(--admin-primary);
@@ -4923,7 +4957,7 @@ $admin-color-system: (
     grid-template-columns: 1fr auto 1fr;
     gap: 1.5rem;
     align-items: start;
-    
+
     @media (max-width: 768px) {
         grid-template-columns: 1fr;
         gap: 1rem;
@@ -4951,7 +4985,7 @@ $admin-color-system: (
     border: 2px solid var(--admin-gray-200);
     border-radius: var(--admin-radius-md);
     overflow: hidden;
-    
+
     img {
         position: absolute;
         top: 0;
@@ -4968,12 +5002,12 @@ $admin-color-system: (
     justify-content: center;
     padding-top: 2rem;
     color: var(--admin-gray-400);
-    
+
     svg {
         width: 32px;
         height: 32px;
     }
-    
+
     @media (max-width: 768px) {
         padding-top: 0;
         transform: rotate(90deg);
@@ -4994,7 +5028,7 @@ $admin-color-system: (
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     &--open {
         opacity: 1;
         visibility: visible;
@@ -5038,23 +5072,23 @@ $admin-color-system: (
     transition: all 0.2s;
     z-index: 2;
     backdrop-filter: blur(8px);
-    
+
     svg {
         width: 24px;
         height: 24px;
     }
-    
+
     &:hover {
         background: rgba(255, 255, 255, 0.2);
         border-color: rgba(255, 255, 255, 0.3);
         transform: scale(1.1);
     }
-    
+
     @media (max-width: 768px) {
         top: -2.5rem;
         width: 40px;
         height: 40px;
-        
+
         svg {
             width: 20px;
             height: 20px;
@@ -5074,7 +5108,7 @@ $admin-color-system: (
     border-radius: var(--admin-radius-lg);
     overflow: hidden;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    
+
     img {
         max-width: 100%;
         max-height: 80vh;
@@ -5096,14 +5130,14 @@ $admin-color-system: (
     justify-content: center;
     gap: 1rem;
     background: rgba(0, 0, 0, 0.3);
-    
+
     p {
         color: #fff;
         font-size: 0.9375rem;
         margin: 0;
         text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
-    
+
     .adminImagePage_loading_spinner {
         width: 48px;
         height: 48px;
@@ -5123,7 +5157,7 @@ $admin-color-system: (
     color: #fff;
     margin: 0;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    
+
     @media (max-width: 768px) {
         font-size: 1rem;
     }
@@ -5147,7 +5181,7 @@ $admin-color-system: (
 .adminFormPage {
     padding: 0;
     min-height: 100vh;
-    
+
     // Add padding bottom on mobile to prevent content from being hidden behind fixed bottom bar
     @media (max-width: 1023px) {
         padding-bottom: 65px; // Space for mobile bottom bar (reduced from 80px)
@@ -5180,7 +5214,7 @@ $admin-color-system: (
     position: relative;
     overflow: hidden;
     margin-bottom: 2rem;
-    
+
     &::before {
         content: '';
         position: absolute;
@@ -5192,11 +5226,11 @@ $admin-color-system: (
         border-radius: 50%;
         pointer-events: none;
     }
-    
+
     @media (max-width: 1023px) {
         padding: 1.25rem;
     }
-    
+
     @media (max-width: 768px) {
         padding: 1rem;
         margin-bottom: 1.5rem;
@@ -5218,12 +5252,12 @@ $admin-color-system: (
     border-radius: var(--admin-radius-md);
     position: relative;
     z-index: 1;
-    
+
     svg {
         width: 18px;
         height: 18px;
     }
-    
+
     &:hover {
         color: var(--admin-primary);
         background: rgba(33, 150, 243, 0.08);
@@ -5238,7 +5272,7 @@ $admin-color-system: (
     gap: 1.5rem;
     position: relative;
     z-index: 1;
-    
+
     @media (max-width: 768px) {
         flex-direction: column;
         align-items: stretch;
@@ -5252,7 +5286,7 @@ $admin-color-system: (
     gap: 1rem;
     flex: 1;
     min-width: 0;
-    
+
     @media (max-width: 768px) {
         gap: 0.75rem;
     }
@@ -5270,17 +5304,17 @@ $admin-color-system: (
     justify-content: center;
     flex-shrink: 0;
     transition: all 0.3s ease;
-    
+
     svg {
         width: 28px;
         height: 28px;
         color: var(--admin-primary);
     }
-    
+
     @media (max-width: 768px) {
         width: 48px;
         height: 48px;
-        
+
         svg {
             width: 24px;
             height: 24px;
@@ -5301,7 +5335,7 @@ $admin-color-system: (
     color: var(--admin-gray-900);
     margin: 0;
     line-height: 1.2;
-    
+
     @media (max-width: 768px) {
         font-size: 1.375rem;
     }
@@ -5312,12 +5346,12 @@ $admin-color-system: (
     margin: 0;
     font-size: 0.9375rem;
     line-height: 1.5;
-    
+
     strong {
         color: var(--admin-primary);
         font-weight: 700;
     }
-    
+
     @media (max-width: 768px) {
         font-size: 0.875rem;
     }
@@ -5331,7 +5365,7 @@ $admin-color-system: (
     margin-top: 0.25rem;
     font-size: 0.875rem;
     color: var(--admin-gray-600);
-    
+
     span {
         display: inline-flex;
         align-items: center;
@@ -5347,25 +5381,25 @@ $admin-color-system: (
     border-radius: var(--admin-radius-sm);
     font-size: 0.75rem;
     font-weight: 600;
-    
+
     &--success {
         background: linear-gradient(135deg, rgba(7, 163, 93, 0.1) 0%, rgba(7, 163, 93, 0.15) 100%);
         color: var(--admin-success);
         border: 1px solid rgba(7, 163, 93, 0.2);
     }
-    
+
     &--warning {
         background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.15) 100%);
         color: #d97706;
         border: 1px solid rgba(245, 158, 11, 0.2);
     }
-    
+
     &--danger {
         background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.15) 100%);
         color: var(--admin-danger);
         border: 1px solid rgba(239, 68, 68, 0.2);
     }
-    
+
     &--primary {
         background: linear-gradient(135deg, rgba(33, 150, 243, 0.1) 0%, rgba(33, 150, 243, 0.15) 100%);
         color: var(--admin-primary);
@@ -5389,18 +5423,18 @@ $admin-color-system: (
     flex-shrink: 0;
     white-space: nowrap;
     box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
-    
+
     svg {
         width: 20px;
         height: 20px;
     }
-    
+
     &:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 16px rgba(33, 150, 243, 0.3);
         color: #fff;
     }
-    
+
     @media (max-width: 768px) {
         width: 100%;
         padding: 0.75rem 1.25rem;
@@ -5410,13 +5444,13 @@ $admin-color-system: (
 // Language Switcher below header
 .adminFormPage_languageSwitcher {
     margin-bottom: 2rem;
-    
+
     @media (max-width: 768px) {
         margin-bottom: 1.5rem;
     }
-    
+
     // Khi có validation errors banner bên dưới, giảm margin
-    + .adminFormValidationErrors {
+    +.adminFormValidationErrors {
         margin-top: -0.5rem;
     }
 }
@@ -5430,11 +5464,11 @@ $admin-color-system: (
     border: 2px solid rgba(239, 68, 68, 0.2);
     border-radius: var(--admin-radius-lg);
     margin-bottom: 2rem;
-    
+
     @media (max-width: 1023px) {
         padding: 1.25rem;
     }
-    
+
     @media (max-width: 768px) {
         flex-direction: column;
         padding: 1rem;
@@ -5447,7 +5481,7 @@ $admin-color-system: (
     width: 24px;
     height: 24px;
     color: var(--admin-danger);
-    
+
     svg {
         width: 100%;
         height: 100%;
@@ -5456,20 +5490,20 @@ $admin-color-system: (
 
 .adminFormPage_errors_content {
     flex: 1;
-    
+
     h3 {
         font-size: 1rem;
         font-weight: 700;
         color: var(--admin-danger);
         margin: 0 0 0.5rem 0;
     }
-    
+
     ul {
         margin: 0;
         padding-left: 1.5rem;
         color: var(--admin-danger);
         font-size: 0.9375rem;
-        
+
         li {
             margin-bottom: 0.25rem;
         }
@@ -5483,26 +5517,26 @@ $admin-color-system: (
     padding: 1.5rem;
     border-radius: var(--admin-radius-lg);
     margin-bottom: 2rem;
-    
+
     &--success {
         background: rgba(7, 163, 93, 0.1);
         border: 2px solid rgba(7, 163, 93, 0.2);
     }
-    
+
     &--danger {
         background: rgba(239, 68, 68, 0.1);
         border: 2px solid rgba(239, 68, 68, 0.2);
     }
-    
+
     &--info {
         background: rgba(33, 150, 243, 0.1);
         border: 2px solid rgba(33, 150, 243, 0.2);
     }
-    
+
     @media (max-width: 1023px) {
         padding: 1.25rem;
     }
-    
+
     @media (max-width: 768px) {
         padding: 1rem;
         gap: 0.75rem;
@@ -5513,20 +5547,20 @@ $admin-color-system: (
     flex-shrink: 0;
     width: 24px;
     height: 24px;
-    
+
     svg {
         width: 100%;
         height: 100%;
     }
-    
+
     .adminFormPage_message--success & {
         color: var(--admin-success);
     }
-    
+
     .adminFormPage_message--danger & {
         color: var(--admin-danger);
     }
-    
+
     .adminFormPage_message--info & {
         color: var(--admin-primary);
     }
@@ -5536,15 +5570,15 @@ $admin-color-system: (
     flex: 1;
     font-size: 0.9375rem;
     line-height: 1.5;
-    
+
     .adminFormPage_message--success & {
         color: var(--admin-success);
     }
-    
+
     .adminFormPage_message--danger & {
         color: var(--admin-danger);
     }
-    
+
     .adminFormPage_message--info & {
         color: var(--admin-primary);
     }
@@ -5555,7 +5589,7 @@ $admin-color-system: (
     margin-top: 0;
     margin-bottom: 2rem;
     animation: slideDown 0.3s ease;
-    
+
     @media (max-width: 768px) {
         margin-bottom: 1.5rem;
     }
@@ -5571,11 +5605,11 @@ $admin-color-system: (
     border-radius: var(--admin-radius-md);
     box-shadow: 0 2px 8px rgba(239, 68, 68, 0.1);
     position: relative;
-    
+
     @media (max-width: 1023px) {
         padding: 1.25rem;
     }
-    
+
     @media (max-width: 768px) {
         padding: 1rem;
         gap: 0.75rem;
@@ -5588,12 +5622,12 @@ $admin-color-system: (
     height: 20px;
     color: var(--admin-danger);
     margin-top: 2px;
-    
+
     svg {
         width: 100%;
         height: 100%;
     }
-    
+
     @media (max-width: 768px) {
         width: 18px;
         height: 18px;
@@ -5611,7 +5645,7 @@ $admin-color-system: (
     color: var(--admin-danger);
     margin: 0 0 0.625rem 0;
     line-height: 1.4;
-    
+
     @media (max-width: 768px) {
         font-size: 0.875rem;
         margin-bottom: 0.5rem;
@@ -5625,7 +5659,7 @@ $admin-color-system: (
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    
+
     @media (max-width: 768px) {
         gap: 0.375rem;
     }
@@ -5633,7 +5667,7 @@ $admin-color-system: (
 
 .adminFormValidationErrors_item {
     margin: 0;
-    
+
     // When item contains plain text (not link) - for custom validation messages
     &:not(:has(a)) {
         color: var(--admin-danger);
@@ -5644,7 +5678,7 @@ $admin-color-system: (
         border: 1px solid rgba(239, 68, 68, 0.2);
         border-radius: var(--admin-radius-sm);
         line-height: 1.5;
-        
+
         @media (max-width: 768px) {
             font-size: 0.8125rem;
             padding: 0.3125rem 0.5rem;
@@ -5665,7 +5699,7 @@ $admin-color-system: (
     border: 1px solid rgba(239, 68, 68, 0.2);
     border-radius: var(--admin-radius-sm);
     transition: all 0.2s;
-    
+
     &:hover {
         background: rgba(239, 68, 68, 0.15);
         border-color: rgba(239, 68, 68, 0.3);
@@ -5673,13 +5707,13 @@ $admin-color-system: (
         transform: translateY(-1px);
         box-shadow: 0 2px 4px rgba(239, 68, 68, 0.15);
     }
-    
+
     &::before {
         content: '→';
         font-weight: 600;
         font-size: 0.75rem;
     }
-    
+
     @media (max-width: 768px) {
         font-size: 0.8125rem;
         padding: 0.3125rem 0.5rem;
@@ -5702,23 +5736,23 @@ $admin-color-system: (
     border-radius: var(--admin-radius-sm);
     transition: all 0.2s;
     opacity: 0.7;
-    
+
     svg {
         width: 16px;
         height: 16px;
     }
-    
+
     &:hover {
         background: rgba(239, 68, 68, 0.1);
         opacity: 1;
     }
-    
+
     @media (max-width: 768px) {
         top: 0.5rem;
         right: 0.5rem;
         width: 24px;
         height: 24px;
-        
+
         svg {
             width: 14px;
             height: 14px;
@@ -5731,6 +5765,7 @@ $admin-color-system: (
         opacity: 0;
         transform: translateY(-20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -5739,6 +5774,7 @@ $admin-color-system: (
 
 // Invalid field highlights
 .adminFormField--invalid {
+
     .adminFormField_input,
     .adminFormField_input--textarea,
     .adminFormField_input--select {
@@ -5746,7 +5782,7 @@ $admin-color-system: (
         background: rgba(239, 68, 68, 0.05) !important;
         box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
     }
-    
+
     .adminFormField_label {
         color: var(--admin-danger);
     }
@@ -5758,7 +5794,7 @@ $admin-color-system: (
         background: rgba(239, 68, 68, 0.05) !important;
         box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
     }
-    
+
     .adminFormSelect_label {
         color: var(--admin-danger);
     }
@@ -5769,7 +5805,7 @@ $admin-color-system: (
         border-color: var(--admin-danger) !important;
         background: rgba(239, 68, 68, 0.05) !important;
     }
-    
+
     .adminFormImageUpload_label {
         color: var(--admin-danger);
     }
@@ -5780,7 +5816,7 @@ $admin-color-system: (
         border-color: var(--admin-danger) !important;
         background: rgba(239, 68, 68, 0.05) !important;
     }
-    
+
     .adminFormFileUpload_label {
         color: var(--admin-danger);
     }
@@ -5792,7 +5828,7 @@ $admin-color-system: (
         background: rgba(239, 68, 68, 0.05) !important;
         box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
     }
-    
+
     .adminFormContent_label {
         color: var(--admin-danger);
     }
@@ -5803,7 +5839,7 @@ $admin-color-system: (
     display: grid;
     grid-template-columns: 1fr 320px;
     gap: 2rem;
-    
+
     @media (max-width: 1024px) {
         grid-template-columns: 1fr;
         gap: 1.5rem;
@@ -5814,7 +5850,7 @@ $admin-color-system: (
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    
+
     @media (max-width: 768px) {
         gap: 1.5rem;
     }
@@ -5833,13 +5869,13 @@ $admin-color-system: (
     border: 1px solid var(--admin-gray-200);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     &--invalid {
         border-color: var(--admin-danger);
         border-width: 2px;
         box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
         background: rgba(239, 68, 68, 0.02);
-        
+
         .adminFormSection_header {
             background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(239, 68, 68, 0.1) 100%);
             border-bottom-color: var(--admin-danger);
@@ -5854,11 +5890,11 @@ $admin-color-system: (
     padding: 1.5rem;
     background: linear-gradient(135deg, rgba(33, 150, 243, 0.03) 0%, rgba(33, 150, 243, 0.08) 100%);
     border-bottom: 1px solid var(--admin-gray-200);
-    
+
     @media (max-width: 1023px) {
         padding: 1.25rem;
     }
-    
+
     @media (max-width: 768px) {
         padding: 1rem;
         gap: 0.75rem;
@@ -5877,16 +5913,16 @@ $admin-color-system: (
     border: 2px solid rgba(33, 150, 243, 0.2);
     border-radius: var(--admin-radius-md);
     color: var(--admin-primary);
-    
+
     svg {
         width: 24px;
         height: 24px;
     }
-    
+
     @media (max-width: 768px) {
         width: 36px;
         height: 36px;
-        
+
         svg {
             width: 20px;
             height: 20px;
@@ -5903,7 +5939,7 @@ $admin-color-system: (
     font-weight: 700;
     color: var(--admin-gray-900);
     margin: 0 0 0.25rem 0;
-    
+
     @media (max-width: 768px) {
         font-size: 1rem;
     }
@@ -5913,7 +5949,7 @@ $admin-color-system: (
     font-size: 0.875rem;
     color: var(--admin-gray-600);
     margin: 0;
-    
+
     @media (max-width: 768px) {
         font-size: 0.8125rem;
     }
@@ -5924,14 +5960,40 @@ $admin-color-system: (
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    
+
     @media (max-width: 1023px) {
         padding: 1.25rem;
     }
-    
+
     @media (max-width: 768px) {
         padding: 1rem;
         gap: 0.75rem;
+    }
+}
+
+// Form Grid Layout (for side-by-side fields)
+.adminFormGrid {
+    display: grid;
+    gap: 1rem;
+
+    &--2cols {
+        grid-template-columns: 1fr 1fr;
+
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &--3cols {
+        grid-template-columns: repeat(3, 1fr);
+
+        @media (max-width: 1024px) {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+        }
     }
 }
 
@@ -5954,44 +6016,44 @@ $admin-color-system: (
     white-space: nowrap;
     box-shadow: 0 2px 8px rgba(33, 150, 243, 0.2);
     margin-left: auto;
-    
+
     svg {
         width: 18px;
         height: 18px;
         transition: transform 0.3s;
         flex-shrink: 0;
     }
-    
+
     span {
         font-size: 0.875rem;
         line-height: 1;
     }
-    
+
     &:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
         background: linear-gradient(135deg, #1e88e5 0%, #1976d2 100%);
-        
+
         svg {
             transform: rotate(90deg);
         }
     }
-    
+
     &:active {
         transform: translateY(0);
         box-shadow: 0 2px 6px rgba(33, 150, 243, 0.25);
     }
-    
+
     @media (max-width: 768px) {
         padding: 0.5rem 0.875rem;
         font-size: 0.8125rem;
         gap: 0.375rem;
-        
+
         svg {
             width: 16px;
             height: 16px;
         }
-        
+
         span {
             font-size: 0.8125rem;
         }
@@ -6003,29 +6065,29 @@ $admin-color-system: (
     .adminFormSection_body {
         gap: 1.25rem;
         position: relative;
-        
+
         // Hide the hidden create button
-        > button[data-repeater-create] {
+        >button[data-repeater-create] {
             display: none !important;
         }
-        
+
         // Repeater list container
-        > [data-repeater-list] {
+        >[data-repeater-list] {
             display: flex;
             flex-direction: column;
             gap: 1.25rem;
             position: relative;
-            
+
             // Sortable styles
             &.ui-sortable {
                 min-height: 50px;
             }
-            
+
             @media (max-width: 768px) {
                 gap: 1rem;
             }
         }
-        
+
         @media (max-width: 768px) {
             gap: 1rem;
         }
@@ -6044,35 +6106,35 @@ $admin-color-system: (
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     cursor: default;
-    
+
     &:not(:last-child) {
         margin-bottom: 0;
     }
-    
+
     &:hover {
         border-color: var(--admin-primary);
         box-shadow: 0 4px 12px rgba(33, 150, 243, 0.1);
         transform: translateY(-2px);
     }
-    
+
     // Sortable states
     &.ui-sortable-helper {
         cursor: move;
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
         z-index: 1000;
     }
-    
+
     &--placeholder {
         background: var(--admin-gray-50);
         border: 2px dashed var(--admin-primary);
         opacity: 0.5;
         min-height: 100px;
     }
-    
+
     @media (max-width: 1023px) {
         padding: 1.25rem;
     }
-    
+
     @media (max-width: 768px) {
         padding: 1rem;
         gap: 1rem;
@@ -6095,27 +6157,27 @@ $admin-color-system: (
     transition: all 0.2s;
     border-radius: var(--admin-radius-sm);
     flex-shrink: 0;
-    
+
     svg {
         width: 20px;
         height: 20px;
     }
-    
+
     &:hover {
         color: var(--admin-primary);
         background: var(--admin-primary-lighter);
     }
-    
+
     &:active {
         cursor: grabbing;
     }
-    
+
     @media (max-width: 768px) {
         width: 28px;
         height: 28px;
         min-width: 28px;
         min-height: 28px;
-        
+
         svg {
             width: 18px;
             height: 18px;
@@ -6128,20 +6190,20 @@ $admin-color-system: (
     flex-direction: column;
     gap: 1.5rem;
     align-items: stretch;
-    
+
     .adminFormRepeater_item_content {
         width: 100%;
         gap: 1.25rem;
     }
-    
+
     .adminFormRepeater_item_delete {
         align-self: flex-end;
         margin-top: 0.25rem;
     }
-    
+
     @media (max-width: 768px) {
         gap: 1.25rem;
-        
+
         .adminFormRepeater_item_content {
             gap: 1rem;
         }
@@ -6155,7 +6217,7 @@ $admin-color-system: (
     flex-direction: column;
     gap: 1.25rem;
     min-width: 0;
-    
+
     @media (max-width: 768px) {
         gap: 1rem;
     }
@@ -6167,7 +6229,7 @@ $admin-color-system: (
     grid-template-columns: 1fr 140px;
     gap: 1.25rem;
     align-items: start;
-    
+
     @media (max-width: 768px) {
         grid-template-columns: 1fr;
         gap: 1rem;
@@ -6204,43 +6266,43 @@ $admin-color-system: (
     flex-shrink: 0;
     white-space: nowrap;
     align-self: flex-end;
-    
+
     svg {
         width: 18px;
         height: 18px;
         transition: transform 0.3s;
         flex-shrink: 0;
     }
-    
+
     span {
         font-size: 0.875rem;
         line-height: 1;
     }
-    
+
     &:hover {
         background: var(--admin-danger);
         color: #fff;
         border-color: var(--admin-danger);
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-        
+
         svg {
             transform: rotate(90deg);
         }
     }
-    
+
     &:active {
         transform: translateY(0);
         box-shadow: 0 2px 6px rgba(239, 68, 68, 0.25);
     }
-    
+
     @media (max-width: 768px) {
         width: 100%;
         justify-content: center;
         padding: 0.75rem 1rem;
         align-self: stretch;
         gap: 0.375rem;
-        
+
         svg {
             width: 16px;
             height: 16px;
@@ -6252,7 +6314,7 @@ $admin-color-system: (
 .adminFormRepeater_addButton {
     margin-top: 1rem;
     align-self: flex-start;
-    
+
     @media (max-width: 768px) {
         width: 100%;
         justify-content: center;
@@ -6308,15 +6370,15 @@ $admin-color-system: (
     cursor: help;
     position: relative;
     transition: color 0.2s ease;
-    
+
     svg {
         width: 100%;
         height: 100%;
     }
-    
+
     &:hover {
         color: var(--admin-primary);
-        
+
         &::after {
             content: attr(data-tooltip);
             position: absolute;
@@ -6341,7 +6403,7 @@ $admin-color-system: (
             box-shadow: var(--admin-shadow-md);
             animation: tooltipFadeIn 0.2s ease forwards;
         }
-        
+
         &::before {
             content: '';
             position: absolute;
@@ -6379,12 +6441,12 @@ $admin-color-system: (
     color: var(--admin-gray-500);
     cursor: pointer;
     transition: all 0.2s;
-    
+
     svg {
         width: 16px;
         height: 16px;
     }
-    
+
     &:hover {
         background: var(--admin-primary-lighter);
         border-color: var(--admin-primary);
@@ -6423,133 +6485,133 @@ $admin-color-system: (
     background: #fff;
     color: var(--admin-gray-700);
     transition: all 0.2s;
-    
+
     &:focus {
         outline: none;
         border-color: var(--admin-primary);
         box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
     }
-    
+
     &:not(:placeholder-shown) {
         color: var(--admin-primary);
         font-weight: 600;
     }
-    
+
     &::placeholder {
         color: var(--admin-gray-400);
     }
-    
+
     &--textarea {
         min-height: auto;
         resize: vertical;
         font-family: inherit;
         line-height: 1.5;
     }
-    
-        &--select {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 0.75rem center;
-            background-size: 16px;
-            padding-right: 2.5rem;
-            
-            &:hover {
-                border-color: var(--admin-primary);
-                background-color: var(--admin-primary-lighter);
-            }
-            
-            &--multiple {
-                min-height: 120px;
-                padding: 0.5rem 0.75rem;
-                background-image: none;
-                
-                option {
-                    padding: 0.5rem;
-                }
+
+    &--select {
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 16px;
+        padding-right: 2.5rem;
+
+        &:hover {
+            border-color: var(--admin-primary);
+            background-color: var(--admin-primary-lighter);
+        }
+
+        &--multiple {
+            min-height: 120px;
+            padding: 0.5rem 0.75rem;
+            background-image: none;
+
+            option {
+                padding: 0.5rem;
             }
         }
-        
-        // Select2 integration styles
-        .select2-container {
-            width: 100% !important;
-            
-            .select2-selection {
-                min-height: 48px;
-                border: 2px solid var(--admin-gray-300) !important;
-                border-radius: var(--admin-radius-md) !important;
-                padding: 0.25rem;
-                transition: all 0.2s;
-                
-                &:hover {
-                    border-color: var(--admin-primary) !important;
-                }
-                
-                &--multiple {
-                    .select2-selection__choice {
-                        background: var(--admin-primary-lighter) !important;
-                        border: 1px solid var(--admin-primary) !important;
+    }
+
+    // Select2 integration styles
+    .select2-container {
+        width: 100% !important;
+
+        .select2-selection {
+            min-height: 48px;
+            border: 2px solid var(--admin-gray-300) !important;
+            border-radius: var(--admin-radius-md) !important;
+            padding: 0.25rem;
+            transition: all 0.2s;
+
+            &:hover {
+                border-color: var(--admin-primary) !important;
+            }
+
+            &--multiple {
+                .select2-selection__choice {
+                    background: var(--admin-primary-lighter) !important;
+                    border: 1px solid var(--admin-primary) !important;
+                    color: var(--admin-primary) !important;
+                    border-radius: var(--admin-radius-sm) !important;
+                    padding: 0.25rem 0.5rem !important;
+                    margin: 0.25rem !important;
+                    font-size: 0.875rem !important;
+                    font-weight: 500 !important;
+
+                    .select2-selection__choice__remove {
                         color: var(--admin-primary) !important;
-                        border-radius: var(--admin-radius-sm) !important;
-                        padding: 0.25rem 0.5rem !important;
-                        margin: 0.25rem !important;
-                        font-size: 0.875rem !important;
-                        font-weight: 500 !important;
-                        
-                        .select2-selection__choice__remove {
-                            color: var(--admin-primary) !important;
-                            margin-right: 0.5rem !important;
-                            
-                            &:hover {
-                                color: var(--admin-danger) !important;
-                            }
+                        margin-right: 0.5rem !important;
+
+                        &:hover {
+                            color: var(--admin-danger) !important;
                         }
                     }
-                    
-                    .select2-selection__rendered {
-                        padding: 0.25rem !important;
-                    }
                 }
-            }
-            
-            &.select2-container--focus .select2-selection {
-                border-color: var(--admin-primary) !important;
-                box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1) !important;
-            }
-            
-            .select2-dropdown {
-                border: 2px solid var(--admin-gray-300) !important;
-                border-radius: var(--admin-radius-md) !important;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
-                
-                .select2-search__field {
-                    border: 1px solid var(--admin-gray-300) !important;
-                    border-radius: var(--admin-radius-sm) !important;
-                    padding: 0.5rem !important;
-                    
-                    &:focus {
-                        border-color: var(--admin-primary) !important;
-                        outline: none !important;
-                    }
-                }
-                
-                .select2-results__option {
-                    padding: 0.75rem 1rem !important;
-                    
-                    &--highlighted {
-                        background: var(--admin-primary-lighter) !important;
-                        color: var(--admin-primary) !important;
-                    }
-                    
-                    &[aria-selected="true"] {
-                        background: var(--admin-primary) !important;
-                        color: #fff !important;
-                    }
+
+                .select2-selection__rendered {
+                    padding: 0.25rem !important;
                 }
             }
         }
-    
+
+        &.select2-container--focus .select2-selection {
+            border-color: var(--admin-primary) !important;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1) !important;
+        }
+
+        .select2-dropdown {
+            border: 2px solid var(--admin-gray-300) !important;
+            border-radius: var(--admin-radius-md) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+
+            .select2-search__field {
+                border: 1px solid var(--admin-gray-300) !important;
+                border-radius: var(--admin-radius-sm) !important;
+                padding: 0.5rem !important;
+
+                &:focus {
+                    border-color: var(--admin-primary) !important;
+                    outline: none !important;
+                }
+            }
+
+            .select2-results__option {
+                padding: 0.75rem 1rem !important;
+
+                &--highlighted {
+                    background: var(--admin-primary-lighter) !important;
+                    color: var(--admin-primary) !important;
+                }
+
+                &[aria-selected="true"] {
+                    background: var(--admin-primary) !important;
+                    color: #fff !important;
+                }
+            }
+        }
+    }
+
     &[readonly] {
         background: var(--admin-gray-50);
         cursor: not-allowed;
@@ -6596,11 +6658,11 @@ $admin-color-system: (
     background: #fff;
     cursor: pointer;
     transition: all 0.2s;
-    
+
     &:hover {
         border-color: var(--admin-primary);
     }
-    
+
     &:focus {
         outline: none;
         border-color: var(--admin-primary);
@@ -6616,7 +6678,7 @@ $admin-color-system: (
     border: 2px solid var(--admin-gray-200);
     border-radius: var(--admin-radius-md);
     overflow: hidden;
-    
+
     img {
         position: absolute;
         top: 0;
@@ -6649,12 +6711,12 @@ $admin-color-system: (
     border-radius: var(--admin-radius-lg);
     border: 1px solid var(--admin-gray-200);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    
+
     @media (max-width: 1023px) {
         display: none; // Hide on mobile, use bottom bar instead
         padding: 1.25rem;
     }
-    
+
     @media (max-width: 768px) {
         padding: 1rem;
     }
@@ -6685,50 +6747,50 @@ $admin-color-system: (
     text-decoration: none;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     svg {
         width: 20px;
         height: 20px;
     }
-    
+
     &--primary {
         background: var(--admin-gradient-primary);
         color: #fff;
         box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
-        
+
         &:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 16px rgba(33, 150, 243, 0.3);
             color: #fff;
         }
-        
+
         &:active {
             transform: translateY(0);
         }
     }
-    
+
     &--secondary {
         background: var(--admin-gray-100);
         color: var(--admin-gray-700);
         border: 1px solid var(--admin-gray-300);
-        
+
         &:hover {
             background: var(--admin-gray-200);
             color: var(--admin-gray-900);
         }
     }
-    
+
     &--view {
         background: transparent;
         color: var(--admin-primary);
         border: 2px solid var(--admin-primary);
-        
+
         &:hover {
             background: var(--admin-primary-lighter);
             color: var(--admin-primary);
         }
     }
-    
+
     @media (max-width: 768px) {
         padding: 0.75rem 1.25rem;
         font-size: 0.875rem;
@@ -6762,7 +6824,7 @@ $admin-color-system: (
     color: var(--admin-gray-700);
     cursor: pointer;
     margin: 0;
-    
+
     svg {
         width: 18px;
         height: 18px;
@@ -6773,7 +6835,7 @@ $admin-color-system: (
 // Mobile Bottom Bar (Fixed at bottom on mobile)
 .adminFormActions_mobile {
     display: none; // Hidden on desktop
-    
+
     @media (max-width: 1023px) {
         display: block;
         position: fixed;
@@ -6785,7 +6847,7 @@ $admin-color-system: (
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         border-top: 1px solid var(--admin-gray-200);
-        box-shadow: 
+        box-shadow:
             0 -4px 20px rgba(0, 0, 0, 0.1),
             0 -2px 10px rgba(0, 0, 0, 0.05);
         padding: 0;
@@ -6797,6 +6859,7 @@ $admin-color-system: (
     from {
         transform: translateY(100%);
     }
+
     to {
         transform: translateY(0);
     }
@@ -6811,13 +6874,15 @@ $admin-color-system: (
     max-width: 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    
+
     // Hide scrollbar
     scrollbar-width: none;
     -ms-overflow-style: none;
+
     &::-webkit-scrollbar {
         display: none;
     }
+
     @media (max-width: 768px) {
         padding: 0.625rem 0.75rem;
     }
@@ -6849,17 +6914,17 @@ $admin-color-system: (
     font-size: 0.875rem;
     font-weight: 600;
     white-space: nowrap;
-    
+
     svg {
         width: 18px;
         height: 18px;
         flex-shrink: 0;
     }
-    
+
     span {
         line-height: 1;
     }
-    
+
     // View button - icon only
     &--view {
         width: 40px;
@@ -6868,49 +6933,49 @@ $admin-color-system: (
         background: transparent;
         color: var(--admin-primary);
         border: 1.5px solid var(--admin-primary);
-        
+
         span {
             display: none; // Hide text for view button
         }
-        
+
         &:hover {
             background: var(--admin-primary-lighter);
             color: var(--admin-primary);
         }
-        
+
         &:active {
             transform: scale(0.95);
         }
     }
-    
+
     // Back button - icon + text
     &--back {
         &:hover {
             background: var(--admin-gray-200);
             color: var(--admin-gray-900);
         }
-        
+
         &:active {
             transform: scale(0.95);
         }
     }
-    
+
     // Primary button - icon + text
     &--primary {
         background: var(--admin-gradient-primary);
         color: #fff;
         box-shadow: 0 2px 8px rgba(33, 150, 243, 0.25);
-        
+
         &:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(33, 150, 243, 0.35);
         }
-        
+
         &:active {
             transform: translateY(0) scale(0.98);
         }
     }
-    
+
     // Loading state
     &:disabled {
         opacity: 0.6;
@@ -6924,7 +6989,7 @@ $admin-color-system: (
     position: sticky;
     top: 2rem;
     height: fit-content;
-    
+
     @media (max-width: 1024px) {
         position: static;
     }
@@ -6947,7 +7012,7 @@ $admin-color-system: (
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
-    
+
     @media (max-width: 768px) {
         grid-template-columns: 1fr;
     }
@@ -6983,7 +7048,7 @@ $admin-color-system: (
     height: 18px;
     color: var(--admin-gray-400);
     cursor: help;
-    
+
     svg {
         width: 100%;
         height: 100%;
@@ -7000,13 +7065,13 @@ $admin-color-system: (
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    
+
     &--hasImage {
         .adminFormImageUpload_dropzone {
             display: none;
         }
     }
-    
+
     &--dragover {
         .adminFormImageUpload_dropzone {
             border-color: var(--admin-primary);
@@ -7038,7 +7103,7 @@ $admin-color-system: (
     border-radius: var(--admin-radius-md);
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     &:hover {
         border-color: var(--admin-primary);
         background: var(--admin-primary-lighter);
@@ -7059,11 +7124,11 @@ $admin-color-system: (
     height: 48px;
     color: var(--admin-gray-400);
     transition: color 0.3s;
-    
+
     .adminFormImageUpload_dropzone:hover & {
         color: var(--admin-primary);
     }
-    
+
     @media (max-width: 768px) {
         width: 40px;
         height: 40px;
@@ -7081,7 +7146,7 @@ $admin-color-system: (
     font-size: 0.9375rem;
     font-weight: 600;
     color: var(--admin-gray-700);
-    
+
     @media (max-width: 768px) {
         font-size: 0.875rem;
     }
@@ -7090,7 +7155,7 @@ $admin-color-system: (
 .adminFormImageUpload_dropzone_text_secondary {
     font-size: 0.8125rem;
     color: var(--admin-gray-500);
-    
+
     @media (max-width: 768px) {
         font-size: 0.75rem;
     }
@@ -7103,7 +7168,7 @@ $admin-color-system: (
     border: 2px solid var(--admin-gray-200);
     border-radius: var(--admin-radius-md);
     overflow: hidden;
-    
+
     img {
         width: 100%;
         height: 100%;
@@ -7129,12 +7194,12 @@ $admin-color-system: (
     cursor: pointer;
     transition: all 0.2s;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    
+
     svg {
         width: 20px;
         height: 20px;
     }
-    
+
     &:hover {
         background: var(--admin-danger);
         transform: scale(1.1);
@@ -7150,7 +7215,7 @@ $admin-color-system: (
     border-radius: var(--admin-radius-sm);
     font-size: 0.8125rem;
     color: var(--admin-gray-600);
-    
+
     span {
         font-weight: 500;
     }
@@ -7216,12 +7281,12 @@ $admin-color-system: (
     transition: all 0.2s;
     flex-shrink: 0;
     border-radius: var(--admin-radius-sm);
-    
+
     svg {
         width: 1.25rem;
         height: 1.25rem;
     }
-    
+
     &:hover {
         background: var(--admin-danger-light);
         transform: scale(1.1);
@@ -7250,18 +7315,18 @@ $admin-color-system: (
     overflow: hidden;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         display: block;
     }
-    
+
     &:hover {
         border-color: var(--admin-primary);
         box-shadow: 0 4px 12px rgba(33, 150, 243, 0.15);
-        
+
         .adminFormImageUpload_current_overlay {
             opacity: 1;
             visibility: visible;
@@ -7284,7 +7349,7 @@ $admin-color-system: (
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     @media (max-width: 768px) {
         opacity: 1;
         visibility: visible;
@@ -7306,20 +7371,20 @@ $admin-color-system: (
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    
+
     svg {
         width: 18px;
         height: 18px;
         flex-shrink: 0;
     }
-    
+
     span {
         white-space: nowrap;
     }
-    
+
     &--change {
         color: var(--admin-primary);
-        
+
         &:hover {
             background: var(--admin-primary);
             color: #fff;
@@ -7327,10 +7392,10 @@ $admin-color-system: (
             box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
         }
     }
-    
+
     &--remove {
         color: var(--admin-danger);
-        
+
         &:hover {
             background: var(--admin-danger);
             color: #fff;
@@ -7338,12 +7403,12 @@ $admin-color-system: (
             box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         }
     }
-    
+
     @media (max-width: 768px) {
         padding: 0.5rem 0.875rem;
         font-size: 0.8125rem;
         gap: 0.375rem;
-        
+
         svg {
             width: 16px;
             height: 16px;
@@ -7383,19 +7448,19 @@ $admin-color-system: (
     font-size: 0.8125rem;
     font-weight: 500;
     transition: all 0.2s;
-    
+
     &:hover {
         border-color: var(--admin-primary);
         background: var(--admin-primary-lighter);
         color: var(--admin-primary);
     }
-    
+
     &--active {
         background: var(--admin-gradient-primary);
         border-color: var(--admin-primary);
         color: #fff;
     }
-    
+
     &--disabled {
         opacity: 0.5;
         cursor: not-allowed;
@@ -7437,7 +7502,7 @@ $admin-color-system: (
     height: 18px;
     color: var(--admin-gray-400);
     cursor: help;
-    
+
     svg {
         width: 100%;
         height: 100%;
@@ -7454,13 +7519,13 @@ $admin-color-system: (
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    
+
     &--hasFile {
         .adminFormFileUpload_dropzone {
             display: none;
         }
     }
-    
+
     &--dragover {
         .adminFormFileUpload_dropzone {
             border-color: var(--admin-primary);
@@ -7490,7 +7555,7 @@ $admin-color-system: (
     border-radius: var(--admin-radius-md);
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     &:hover {
         border-color: var(--admin-primary);
         background: var(--admin-primary-lighter);
@@ -7511,11 +7576,11 @@ $admin-color-system: (
     height: 48px;
     color: var(--admin-gray-400);
     transition: color 0.3s;
-    
+
     .adminFormFileUpload_dropzone:hover & {
         color: var(--admin-primary);
     }
-    
+
     @media (max-width: 768px) {
         width: 40px;
         height: 40px;
@@ -7533,7 +7598,7 @@ $admin-color-system: (
     font-size: 0.9375rem;
     font-weight: 600;
     color: var(--admin-gray-700);
-    
+
     @media (max-width: 768px) {
         font-size: 0.875rem;
     }
@@ -7542,7 +7607,7 @@ $admin-color-system: (
 .adminFormFileUpload_dropzone_text_secondary {
     font-size: 0.8125rem;
     color: var(--admin-gray-500);
-    
+
     @media (max-width: 768px) {
         font-size: 0.75rem;
     }
@@ -7564,7 +7629,7 @@ $admin-color-system: (
     border: 2px solid var(--admin-gray-200);
     border-radius: var(--admin-radius-md);
     overflow: hidden;
-    
+
     embed {
         width: 100%;
         height: 600px;
@@ -7581,7 +7646,7 @@ $admin-color-system: (
     gap: 1rem;
     padding: 3rem;
     color: var(--admin-gray-400);
-    
+
     svg {
         width: 64px;
         height: 64px;
@@ -7600,7 +7665,7 @@ $admin-color-system: (
     font-size: 0.9375rem;
     font-weight: 600;
     transition: all 0.2s;
-    
+
     &:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
@@ -7626,12 +7691,12 @@ $admin-color-system: (
     transition: all 0.2s;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     z-index: 10;
-    
+
     svg {
         width: 20px;
         height: 20px;
     }
-    
+
     &:hover {
         background: var(--admin-danger);
         transform: scale(1.1);
@@ -7680,12 +7745,12 @@ $admin-color-system: (
     color: var(--admin-gray-500);
     cursor: pointer;
     transition: all 0.2s;
-    
+
     svg {
         width: 16px;
         height: 16px;
     }
-    
+
     &:hover {
         background: var(--admin-primary-lighter);
         border-color: var(--admin-primary);
@@ -7703,12 +7768,12 @@ $admin-color-system: (
     overflow-x: hidden; // Prevent horizontal scroll
     max-width: 100%; // Prevent overflow
     transition: all 0.2s;
-    
+
     &:focus-within {
         border-color: var(--admin-primary);
         box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
     }
-    
+
     &--copied {
         border-color: var(--admin-success);
         background: rgba(7, 163, 93, 0.02);
@@ -7727,26 +7792,26 @@ $admin-color-system: (
     resize: vertical;
     overflow-x: hidden; // Prevent horizontal scroll
     box-sizing: border-box;
-    
+
     &:focus {
         outline: none;
     }
-    
+
     // TinyMCE editor styles
-    & + .tox-tinymce {
+    &+.tox-tinymce {
         border: none !important;
         border-radius: var(--admin-radius-md);
         max-width: 100% !important;
         overflow-x: hidden !important;
         box-sizing: border-box !important;
-        
+
         .tox-toolbar {
             background: var(--admin-gray-50);
             border-bottom: 1px solid var(--admin-gray-200);
             max-width: 100% !important;
             overflow-x: hidden !important;
         }
-        
+
         .tox-edit-area {
             background: #fff;
             max-width: 100% !important;
@@ -7762,7 +7827,7 @@ $admin-color-system: (
     max-width: 100% !important; // Prevent horizontal overflow
     overflow-x: hidden !important; // Prevent horizontal scroll
     box-sizing: border-box !important;
-    
+
     .tox-toolbar {
         background: var(--admin-gray-50) !important;
         border-bottom: 1px solid var(--admin-gray-200) !important;
@@ -7771,20 +7836,20 @@ $admin-color-system: (
         overflow-x: hidden !important;
         box-sizing: border-box !important;
     }
-    
+
     .tox-edit-area {
         background: #fff !important;
         max-width: 100% !important;
         overflow-x: hidden !important;
         box-sizing: border-box !important;
     }
-    
+
     .tox-edit-area__iframe {
         background: #fff !important;
         max-width: 100% !important;
         overflow-x: hidden !important;
         box-sizing: border-box !important;
-        
+
         body {
             max-width: 100% !important;
             overflow-x: hidden !important;
@@ -7792,7 +7857,7 @@ $admin-color-system: (
             word-break: break-word !important;
         }
     }
-    
+
     .tox-statusbar {
         background: var(--admin-gray-50) !important;
         border-top: 1px solid var(--admin-gray-200) !important;
@@ -7811,7 +7876,7 @@ $admin-color-system: (
 
 .tox-edit-area__iframe {
     max-width: 100% !important;
-    
+
     body {
         max-width: 100% !important;
         overflow-x: hidden !important;
@@ -7819,19 +7884,19 @@ $admin-color-system: (
         word-break: break-word !important;
         overflow-wrap: break-word !important;
     }
-    
+
     // Ensure all content inside iframe doesn't overflow
     * {
         max-width: 100% !important;
         box-sizing: border-box !important;
     }
-    
+
     // Prevent images and tables from causing horizontal scroll
     img {
         max-width: 100% !important;
         height: auto !important;
     }
-    
+
     table {
         max-width: 100% !important;
         table-layout: auto !important;
@@ -7873,15 +7938,15 @@ $admin-color-system: (
     color: var(--admin-gray-400);
     cursor: help;
     position: relative;
-    
+
     svg {
         width: 100%;
         height: 100%;
     }
-    
+
     &:hover {
         color: var(--admin-primary);
-        
+
         &::after {
             content: attr(data-tooltip);
             position: absolute;
@@ -7922,7 +7987,7 @@ $admin-color-system: (
 .adminCustomSelect {
     position: relative;
     width: 100%;
-    
+
     &--open {
         .adminCustomSelect_options {
             display: block;
@@ -7930,12 +7995,12 @@ $admin-color-system: (
             visibility: visible;
             transform: translateY(0);
         }
-        
+
         .adminCustomSelect_dropdown svg {
             transform: rotate(180deg);
         }
     }
-    
+
     &_display {
         position: relative;
         min-height: 48px;
@@ -7950,23 +8015,23 @@ $admin-color-system: (
         flex-wrap: wrap;
         align-items: flex-start;
         gap: 0.5rem;
-        
+
         &:hover {
             border-color: var(--admin-primary);
         }
-        
+
         &:focus-within {
             border: 2px solid var(--admin-primary);
             box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.1);
         }
-        
+
         &:has(input:disabled) {
             background: var(--admin-gray-50);
             cursor: not-allowed;
             border-color: var(--admin-gray-200);
         }
     }
-    
+
     &_tags {
         display: flex;
         flex-wrap: wrap;
@@ -7976,13 +8041,13 @@ $admin-color-system: (
         min-width: 0;
         z-index: 2;
         pointer-events: none;
-        
+
         .adminCustomSelect_tag {
             pointer-events: auto;
             flex-shrink: 0;
         }
     }
-    
+
     &_tag {
         display: inline-flex;
         align-items: center;
@@ -7995,12 +8060,12 @@ $admin-color-system: (
         color: var(--admin-gray-700);
         font-weight: 500;
         animation: adminSelectSlideIn 0.2s ease;
-        
+
         span {
             white-space: nowrap;
         }
     }
-    
+
     &_tag_remove {
         display: flex;
         align-items: center;
@@ -8015,19 +8080,19 @@ $admin-color-system: (
         border-radius: 50%;
         transition: all 0.2s ease;
         flex-shrink: 0;
-        
+
         svg {
             width: 14px;
             height: 14px;
         }
-        
+
         &:hover {
             background: rgba(239, 68, 68, 0.1);
             color: var(--admin-danger);
             transform: scale(1.1);
         }
     }
-    
+
     &_selected {
         display: flex;
         align-items: center;
@@ -8036,17 +8101,17 @@ $admin-color-system: (
         z-index: 2;
         pointer-events: none;
     }
-    
+
     &_selected_text {
         font-size: 0.9375rem;
         color: var(--admin-gray-700);
-        
+
         &:empty::before {
             content: attr(data-placeholder);
             color: var(--admin-gray-400);
         }
     }
-    
+
     &_search {
         position: absolute;
         top: 0;
@@ -8066,35 +8131,35 @@ $admin-color-system: (
         box-shadow: none;
         font-family: inherit;
         box-sizing: border-box;
-        
+
         &:focus {
             border: none;
             outline: none;
             box-shadow: none;
         }
-        
+
         &::placeholder {
             color: var(--admin-gray-400);
         }
-        
+
         &:disabled {
             color: var(--admin-gray-500);
             cursor: not-allowed;
         }
-        
+
         &:not(:placeholder-shown) {
             &::placeholder {
                 opacity: 0;
             }
         }
     }
-    
+
     &_display:has(.adminCustomSelect_tags:not(:empty)) {
         .adminCustomSelect_search::placeholder {
             opacity: 0;
         }
     }
-    
+
     &_dropdown {
         position: absolute;
         right: 0.75rem;
@@ -8114,28 +8179,28 @@ $admin-color-system: (
         cursor: pointer;
         border-radius: 6px;
         transition: all 0.2s ease;
-        
+
         svg {
             width: 18px;
             height: 18px;
             transition: transform 0.2s ease;
         }
-        
+
         &:hover:not(:disabled) {
             background: var(--admin-gray-100);
             color: var(--admin-gray-700);
         }
-        
+
         &:active:not(:disabled) {
             background: var(--admin-gray-200);
         }
-        
+
         &:disabled {
             cursor: not-allowed;
             opacity: 0.5;
         }
     }
-    
+
     &_options {
         position: absolute;
         top: calc(100% + 0.5rem);
@@ -8153,26 +8218,26 @@ $admin-color-system: (
         visibility: hidden;
         transform: translateY(-10px);
         transition: all 0.2s ease;
-        
+
         &::-webkit-scrollbar {
             width: 6px;
         }
-        
+
         &::-webkit-scrollbar-track {
             background: var(--admin-gray-100);
             border-radius: 3px;
         }
-        
+
         &::-webkit-scrollbar-thumb {
             background: var(--admin-gray-300);
             border-radius: 3px;
-            
+
             &:hover {
                 background: var(--admin-gray-400);
             }
         }
     }
-    
+
     &_option {
         padding: 0.75rem 1rem;
         cursor: pointer;
@@ -8181,21 +8246,21 @@ $admin-color-system: (
         color: var(--admin-gray-700);
         font-size: 0.9375rem;
         position: relative;
-        
+
         &:last-child {
             border-bottom: none;
         }
-        
+
         &:hover {
             background: rgba(33, 150, 243, 0.05);
             color: var(--admin-primary);
         }
-        
+
         &--selected {
             background: rgba(34, 197, 94, 0.08);
             color: var(--admin-gray-900);
             font-weight: 500;
-            
+
             &::after {
                 content: '';
                 position: absolute;
@@ -8210,7 +8275,7 @@ $admin-color-system: (
                 align-items: center;
                 justify-content: center;
             }
-            
+
             &::before {
                 content: '✓';
                 position: absolute;
@@ -8231,6 +8296,7 @@ $admin-color-system: (
         opacity: 0;
         transform: scale(0.8);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
@@ -8240,7 +8306,7 @@ $admin-color-system: (
 // Select2 Integration Styles (Legacy - keeping for backward compatibility)
 .select2-container {
     width: 100% !important;
-    
+
     .select2-selection {
         min-height: 48px;
         border: 2px solid var(--admin-gray-300) !important;
@@ -8248,43 +8314,43 @@ $admin-color-system: (
         padding: 0.25rem;
         transition: all 0.2s;
         background: #fff !important;
-        
+
         &:hover {
             border-color: var(--admin-primary) !important;
             background-color: var(--admin-primary-lighter) !important;
         }
-        
+
         &--single {
             height: 48px;
-            
+
             .select2-selection__rendered {
                 line-height: 44px;
                 padding-left: 0.75rem;
                 padding-right: 2rem;
                 color: var(--admin-gray-700);
             }
-            
+
             .select2-selection__arrow {
                 height: 46px;
                 right: 0.75rem;
-                
+
                 b {
                     border-color: var(--admin-gray-500) transparent transparent transparent;
                     border-width: 6px 5px 0 5px;
                 }
             }
         }
-        
+
         &--multiple {
             min-height: 48px;
-            
+
             .select2-selection__rendered {
                 padding: 0.25rem;
                 display: flex;
                 flex-wrap: wrap;
                 gap: 0.25rem;
             }
-            
+
             .select2-selection__choice {
                 background: var(--admin-primary-lighter) !important;
                 border: 1px solid var(--admin-primary) !important;
@@ -8297,7 +8363,7 @@ $admin-color-system: (
                 display: inline-flex;
                 align-items: center;
                 gap: 0.5rem;
-                
+
                 .select2-selection__choice__remove {
                     color: var(--admin-primary) !important;
                     margin-right: 0 !important;
@@ -8310,36 +8376,36 @@ $admin-color-system: (
                     display: inline-flex;
                     align-items: center;
                     justify-content: center;
-                    
+
                     &:hover {
                         color: var(--admin-danger) !important;
                         background: transparent !important;
                     }
                 }
             }
-            
+
             .select2-selection__placeholder {
                 color: var(--admin-gray-400);
                 margin-left: 0.5rem;
             }
-            
+
             .select2-selection__clear {
                 margin-right: 0.5rem;
                 color: var(--admin-gray-500);
-                
+
                 &:hover {
                     color: var(--admin-danger);
                 }
             }
         }
     }
-    
+
     &.select2-container--focus .select2-selection {
         border-color: var(--admin-primary) !important;
         box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1) !important;
         background: #fff !important;
     }
-    
+
     &.select2-container--disabled .select2-selection {
         background: var(--admin-gray-50) !important;
         cursor: not-allowed;
@@ -8352,17 +8418,17 @@ $admin-color-system: (
     border-radius: var(--admin-radius-md) !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
     margin-top: 0.25rem;
-    
+
     .select2-search {
         padding: 0.5rem;
-        
+
         .select2-search__field {
             border: 1px solid var(--admin-gray-300) !important;
             border-radius: var(--admin-radius-sm) !important;
             padding: 0.5rem 0.75rem !important;
             font-size: 0.9375rem !important;
             width: 100% !important;
-            
+
             &:focus {
                 border-color: var(--admin-primary) !important;
                 outline: none !important;
@@ -8370,31 +8436,31 @@ $admin-color-system: (
             }
         }
     }
-    
+
     .select2-results {
         .select2-results__options {
             max-height: 300px;
-            
+
             .select2-results__option {
                 padding: 0.75rem 1rem !important;
                 font-size: 0.9375rem !important;
                 color: var(--admin-gray-700);
                 transition: all 0.2s;
-                
+
                 &[aria-disabled="true"] {
                     opacity: 0.5;
                     cursor: not-allowed;
                 }
-                
+
                 &--highlighted {
                     background: var(--admin-primary-lighter) !important;
                     color: var(--admin-primary) !important;
                 }
-                
+
                 &[aria-selected="true"] {
                     background: var(--admin-primary) !important;
                     color: #fff !important;
-                    
+
                     &.select2-results__option--highlighted {
                         background: var(--admin-primary) !important;
                         color: #fff !important;
@@ -8438,67 +8504,67 @@ $admin-color-system: (
     white-space: nowrap;
     position: relative;
     overflow: hidden;
-    
+
     svg {
         width: 20px;
         height: 20px;
         flex-shrink: 0;
     }
-    
+
     &:disabled {
         opacity: 0.6;
         cursor: not-allowed;
         pointer-events: none;
     }
-    
+
     &--primary {
         background: var(--admin-gradient-primary);
         color: #fff;
         box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
-        
+
         &:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 6px 16px rgba(33, 150, 243, 0.3);
         }
-        
+
         &:active:not(:disabled) {
             transform: translateY(0);
         }
     }
-    
+
     &--secondary {
         background: #fff;
         color: var(--admin-gray-700);
         border: 2px solid var(--admin-gray-300);
-        
+
         &:hover:not(:disabled) {
             border-color: var(--admin-primary);
             color: var(--admin-primary);
             background: var(--admin-primary-lighter);
         }
     }
-    
+
     &--success {
         background: linear-gradient(135deg, var(--admin-success) 0%, #059669 100%);
         color: #fff;
         box-shadow: 0 4px 12px rgba(7, 163, 93, 0.2);
-        
+
         &:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 6px 16px rgba(7, 163, 93, 0.3);
         }
     }
-    
+
     &--sm {
         padding: 0.625rem 1.25rem;
         font-size: 0.875rem;
-        
+
         svg {
             width: 18px;
             height: 18px;
         }
     }
-    
+
     @media (max-width: 768px) {
         width: 100%;
         justify-content: center;
@@ -8519,12 +8585,12 @@ $admin-color-system: (
     border-radius: 0 0 var(--admin-radius-lg) var(--admin-radius-lg);
     margin-top: 2rem;
     flex-wrap: wrap;
-    
+
     @media (max-width: 768px) {
         flex-direction: column;
         padding: 1rem;
         gap: 0.75rem;
-        
+
         .adminButton {
             width: 100%;
         }
@@ -8578,7 +8644,7 @@ $admin-color-system: (
 
 .adminFormPage_results_header {
     margin-bottom: 1rem;
-    
+
     h3 {
         margin: 0;
         color: var(--admin-gray-900);
@@ -8600,34 +8666,34 @@ $admin-color-system: (
     border-left: 4px solid var(--admin-primary);
     font-size: 0.9375rem;
     line-height: 1.6;
-    
+
     strong {
         font-weight: 600;
         color: var(--admin-gray-900);
     }
-    
+
     &--success {
         border-left-color: var(--admin-success);
         background: rgba(7, 163, 93, 0.05);
-        
+
         strong {
             color: var(--admin-success);
         }
     }
-    
+
     &--error {
         border-left-color: var(--admin-danger);
         background: rgba(198, 46, 46, 0.05);
-        
+
         strong {
             color: var(--admin-danger);
         }
     }
-    
+
     ul {
         margin: 0.5rem 0 0 0;
         padding-left: 1.5rem;
-        
+
         li {
             margin-top: 0.25rem;
             color: var(--admin-gray-700);
@@ -8643,7 +8709,7 @@ $admin-color-system: (
     text-align: center;
     padding: 4rem 2rem;
     color: var(--admin-gray-500);
-    
+
     svg {
         width: 4rem;
         height: 4rem;
@@ -8651,14 +8717,14 @@ $admin-color-system: (
         opacity: 0.5;
         color: var(--admin-gray-400);
     }
-    
+
     h3 {
         font-size: 1.25rem;
         font-weight: 600;
         color: var(--admin-gray-700);
         margin: 0 0 0.5rem 0;
     }
-    
+
     p {
         font-size: 1rem;
         margin: 0;
@@ -8670,7 +8736,7 @@ $admin-color-system: (
     margin-top: 2rem;
     display: flex;
     justify-content: center;
-    
+
     @media (max-width: 768px) {
         margin-top: 1.5rem;
     }
@@ -8690,14 +8756,14 @@ $admin-color-system: (
     background: var(--admin-gray-50);
     border-radius: var(--admin-radius-md);
     border: 1px solid var(--admin-gray-200);
-    
+
     #fileName {
         color: var(--admin-gray-700);
         font-size: 0.875rem;
         font-weight: 500;
         flex: 1;
     }
-    
+
     button {
         background: none;
         border: none;
@@ -8707,12 +8773,12 @@ $admin-color-system: (
         display: flex;
         align-items: center;
         transition: all 0.2s;
-        
+
         svg {
             width: 1.25rem;
             height: 1.25rem;
         }
-        
+
         &:hover {
             color: var(--admin-danger);
             transform: scale(1.1);
@@ -8727,16 +8793,16 @@ $admin-color-system: (
     background: var(--admin-gray-50) !important;
     border-radius: var(--admin-radius-lg) !important;
     border: 1px solid var(--admin-gray-200) !important;
-    
-    > div:first-child {
+
+    >div:first-child {
         width: 100% !important;
         height: 0.5rem !important;
         background: var(--admin-gray-200) !important;
         border-radius: 999px !important;
         overflow: hidden !important;
         margin-bottom: 0.75rem !important;
-        
-        > div {
+
+        >div {
             height: 100% !important;
             background: var(--admin-gradient-primary) !important;
             width: 0% !important;
@@ -8744,8 +8810,8 @@ $admin-color-system: (
             border-radius: 999px !important;
         }
     }
-    
-    > p {
+
+    >p {
         text-align: center !important;
         color: var(--admin-gray-600) !important;
         font-size: 0.875rem !important;
@@ -8761,10 +8827,10 @@ $admin-color-system: (
     background: var(--admin-gray-50) !important;
     border-radius: var(--admin-radius-lg) !important;
     border: 1px solid var(--admin-gray-200) !important;
-    
-    > div:first-child {
+
+    >div:first-child {
         margin-bottom: 1rem !important;
-        
+
         h3 {
             margin: 0 !important;
             color: var(--admin-gray-900) !important;
@@ -8772,29 +8838,29 @@ $admin-color-system: (
             font-weight: 600 !important;
         }
     }
-    
+
     #resultsBody {
         display: flex !important;
         flex-direction: column !important;
         gap: 0.75rem !important;
-        
-        > div {
+
+        >div {
             padding: 0.75rem 1rem !important;
             background: #fff !important;
             border-radius: var(--admin-radius-md) !important;
             border-left: 4px solid var(--admin-primary) !important;
             font-size: 0.9375rem !important;
             line-height: 1.6 !important;
-            
+
             strong {
                 font-weight: 600;
                 color: var(--admin-gray-900);
             }
-            
+
             ul {
                 margin-top: 0.5rem;
                 padding-left: 1.5rem;
-                
+
                 li {
                     margin-bottom: 0.25rem;
                 }
@@ -8809,11 +8875,11 @@ $admin-color-system: (
     align-items: stretch;
     gap: 1rem;
     flex-wrap: wrap;
-    
+
     @media (max-width: 1024px) {
         gap: 0.75rem;
     }
-    
+
     @media (max-width: 768px) {
         flex-direction: column;
         align-items: stretch;
@@ -8835,7 +8901,7 @@ $admin-color-system: (
     align-items: stretch;
     gap: 0.75rem;
     flex-shrink: 0;
-    
+
     @media (max-width: 768px) {
         flex-direction: column;
         align-items: stretch;
@@ -8849,22 +8915,22 @@ $admin-color-system: (
     min-width: 200px;
     display: flex;
     align-items: stretch;
-    
+
     .adminPersonnelPage_searchBar_filterSelect {
         width: 100%;
         display: flex;
         flex-direction: column;
-        
+
         .adminFormSelect_labelWrapper {
             display: none;
         }
-        
+
         .adminCustomSelect {
             min-width: 200px;
             height: 100%;
             display: flex;
             flex-direction: column;
-            
+
             .adminCustomSelect_display {
                 min-height: 48px;
                 height: 100%;
@@ -8873,19 +8939,19 @@ $admin-color-system: (
             }
         }
     }
-    
+
     @media (max-width: 1024px) {
         min-width: 180px;
-        
+
         .adminCustomSelect {
             min-width: 180px;
         }
     }
-    
+
     @media (max-width: 768px) {
         width: 100%;
         min-width: unset;
-        
+
         .adminCustomSelect {
             width: 100%;
             min-width: unset;
@@ -8898,7 +8964,7 @@ $admin-color-system: (
     align-items: stretch;
     gap: 0.5rem;
     flex-shrink: 0;
-    
+
     .adminButton {
         height: 100%;
         min-height: 48px;
@@ -8906,12 +8972,12 @@ $admin-color-system: (
         align-items: center;
         justify-content: center;
     }
-    
+
     @media (max-width: 768px) {
         width: 100%;
         justify-content: flex-start;
         flex-wrap: wrap;
-        
+
         .adminButton {
             min-height: 44px;
         }
@@ -8920,18 +8986,19 @@ $admin-color-system: (
 
 // QR Code Card Custom Styles - Support inline styles
 .adminPersonnelPage_card {
+
     // QR code body with flex column
     .adminPersonnelPage_card_body {
         &[style*="flex-direction: column"] {
-            > div:first-child {
+            >div:first-child {
                 img {
                     width: 200px !important;
                     height: 200px !important;
                     display: block !important;
                 }
             }
-            
-            > div:last-child {
+
+            >div:last-child {
                 a {
                     display: block !important;
                     font-size: 0.75rem !important;
@@ -8943,7 +9010,7 @@ $admin-color-system: (
                     background: var(--admin-gray-50) !important;
                     border-radius: var(--admin-radius-md) !important;
                     transition: all 0.2s !important;
-                    
+
                     &:hover {
                         color: var(--admin-primary) !important;
                         background: var(--admin-primary-lighter) !important;
@@ -8978,39 +9045,39 @@ $admin-color-system: (
     transition: background-color 0.2s ease;
     width: 100%;
     box-sizing: border-box;
-    
+
     &:hover {
         background: var(--admin-gray-50);
     }
-    
+
     &:last-child {
         border-bottom: none;
     }
-    
+
     &--success {
         background: transparent;
-        
+
         &:hover {
             background: rgba(7, 163, 93, 0.03);
         }
     }
-    
+
     &--duplicate {
         background: transparent;
-        
+
         &:hover {
             background: rgba(251, 191, 36, 0.03);
         }
     }
-    
+
     &--error {
         background: transparent;
-        
+
         &:hover {
             background: rgba(239, 68, 68, 0.03);
         }
     }
-    
+
     @media (max-width: 768px) {
         flex-direction: column;
         align-items: stretch;
@@ -9031,13 +9098,13 @@ $admin-color-system: (
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
     @media (max-width: 768px) {
         width: 70px;
         height: 70px;
         align-self: center;
     }
-    
+
     .adminQrCode_listItem_qr_img {
         width: 100%;
         height: 100%;
@@ -9046,20 +9113,20 @@ $admin-color-system: (
         justify-content: center;
         overflow: hidden;
         border-radius: var(--admin-radius-sm);
-        
+
         svg {
             max-width: 100%;
             max-height: 100%;
             width: auto;
             height: auto;
-        display: block;
+            display: block;
         }
-        
+
         @media (max-width: 768px) {
             // Giữ nguyên kích thước trên mobile
         }
     }
-    
+
     &--empty {
         display: flex;
         align-items: center;
@@ -9070,16 +9137,16 @@ $admin-color-system: (
         min-height: 80px;
         background: var(--admin-gray-50);
         border-radius: var(--admin-radius-sm);
-        
+
         @media (max-width: 768px) {
             width: 70px;
             height: 70px;
-        min-width: 70px;
-        min-height: 70px;
+            min-width: 70px;
+            min-height: 70px;
         }
     }
-        
-        @media (max-width: 768px) {
+
+    @media (max-width: 768px) {
         width: 70px;
         height: 70px;
     }
@@ -9088,13 +9155,13 @@ $admin-color-system: (
 .adminQrCode_listItem_qr_empty {
     text-align: center;
     color: var(--admin-gray-400);
-    
+
     svg {
         width: 32px;
         height: 32px;
         margin-bottom: 0.25rem;
     }
-    
+
     p {
         font-size: 0.6875rem;
         margin: 0;
@@ -9107,7 +9174,7 @@ $admin-color-system: (
     flex-direction: column;
     gap: 0.75rem;
     min-width: 0;
-    
+
     @media (max-width: 768px) {
         width: 100%;
         gap: 0.625rem;
@@ -9125,7 +9192,7 @@ $admin-color-system: (
     align-items: center;
     gap: 0.75rem;
     flex-wrap: wrap;
-    
+
     @media (max-width: 768px) {
         align-items: flex-start;
         gap: 0.5rem;
@@ -9140,7 +9207,7 @@ $admin-color-system: (
     line-height: 1.4;
     word-break: break-word;
     overflow-wrap: break-word;
-    
+
     @media (max-width: 768px) {
         font-size: 0.875rem;
     }
@@ -9162,7 +9229,7 @@ $admin-color-system: (
     align-items: center;
     gap: 0.375rem;
     margin-bottom: 0.25rem;
-    
+
     svg {
         width: 14px;
         height: 14px;
@@ -9176,22 +9243,22 @@ $admin-color-system: (
     white-space: normal;
     word-break: break-word;
     max-width: 300px;
-    
+
     &--success {
         color: var(--admin-success);
     }
-    
+
     &--duplicate {
         color: var(--admin-warning);
     }
-    
+
     &--error {
         color: var(--admin-danger);
         white-space: normal;
         word-break: break-word;
         max-width: 400px;
     }
-    
+
     @media (max-width: 768px) {
         max-width: 100%;
     }
@@ -9204,49 +9271,49 @@ $admin-color-system: (
     flex-wrap: wrap;
     margin-bottom: 0;
     width: 100%;
-    
+
     // Đảm bảo icon status không bị shrink
-    > svg {
+    >svg {
         flex-shrink: 0;
     }
-    
+
     // Tên HLV - chiếm không gian chính
     .adminQrCode_listItem_name {
         flex: 1;
         min-width: 150px;
         margin-right: auto;
     }
-    
+
     // Mã HLV - không wrap nếu có thể
     .adminQrCode_listItem_code {
         flex-shrink: 1;
         max-width: 100%;
-        
+
         @media (max-width: 768px) {
             max-width: 100%;
             white-space: normal;
         }
     }
-    
+
     // Status text - có thể wrap để hiển thị lỗi
     .adminQrCode_listItem_statusText {
         flex-shrink: 1;
         white-space: normal;
     }
-    
+
     @media (max-width: 768px) {
         gap: 0.375rem;
-        
+
         .adminQrCode_listItem_name {
             min-width: 120px;
             width: 100%;
         }
-        
+
         .adminQrCode_listItem_code {
             width: 100%;
             order: 3;
         }
-        
+
         .adminQrCode_listItem_statusText {
             order: 2;
         }
@@ -9266,7 +9333,7 @@ $admin-color-system: (
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    
+
     @media (max-width: 768px) {
         font-size: 0.6875rem;
         padding: 0.1875rem 0.375rem;
@@ -9291,37 +9358,37 @@ $admin-color-system: (
     color: var(--admin-gray-600);
     line-height: 1.5;
     min-width: 0;
-    
+
     svg {
         width: 0.875rem;
         height: 0.875rem;
         color: var(--admin-gray-400);
         flex-shrink: 0;
     }
-    
+
     span {
         word-break: break-word;
         overflow-wrap: break-word;
         flex: 1;
         min-width: 0;
     }
-    
+
     @media (max-width: 768px) {
         font-size: 0.75rem;
         gap: 0.375rem;
-}
+    }
 
     // Contact row (phone + email trên cùng 1 dòng)
     &--contact {
-    display: flex;
+        display: flex;
         flex-wrap: wrap;
         gap: 0.5rem 1.5rem;
         align-items: center;
-        
+
         @media (max-width: 768px) {
             flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
+            align-items: flex-start;
+            gap: 0.5rem;
         }
     }
 }
@@ -9332,25 +9399,25 @@ $admin-color-system: (
     align-items: center;
     gap: 0.5rem;
     width: fit-content;
-    
+
     svg {
         width: 0.875rem;
         height: 0.875rem;
         color: var(--admin-gray-400);
         flex-shrink: 0;
     }
-    
+
     span {
         font-size: 0.8125rem;
         color: var(--admin-gray-600);
         line-height: 1.5;
         white-space: nowrap;
     }
-    
+
     @media (max-width: 768px) {
         width: 100%;
         gap: 0.375rem;
-        
+
         span {
             font-size: 0.75rem;
             white-space: normal;
@@ -9365,7 +9432,7 @@ $admin-color-system: (
     align-items: center;
     gap: 0.5rem;
     cursor: pointer;
-    
+
     input[type="checkbox"] {
         width: 18px;
         height: 18px;
@@ -9373,7 +9440,7 @@ $admin-color-system: (
         accent-color: var(--admin-primary);
         flex-shrink: 0;
     }
-    
+
     .adminCheckbox_label {
         font-size: 0.875rem;
         color: var(--admin-gray-700);
@@ -9397,7 +9464,7 @@ $admin-color-system: (
     background: var(--admin-gray-50);
     border-radius: var(--admin-radius-md);
     border: 1px solid var(--admin-gray-200);
-    
+
     @media (max-width: 768px) {
         flex-direction: column;
         align-items: stretch;
@@ -9422,7 +9489,7 @@ $admin-color-system: (
     align-items: center;
     gap: 0.75rem;
     margin-left: auto;
-    
+
     @media (max-width: 768px) {
         margin-left: 0;
         width: 100%;
@@ -9432,7 +9499,7 @@ $admin-color-system: (
 .adminQrCode_listItem_checkbox {
     flex-shrink: 0;
     padding-right: 1rem;
-    
+
     .adminCheckbox {
         input[type="checkbox"] {
             width: 20px;
@@ -9443,7 +9510,7 @@ $admin-color-system: (
 
 .adminQrCode_listItem--email {
     padding-left: 0.5rem;
-    
+
     .adminQrCode_listItem_info {
         flex: 1;
     }
@@ -9459,7 +9526,7 @@ $admin-color-system: (
     display: flex;
     align-items: flex-start;
     gap: 0.5rem;
-    
+
     svg {
         width: 1rem;
         height: 1rem;
@@ -9467,28 +9534,28 @@ $admin-color-system: (
         flex-shrink: 0;
         margin-top: 0.125rem;
     }
-    
+
     .adminQrCode_listItem_url_link {
         font-size: 0.75rem;
         color: var(--admin-gray-600);
         text-decoration: none;
         word-break: break-all;
         transition: all 0.2s;
-        
+
         &:hover {
             color: var(--admin-primary);
             text-decoration: underline;
         }
     }
-    
+
     @media (max-width: 768px) {
         gap: 0.375rem;
-        
+
         svg {
             width: 0.875rem;
             height: 0.875rem;
         }
-        
+
         .adminQrCode_listItem_url_link {
             font-size: 0.6875rem;
         }
@@ -9499,7 +9566,7 @@ $admin-color-system: (
     flex-shrink: 0;
     display: flex;
     align-items: flex-start;
-    
+
     @media (max-width: 768px) {
         width: 100%;
         justify-content: center;
@@ -9510,7 +9577,7 @@ $admin-color-system: (
 .adminButton--sm {
     padding: 0.5rem 1rem;
     font-size: 0.875rem;
-    
+
     svg {
         width: 1rem;
         height: 1rem;
@@ -9625,6 +9692,7 @@ $admin-color-system: (
     0% {
         transform: rotate(0deg);
     }
+
     100% {
         transform: rotate(360deg);
     }
@@ -9635,10 +9703,12 @@ $admin-color-system: (
         stroke-dasharray: 1, 150;
         stroke-dashoffset: 0;
     }
+
     50% {
         stroke-dasharray: 90, 150;
         stroke-dashoffset: -35;
     }
+
     100% {
         stroke-dasharray: 90, 150;
         stroke-dashoffset: -124;
@@ -9673,12 +9743,12 @@ $admin-color-system: (
     border-top: 1px solid var(--admin-gray-200);
     border-bottom: 1px solid var(--admin-gray-200);
     overflow: hidden;
-    
+
     @media (max-width: 1023px) {
         margin-left: -1.25rem;
         margin-right: -1.25rem;
     }
-    
+
     @media (max-width: 768px) {
         margin-left: -1rem;
         margin-right: -1rem;
@@ -9751,15 +9821,15 @@ $admin-color-system: (
     background: var(--admin-gray-50);
     border-radius: var(--admin-radius-md);
     transition: all 0.2s ease;
-    
+
     &--success {
         background: rgba(7, 163, 93, 0.05);
     }
-    
+
     &--duplicate {
         background: rgba(251, 191, 36, 0.05);
     }
-    
+
     &--error {
         background: rgba(239, 68, 68, 0.05);
     }
@@ -9795,7 +9865,7 @@ $admin-color-system: (
     border: none;
     border-bottom: 1px solid var(--admin-gray-200);
     margin-bottom: 0;
-    
+
     &--error {
         background: rgba(239, 68, 68, 0.02);
     }
@@ -9806,7 +9876,7 @@ $admin-color-system: (
     align-items: center;
     gap: 0.75rem;
     margin-bottom: 1rem;
-    
+
     @media (max-width: 768px) {
         margin-bottom: 0.75rem;
     }
@@ -9817,7 +9887,7 @@ $admin-color-system: (
     height: 24px;
     color: var(--admin-success);
     flex-shrink: 0;
-    
+
     .adminTrainerManagement_summary--error & {
         color: var(--admin-danger);
     }
@@ -9834,7 +9904,7 @@ $admin-color-system: (
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
-    
+
     @media (max-width: 768px) {
         gap: 0.75rem;
     }
@@ -9849,19 +9919,19 @@ $admin-color-system: (
     border-radius: var(--admin-radius-sm);
     min-width: 80px;
     border: none;
-    
+
     &--success {
         background: rgba(7, 163, 93, 0.08);
     }
-    
+
     &--duplicate {
         background: rgba(251, 191, 36, 0.08);
     }
-    
+
     &--error {
         background: rgba(239, 68, 68, 0.08);
     }
-    
+
     @media (max-width: 768px) {
         min-width: 70px;
         padding: 0.5rem 0.75rem;
@@ -9913,7 +9983,7 @@ $admin-color-system: (
     padding-left: 1.5rem;
     font-size: 0.875rem;
     color: var(--admin-gray-700);
-    
+
     li {
         margin-bottom: 0.25rem;
     }
@@ -9941,7 +10011,7 @@ $admin-color-system: (
     padding-left: 1rem;
     font-size: 0.75rem;
     color: var(--admin-gray-600);
-    
+
     li {
         margin-bottom: 0.125rem;
     }
@@ -9984,7 +10054,7 @@ $admin-color-system: (
     align-items: center;
     justify-content: center;
     background: var(--admin-gray-100);
-    
+
     svg {
         width: 64px;
         height: 64px;
@@ -10003,7 +10073,7 @@ $admin-color-system: (
     font-size: 0.75rem;
     font-weight: 600;
     backdrop-filter: blur(4px);
-    
+
     @media (max-width: 768px) {
         bottom: 0.5rem;
         right: 0.5rem;
@@ -10016,7 +10086,7 @@ $admin-color-system: (
     position: absolute;
     top: 0.75rem;
     left: 0.75rem;
-    
+
     @media (max-width: 768px) {
         top: 0.5rem;
         left: 0.5rem;
@@ -10086,27 +10156,27 @@ $admin-color-system: (
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     backdrop-filter: blur(8px);
-    
+
     svg {
         width: 28px;
         height: 28px;
         margin-left: 3px;
     }
-    
+
     &:hover {
         transform: translate(-50%, -50%) scale(1.1);
         background: #fff;
         box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
     }
-    
+
     .adminVideoManagement_listItem:hover & {
         opacity: 1;
     }
-    
+
     @media (max-width: 768px) {
         width: 44px;
         height: 44px;
-        
+
         svg {
             width: 22px;
             height: 22px;
@@ -10120,7 +10190,7 @@ $admin-color-system: (
     left: 0.375rem;
     z-index: 5;
     pointer-events: none;
-    
+
     .adminBadge {
         display: inline-flex;
         align-items: center;
@@ -10134,12 +10204,12 @@ $admin-color-system: (
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
         white-space: nowrap;
-        
+
         &--success {
             background: rgba(34, 197, 94, 0.95);
             color: #fff;
         }
-        
+
         &--secondary {
             background: rgba(107, 114, 128, 0.95);
             color: #fff;
@@ -10170,7 +10240,7 @@ $admin-color-system: (
     flex-direction: column;
     gap: 0.375rem;
     justify-content: center;
-    
+
     @media (max-width: 768px) {
         gap: 0.25rem;
     }
@@ -10198,12 +10268,12 @@ $admin-color-system: (
     text-decoration: none;
     transition: all 0.2s ease;
     cursor: pointer;
-    
+
     svg {
         width: 18px;
         height: 18px;
     }
-    
+
     &:hover {
         background: var(--admin-primary);
         border-color: var(--admin-primary);
@@ -10211,12 +10281,12 @@ $admin-color-system: (
         transform: translateY(-2px);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
     }
-    
+
     &--danger:hover {
         background: var(--admin-danger);
         border-color: var(--admin-danger);
     }
-    
+
     @media (max-width: 768px) {
         width: 40px;
         height: 40px;
@@ -10239,7 +10309,7 @@ $admin-color-system: (
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    
+
     @media (max-width: 768px) {
         font-size: 1rem;
         -webkit-line-clamp: 2;
@@ -10256,7 +10326,7 @@ $admin-color-system: (
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    
+
     @media (max-width: 768px) {
         font-size: 0.75rem;
         -webkit-line-clamp: 2;
@@ -10288,17 +10358,17 @@ $admin-color-system: (
     gap: 0.375rem;
     font-size: 0.75rem;
     color: var(--admin-gray-500);
-    
+
     svg {
         width: 13px;
         height: 13px;
         color: var(--admin-gray-400);
         flex-shrink: 0;
     }
-    
+
     @media (max-width: 768px) {
         font-size: 0.6875rem;
-        
+
         svg {
             width: 12px;
             height: 12px;
@@ -10316,18 +10386,18 @@ $admin-color-system: (
     display: flex;
     gap: 1.5rem;
     padding: 1.5rem;
-    
+
     &:hover {
         transform: translateY(-2px);
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
         border-color: var(--admin-primary);
     }
-    
+
     @media (max-width: 1024px) {
         padding: 1.25rem;
         gap: 1.25rem;
     }
-    
+
     @media (max-width: 768px) {
         flex-direction: column;
         padding: 1rem;
@@ -10344,7 +10414,7 @@ $admin-color-system: (
     background: var(--admin-gray-100);
     border-radius: var(--admin-radius-md);
     flex-shrink: 0;
-    
+
     img {
         position: absolute;
         top: 0;
@@ -10354,18 +10424,18 @@ $admin-color-system: (
         object-fit: cover;
         transition: transform 0.3s ease;
     }
-    
+
     .adminVideoList_item:hover & {
         img {
             transform: scale(1.05);
         }
     }
-    
+
     @media (max-width: 1024px) {
         width: 240px;
         min-width: 240px;
     }
-    
+
     @media (max-width: 768px) {
         width: 100%;
         min-width: 100%;
@@ -10383,7 +10453,7 @@ $admin-color-system: (
     align-items: center;
     justify-content: center;
     background: var(--admin-gray-100);
-    
+
     svg {
         width: 64px;
         height: 64px;
@@ -10410,27 +10480,27 @@ $admin-color-system: (
     z-index: 2;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(8px);
-    
+
     svg {
         width: 36px;
         height: 36px;
         margin-left: 4px; // Center play icon
     }
-    
+
     &:hover {
         transform: translate(-50%, -50%) scale(1.1);
         background: #fff;
         box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
     }
-    
+
     &:active {
         transform: translate(-50%, -50%) scale(1.05);
     }
-    
+
     @media (max-width: 768px) {
         width: 64px;
         height: 64px;
-        
+
         svg {
             width: 32px;
             height: 32px;
@@ -10443,7 +10513,7 @@ $admin-color-system: (
     top: 0.75rem;
     left: 0.75rem;
     z-index: 2;
-    
+
     @media (max-width: 768px) {
         top: 0.5rem;
         left: 0.5rem;
@@ -10463,7 +10533,7 @@ $admin-color-system: (
     align-items: flex-start;
     justify-content: space-between;
     gap: 1rem;
-    
+
     @media (max-width: 768px) {
         flex-direction: column;
         gap: 0.75rem;
@@ -10477,11 +10547,11 @@ $admin-color-system: (
     margin: 0;
     line-height: 1.4;
     flex: 1;
-    
+
     @media (max-width: 1024px) {
         font-size: 1.125rem;
     }
-    
+
     @media (max-width: 768px) {
         font-size: 1rem;
     }
@@ -10506,12 +10576,12 @@ $admin-color-system: (
     text-decoration: none;
     transition: all 0.2s;
     cursor: pointer;
-    
+
     svg {
         width: 18px;
         height: 18px;
     }
-    
+
     &:hover {
         background: var(--admin-primary);
         border-color: var(--admin-primary);
@@ -10519,16 +10589,16 @@ $admin-color-system: (
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
-    
+
     &--danger:hover {
         background: var(--admin-danger);
         border-color: var(--admin-danger);
     }
-    
+
     @media (max-width: 768px) {
         width: 36px;
         height: 36px;
-        
+
         svg {
             width: 16px;
             height: 16px;
@@ -10541,7 +10611,7 @@ $admin-color-system: (
     align-items: center;
     gap: 1rem;
     flex-wrap: wrap;
-    
+
     @media (max-width: 768px) {
         gap: 0.75rem;
     }
@@ -10557,7 +10627,7 @@ $admin-color-system: (
     font-size: 0.8125rem;
     font-weight: 600;
     color: var(--admin-gray-700);
-    
+
     svg {
         width: 14px;
         height: 14px;
@@ -10571,7 +10641,7 @@ $admin-color-system: (
     gap: 0.5rem;
     font-size: 0.8125rem;
     color: var(--admin-gray-600);
-    
+
     svg {
         width: 14px;
         height: 14px;
@@ -10589,7 +10659,7 @@ $admin-color-system: (
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    
+
     @media (max-width: 768px) {
         font-size: 0.875rem;
         -webkit-line-clamp: 3;
@@ -10614,11 +10684,11 @@ $admin-color-system: (
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
-    
+
     &--active {
         opacity: 1;
         visibility: visible;
-        
+
         .adminVideoModal_container {
             transform: scale(1);
         }
@@ -10648,7 +10718,7 @@ $admin-color-system: (
     padding: 2rem;
     transform: scale(0.95);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     @media (max-width: 768px) {
         padding: 1rem;
     }
@@ -10671,24 +10741,24 @@ $admin-color-system: (
     transition: all 0.3s;
     z-index: 10000;
     backdrop-filter: blur(8px);
-    
+
     svg {
         width: 24px;
         height: 24px;
     }
-    
+
     &:hover {
         background: rgba(255, 255, 255, 0.2);
         border-color: rgba(255, 255, 255, 0.3);
         transform: rotate(90deg);
     }
-    
+
     @media (max-width: 768px) {
         top: 1rem;
         right: 1rem;
         width: 40px;
         height: 40px;
-        
+
         svg {
             width: 20px;
             height: 20px;
@@ -10713,38 +10783,38 @@ $admin-color-system: (
     transition: all 0.3s;
     z-index: 10001;
     backdrop-filter: blur(8px);
-    
+
     svg {
         width: 24px;
         height: 24px;
     }
-    
+
     &:hover {
         background: rgba(255, 255, 255, 0.2);
         border-color: rgba(255, 255, 255, 0.3);
         transform: translateY(-50%) scale(1.1);
     }
-    
+
     &--prev {
         left: 2rem;
     }
-    
+
     &--next {
         right: 2rem;
     }
-    
+
     @media (max-width: 768px) {
         width: 48px;
         height: 48px;
-        
+
         &--prev {
             left: 1rem;
         }
-        
+
         &--next {
             right: 1rem;
         }
-        
+
         svg {
             width: 20px;
             height: 20px;
@@ -10763,12 +10833,12 @@ $admin-color-system: (
     border-radius: var(--admin-radius-lg);
     overflow: hidden;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    
+
     @media (max-width: 1024px) {
         max-height: 100vh;
         flex-direction: column;
     }
-    
+
     @media (max-width: 768px) {
         border-radius: 0;
     }
@@ -10780,7 +10850,7 @@ $admin-color-system: (
     flex-direction: column;
     min-width: 0;
     background: #000;
-    
+
     @media (max-width: 1024px) {
         max-height: 60vh;
     }
@@ -10812,12 +10882,12 @@ $admin-color-system: (
     border-top: 1px solid var(--admin-gray-200);
     max-height: 40%;
     overflow-y: auto;
-    
+
     @media (max-width: 1024px) {
         padding: 1.5rem;
         max-height: 40vh;
     }
-    
+
     @media (max-width: 768px) {
         padding: 1.25rem;
     }
@@ -10829,7 +10899,7 @@ $admin-color-system: (
     justify-content: space-between;
     gap: 1rem;
     margin-bottom: 1rem;
-    
+
     @media (max-width: 768px) {
         flex-direction: column;
         gap: 0.75rem;
@@ -10843,7 +10913,7 @@ $admin-color-system: (
     margin: 0;
     line-height: 1.4;
     flex: 1;
-    
+
     @media (max-width: 768px) {
         font-size: 1.25rem;
     }
@@ -10875,12 +10945,12 @@ $admin-color-system: (
     border-radius: var(--admin-radius-md);
     font-size: 0.875rem;
     font-weight: 600;
-    
+
     &.adminBadge--success {
         background: var(--admin-success);
         color: #fff;
     }
-    
+
     &.adminBadge--secondary {
         background: var(--admin-gray-400);
         color: #fff;
@@ -10892,7 +10962,7 @@ $admin-color-system: (
     color: var(--admin-gray-600);
     line-height: 1.6;
     margin: 0 0 1.5rem 0;
-    
+
     @media (max-width: 768px) {
         font-size: 0.875rem;
         margin-bottom: 1.25rem;
@@ -10913,7 +10983,7 @@ $admin-color-system: (
     gap: 0.5rem;
     font-size: 0.875rem;
     color: var(--admin-gray-600);
-    
+
     svg {
         width: 16px;
         height: 16px;
@@ -10936,7 +11006,7 @@ $admin-color-system: (
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    
+
     @media (max-width: 1024px) {
         width: 100%;
         min-width: 100%;
@@ -10953,7 +11023,7 @@ $admin-color-system: (
     color: var(--admin-gray-900);
     margin: 0;
     border-bottom: 1px solid var(--admin-gray-200);
-    
+
     @media (max-width: 1024px) {
         padding: 1.25rem;
         font-size: 1rem;
@@ -10967,7 +11037,7 @@ $admin-color-system: (
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    
+
     @media (max-width: 1024px) {
         padding: 0.75rem;
         gap: 0.5rem;
@@ -10983,17 +11053,17 @@ $admin-color-system: (
     border: 1px solid var(--admin-gray-200);
     cursor: pointer;
     transition: all 0.2s;
-    
+
     &:hover {
         border-color: var(--admin-primary);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         transform: translateX(4px);
     }
-    
+
     &--active {
         border-color: var(--admin-primary);
         background: var(--admin-primary-01);
-        
+
         .adminVideoModal_related_item_title {
             color: var(--admin-primary);
         }
@@ -11008,7 +11078,7 @@ $admin-color-system: (
     overflow: hidden;
     background: var(--admin-gray-100);
     border-radius: var(--admin-radius-sm);
-    
+
     img {
         position: absolute;
         top: 0;
@@ -11032,7 +11102,7 @@ $admin-color-system: (
     background: rgba(255, 255, 255, 0.9);
     border-radius: 50%;
     color: var(--admin-primary);
-    
+
     svg {
         width: 16px;
         height: 16px;
@@ -11095,7 +11165,11 @@ $admin-color-system: (
     @media (max-width: 768px) {
         width: 48px;
         height: 48px;
-        svg { width: 28px; height: 28px; }
+
+        svg {
+            width: 28px;
+            height: 28px;
+        }
     }
 }
 
@@ -11148,7 +11222,7 @@ $admin-color-system: (
     margin-bottom: 1.5rem;
     align-items: stretch;
     flex-wrap: wrap;
-    
+
     @media (max-width: 768px) {
         display: flex;
         flex-direction: column;
@@ -11162,7 +11236,7 @@ $admin-color-system: (
     position: relative;
     display: flex;
     align-items: center;
-    
+
     @media (max-width: 768px) {
         min-width: 0;
         flex: 1 1 auto;
@@ -11176,7 +11250,7 @@ $admin-color-system: (
     height: 20px;
     color: var(--admin-gray-400);
     pointer-events: none;
-    
+
     @media (max-width: 768px) {
         left: 0.75rem;
         width: 18px;
@@ -11199,8 +11273,11 @@ $admin-color-system: (
         border-color: var(--admin-primary);
         box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
     }
-    &::placeholder { color: var(--admin-gray-400); }
-    
+
+    &::placeholder {
+        color: var(--admin-gray-400);
+    }
+
     @media (max-width: 768px) {
         padding: 0.625rem 0.75rem 0.625rem 2.25rem;
         font-size: 0.875rem;
@@ -11209,7 +11286,7 @@ $admin-color-system: (
 
 .adminVideoAcademy_toolbar_filter {
     min-width: 180px;
-    
+
     @media (max-width: 768px) {
         min-width: 0;
         flex: 1 1 auto;
@@ -11231,7 +11308,7 @@ $admin-color-system: (
         outline: none;
         border-color: var(--admin-primary);
     }
-    
+
     @media (max-width: 768px) {
         padding: 0.625rem 0.75rem;
         font-size: 0.875rem;
@@ -11240,7 +11317,7 @@ $admin-color-system: (
 
 .adminVideoAcademy_toolbar_btn {
     flex-shrink: 0;
-    
+
     @media (max-width: 768px) {
         width: 100%;
     }
@@ -11252,15 +11329,15 @@ $admin-color-system: (
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 0.5rem;
-        
+
         .adminVideoAcademy_toolbar_search {
             grid-column: 1;
         }
-        
+
         .adminVideoAcademy_toolbar_filter {
             grid-column: 2;
         }
-        
+
         .adminVideoAcademy_toolbar_btn {
             grid-column: 1 / -1;
         }
@@ -11301,8 +11378,14 @@ $admin-color-system: (
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
         border-color: var(--admin-primary);
 
-        .adminVideoAcademy_card_play { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
-        .adminVideoAcademy_card_thumb img { transform: scale(1.05); }
+        .adminVideoAcademy_card_play {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+
+        .adminVideoAcademy_card_thumb img {
+            transform: scale(1.05);
+        }
     }
 }
 
@@ -11394,11 +11477,11 @@ $admin-color-system: (
     opacity: 0;
     transition: opacity 0.3s;
     z-index: 20;
-    
+
     .adminVideoAcademy_card:hover & {
         opacity: 1;
     }
-    
+
     @media (max-width: 768px) {
         opacity: 1;
         top: 0.5rem;
@@ -11423,28 +11506,28 @@ $admin-color-system: (
     backdrop-filter: blur(8px);
     padding: 0;
     margin: 0;
-    
+
     svg {
         width: 18px;
         height: 18px;
     }
-    
+
     &:hover {
         background: var(--admin-primary);
         border-color: var(--admin-primary);
         color: #fff;
         transform: scale(1.1);
     }
-    
+
     &--danger:hover {
         background: var(--admin-danger);
         border-color: var(--admin-danger);
     }
-    
+
     @media (max-width: 768px) {
         width: 32px;
         height: 32px;
-        
+
         svg {
             width: 16px;
             height: 16px;
@@ -11544,7 +11627,9 @@ $admin-color-system: (
     text-decoration: none;
     transition: color 0.2s;
 
-    &:hover { color: var(--admin-primary-dark, #1565c0); }
+    &:hover {
+        color: var(--admin-primary-dark, #1565c0);
+    }
 
     svg {
         width: 18px;
@@ -11611,7 +11696,11 @@ $admin-color-system: (
         margin-bottom: 0.75rem;
         opacity: 0.7;
     }
-    p { margin: 0; font-size: 1rem; }
+
+    p {
+        margin: 0;
+        font-size: 1rem;
+    }
 }
 
 // Info (title, category, date, description)
@@ -11760,7 +11849,10 @@ $admin-color-system: (
     background: var(--admin-gray-100);
     color: var(--admin-gray-400);
 
-    svg { width: 24px; height: 24px; }
+    svg {
+        width: 24px;
+        height: 24px;
+    }
 }
 
 .adminVideoAcademy_sidebar_item_play {
@@ -11777,7 +11869,11 @@ $admin-color-system: (
     border-radius: 50%;
     color: var(--admin-primary);
 
-    svg { width: 18px; height: 18px; margin-left: 2px; }
+    svg {
+        width: 18px;
+        height: 18px;
+        margin-left: 2px;
+    }
 }
 
 .adminVideoAcademy_sidebar_item_body {
@@ -11899,20 +11995,20 @@ $admin-color-system: (
     transition: color 0.2s, opacity 0.2s;
     font-weight: 500;
 
-    svg { 
-        width: 16px; 
-        height: 16px; 
+    svg {
+        width: 16px;
+        height: 16px;
         flex-shrink: 0;
-        
+
         @media (max-width: 568px) {
             width: 14px;
             height: 14px;
         }
     }
 
-    &:hover { 
-        color: var(--admin-primary-dark, #1565c0); 
-        opacity: 0.9; 
+    &:hover {
+        color: var(--admin-primary-dark, #1565c0);
+        opacity: 0.9;
     }
 
     &--current {
@@ -11926,20 +12022,20 @@ $admin-color-system: (
         text-overflow: ellipsis;
         white-space: nowrap;
 
-        @media (max-width: 1023px) { 
-            max-width: 200px; 
+        @media (max-width: 1023px) {
+            max-width: 200px;
         }
 
-        @media (max-width: 990px) { 
-            max-width: 180px; 
+        @media (max-width: 990px) {
+            max-width: 180px;
         }
 
-        @media (max-width: 767px) { 
-            max-width: 160px; 
+        @media (max-width: 767px) {
+            max-width: 160px;
         }
 
-        @media (max-width: 568px) { 
-            max-width: 140px; 
+        @media (max-width: 568px) {
+            max-width: 140px;
         }
     }
 }
@@ -12093,8 +12189,8 @@ $admin-color-system: (
         }
     }
 
-    p { 
-        margin: 0; 
+    p {
+        margin: 0;
         font-size: 1.0625rem;
         font-weight: 500;
 
@@ -12301,6 +12397,7 @@ $admin-color-system: (
     @media (max-width: 1199px) {
         font-size: 0.875rem;
         gap: 0.40625rem;
+
         svg {
             width: 16px;
             height: 16px;
@@ -12310,6 +12407,7 @@ $admin-color-system: (
     @media (max-width: 1023px) {
         font-size: 0.84375rem;
         gap: 0.375rem;
+
         svg {
             width: 15px;
             height: 15px;
@@ -12319,6 +12417,7 @@ $admin-color-system: (
     @media (max-width: 767px) {
         font-size: 0.8125rem;
         gap: 0.34375rem;
+
         svg {
             width: 14px;
             height: 14px;
@@ -12328,6 +12427,7 @@ $admin-color-system: (
     @media (max-width: 568px) {
         font-size: 0.78125rem;
         gap: 0.3125rem;
+
         svg {
             width: 13px;
             height: 13px;
@@ -12415,9 +12515,9 @@ $admin-color-system: (
         grid-template-columns: none;
         align-items: center;
         gap: 0.75rem;
-        
+
         // Các button chiếm full width
-        > * {
+        >* {
             flex: 1;
         }
     }
@@ -12472,9 +12572,9 @@ $admin-color-system: (
         gap: 0.375rem;
     }
 
-    svg { 
-        width: 20px; 
-        height: 20px; 
+    svg {
+        width: 20px;
+        height: 20px;
         flex-shrink: 0;
         margin-top: 0.125rem;
 
@@ -12499,7 +12599,7 @@ $admin-color-system: (
         }
     }
 
-    > span:not(.academyWatch_navBtn_title) {
+    >span:not(.academyWatch_navBtn_title) {
         flex-shrink: 0;
         white-space: nowrap;
     }
@@ -12531,27 +12631,28 @@ $admin-color-system: (
         box-shadow: 0 2px 8px rgba(33, 150, 243, 0.12);
     }
 
-    &--prev { 
-        justify-content: flex-start; 
+    &--prev {
+        justify-content: flex-start;
         text-align: left;
-        
-        > span:not(.academyWatch_navBtn_title) {
+
+        >span:not(.academyWatch_navBtn_title) {
             order: 1;
         }
-        
+
         svg {
             order: 0;
         }
     }
-    &--next { 
-        justify-content: flex-end; 
+
+    &--next {
+        justify-content: flex-end;
         grid-column: 3;
         text-align: left;
-        
-        > span:not(.academyWatch_navBtn_title) {
+
+        >span:not(.academyWatch_navBtn_title) {
             order: 0;
         }
-        
+
         svg {
             order: 1;
         }
@@ -12578,7 +12679,7 @@ $admin-color-system: (
             padding-top: 0.8125rem;
             padding-bottom: 0.8125rem;
 
-            > span:not(.academyWatch_navBtn_title) {
+            >span:not(.academyWatch_navBtn_title) {
                 display: none;
             }
 
@@ -12661,20 +12762,23 @@ $admin-color-system: (
             text-align: right;
         }
 
-        .academyWatch_navBtn:hover & { color: inherit; }
+        .academyWatch_navBtn:hover & {
+            color: inherit;
+        }
     }
 
     @media (max-width: 990px) {
-        &--next { 
+        &--next {
             grid-column: 3;
         }
+
         justify-content: center;
         flex-wrap: nowrap;
         align-items: center;
         min-height: 48px;
-        
+
         // Các button chiếm full width
-        > * {
+        >* {
             flex: 1;
             width: 100%;
         }
@@ -12722,7 +12826,7 @@ $admin-color-system: (
     border-bottom: 1px solid rgba(33, 150, 243, 0.08);
     position: relative;
     overflow: hidden;
-    
+
     &::before {
         content: '';
         position: absolute;
@@ -12734,7 +12838,7 @@ $admin-color-system: (
         border-radius: 50%;
         pointer-events: none;
     }
-    
+
     &::after {
         content: '';
         position: absolute;
@@ -12746,11 +12850,11 @@ $admin-color-system: (
         border-radius: 50%;
         pointer-events: none;
     }
-    
+
     @media (max-width: 1023px) {
         padding: 1.125rem;
     }
-    
+
     @media (max-width: 768px) {
         padding: 1rem;
     }
@@ -12764,15 +12868,15 @@ $admin-color-system: (
     min-width: 0;
     position: relative;
     z-index: 1;
-    
+
     @media (max-width: 1199px) {
         gap: 0.9375rem;
     }
-    
+
     @media (max-width: 990px) {
         gap: 0.875rem;
     }
-    
+
     @media (max-width: 768px) {
         gap: 0.75rem;
     }
@@ -12792,7 +12896,7 @@ $admin-color-system: (
     justify-content: center;
     border-radius: 6px 6px 2px 2px;
     margin-top: -2px;
-    
+
     // Ribbon fishtail bottom
     &::after {
         content: '';
@@ -12807,7 +12911,7 @@ $admin-color-system: (
         clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 60%, 0% 100%);
         z-index: -1;
     }
-    
+
     // Decorative dot at top
     &::before {
         content: '';
@@ -12821,16 +12925,16 @@ $admin-color-system: (
         border-radius: 50%;
         z-index: 2;
     }
-    
+
     &:hover {
         transform: translateY(2px);
         box-shadow: 0 6px 15px rgba(33, 150, 243, 0.25);
-        
+
         svg {
             transform: scale(1.1);
         }
     }
-    
+
     svg {
         width: 22px;
         height: 22px;
@@ -12838,28 +12942,28 @@ $admin-color-system: (
         position: relative;
         z-index: 1;
         transition: transform 0.3s ease;
-        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
     }
-    
+
     @media (max-width: 1199px) {
         width: 40px;
         height: 48px;
-        
+
         svg {
             width: 20px;
             height: 20px;
         }
     }
-    
+
     @media (max-width: 768px) {
         width: 36px;
         height: 44px;
-        
+
         &::after {
             bottom: -8px;
             height: 10px;
         }
-        
+
         svg {
             width: 18px;
             height: 18px;
@@ -12884,22 +12988,22 @@ $admin-color-system: (
     margin: 0 0 0.375rem 0;
     line-height: 1.25;
     letter-spacing: -0.01em;
-    
+
     @media (max-width: 1199px) {
         font-size: 1.1875rem;
         gap: 0.6875rem;
     }
-    
+
     @media (max-width: 1023px) {
         font-size: 1.125rem;
         gap: 0.625rem;
     }
-    
+
     @media (max-width: 990px) {
         font-size: 1.0625rem;
         gap: 0.5625rem;
     }
-    
+
     @media (max-width: 768px) {
         font-size: 1rem;
         gap: 0.5rem;
@@ -12913,15 +13017,15 @@ $admin-color-system: (
     line-height: 1.6;
     font-weight: 400;
     max-width: 600px;
-    
+
     @media (max-width: 1199px) {
         font-size: 0.84375rem;
     }
-    
+
     @media (max-width: 990px) {
         font-size: 0.8125rem;
     }
-    
+
     @media (max-width: 768px) {
         font-size: 0.75rem;
     }
@@ -12942,7 +13046,7 @@ $admin-color-system: (
     }
 
     // Ẩn border-bottom cho item cuối cùng
-    > li:last-child {
+    >li:last-child {
         .academyWatch_sidebar_item {
             border-bottom: none;
         }
@@ -12988,10 +13092,10 @@ $admin-color-system: (
 
         scrollbar-width: none;
 
-        > li {
+        >li {
             width: 100%;
             flex: 0 0 auto;
-            
+
             &:last-child {
                 .academyWatch_sidebar_item {
                     border-bottom: none;
@@ -13037,12 +13141,13 @@ $admin-color-system: (
         background: var(--admin-gray-50);
         border-bottom-color: rgba(0, 0, 0, 0.12);
 
-        .academyWatch_sidebar_item_play { 
-            opacity: 1; 
-            transform: translate(-50%, -50%) scale(1.05); 
+        .academyWatch_sidebar_item_play {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.05);
         }
-        .academyWatch_sidebar_item_thumb img { 
-            transform: scale(1.05); 
+
+        .academyWatch_sidebar_item_thumb img {
+            transform: scale(1.05);
         }
     }
 
@@ -13051,10 +13156,10 @@ $admin-color-system: (
         flex-direction: row;
         align-items: flex-start;
         gap: 1rem;
-        
+
         &:hover {
-            .academyWatch_sidebar_item_thumb img { 
-                transform: none; 
+            .academyWatch_sidebar_item_thumb img {
+                transform: none;
             }
         }
 
@@ -13223,9 +13328,9 @@ $admin-color-system: (
     background: var(--admin-gray-100);
     color: var(--admin-gray-400);
 
-    svg { 
-        width: 36px; 
-        height: 36px; 
+    svg {
+        width: 36px;
+        height: 36px;
 
         @media (max-width: 1023px) {
             width: 32px;
@@ -13271,6 +13376,7 @@ $admin-color-system: (
     @media (max-width: 1023px) {
         width: 44px;
         height: 44px;
+
         svg {
             width: 22px;
             height: 22px;
@@ -13281,6 +13387,7 @@ $admin-color-system: (
         opacity: 1;
         width: 52px;
         height: 52px;
+
         svg {
             width: 26px;
             height: 26px;
@@ -13290,6 +13397,7 @@ $admin-color-system: (
     @media (max-width: 767px) {
         width: 48px;
         height: 48px;
+
         svg {
             width: 24px;
             height: 24px;
@@ -13299,6 +13407,7 @@ $admin-color-system: (
     @media (max-width: 568px) {
         width: 44px;
         height: 44px;
+
         svg {
             width: 22px;
             height: 22px;
@@ -13448,7 +13557,7 @@ $admin-color-system: (
     padding: 1.5rem;
     margin-bottom: 1.5rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    
+
     @media (max-width: 768px) {
         padding: 1.25rem;
         margin-bottom: 1.25rem;
@@ -13459,7 +13568,7 @@ $admin-color-system: (
     display: flex;
     gap: 1rem;
     align-items: flex-end;
-    
+
     @media (max-width: 768px) {
         flex-direction: column;
         gap: 1rem;
@@ -13472,7 +13581,7 @@ $admin-color-system: (
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    
+
     @media (max-width: 768px) {
         width: 100%;
     }
@@ -13482,7 +13591,7 @@ $admin-color-system: (
     font-size: 0.875rem;
     font-weight: 600;
     color: var(--admin-gray-700);
-    
+
     @media (max-width: 768px) {
         font-size: 0.8125rem;
     }
@@ -13496,17 +13605,17 @@ $admin-color-system: (
     font-size: 0.875rem;
     color: var(--admin-gray-900);
     transition: all 0.2s;
-    
+
     &:focus {
         outline: none;
         border-color: var(--admin-primary);
         box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
     }
-    
+
     &::placeholder {
         color: var(--admin-gray-400);
     }
-    
+
     @media (max-width: 768px) {
         padding: 0.625rem 0.875rem;
         font-size: 0.8125rem;
@@ -13515,10 +13624,10 @@ $admin-color-system: (
 
 .adminRedirect_addForm_actions {
     flex-shrink: 0;
-    
+
     @media (max-width: 768px) {
         width: 100%;
-        
+
         .adminButton {
             width: 100%;
         }
@@ -13532,7 +13641,7 @@ $admin-color-system: (
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     overflow-x: auto;
-    
+
     @media (max-width: 768px) {
         border-radius: var(--admin-radius-md);
     }
@@ -13559,22 +13668,22 @@ $admin-color-system: (
     text-transform: uppercase;
     letter-spacing: 0.05em;
     white-space: nowrap;
-    
+
     &:first-child {
         text-align: center;
         width: 60px;
     }
-    
+
     &:nth-child(2),
     &:nth-child(3) {
         width: calc((100% - 160px) / 2);
     }
-    
+
     &:last-child {
         width: 100px;
         text-align: center;
     }
-    
+
     @media (max-width: 768px) {
         padding: 0.875rem 1rem;
         font-size: 0.8125rem;
@@ -13584,11 +13693,11 @@ $admin-color-system: (
 .adminRedirect_table tbody tr {
     border-bottom: 1px solid var(--admin-gray-200);
     transition: background-color 0.2s;
-    
+
     &:hover {
         background: var(--admin-gray-50);
     }
-    
+
     &:last-child {
         border-bottom: none;
     }
@@ -13597,7 +13706,7 @@ $admin-color-system: (
 .adminRedirect_table td {
     padding: 1rem 1.5rem;
     vertical-align: middle;
-    
+
     @media (max-width: 768px) {
         padding: 0.875rem 1rem;
     }
@@ -13608,7 +13717,7 @@ $admin-color-system: (
     font-weight: 600;
     color: var(--admin-gray-600);
     font-size: 0.875rem;
-    
+
     @media (max-width: 768px) {
         font-size: 0.8125rem;
     }
@@ -13629,7 +13738,7 @@ $admin-color-system: (
     font-size: 0.875rem;
     word-break: break-all;
     transition: color 0.2s;
-    
+
     svg {
         width: 16px;
         height: 16px;
@@ -13637,20 +13746,20 @@ $admin-color-system: (
         opacity: 0.6;
         transition: opacity 0.2s;
     }
-    
+
     &:hover {
         color: var(--admin-primary-dark);
         text-decoration: underline;
-        
+
         svg {
             opacity: 1;
         }
     }
-    
+
     @media (max-width: 768px) {
         font-size: 0.8125rem;
         gap: 0.375rem;
-        
+
         svg {
             width: 14px;
             height: 14px;
@@ -13661,6 +13770,3 @@ $admin-color-system: (
 .adminRedirect_table_actions {
     text-align: center;
 }
-
-
-

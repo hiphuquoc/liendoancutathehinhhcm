@@ -63,7 +63,21 @@ class Image {
     public static function getUrlImageCloud($urlImage){
         $result     = null;
         if(!empty($urlImage)){
+            // Nếu đã là URL đầy đủ (http/https) thì trả về luôn
+            if (filter_var($urlImage, FILTER_VALIDATE_URL)) {
+                return $urlImage;
+            }
+
+            // Nếu đang ở local -> xử lý path local
+            if (env('APP_ENV') == 'local') {
+                // Fix đường dẫn thừa 'public' do Storage::url() tạo ra với disk local
+                // /storage/public/images/... -> /storage/images/...
+                return str_replace('/storage/public/', '/storage/', $urlImage);
+            }
+
             /* sử dụng ảnh trong google_cloud_storage */
+            // Xóa dấu / ở đầu để tránh double slash
+            $urlImage = ltrim($urlImage, '/');
             $result = config('main_'.env('APP_NAME').'.google_cloud_storage.default_domain').$urlImage;
         }
         return $result;

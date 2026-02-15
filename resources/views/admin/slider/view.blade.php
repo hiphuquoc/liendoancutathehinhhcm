@@ -271,7 +271,7 @@
                                     'name' => 'image',
                                     'label' => 'Ảnh Desktop (1920×800)',
                                     'required' => empty($item->id),
-                                    'currentImage' => !empty($item->image) ? \App\Helpers\Image::getUrlImageSmallByUrlImage($item->image) : null,
+                                    'currentImage' => !empty($item->image) ? \App\Helpers\Image::getUrlImageCloud($item->image) : null,
                                     'aspectRatio' => '16/9',
                                     'tooltip' => 'Kích thước khuyến nghị: 1920x800px hoặc tỷ lệ tương tự'
                                 ])
@@ -281,7 +281,7 @@
                                     'name' => 'image_mobile',
                                     'label' => 'Ảnh Mobile (tùy chọn)',
                                     'required' => false,
-                                    'currentImage' => !empty($item->image_mobile) ? \App\Helpers\Image::getUrlImageSmallByUrlImage($item->image_mobile) : null,
+                                    'currentImage' => !empty($item->image_mobile) ? \App\Helpers\Image::getUrlImageCloud($item->image_mobile) : null,
                                     'aspectRatio' => '4/3',
                                     'tooltip' => 'Kích thước khuyến nghị: 768x600px. Nếu không chọn, sẽ dùng ảnh Desktop'
                                 ])

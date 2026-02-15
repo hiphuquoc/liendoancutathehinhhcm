@@ -137,11 +137,12 @@ class SliderController extends Controller {
         $filename = $name . '-slider-' . $suffix . '-' . time();
         $filepath = $folderUpload . $filename . '.' . $extension;
         
-        ImageManagerStatic::make($image->getRealPath())
-            ->encode($extension, config('image.quality'))
-            ->save(Storage::path($filepath));
+        $img = ImageManagerStatic::make($image->getRealPath())
+            ->encode($extension, config('image.quality'));
+
+        Storage::disk('gcs')->put($filepath, (string)$img, 'public');
         
-        return Storage::url($filepath);
+        return Storage::disk('gcs')->url($filepath);
     }
 
     /**

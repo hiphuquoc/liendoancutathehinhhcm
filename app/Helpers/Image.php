@@ -87,7 +87,7 @@ class Image {
         $result     = null;
         if(!empty($urlImage)){
             /* sử dụng ảnh trong google_cloud_storage */
-            $url    = config('main_'.env('APP_NAME').'.google_cloud_storage.default_domain').$urlImage;
+            $url = filter_var($urlImage, FILTER_VALIDATE_URL) ? $urlImage : config('main_'.env('APP_NAME').'.google_cloud_storage.default_domain').$urlImage;
             $tmp    = pathinfo($url);
             $result = $tmp['dirname'].'/'.$tmp['filename'].'-mini.'.$tmp['extension'];
         }
@@ -98,7 +98,7 @@ class Image {
         $result     = null;
         if(!empty($urlImage)){
             /* sử dụng ảnh trong google_cloud_storage */
-            $url    = config('main_'.env('APP_NAME').'.google_cloud_storage.default_domain').$urlImage;
+            $url = filter_var($urlImage, FILTER_VALIDATE_URL) ? $urlImage : config('main_'.env('APP_NAME').'.google_cloud_storage.default_domain').$urlImage;
             $tmp    = pathinfo($url);
             $result = $tmp['dirname'].'/'.$tmp['filename'].'-small.'.$tmp['extension'];
         }
@@ -109,7 +109,7 @@ class Image {
         $result     = null;
         if(!empty($urlImage)){
             /* sử dụng ảnh trong google_cloud_storage */
-            $url    = config('main_'.env('APP_NAME').'.google_cloud_storage.default_domain').$urlImage;
+            $url = filter_var($urlImage, FILTER_VALIDATE_URL) ? $urlImage : config('main_'.env('APP_NAME').'.google_cloud_storage.default_domain').$urlImage;
             $tmp    = pathinfo($url);
             $result = $tmp['dirname'].'/'.$tmp['filename'].'-large.'.$tmp['extension'];
         }

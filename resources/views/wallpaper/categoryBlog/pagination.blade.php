@@ -1,36 +1,42 @@
 @if ($paginator->hasPages())
-    <div class="bottom-nav">
-        <ul>
-            <!-- Liên kết "Previous" -->
+    <nav class="pagination-nav" aria-label="Phân trang">
+        <ul class="pagination-nav__list" role="list">
             @if ($paginator->onFirstPage())
-                <li class="bottom-link unaction"><span>Previous</span></li>
+                <li class="pagination-nav__item pagination-nav__item--disabled" aria-disabled="true">
+                    <span class="pagination-nav__link">Trước</span>
+                </li>
             @else
-                <li class="bottom-link"><a href="{{ $paginator->previousPageUrl() }}">Previous</a></li>
+                <li class="pagination-nav__item">
+                    <a class="pagination-nav__link" href="{{ $paginator->previousPageUrl() }}" rel="prev">Trước</a>
+                </li>
             @endif
 
-            <!-- Các số trang -->
             @foreach ($elements as $element)
                 @if (is_string($element))
-                    <li class="bottom-number-link unaction"><span>{{ $element }}</span></li>
+                    <li class="pagination-nav__item pagination-nav__item--ellipsis" aria-hidden="true"><span>{{ $element }}</span></li>
                 @endif
-
                 @if (is_array($element))
                     @foreach ($element as $page => $url)
-                        @if ($page == $paginator->currentPage())
-                            <li class="bottom-number-link active"><a href="{{ $url }}">{{ $page }}</a></li>
-                        @else
-                            <li class="bottom-number-link"><a href="{{ $url }}">{{ $page }}</a></li>
-                        @endif
+                        <li class="pagination-nav__item {{ $page == $paginator->currentPage() ? 'pagination-nav__item--active' : '' }}">
+                            @if ($page == $paginator->currentPage())
+                                <span class="pagination-nav__link pagination-nav__link--current" aria-current="page">{{ $page }}</span>
+                            @else
+                                <a class="pagination-nav__link" href="{{ $url }}">{{ $page }}</a>
+                            @endif
+                        </li>
                     @endforeach
                 @endif
             @endforeach
 
-            <!-- Liên kết "Next" -->
             @if ($paginator->hasMorePages())
-                <li class="bottom-link"><a href="{{ $paginator->nextPageUrl() }}">Next</a></li>
+                <li class="pagination-nav__item">
+                    <a class="pagination-nav__link" href="{{ $paginator->nextPageUrl() }}" rel="next">Sau</a>
+                </li>
             @else
-                <li class="bottom-link unaction"><span>Next</span></li>
+                <li class="pagination-nav__item pagination-nav__item--disabled" aria-disabled="true">
+                    <span class="pagination-nav__link">Sau</span>
+                </li>
             @endif
         </ul>
-    </div>
+    </nav>
 @endif

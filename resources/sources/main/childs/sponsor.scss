@@ -249,7 +249,7 @@
     // ==========================================
     .buttons-container {
         text-align: center;
-        margin-top: 40px;
+        margin-top: 1rem; // Reduced from 40px
 
         .btn-view-all {
             display: inline-flex;
@@ -268,7 +268,6 @@
             position: relative;
             overflow: hidden;
             z-index: 1;
-            box-shadow: none; // Reset any previous shadow if needed
 
             &::before {
                 content: '';
@@ -285,7 +284,6 @@
             &:hover {
                 color: #fff;
                 box-shadow: 0 10px 20px rgba($colorLv1, 0.3);
-                transform: none;
 
                 &::before {
                     width: 100%;
@@ -293,13 +291,11 @@
 
                 i {
                     transform: translateX(4px);
-                    color: #fff;
                 }
             }
 
             i {
                 transition: transform 0.3s ease;
-                font-size: 0.9rem; // Standard size
             }
         }
     }

@@ -41,42 +41,42 @@
 <!-- ===== END:: SCHEMA ===== -->
 @endpush
 @section('content')
-    <!-- share social -->
     @include('wallpaper.template.shareSocial')
-    <!-- content -->
-    <div class="breadcrumbMobileBox"><!-- dùng để chống nhảy padding - margin so với các trang có breadcrumb --></div>
-    <!-- Item Category Grid Box -->
+    <div class="breadcrumbMobileBox" aria-hidden="true"></div>
     @include('wallpaper.snippets.banner', [
         'urlImage' => 'https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/blog-bg-img.webp',
     ])
-    
-    <!-- body -->
-    <div class="blog">
-        <div class="container">
-            <div class="row">
-                <!-- sidebar -->
-                <div class="col-lg-4">
-                    <!-- Search -->
-                    @include('wallpaper.categoryBlog.search')
-                    <!-- blog news -->
-                    @include('wallpaper.categoryBlog.blogFeatured')
-                    <!-- categories -->
-                    @include('wallpaper.categoryBlog.categoryList')                    
-                    <!-- fanpage facebook -->
-                    @include('wallpaper.categoryBlog.fanpageFacebook')
-                </div>
-                <!-- main content -->
-                <div class="col-lg-8">
-        
-                    <!-- blogs -->
-                    @include('wallpaper.categoryBlog.blogList')
-                    <!-- Phân trang -->
-                    {{ $blogs->links('wallpaper.categoryBlog.pagination') }}
-                
-                </div>
+
+    @php
+        $blogPageTitle = isset($item) && !empty($item->title) ? $item->title : (isset($item) && !empty($item->name) ? $item->name : 'Tin tức');
+    @endphp
+    <header class="page-category-blog-hero">
+        <div class="container page-category-blog-hero__container">
+            <div class="page-category-blog-hero__inner">
+                <h1 class="page-category-blog-hero__title">{{ $blogPageTitle }}</h1>
+                <p class="page-category-blog-hero__desc">Cập nhật tin tức, sự kiện và bài viết từ Liên Đoàn Cử Tạ Thể Hình TP.HCM</p>
             </div>
         </div>
-    </div>
+    </header>
+
+    <section class="page-category-blog" aria-label="Tin tức">
+        <div class="container page-category-blog__container">
+            <div class="page-category-blog__layout">
+                <aside class="page-category-blog__sidebar" aria-label="Sidebar">
+                    @include('wallpaper.categoryBlog.search')
+                    @include('wallpaper.categoryBlog.blogFeatured')
+                    @include('wallpaper.categoryBlog.categoryList')
+                    @include('wallpaper.categoryBlog.fanpageFacebook')
+                </aside>
+                <main class="page-category-blog__main" id="blog-list-main">
+                    @include('wallpaper.categoryBlog.blogList')
+                    <div class="page-category-blog__pagination-wrap">
+                        {{ $blogs->links('wallpaper.categoryBlog.pagination') }}
+                    </div>
+                </main>
+            </div>
+        </div>
+    </section>
 
     {{-- @include('wallpaper.home.teacher')
     @include('wallpaper.home.timetable')

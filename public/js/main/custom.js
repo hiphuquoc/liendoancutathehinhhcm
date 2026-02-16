@@ -2,12 +2,16 @@
 // carousal slider js
 
 
-// top header
+// top header — chỉ áp dụng cho header nav chính, không áp dụng cho .page-category-blog-hero
 $(window).on("scroll", function () {
-  if ($(document).scrollTop() > 50) {
-    $('header').addClass('shrink');
-  } else {
-    $('header').removeClass('shrink');
+  var $mainHeader = $('#mainHeader');
+  if (!$mainHeader.length) $mainHeader = $('.header-main');
+  if ($mainHeader.length) {
+    if ($(document).scrollTop() > 50) {
+      $mainHeader.addClass('shrink');
+    } else {
+      $mainHeader.removeClass('shrink');
+    }
   }
 });
 

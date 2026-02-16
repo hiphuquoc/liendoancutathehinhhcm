@@ -74,7 +74,7 @@
                                     @endif
                                     @if($hasButton)
                                         <div class="sliderHome_item_content_actions">
-                                            <a href="{{ $slider['button_link'] }}" class="sliderHome_item_content_button">
+                                            <a href="{{ $slider['button_link'] }}" class="btn-brand-filled">
                                                 @if(!empty($slider['button_icon']))
                                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="sliderHome_item_content_button_icon">
                                                         @if($slider['button_icon'] == 'arrow-right')

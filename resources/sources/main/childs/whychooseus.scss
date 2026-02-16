@@ -18,39 +18,36 @@
         padding: 50px 0 60px;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         padding: 40px 0 50px;
     }
 
-    @media (max-width: 576px) {
+    @media (max-width: 575px) {
         padding: 30px 0 40px;
     }
 
     // Title Section
     .section-title {
-        margin-bottom: 20px;
+        @include home-section-title-typography;
         color: #fff; // White title
-        text-transform: uppercase;
-        background: none !important;
+        // Xóa override margin-bottom và padding-bottom, dùng từ mixin
+        margin-bottom: 20px !important;
         padding-bottom: 0 !important;
 
-        .highlight {
-            color: #fff; // White highlight
-            position: relative;
-            display: inline-block;
+        @media (max-width: 1023px) {
+            margin-bottom: 18px !important;
+        }
 
-            &::after {
-                // Underline effect
-                content: '';
-                position: absolute;
-                bottom: 2px;
-                left: 0;
-                width: 100%;
-                height: 8px;
-                background: rgba(255, 255, 255, 0.2); // Light underline
-                z-index: -1;
-                border-radius: 4px;
-            }
+        @media (max-width: 767px) {
+            margin-bottom: 16px !important;
+        }
+
+        @media (max-width: 575px) {
+            margin-bottom: 14px !important;
+        }
+
+        .highlight {
+            @include home-title-highlight(#fff, rgba(255, 255, 255, 0.2));
         }
     }
 
@@ -58,7 +55,7 @@
         color: rgba(255, 255, 255, 0.9); // Light desc
         margin-bottom: 40px;
         line-height: 1.7;
-        font-size: 1.05rem;
+        @include home-description-typography;
         max-width: 600px;
     }
 
@@ -69,7 +66,7 @@
         gap: 25px;
         margin-top: 30px;
 
-        @media (max-width: 576px) {
+        @media (max-width: 575px) {
             grid-template-columns: 1fr;
             gap: 20px;
         }
@@ -82,7 +79,7 @@
                 padding: 1.25rem;
             }
 
-            @media(max-width: 768px) {
+            @media(max-width: 767px) {
                 padding: 1rem;
             }
 

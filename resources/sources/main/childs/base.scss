@@ -106,13 +106,33 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  align-items: flex-end;
   bottom: 0;
   right: 0;
+  gap: 0;
+
+  // Reset margin/padding cho script tags và các phần tử không mong muốn
+  script {
+    display: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  // Reset cho các phần tử khác (trừ .gotoTop)
+  >*:not(.gotoTop) {
+    margin: 0;
+    padding: 0;
+  }
 
   &:dir(rtl),
   [dir="rtl"] & {
     right: unset;
     left: 0;
+  }
+
+  @media(max-width: 767px) {
+    padding: 0.25rem;
+    gap: 0;
   }
 }
 
@@ -127,6 +147,7 @@
   width: 37px;
   aspect-ratio: 1/1;
   margin: 0 0.5rem 0.5rem 0.5rem;
+  flex-shrink: 0;
 
   i {
     display: flex;
@@ -145,7 +166,9 @@
 
   @media(max-width: 767px) {
     width: 35px;
-    margin-bottom: calc(52.5px + 0.25rem);
+    margin: 0 0.5rem 0.5rem 0.5rem;
+    // Giảm margin-bottom trên mobile để tránh khoảng cách quá xa
+    margin-bottom: 0.5rem;
   }
 }
 
@@ -168,55 +191,131 @@
 @import 'breadcrumb';
 
 // ============================================
+// GLOBAL TYPOGRAPHY MIXIN - Description Text
+// ============================================
+// Mixin để đồng bộ font-size cho các mô tả phụ trên trang chủ
+@mixin home-description-typography {
+  font-size: 1.05rem; // Desktop
+
+  @media (max-width: 1023px) {
+    font-size: 1rem;
+  }
+
+  @media (max-width: 767px) {
+    font-size: 0.95rem;
+  }
+}
+
+// ============================================
+// GLOBAL TYPOGRAPHY MIXIN - Section Title
+// ============================================
+// Mixin để đồng bộ font-size và style cho các tiêu đề lớn trên trang chủ
+@mixin home-section-title-typography {
+  font-family: $fontTitle;
+  font-size: 2.5rem; // Desktop
+  font-weight: 800;
+  line-height: 1.25;
+  color: $colorTitle;
+  margin-bottom: 20px; // Desktop
+  padding-bottom: 0; // Đồng bộ padding-bottom
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+  background: none !important;
+  min-height: auto;
+
+  @media (max-width: 1023px) {
+    font-size: 2.1rem;
+    margin-bottom: 18px;
+  }
+
+  @media (max-width: 767px) {
+    font-size: 1.9rem;
+    margin-bottom: 16px;
+  }
+
+  @media (max-width: 575px) {
+    font-size: 1.7rem;
+    margin-bottom: 14px;
+  }
+}
+
+// ============================================
+// GLOBAL MIXIN - Section Header Wrapper
+// ============================================
+// Mixin để đồng bộ margin-bottom cho các header wrapper
+@mixin home-section-header-wrapper {
+  margin-bottom: 40px;
+
+  @media (max-width: 767px) {
+    margin-bottom: 35px;
+  }
+
+  @media (max-width: 575px) {
+    margin-bottom: 30px;
+  }
+}
+
+// ============================================
+// GLOBAL TYPOGRAPHY MIXIN - Title Highlight
+// ============================================
+// Mixin để đồng bộ style cho highlight con trong tiêu đề
+@mixin home-title-highlight($highlight-color: $colorLv1, $underline-color: rgba($colorLv1, 0.15)) {
+  color: $highlight-color;
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+
+  // Underline accent
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: $underline-color;
+    z-index: -1;
+    border-radius: 4px;
+  }
+}
+
+// ============================================
 // GLOBAL SECTION TITLE
 // ============================================
 .section-title {
-  font-family: $fontTitle;
-  font-size: 2.5rem !important; // Force consistent size
-  font-weight: 800 !important;
-  line-height: 1.25 !important;
-  color: $colorTitle;
-  margin-bottom: 20px;
-  text-transform: uppercase !important;
-  letter-spacing: -0.5px;
-  background: none !important;
+  @include home-section-title-typography;
+
+  // Xóa tất cả override về margin, padding và font-size - Force từ mixin
+  margin-bottom: 20px !important;
   padding-bottom: 0 !important;
-  min-height: auto; // Reset any height constraints if present
+  font-size: 2.5rem !important;
+
+  @media (max-width: 1023px) {
+    font-size: 2.1rem !important;
+    margin-bottom: 18px !important;
+  }
+
+  @media (max-width: 767px) {
+    font-size: 1.9rem !important;
+    margin-bottom: 16px !important;
+  }
+
+  @media (max-width: 575px) {
+    font-size: 1.7rem !important;
+    margin-bottom: 14px !important;
+  }
 
   .highlight {
-    color: $colorLv1;
-    position: relative;
-    z-index: 1;
-    display: inline-block;
+    @include home-title-highlight;
+  }
 
-    // Underline accent
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: 4px;
-      left: 0;
-      right: 0;
-      height: 8px;
-      background: rgba($colorLv1, 0.15);
-      z-index: -1;
-      border-radius: 4px;
+  // Variant cho white background (như why-choose-us)
+  &--white {
+    color: #fff;
+
+    .highlight {
+      @include home-title-highlight(#fff, rgba(255, 255, 255, 0.2));
     }
-  }
-
-  @media (max-width: 1199px) {
-    font-size: 2.3rem !important;
-  }
-
-  @media (max-width: 991px) {
-    font-size: 2.1rem !important;
-  }
-
-  @media (max-width: 768px) {
-    font-size: 1.9rem !important;
-  }
-
-  @media (max-width: 576px) {
-    font-size: 1.7rem !important;
   }
 }
 

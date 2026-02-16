@@ -21,25 +21,23 @@
         padding: 50px 0 60px;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
         padding: 40px 0 50px;
     }
 
-    @media (max-width: 576px) {
+    @media (max-width: 575px) {
         padding: 30px 0 40px;
     }
 }
 
 .trainer-header-shared {
+    @include home-section-header-wrapper;
     text-align: center;
-    margin-bottom: 40px;
     position: relative;
     max-width: 900px; // Limit width for centering
     margin-left: auto;
     margin-right: auto;
     padding: 0 15px;
-
-
 
     // Badge
     .section-badge {
@@ -67,48 +65,45 @@
         }
     }
 
-    @media(max-width: 991px) {
-        margin-bottom: 40px;
-    }
-
-    @media(max-width: 576px) {
-        margin-bottom: 30px;
+    // Đảm bảo .section-title bên trong không bị override
+    .section-title {
+        margin-bottom: 20px !important;
+        padding-bottom: 0 !important;
     }
 
     .header-title {
-        font-family: $fontTitle;
-        font-size: 2.4rem;
-        font-weight: 800;
-        color: $colorTitle;
-        text-transform: uppercase;
+        @include home-section-title-typography;
         letter-spacing: 1px;
-        margin-bottom: 18px;
-        line-height: 1.3;
+        // Xóa override margin-bottom, dùng từ mixin
+        margin-bottom: 20px !important;
+        padding-bottom: 0 !important;
+
+        @media (max-width: 1023px) {
+            margin-bottom: 18px !important;
+        }
+
+        @media (max-width: 767px) {
+            margin-bottom: 16px !important;
+        }
+
+        @media(max-width: 575px) {
+            letter-spacing: 0.5px;
+            margin-bottom: 14px !important;
+        }
 
         span {
-            color: $colorLv1;
-            position: relative;
-        }
-
-        @media(max-width: 768px) {
-            font-size: 1.8rem;
-        }
-
-        @media(max-width: 576px) {
-            font-size: 1.5rem;
-            letter-spacing: 0.5px;
+            @include home-title-highlight;
         }
     }
 
     .header-desc {
         max-width: 720px;
         margin: 0 auto;
-        font-size: 1.05rem;
+        @include home-description-typography;
         line-height: 1.75;
         color: $bg-07;
 
-        @media(max-width: 576px) {
-            font-size: 0.95rem;
+        @media(max-width: 575px) {
             line-height: 1.65;
         }
     }
@@ -121,7 +116,7 @@
         margin-top: 24px;
         flex-wrap: wrap;
 
-        @media(max-width: 576px) {
+        @media(max-width: 575px) {
             gap: 8px;
             margin-top: 20px;
         }
@@ -136,7 +131,7 @@
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
             border: 1px solid rgba(0, 0, 0, 0.04);
 
-            @media(max-width: 576px) {
+            @media(max-width: 575px) {
                 padding: 8px 14px;
                 gap: 8px;
             }
@@ -152,7 +147,7 @@
                 color: $colorLv1;
                 font-size: 0.95rem;
 
-                @media(max-width: 576px) {
+                @media(max-width: 575px) {
                     width: 30px;
                     height: 30px;
                     font-size: 0.8rem;
@@ -171,7 +166,7 @@
                     color: $colorTitle;
                     line-height: 1.2;
 
-                    @media(max-width: 576px) {
+                    @media(max-width: 575px) {
                         font-size: 0.95rem;
                     }
                 }
@@ -180,7 +175,7 @@
                     font-size: 0.8rem;
                     color: $bg-07;
 
-                    @media(max-width: 576px) {
+                    @media(max-width: 575px) {
                         font-size: 0.7rem;
                     }
                 }

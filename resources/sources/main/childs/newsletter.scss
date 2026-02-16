@@ -65,28 +65,31 @@
         max-width: 600px;
 
         .section-title {
+            @include home-section-title-typography;
             color: $colorTitle; // Dark text
-            margin-bottom: 12px;
-            font-size: 2rem !important;
+            // Xóa override margin-bottom và padding-bottom, dùng từ mixin
+            margin-bottom: 20px !important;
+            padding-bottom: 0 !important;
             text-align: left;
-            background: none !important;
-            padding: 0 !important;
 
-            @media (max-width: 991px) {
-                text-align: center;
-                font-size: 1.8rem !important;
+            @media (max-width: 1023px) {
+                margin-bottom: 18px !important;
+            }
+
+            @media (max-width: 768px) {
+                margin-bottom: 16px !important;
             }
 
             @media (max-width: 576px) {
-                font-size: 1.5rem !important;
+                margin-bottom: 14px !important;
+            }
+
+            @media (max-width: 991px) {
+                text-align: center;
             }
 
             .highlight {
-                color: $colorLv1; // Brand highlight
-
-                &::after {
-                    background: rgba($colorLv1, 0.15); // Brand underline
-                }
+                @include home-title-highlight;
             }
         }
 

@@ -1,10 +1,39 @@
 @import 'childs/default.scss';
 @import 'childs/base.scss';
 
-// Variables from default.scss:
-// $colorLv1: #00adef; 
-// $bg-02: #EDF2F7;
-// $colorText: #2c3e50;
+$bp-1199: 1199px;
+$bp-991: 991px;
+$bp-768: 768px;
+$bp-576: 576px;
+
+// Override global .section-title trong profile (base.scss dùng 2.5rem !important)
+.trainer-profile-container .profile-content .content-box .section-title {
+    font-size: 1.35rem !important;
+    font-weight: 700 !important;
+    line-height: 1.35 !important;
+    margin-bottom: 1.25rem !important;
+    text-transform: none !important;
+    letter-spacing: 0;
+    padding-bottom: 0 !important;
+    min-height: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+
+    i { color: $colorLv1; font-size: 1.125rem; }
+    &::after {
+        content: '' !important;
+        flex: 1 !important;
+        height: 2px !important;
+        background: $bg-03 !important;
+        margin-left: 1rem !important;
+        opacity: 0.7;
+    }
+    @media (max-width: $bp-1199) { font-size: 1.25rem !important; margin-bottom: 1.125rem !important; }
+    @media (max-width: $bp-991) { font-size: 1.1875rem !important; margin-bottom: 1rem !important; gap: 0.625rem !important; }
+    @media (max-width: $bp-768) { font-size: 1.125rem !important; margin-bottom: 0.875rem !important; }
+    @media (max-width: $bp-576) { font-size: 1.0625rem !important; margin-bottom: 0.75rem !important; gap: 0.5rem !important; }
+}
 
 .trainer-profile-container {
     padding: 60px 0;
@@ -309,27 +338,9 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
             padding: 30px;
 
-            .section-title {
-                font-family: $fontTitle;
-                font-size: 1.5rem;
-                color: $colorTitle;
-                margin-bottom: 25px;
-                display: flex;
-                align-items: center;
-                gap: 12px;
-
-                i {
-                    color: $colorLv1;
-                }
-
-                &::after {
-                    content: '';
-                    flex: 1;
-                    height: 1px;
-                    background: $bg-03;
-                    margin-left: 20px;
-                }
-            }
+            @media (max-width: $bp-991) { padding: 24px; border-radius: 14px; }
+            @media (max-width: $bp-768) { padding: 20px; border-radius: 12px; }
+            @media (max-width: $bp-576) { padding: 1rem 1.25rem; border-radius: 12px; }
 
             .content-text {
                 line-height: 1.8;

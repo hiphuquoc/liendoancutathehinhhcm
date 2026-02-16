@@ -8,7 +8,7 @@
                 <i class="fa-solid fa-users-gear"></i>
                 <span>Đội ngũ chuyên gia</span>
             </div>
-            <h1 class="header-title">Huấn Luyện Viên <span>Của Chúng Tôi</span></h1>
+            <h1 class="header-title">Huấn Luyện Viên <br/> <span class="highlight">Của Chúng Tôi</span></h1>
             <p class="header-desc">
                 Đội ngũ huấn luyện viên của chúng tôi là những chuyên gia hàng đầu, sở hữu kinh nghiệm thực tế 
                 và thành tích ấn tượng trong lĩnh vực Cử tạ - Thể hình. Sự tận tâm và nhiệt huyết của họ sẽ 

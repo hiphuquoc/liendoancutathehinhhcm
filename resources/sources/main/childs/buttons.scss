@@ -64,15 +64,15 @@ $btn-transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 
     // Responsive: Notebook/Tablet
     @media (max-width: 1199px) {
-        padding: $btn-padding-y-tablet $btn-padding-x-tablet;
-        font-size: $btn-font-size-tablet;
+        padding: $btn-padding-y-tablet $btn-padding-x-tablet !important;
+        font-size: $btn-font-size-tablet !important;
     }
 
     // Responsive: Mobile
     @media (max-width: 767px) {
-        padding: $btn-padding-y-mobile $btn-padding-x-mobile;
-        font-size: $btn-font-size-mobile;
-        gap: 8px;
+        padding: $btn-padding-y-mobile $btn-padding-x-mobile !important;
+        font-size: $btn-font-size-mobile !important;
+        gap: 8px !important;
     }
 }
 

@@ -8,7 +8,7 @@
                 <i class="fa-solid fa-scale-balanced"></i>
                 <span>Công bằng - Chính trực</span>
             </div>
-            <h1 class="header-title">Trọng Tài <span>Của Chúng Tôi</span></h1>
+            <h1 class="header-title">Trọng Tài <br/> <span class="highlight">Của Chúng Tôi</span></h1>
             <p class="header-desc">
                 Đội ngũ trọng tài của chúng tôi là những chuyên gia uy tín, được đào tạo bài bản 
                 và giàu kinh nghiệm trong lĩnh vực Cử tạ – Thể hình. Với tinh thần công tâm, chuyên nghiệp 

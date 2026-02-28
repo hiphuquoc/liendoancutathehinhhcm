@@ -52,9 +52,11 @@ class RoutingController extends Controller{
             SettingController::settingLanguage($language);
             /* đưa biến search lên để xử lý với cache */
             $search                 = request('search') ?? null;
+            $searchName             = request('search_name') ?? null;
             /* cache HTML */
             $paramsSlug             = [];
             if(!empty($search)) $paramsSlug['search'] = $search;
+            if(!empty($searchName)) $paramsSlug['search_name'] = $searchName;
             $nameCache              = self::buildNameCache($itemSeo['slug_full'], $paramsSlug).'.'.config('main_'.env('APP_NAME').'.cache.extension');
             $pathCache              = Storage::path(config('main_'.env('APP_NAME').'.cache.folderSave')).$nameCache;
             $cacheTime    	        = env('APP_CACHE_TIME') ?? 1800;
@@ -134,13 +136,22 @@ class RoutingController extends Controller{
                 /* ===== Blog ==== */
                 if($itemSeo->type=='blog_info'){
                     $flagMatch          = true;
-                    /* thông tin trang category blog */
+                    /* thông tin trang blog */
                     $item               = Blog::select('*')
                                             ->whereHas('seos.infoSeo', function($query) use($idSeo){
                                                 $query->where('id', $idSeo);
                                             })
-                                            ->with('seo', 'seos.infoSeo.contents')
+                                            ->with('seo', 'seos.infoSeo.contents', 'categories.infoCategory.seo')
                                             ->first();
+                    /* URL form tìm kiếm sidebar: trỏ về danh mục tin tức (để search từ trang chi tiết bài viết) */
+                    $sidebarSearchActionUrl = null;
+                    $firstCategory         = $item ? $item->categories->first() : null;
+                    if ($firstCategory && $firstCategory->infoCategory && $firstCategory->infoCategory->seo && !empty($firstCategory->infoCategory->seo->slug_full)) {
+                        $sidebarSearchActionUrl = url('/' . $firstCategory->infoCategory->seo->slug_full);
+                    } else {
+                        $menuSlug = collect(config('main_'.env('APP_NAME').'.menu', []))->firstWhere('slug', 'tin-tuc');
+                        $sidebarSearchActionUrl = $menuSlug ? url('/' . ($menuSlug['slug'] ?? 'tin-tuc')) : url('/tin-tuc');
+                    }
                     /* blog nổi bật - sidebar */
                     $blogFeatured       = BlogController::getBlogFeatured($language);
                     /* related */
@@ -150,7 +161,7 @@ class RoutingController extends Controller{
                     foreach($itemSeo->contents as $content) $htmlContent .= $content->content;
                     $dataContent        = CategoryMoneyController::buildTocContentMain($htmlContent, $language);
                     $htmlContent        = str_replace('<div id="tocContentMain"></div>', '<div id="tocContentMain">'.$dataContent['toc_content'].'</div>', $dataContent['content']);
-                    $xhtml              = view('wallpaper.blog.index', compact('item', 'itemSeo', 'blogFeatured', 'related', 'language', 'breadcrumb', 'htmlContent'))->render();
+                    $xhtml              = view('wallpaper.blog.index', compact('item', 'itemSeo', 'blogFeatured', 'related', 'language', 'breadcrumb', 'htmlContent', 'sidebarSearchActionUrl'))->render();
                 }
                 /* ===== Trainer ==== */
                 if($itemSeo->type=='trainer_info'){
@@ -160,7 +171,7 @@ class RoutingController extends Controller{
                                             ->whereHas('seos.infoSeo', function($query) use($idSeo){
                                                 $query->where('id', $idSeo);
                                             })
-                                            ->with('seo', 'seos.infoSeo.contents')
+                                            ->with('seo', 'seos.infoSeo.contents', 'activityImages')
                                             ->first();
                     $xhtml              = view('wallpaper.teacherDetail.index', compact('item', 'itemSeo', 'language', 'breadcrumb'))->render();
                 }
@@ -172,7 +183,7 @@ class RoutingController extends Controller{
                                             ->whereHas('seos.infoSeo', function($query) use($idSeo){
                                                 $query->where('id', $idSeo);
                                             })
-                                            ->with('seo', 'seos.infoSeo.contents')
+                                            ->with('seo', 'seos.infoSeo.contents', 'activityImages')
                                             ->first();
                     $xhtml              = view('wallpaper.teacherDetail.index', compact('item', 'itemSeo', 'language', 'breadcrumb'))->render();
                 }

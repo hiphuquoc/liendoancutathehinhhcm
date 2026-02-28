@@ -390,6 +390,73 @@
                         </div>
                     </div>
 
+                    <!-- Thống kê hoạt động -->
+                    <div class="adminFormSection">
+                        <div class="adminFormSection_header">
+                            <div class="adminFormSection_header_icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 20V10"/>
+                                    <path d="M18 20V4"/>
+                                    <path d="M6 20v-4"/>
+                                </svg>
+                            </div>
+                            <div class="adminFormSection_header_info">
+                                <h2 class="adminFormSection_title">Thống kê hoạt động</h2>
+                                <p class="adminFormSection_description">Số học viên, giờ dạy, giải thưởng hiển thị trên trang profile.</p>
+                            </div>
+                        </div>
+                        <div class="adminFormSection_body">
+                            <div class="adminFormGrid adminFormGrid--3cols">
+                                @include('admin.components.formField', [
+                                    'label' => 'Số học viên',
+                                    'name' => 'total_learner',
+                                    'type' => 'number',
+                                    'value' => old('total_learner') ?? ($referee->total_learner ?? 0),
+                                    'required' => false
+                                ])
+                                @include('admin.components.formField', [
+                                    'label' => 'Giờ dạy',
+                                    'name' => 'total_teaching_hour',
+                                    'type' => 'number',
+                                    'value' => old('total_teaching_hour') ?? ($referee->total_teaching_hour ?? 0),
+                                    'required' => false
+                                ])
+                                @include('admin.components.formField', [
+                                    'label' => 'Giải thưởng',
+                                    'name' => 'total_prize',
+                                    'type' => 'number',
+                                    'value' => old('total_prize') ?? ($referee->total_prize ?? 0),
+                                    'required' => false,
+                                    'tooltip' => 'Số lượng giải thưởng đã đạt được'
+                                ])
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hình ảnh hoạt động -->
+                    <div class="adminFormSection">
+                        <div class="adminFormSection_header">
+                            <div class="adminFormSection_header_icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                                    <polyline points="21 15 16 10 5 21"/>
+                                </svg>
+                            </div>
+                            <div class="adminFormSection_header_info">
+                                <h2 class="adminFormSection_title">Hình ảnh hoạt động</h2>
+                                <p class="adminFormSection_description">Ảnh hiển thị tại trang chi tiết profile. Upload lên Google Cloud.</p>
+                            </div>
+                        </div>
+                        <div class="adminFormSection_body">
+                            @include('admin.components.activityImagesUpload', [
+                                'activityImages' => $referee->activityImages ?? collect(),
+                                'ownerType' => 'referee_info',
+                                'ownerId' => $referee->id
+                            ])
+                        </div>
+                    </div>
+
                     <!-- Bằng cấp -->
                     <div class="adminFormSection adminFormSection--repeater repeater" data-repeater-container>
                         <div class="adminFormSection_header">

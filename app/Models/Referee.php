@@ -83,4 +83,11 @@ class Referee extends Model {
     public function user() {
         return $this->belongsTo(\App\Models\User::class, 'user_id', 'id');
     }
+
+    public function activityImages() {
+        return $this->hasMany(\App\Models\ProfileActivityImage::class, 'owner_id', 'id')
+            ->where('owner_type', \App\Models\ProfileActivityImage::OWNER_TYPE_REFEREE)
+            ->orderBy('ordering')
+            ->orderBy('id');
+    }
 }

@@ -116,24 +116,29 @@
 
                 <!-- Stats Grid -->
                 <div class="stats-grid">
+                    @php
+                        $statLearner = isset($item->total_learner) && (int) $item->total_learner > 0 ? (int) $item->total_learner . '+' : '--';
+                        $statHours   = isset($item->total_teaching_hour) && (int) $item->total_teaching_hour > 0 ? (int) $item->total_teaching_hour . '+' : '--';
+                        $statPrize   = isset($item->total_prize) && (int) $item->total_prize > 0 ? (int) $item->total_prize . '+' : '--';
+                    @endphp
                     <div class="stat-card">
                         <div class="icon-box"><i class="fa-solid fa-users"></i></div>
                         <div class="stat-info">
-                            <span class="number">{{ $item->total_learner ?? 0 }}+</span>
+                            <span class="number">{{ $statLearner }}</span>
                             <span class="label">Học viên</span>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="icon-box"><i class="fa-solid fa-clock"></i></div>
                         <div class="stat-info">
-                            <span class="number">{{ $item->total_teaching_hour ?? 0 }}+</span>
+                            <span class="number">{{ $statHours }}</span>
                             <span class="label">Giờ dạy</span>
                         </div>
                     </div>
                     <div class="stat-card">
                         <div class="icon-box"><i class="fa-solid fa-trophy"></i></div>
                         <div class="stat-info">
-                            <span class="number">{{ $item->total_prize ?? 0 }}+</span>
+                            <span class="number">{{ $statPrize }}</span>
                             <span class="label">Giải thưởng</span>
                         </div>
                     </div>
@@ -281,20 +286,21 @@
                 <!-- Gallery Section -->
                 <div class="content-box gallery-section">
                     <h2 class="section-title"><i class="fa-solid fa-images"></i> Hình ảnh hoạt động</h2>
-                    <div class="gallery-grid">
-                        <a href="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/about-bg-img.webp" class="glightbox gallery-item" data-gallery="trainer-gallery">
-                            <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/about-bg-img.webp" alt="Gallery 1">
-                        </a>
-                        <a href="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop" class="glightbox gallery-item" data-gallery="trainer-gallery">
-                            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop" alt="Gallery 2">
-                        </a>
-                        <a href="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2070&auto=format&fit=crop" class="glightbox gallery-item" data-gallery="trainer-gallery">
-                            <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2070&auto=format&fit=crop" alt="Gallery 3">
-                        </a>
-                        <a href="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop" class="glightbox gallery-item" data-gallery="trainer-gallery">
-                            <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop" alt="Gallery 4">
-                        </a>
-                    </div>
+                    @if(!empty($item->activityImages) && $item->activityImages->isNotEmpty())
+                        <div class="gallery-grid">
+                            @foreach($item->activityImages as $actImg)
+                                @php
+                                    $imgUrl = $actImg->image_url;
+                                    $thumbUrl = !empty($actImg->image) ? \App\Helpers\Image::getUrlImageSmallByUrlImage($actImg->image) : $imgUrl;
+                                @endphp
+                                <a href="{{ $imgUrl }}" class="glightbox gallery-item" data-gallery="profile-gallery" title="Hình ảnh hoạt động">
+                                    <img src="{{ $thumbUrl }}" alt="Hình ảnh hoạt động" loading="lazy">
+                                </a>
+                            @endforeach
+                        </div>
+                    @else
+                        <p class="text-muted mb-0">Chưa có hình ảnh hoạt động.</p>
+                    @endif
                 </div>
             </div>
         </div>

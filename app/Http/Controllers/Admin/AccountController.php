@@ -21,6 +21,7 @@ use App\Models\TrainerExperience;
 use App\Models\TrainerExperienceContent;
 use App\Models\TrainerDegree;
 use App\Models\TrainerDegreeContent;
+use App\Models\ProfileActivityImage;
 
 class AccountController extends Controller
 {
@@ -223,7 +224,7 @@ class AccountController extends Controller
         
         // Tìm trainer có user_id = user hiện tại
         $trainer = Trainer::where('user_id', $user->id)
-            ->with('seo.contents', 'achievements', 'skills', 'experiences.contents', 'degrees.contents')
+            ->with('seo.contents', 'achievements', 'skills', 'experiences.contents', 'degrees.contents', 'activityImages')
             ->first();
         
         if (empty($trainer)) {
@@ -290,6 +291,15 @@ class AccountController extends Controller
             
             if ($request->has('description')) {
                 $updateData['description'] = trim($request->description) ?: null;
+            }
+            if ($request->has('total_learner')) {
+                $updateData['total_learner'] = (int) $request->get('total_learner', 0);
+            }
+            if ($request->has('total_teaching_hour')) {
+                $updateData['total_teaching_hour'] = (int) $request->get('total_teaching_hour', 0);
+            }
+            if ($request->has('total_prize')) {
+                $updateData['total_prize'] = (int) $request->get('total_prize', 0);
             }
             
             // Update trainer_info nếu có thay đổi
@@ -429,6 +439,7 @@ class AccountController extends Controller
                 }
             }
             
+            /* Hình ảnh hoạt động: quản lý qua AJAX (ProfileActivityImageController) */
             DB::commit();
             
             $message = [
@@ -558,7 +569,7 @@ class AccountController extends Controller
         
         // Tìm referee có user_id = user hiện tại
         $referee = Referee::where('user_id', $user->id)
-            ->with('seo.contents', 'achievements', 'skills', 'experiences.contents', 'degrees.contents')
+            ->with('seo.contents', 'achievements', 'skills', 'experiences.contents', 'degrees.contents', 'activityImages')
             ->first();
         
         if (empty($referee)) {
@@ -620,6 +631,15 @@ class AccountController extends Controller
             
             if ($request->has('email')) {
                 $updateData['email'] = trim($request->email) ?: null;
+            }
+            if ($request->has('total_learner')) {
+                $updateData['total_learner'] = (int) $request->get('total_learner', 0);
+            }
+            if ($request->has('total_teaching_hour')) {
+                $updateData['total_teaching_hour'] = (int) $request->get('total_teaching_hour', 0);
+            }
+            if ($request->has('total_prize')) {
+                $updateData['total_prize'] = (int) $request->get('total_prize', 0);
             }
             
             // Update referee_info nếu có thay đổi (KHÔNG bao gồm description vì bảng không có cột này)
@@ -760,6 +780,7 @@ class AccountController extends Controller
                 }
             }
             
+            /* Hình ảnh hoạt động: quản lý qua AJAX (ProfileActivityImageController) */
             DB::commit();
             
             $message = [

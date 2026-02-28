@@ -1,4 +1,7 @@
 <!-- === START:: Scripts Default === -->
+<script>
+(function(){var mq=window.matchMedia('(hover: none), (pointer: coarse)');if(mq.matches)document.documentElement.classList.add('no-hover');else document.documentElement.classList.remove('no-hover');mq.addEventListener('change',function(){if(mq.matches)document.documentElement.classList.add('no-hover');else document.documentElement.classList.remove('no-hover');});})();
+</script>
 <!-- jQuery Core -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <!-- jQuery UI -->

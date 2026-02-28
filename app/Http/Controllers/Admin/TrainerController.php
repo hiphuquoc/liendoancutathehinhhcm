@@ -16,6 +16,7 @@ use App\Models\TrainerExperienceContent;
 use App\Models\TrainerSkill;
 use App\Models\TrainerDegree;
 use App\Models\TrainerDegreeContent;
+use App\Models\ProfileActivityImage;
 use App\Services\BuildInsertUpdateModel;
 use App\Http\Requests\TrainerRequest;
 // use Illuminate\Support\Facades\Storage;
@@ -117,7 +118,7 @@ class TrainerController extends Controller {
         /* tìm theo ngôn ngữ */
         $item               = Trainer::select('*')
                                 ->where('id', $id)
-                                ->with('seo.contents', 'seos.infoSeo.contents', 'achievements', 'skills', 'experiences.contents', 'degrees.contents')
+                                ->with('seo.contents', 'seos.infoSeo.contents', 'achievements', 'skills', 'experiences.contents', 'degrees.contents', 'activityImages')
                                 ->first();
         
         Log::info('Trainer found', [
@@ -232,12 +233,15 @@ class TrainerController extends Controller {
                 /* insert hoặc update trainer_info */
                 if(empty($idTrainer)){ /* check xem create hay update */
                     $trainerData = [
-                        'seo_id'        => $idSeo,
-                        'phone'         => $request->get('phone'),
-                        'email'         => $request->get('email'),
-                        'name'          => $request->get('name'),
-                        'position'      => $request->get('position'),
-                        'description'   => $request->get('description'),
+                        'seo_id'                => $idSeo,
+                        'phone'                 => $request->get('phone'),
+                        'email'                 => $request->get('email'),
+                        'name'                  => $request->get('name'),
+                        'position'              => $request->get('position'),
+                        'description'           => $request->get('description'),
+                        'total_learner'         => (int) $request->get('total_learner', 0),
+                        'total_teaching_hour'   => (int) $request->get('total_teaching_hour', 0),
+                        'total_prize'           => (int) $request->get('total_prize', 0),
                     ];
                     // Set user_id for sub-admin when creating new trainer
                     if(auth()->user()->hasRole('sub-admin') && !auth()->user()->hasRole('admin')){
@@ -301,6 +305,9 @@ class TrainerController extends Controller {
                     if($request->has('name')) $dataTrainer['name'] = $request->get('name');
                     if($request->has('position')) $dataTrainer['position'] = $request->get('position');
                     if($request->has('description')) $dataTrainer['description'] = $request->get('description');
+                    if($request->has('total_learner')) $dataTrainer['total_learner'] = (int) $request->get('total_learner', 0);
+                    if($request->has('total_teaching_hour')) $dataTrainer['total_teaching_hour'] = (int) $request->get('total_teaching_hour', 0);
+                    if($request->has('total_prize')) $dataTrainer['total_prize'] = (int) $request->get('total_prize', 0);
                     // Generate trainer_code if not exists
                     $trainer = Trainer::find($idTrainer);
                     if (!empty($trainer) && empty($trainer->trainer_code)) {
@@ -453,6 +460,7 @@ class TrainerController extends Controller {
                         }
                     }
                 }
+                /* Hình ảnh hoạt động: quản lý qua AJAX (ProfileActivityImageController), không xử lý khi submit form */
                 DB::commit();
                 /* Message */
                 $message        = [
@@ -497,11 +505,15 @@ class TrainerController extends Controller {
                 $id         = $request->get('id');
                 $info       = Trainer::select('*')
                                 ->where('id', $id)
-                                ->with('seo', 'seos')
+                                ->with('seo', 'seos', 'activityImages')
                                 ->first();
                 /* xóa ảnh đại diện trên google_clouds */ 
                 if(!empty($info->seo->image)) Upload::deleteWallpaper($info->seo->image);
                 /* delete relation */
+                foreach ($info->activityImages as $actImg) {
+                    Upload::deleteWallpaper($actImg->image);
+                }
+                $info->activityImages()->delete();
                 $info->achievements()->delete();
                 $info->skills()->delete();
                 // $info->experiences()->contents()->delete();

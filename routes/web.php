@@ -39,6 +39,7 @@ use App\Http\Controllers\Admin\TrainerManagementController;
 use App\Http\Controllers\Admin\QrCodeController;
 use App\Http\Controllers\Admin\RefereeController;
 use App\Http\Controllers\Admin\RefereeManagementController;
+use App\Http\Controllers\Admin\ProfileActivityImageController;
 use App\Http\Controllers\Admin\RefereeQrCodeController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\AccountController as AdminAccountController;
@@ -145,6 +146,12 @@ Route::middleware(['auth', 'role:admin,trainer,referee'])->group(function () {
             Route::get('/delete', [RefereeController::class, 'delete'])->name('admin.referee.delete');
             // Additional actions
             Route::get('/createUser', [RefereeController::class, 'createUser'])->name('admin.referee.createUser');
+        });
+        /* ===== Hình ảnh hoạt động (HLV / TT) – API AJAX ==== */
+        Route::prefix('profile-activity-image')->group(function () {
+            Route::post('/upload', [ProfileActivityImageController::class, 'upload'])->name('admin.profileActivityImage.upload');
+            Route::post('/delete', [ProfileActivityImageController::class, 'delete'])->name('admin.profileActivityImage.delete');
+            Route::post('/reorder', [ProfileActivityImageController::class, 'reorder'])->name('admin.profileActivityImage.reorder');
         });
         /* ===== AI ===== */
         Route::get('/chatGpt', [ChatGptController::class, 'chatGpt'])->name('main.chatGpt');

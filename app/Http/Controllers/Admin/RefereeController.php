@@ -15,6 +15,7 @@ use App\Models\RefereeExperienceContent;
 use App\Models\RefereeSkill;
 use App\Models\RefereeDegree;
 use App\Models\RefereeDegreeContent;
+use App\Models\ProfileActivityImage;
 use App\Services\BuildInsertUpdateModel;
 use App\Http\Requests\RefereeRequest;
 // use Illuminate\Support\Facades\Storage;
@@ -69,7 +70,7 @@ class RefereeController extends Controller {
         /* tìm theo ngôn ngữ */
         $item               = Referee::select('*')
                                 ->where('id', $id)
-                                ->with('seo.contents', 'seos.infoSeo.contents', 'achievements', 'skills', 'experiences.contents', 'degrees.contents')
+                                ->with('seo.contents', 'seos.infoSeo.contents', 'achievements', 'skills', 'experiences.contents', 'degrees.contents', 'activityImages')
                                 ->first();
         if(empty($item)) $flagView = false;
         $slug               = $item->seo->slug ?? '';
@@ -138,11 +139,14 @@ class RefereeController extends Controller {
                 /* insert hoặc update referee_info */
                 if(empty($idReferee)){ /* check xem create hay update */
                     $idReferee  = Referee::insertItem([
-                        'seo_id'        => $idSeo,
-                        'phone'         => $request->get('phone'),
-                        'email'         => $request->get('email'),
-                        'name'          => $request->get('name'),
-                        'position'      => $request->get('position'),
+                        'seo_id'                => $idSeo,
+                        'phone'                 => $request->get('phone'),
+                        'email'                 => $request->get('email'),
+                        'name'                  => $request->get('name'),
+                        'position'              => $request->get('position'),
+                        'total_learner'         => (int) $request->get('total_learner', 0),
+                        'total_teaching_hour'   => (int) $request->get('total_teaching_hour', 0),
+                        'total_prize'           => (int) $request->get('total_prize', 0),
                     ]);
                 }else {
                     $dataReferee    = [];
@@ -150,6 +154,9 @@ class RefereeController extends Controller {
                     if(!empty($request->get('email'))) $dataReferee['email'] = $request->get('email');
                     if($request->has('name')) $dataReferee['name'] = $request->get('name');
                     if($request->has('position')) $dataReferee['position'] = $request->get('position');
+                    if($request->has('total_learner')) $dataReferee['total_learner'] = (int) $request->get('total_learner', 0);
+                    if($request->has('total_teaching_hour')) $dataReferee['total_teaching_hour'] = (int) $request->get('total_teaching_hour', 0);
+                    if($request->has('total_prize')) $dataReferee['total_prize'] = (int) $request->get('total_prize', 0);
                     Referee::updateItem($idReferee, $dataReferee);
                 }
                 /* relation_seo_referee_info */
@@ -240,6 +247,7 @@ class RefereeController extends Controller {
                         }
                     }
                 }
+                /* Hình ảnh hoạt động: quản lý qua AJAX (ProfileActivityImageController), không xử lý khi submit form */
                 DB::commit();
                 /* Message */
                 $message        = [
@@ -314,11 +322,15 @@ class RefereeController extends Controller {
                 $id         = $request->get('id');
                 $info       = Referee::select('*')
                                 ->where('id', $id)
-                                ->with('seo', 'seos')
+                                ->with('seo', 'seos', 'activityImages')
                                 ->first();
                 /* xóa ảnh đại diện trên google_clouds */ 
                 if(!empty($info->seo->image)) Upload::deleteWallpaper($info->seo->image);
                 /* delete relation */
+                foreach ($info->activityImages as $actImg) {
+                    Upload::deleteWallpaper($actImg->image);
+                }
+                $info->activityImages()->delete();
                 $info->achievements()->delete();
                 $info->skills()->delete();
                 // $info->experiences()->contents()->delete();

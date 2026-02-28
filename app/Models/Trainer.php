@@ -116,6 +116,13 @@ class Trainer extends Model {
         return $query;
     }
 
+    public function activityImages() {
+        return $this->hasMany(\App\Models\ProfileActivityImage::class, 'owner_id', 'id')
+            ->where('owner_type', \App\Models\ProfileActivityImage::OWNER_TYPE_TRAINER)
+            ->orderBy('ordering')
+            ->orderBy('id');
+    }
+
     /**
      * Generate trainer code automatically
      * Format: N.O:001.T12.25/HLV-HWBF

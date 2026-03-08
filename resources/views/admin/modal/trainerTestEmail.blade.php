@@ -1,7 +1,65 @@
 {{--
     Modal: Gửi email test thông tin tài khoản HLV
-    Đồng bộ giao diện với modal Clear Cache
+    Giao diện đồng bộ Clear Cache, CSS nội tuyến đảm bảo input và layout đúng.
 --}}
+<style>
+#adminTrainerTestEmailModal.adminClearCacheModal .adminClearCacheModal_content {
+    max-width: 420px;
+    width: 90%;
+}
+#adminTrainerTestEmailModal .adminClearCacheModal_body {
+    text-align: left;
+}
+#adminTrainerTestEmailModal .adminClearCacheModal_icon {
+    margin-left: 0;
+}
+#adminTrainerTestEmailModal .adminClearCacheModal_field {
+    margin-top: 1.25rem;
+}
+#adminTrainerTestEmailModal .adminClearCacheModal_label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+#adminTrainerTestEmailModal .adminClearCacheModal_input {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    color: #111827;
+    background: #fff;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+#adminTrainerTestEmailModal .adminClearCacheModal_input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+#adminTrainerTestEmailModal .adminClearCacheModal_input::placeholder {
+    color: #9ca3af;
+}
+#adminTrainerTestEmailModal .adminClearCacheModal_input:disabled {
+    background: #f3f4f6;
+    cursor: not-allowed;
+}
+#adminTrainerTestEmailModal .adminClearCacheModal_error {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.8125rem;
+    color: #dc2626;
+}
+#adminTrainerTestEmailModal .adminClearCacheModal_icon--email {
+    background: rgba(37, 99, 235, 0.1);
+    color: #2563eb;
+}
+</style>
+
 <div id="adminTrainerTestEmailModal" class="adminClearCacheModal">
     <div class="adminClearCacheModal_backdrop" onclick="closeTrainerTestEmailModal()"></div>
     <div class="adminClearCacheModal_content">

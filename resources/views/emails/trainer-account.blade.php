@@ -5,246 +5,226 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thông tin tài khoản HLV</title>
     <style>
+        * { box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .email-container {
-            background-color: #ffffff;
-            border-radius: 8px;
-            padding: 30px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .header {
-            text-align: center;
-            border-bottom: 3px solid #2196F3;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-        .header h1 {
-            color: #2196F3;
             margin: 0;
-            font-size: 24px;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-size: 15px;
+            line-height: 1.5;
+            color: #1f2937;
+            background-color: #f3f4f6;
         }
-        .content {
-            margin-bottom: 30px;
+        .wrapper {
+            max-width: 560px;
+            margin: 0 auto;
+            padding: 24px 16px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        .card-inner { padding: 28px 24px; }
+        .brand {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 24px;
+        }
+        .brand h1 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+        }
+        .brand p {
+            margin: 4px 0 0;
+            font-size: 13px;
+            color: #6b7280;
         }
         .greeting {
-            font-size: 16px;
             margin-bottom: 20px;
         }
-        .info-box {
-            background-color: #f8f9fa;
-            border-left: 4px solid #2196F3;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 4px;
+        .greeting p {
+            margin: 0 0 8px;
         }
-        .info-box h3 {
-            margin-top: 0;
-            color: #2196F3;
-            font-size: 18px;
+        .greeting strong { color: #111827; }
+        .section {
+            margin-bottom: 22px;
         }
-        .info-item {
-            margin: 15px 0;
-            padding: 10px;
-            background-color: #ffffff;
-            border-radius: 4px;
-        }
-        .info-label {
-            font-weight: bold;
-            color: #555;
-            display: inline-block;
-            width: 120px;
-        }
-        .info-value {
-            color: #2196F3;
+        .section-title {
+            font-size: 13px;
             font-weight: 600;
+            color: #374151;
+            margin: 0 0 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
         }
-        .button {
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .info-table tr {
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .info-table tr:last-child { border-bottom: none; }
+        .info-table td {
+            padding: 10px 0;
+            vertical-align: top;
+        }
+        .info-table .label {
+            width: 140px;
+            color: #6b7280;
+        }
+        .info-table .value {
+            font-weight: 500;
+            color: #111827;
+        }
+        .note-inline {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 6px;
+        }
+        .steps-list {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .steps-list li {
+            margin-bottom: 10px;
+        }
+        .steps-list li:last-child { margin-bottom: 0; }
+        .link-block {
+            margin: 22px 0;
+            text-align: center;
+        }
+        .btn {
             display: inline-block;
-            padding: 12px 30px;
-            background-color: #2196F3;
-            color: #ffffff !important;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 500;
             text-decoration: none;
-            border-radius: 5px;
-            margin: 10px 5px;
-            font-weight: 600;
+            border-radius: 6px;
+            color: #fff !important;
+            background: #2563eb;
+        }
+        .btn:hover { background: #1d4ed8; }
+        .link-url {
+            font-size: 13px;
+            color: #2563eb;
+            word-break: break-all;
+        }
+        .tips {
+            background: #f9fafb;
+            border-radius: 6px;
+            padding: 16px;
+            font-size: 14px;
+            color: #4b5563;
+        }
+        .tips .section-title { margin-bottom: 10px; }
+        .tips ol {
+            margin: 0;
+            padding-left: 18px;
+        }
+        .tips li { margin-bottom: 6px; }
+        .footer-text {
             text-align: center;
-        }
-        .button:hover {
-            background-color: #1976D2;
-        }
-        .button-secondary {
-            background-color: #4CAF50;
-        }
-        .button-secondary:hover {
-            background-color: #45a049;
-        }
-        .notice {
-            background-color: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 4px;
-        }
-        .notice strong {
-            color: #856404;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 30px;
+            margin-top: 24px;
             padding-top: 20px;
-            border-top: 1px solid #e0e0e0;
-            color: #777;
-            font-size: 14px;
+            border-top: 1px solid #e5e7eb;
+            font-size: 12px;
+            color: #9ca3af;
         }
-        .steps {
-            margin: 20px 0;
-        }
-        .step {
-            margin: 15px 0;
-            padding-left: 30px;
-            position: relative;
-        }
-        .step-number {
-            position: absolute;
-            left: 0;
-            top: 0;
-            background-color: #2196F3;
-            color: #ffffff;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 14px;
-        }
+        .footer-text p { margin: 4px 0; }
     </style>
 </head>
 <body>
-    <div class="email-container">
-        <div class="header">
-            <h1>Liên Đoàn Cử Tạ - Thể Hình HCM</h1>
-            <p>Thông tin tài khoản Huấn luyện viên</p>
-        </div>
-
-        <div class="content">
-            <div class="greeting">
-                <p>Xin chào <strong>{{ $trainerName }}</strong>,</p>
-                <p>Chào mừng bạn đến với hệ thống quản lý HLV của Liên Đoàn Cử Tạ - Thể Hình HCM. Dưới đây là thông tin tài khoản đăng nhập của bạn:</p>
-            </div>
-
-            <div class="info-box">
-                <h3>📋 Thông tin tài khoản</h3>
-                
-                <div class="info-item">
-                    <span class="info-label">Họ và tên:</span>
-                    <span class="info-value">{{ $trainerName }}</span>
+    <div class="wrapper">
+        <div class="card">
+            <div class="card-inner">
+                <div class="brand">
+                    <h1>Liên Đoàn Cử Tạ – Thể Hình HCM</h1>
+                    <p>Thông tin tài khoản Huấn luyện viên</p>
                 </div>
 
-                @if(!empty($trainerCode))
-                <div class="info-item">
-                    <span class="info-label">Mã HLV:</span>
-                    <span class="info-value">{{ $trainerCode }}</span>
-                </div>
-                @endif
-
-                <div class="info-item">
-                    <span class="info-label">Email đăng nhập:</span>
-                    <span class="info-value">{{ $email }}</span>
+                <div class="greeting">
+                    <p>Xin chào <strong>{{ $trainerName }}</strong>,</p>
+                    <p>Bạn được cấp tài khoản đăng nhập hệ thống quản lý HLV. Dưới đây là thông tin đăng nhập và hướng dẫn sử dụng.</p>
                 </div>
 
-                <div class="info-item">
-                    <span class="info-label">Tên đăng nhập:</span>
-                    <span class="info-value">{{ $username }}</span>
+                <div class="section">
+                    <p class="section-title">Thông tin đăng nhập</p>
+                    <table class="info-table">
+                        <tr>
+                            <td class="label">Họ và tên</td>
+                            <td class="value">{{ $trainerName }}</td>
+                        </tr>
+                        @if(!empty($trainerCode))
+                        <tr>
+                            <td class="label">Mã HLV</td>
+                            <td class="value">{{ $trainerCode }}</td>
+                        </tr>
+                        @endif
+                        <tr>
+                            <td class="label">Email</td>
+                            <td class="value">{{ $email }}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Tên đăng nhập</td>
+                            <td class="value">{{ $username }}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Mật khẩu mặc định</td>
+                            <td class="value">{{ $username }}</td>
+                        </tr>
+                    </table>
+                    <p class="note-inline">Vui lòng đổi mật khẩu ngay sau lần đăng nhập đầu tiên.</p>
                 </div>
 
-                <div class="info-item">
-                    <span class="info-label">Mật khẩu mặc định:</span>
-                    <span class="info-value">{{ $username }}</span>
-                    <p style="margin: 5px 0 0 0; font-size: 13px; color: #666; font-style: italic;">
-                        ⚠️ Vui lòng đổi mật khẩu ngay sau lần đăng nhập đầu tiên để bảo mật tài khoản
-                    </p>
-                </div>
-            </div>
-
-            <div class="notice">
-                <strong>🔐 Hướng dẫn đăng nhập:</strong>
-                <div class="steps">
-                    <div class="step">
-                        <span class="step-number">1</span>
-                        <p>Truy cập vào đường link đăng nhập: <a href="{{ $loginUrl }}" style="color: #2196F3;">{{ $loginUrl }}</a></p>
-                    </div>
-                    <div class="step">
-                        <span class="step-number">2</span>
-                        <p>Nhập <strong>Tên đăng nhập</strong> hoặc <strong>Email</strong>: <strong>{{ $username }}</strong></p>
-                    </div>
-                    <div class="step">
-                        <span class="step-number">3</span>
-                        <p>Nhập <strong>Mật khẩu</strong>: <strong>{{ $username }}</strong> (mật khẩu mặc định)</p>
-                    </div>
-                    <div class="step">
-                        <span class="step-number">4</span>
-                        <p>Nhấn nút <strong>Đăng nhập</strong></p>
+                <div class="section">
+                    <p class="section-title">Cách đăng nhập</p>
+                    <ol class="steps-list">
+                        <li>Mở link đăng nhập: <a href="{{ $loginUrl }}" class="link-url">{{ $loginUrl }}</a></li>
+                        <li>Nhập <strong>Tên đăng nhập</strong> hoặc <strong>Email</strong>: <strong>{{ $username }}</strong></li>
+                        <li>Nhập <strong>Mật khẩu</strong>: <strong>{{ $username }}</strong> (mật khẩu mặc định)</li>
+                        <li>Bấm <strong>Đăng nhập</strong></li>
+                    </ol>
+                    <div class="link-block">
+                        <a href="{{ $loginUrl }}" class="btn">Đăng nhập</a>
                     </div>
                 </div>
-            </div>
 
-            <div style="text-align: center; margin: 30px 0;">
-                <a href="{{ $loginUrl }}" class="button">🔑 Đăng nhập ngay</a>
-            </div>
-
-            <div class="info-box" style="background-color: #e3f2fd; border-left-color: #2196F3;">
-                <h3>✨ Các bước tiếp theo sau khi đăng nhập</h3>
-                <div style="margin-top: 15px;">
-                    <p><strong>1. Đổi mật khẩu:</strong></p>
-                    <p style="margin-left: 20px; color: #555;">
-                        Vào <strong>Tài khoản</strong> → <strong>Đổi mật khẩu</strong> để đặt mật khẩu mới an toàn hơn.
-                    </p>
-                    
-                    <p style="margin-top: 20px;"><strong>2. Cập nhật thông tin cá nhân:</strong></p>
-                    <p style="margin-left: 20px; color: #555;">
-                        Vào <strong>Tài khoản</strong> → <strong>Hồ sơ HLV</strong> để cập nhật đầy đủ thông tin, ảnh đại diện, và các thông tin khác.
-                    </p>
-                    
-                    <p style="margin-top: 20px;"><strong>3. Hoàn thiện hồ sơ:</strong></p>
-                    <p style="margin-left: 20px; color: #555;">
-                        Cập nhật các thông tin như: thành tích, kỹ năng, kinh nghiệm, bằng cấp để hồ sơ của bạn được hiển thị đầy đủ trên website.
-                    </p>
+                <div class="section tips">
+                    <p class="section-title">Sau khi đăng nhập nên làm</p>
+                    <ol>
+                        <li><strong>Đổi mật khẩu:</strong> Vào Tài khoản → Đổi mật khẩu.</li>
+                        <li><strong>Cập nhật hồ sơ:</strong> Vào Tài khoản → Hồ sơ HLV để cập nhật thông tin, ảnh đại diện.</li>
+                        <li><strong>Hoàn thiện hồ sơ:</strong> Bổ sung thành tích, kỹ năng, kinh nghiệm, bằng cấp để hồ sơ hiển thị đầy đủ trên website.</li>
+                    </ol>
+                    <div class="link-block">
+                        <a href="{{ $profileEditUrl }}" class="btn">Cập nhật hồ sơ</a>
+                        <a href="{{ $profileUrl }}" class="btn" style="background:#6b7280; margin-left:8px;">Xem hồ sơ công khai</a>
+                    </div>
                 </div>
 
-                <div style="text-align: center; margin-top: 25px;">
-                    <a href="{{ $profileEditUrl }}" class="button button-secondary">📝 Cập nhật hồ sơ ngay</a>
-                    <a href="{{ $profileUrl }}" class="button" style="background-color: #9C27B0;">👤 Xem hồ sơ công khai</a>
+                <div class="section">
+                    <p class="section-title">Lưu ý</p>
+                    <ul class="steps-list" style="list-style:disc;">
+                        <li>Giữ bí mật thông tin tài khoản.</li>
+                        <li>Quên mật khẩu: dùng chức năng "Quên mật khẩu" trên trang đăng nhập.</li>
+                        <li>Liên hệ ban quản trị nếu cần hỗ trợ.</li>
+                    </ul>
                 </div>
-            </div>
-
-            <div class="notice">
-                <strong>💡 Lưu ý:</strong>
-                <ul style="margin: 10px 0; padding-left: 20px;">
-                    <li>Vui lòng giữ bí mật thông tin tài khoản của bạn</li>
-                    <li>Nếu bạn quên mật khẩu, sử dụng tính năng "Quên mật khẩu" trên trang đăng nhập</li>
-                    <li>Nếu có bất kỳ thắc mắc nào, vui lòng liên hệ với ban quản trị</li>
-                </ul>
             </div>
         </div>
 
-        <div class="footer">
-            <p><strong>Liên Đoàn Cử Tạ - Thể Hình Thành phố Hồ Chí Minh</strong></p>
-            <p>Email này được gửi tự động, vui lòng không trả lời email này.</p>
-            <p style="font-size: 12px; color: #999; margin-top: 15px;">
-                © {{ date('Y') }} Liên Đoàn Cử Tạ - Thể Hình HCM. Tất cả quyền được bảo lưu.
-            </p>
+        <div class="footer-text">
+            <p><strong>Liên Đoàn Cử Tạ – Thể Hình Thành phố Hồ Chí Minh</strong></p>
+            <p>Email gửi tự động, vui lòng không trả lời.</p>
+            <p>© {{ date('Y') }} Liên Đoàn Cử Tạ – Thể Hình HCM</p>
         </div>
     </div>
 </body>
 </html>
-

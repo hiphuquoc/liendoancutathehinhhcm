@@ -557,6 +557,10 @@
         }
     }
 
+    window.openTrainerTestEmailModal = openTrainerTestEmailModal;
+    window.closeTrainerTestEmailModal = closeTrainerTestEmailModal;
+    window.confirmSendTrainerTestEmail = confirmSendTrainerTestEmail;
+
     document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.js-trainerTestEmailBtn').forEach(function(btn) {
             btn.addEventListener('click', function() {

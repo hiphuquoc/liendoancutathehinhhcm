@@ -163,6 +163,14 @@
                                                     </div>
                                                 @endif
                                             </div>
+                                            <div class="adminQrCode_listItem_actions">
+                                                <button type="button" class="adminButton adminButton--secondary adminButton--sm js-trainerTestEmailBtn" data-trainer-id="{{ $trainer->id }}" data-trainer-name="{{ e($trainer->name ?? 'N/A') }}" title="Gửi email test thông tin tài khoản HLV này đến địa chỉ tùy chọn">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                                        <path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/>
+                                                    </svg>
+                                                    <span>Gửi email test</span>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 @endforeach
@@ -189,6 +197,10 @@
         </div>
     </div>
 </div>
+
+@push('modal')
+    @include('admin.modal.trainerTestEmail')
+@endpush
 
 @endsection
 
@@ -429,6 +441,135 @@
         });
     }
     
+    // --- Modal Gửi email test (đồng bộ clearCache) ---
+    let trainerTestEmailModalTrainerId = null;
+
+    function openTrainerTestEmailModal(trainerId, trainerName) {
+        trainerTestEmailModalTrainerId = trainerId;
+        const modal = document.getElementById('adminTrainerTestEmailModal');
+        const label = document.getElementById('adminTrainerTestEmailModal_trainerLabel');
+        const input = document.getElementById('adminTrainerTestEmailModal_emailInput');
+        const errEl = document.getElementById('adminTrainerTestEmailModal_error');
+        if (modal) {
+            if (label) label.textContent = 'Gửi nội dung email thông tin tài khoản của HLV \"' + (trainerName || '') + '\" đến địa chỉ bên dưới (gửi ngay, không qua hàng đợi).';
+            if (input) { input.value = ''; input.removeAttribute('disabled'); }
+            if (errEl) { errEl.style.display = 'none'; errEl.textContent = ''; }
+            modal.classList.add('adminClearCacheModal--open');
+            setTimeout(function() { if (input) input.focus(); }, 150);
+        }
+    }
+
+    function closeTrainerTestEmailModal() {
+        const modal = document.getElementById('adminTrainerTestEmailModal');
+        const confirmBtn = document.getElementById('adminTrainerTestEmailModal_confirmBtn');
+        const errEl = document.getElementById('adminTrainerTestEmailModal_error');
+        if (modal) modal.classList.remove('adminClearCacheModal--open');
+        trainerTestEmailModalTrainerId = null;
+        if (confirmBtn) {
+            confirmBtn.disabled = false;
+            const text = confirmBtn.querySelector('.adminClearCacheModal_button_text');
+            const loader = confirmBtn.querySelector('.adminClearCacheModal_button_loader');
+            if (text) text.style.display = '';
+            if (loader) loader.style.display = 'none';
+        }
+        if (errEl) { errEl.style.display = 'none'; errEl.textContent = ''; }
+    }
+
+    async function confirmSendTrainerTestEmail() {
+        const input = document.getElementById('adminTrainerTestEmailModal_emailInput');
+        const errEl = document.getElementById('adminTrainerTestEmailModal_error');
+        const confirmBtn = document.getElementById('adminTrainerTestEmailModal_confirmBtn');
+        const sendUrl = '{{ route("admin.trainerEmail.sendTest") }}';
+        const csrf = document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}';
+
+        if (errEl) { errEl.style.display = 'none'; errEl.textContent = ''; }
+
+        const email = input && input.value ? input.value.trim() : '';
+        if (!email) {
+            if (errEl) { errEl.textContent = 'Vui lòng nhập email nhận test.'; errEl.style.display = 'block'; }
+            return;
+        }
+        const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRe.test(email)) {
+            if (errEl) { errEl.textContent = 'Địa chỉ email không hợp lệ.'; errEl.style.display = 'block'; }
+            return;
+        }
+
+        if (!trainerTestEmailModalTrainerId) {
+            alert('Phiên thao tác hết hạn. Vui lòng đóng modal và chọn lại HLV.');
+            return;
+        }
+
+        if (confirmBtn) {
+            confirmBtn.disabled = true;
+            const text = confirmBtn.querySelector('.adminClearCacheModal_button_text');
+            const loader = confirmBtn.querySelector('.adminClearCacheModal_button_loader');
+            if (text) text.style.display = 'none';
+            if (loader) loader.style.display = 'inline-flex';
+        }
+        if (input) input.setAttribute('disabled', 'disabled');
+
+        try {
+            const formData = new FormData();
+            formData.append('_token', csrf);
+            formData.append('trainer_id', trainerTestEmailModalTrainerId);
+            formData.append('test_email', email);
+
+            const response = await fetch(sendUrl, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': csrf,
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            const contentType = response.headers.get('Content-Type') || '';
+            if (!contentType.includes('application/json')) {
+                if (response.status === 419) alert('Phiên đăng nhập hết hạn. Vui lòng tải lại trang và thử lại.');
+                else alert('Lỗi máy chủ. Vui lòng thử lại sau.');
+                return;
+            }
+
+            const data = await response.json();
+            if (data.success) {
+                alert(data.message);
+                closeTrainerTestEmailModal();
+            } else {
+                if (errEl) { errEl.textContent = data.message || 'Có lỗi xảy ra.'; errEl.style.display = 'block'; }
+                if (confirmBtn) confirmBtn.disabled = false;
+                const text = confirmBtn ? confirmBtn.querySelector('.adminClearCacheModal_button_text') : null;
+                const loader = confirmBtn ? confirmBtn.querySelector('.adminClearCacheModal_button_loader') : null;
+                if (text) text.style.display = '';
+                if (loader) loader.style.display = 'none';
+                if (input) input.removeAttribute('disabled');
+            }
+        } catch (e) {
+            console.error(e);
+            alert('Lỗi kết nối. Vui lòng thử lại.');
+            if (confirmBtn) confirmBtn.disabled = false;
+            const text = confirmBtn ? confirmBtn.querySelector('.adminClearCacheModal_button_text') : null;
+            const loader = confirmBtn ? confirmBtn.querySelector('.adminClearCacheModal_button_loader') : null;
+            if (text) text.style.display = '';
+            if (loader) loader.style.display = 'none';
+            if (input) input.removeAttribute('disabled');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.js-trainerTestEmailBtn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const id = this.getAttribute('data-trainer-id');
+                const name = this.getAttribute('data-trainer-name') || '';
+                if (id) openTrainerTestEmailModal(id, name);
+            });
+        });
+        document.getElementById('adminTrainerTestEmailModal')?.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeTrainerTestEmailModal();
+        });
+    });
+
     // Initialize
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {

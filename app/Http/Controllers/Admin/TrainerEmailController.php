@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Trainer;
 use App\Jobs\SendTrainerAccountEmailJob;
+use App\Mail\TrainerAccountMail;
 
 class TrainerEmailController extends Controller
 {
@@ -164,6 +166,72 @@ class TrainerEmailController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Lỗi hệ thống: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Gửi email test thông tin tài khoản HLV đến một địa chỉ tùy chọn (gửi trực tiếp, không queue).
+     * Luôn trả về JSON.
+     */
+    public function sendTestEmail(Request $request)
+    {
+        $request->validate([
+            'trainer_id' => 'required|integer|exists:trainer_info,id',
+            'test_email' => 'required|email',
+        ], [
+            'trainer_id.required' => 'Thiếu thông tin HLV.',
+            'trainer_id.exists' => 'HLV không tồn tại.',
+            'test_email.required' => 'Vui lòng nhập email nhận test.',
+            'test_email.email' => 'Địa chỉ email không hợp lệ.',
+        ]);
+
+        try {
+            $trainer = Trainer::with(['seo', 'user'])
+                ->where('id', $request->trainer_id)
+                ->whereNotNull('user_id')
+                ->first();
+
+            if (!$trainer || !$trainer->user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'HLV không có tài khoản hoặc không tồn tại.',
+                ], 400);
+            }
+
+            $parentSlug = config('main_' . env('APP_NAME') . '.slug_trainer_parent', 'huan-luyen-vien');
+            $seo = $trainer->seo;
+
+            if ($seo && !empty($seo->slug_full)) {
+                $profileUrl = url('/' . $seo->slug_full);
+            } elseif ($seo && !empty($seo->slug)) {
+                $profileUrl = url('/' . $parentSlug . '/' . $seo->slug);
+            } else {
+                $profileUrl = url('/');
+            }
+
+            Mail::to($request->test_email)->send(new TrainerAccountMail(
+                $trainer->name,
+                $trainer->email ?? $request->test_email,
+                $trainer->user->username,
+                $trainer->trainer_code ?? '',
+                $profileUrl,
+                url('/he-thong'),
+                route('admin.account.trainerProfile')
+            ));
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Đã gửi email test thành công đến ' . $request->test_email,
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            Log::error('TrainerEmail sendTestEmail: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Lỗi gửi email: ' . $e->getMessage(),
             ], 500);
         }
     }

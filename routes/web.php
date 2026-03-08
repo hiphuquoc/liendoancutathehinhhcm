@@ -122,6 +122,7 @@ Route::middleware(['auth', 'role:admin,trainer,referee'])->group(function () {
         Route::prefix('trainer-email')->group(function(){
             Route::get('/', [\App\Http\Controllers\Admin\TrainerEmailController::class, 'index'])->name('admin.trainerEmail.index');
             Route::post('/send', [\App\Http\Controllers\Admin\TrainerEmailController::class, 'sendEmails'])->name('admin.trainerEmail.sendEmails');
+            Route::post('/send-test', [\App\Http\Controllers\Admin\TrainerEmailController::class, 'sendTestEmail'])->name('admin.trainerEmail.sendTest');
         });
         /* ===== Referee Management (Upload Excel) ===== */
         Route::prefix('referee-management')->group(function(){

@@ -4838,6 +4838,52 @@ $admin-color-system: (
     }
 }
 
+.adminClearCacheModal_icon--email {
+    background: rgba(33, 150, 243, 0.1);
+    color: #2196f3;
+}
+
+.adminClearCacheModal_field {
+    margin-top: 1.25rem;
+    text-align: left;
+}
+
+.adminClearCacheModal_label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--admin-gray-700);
+    margin-bottom: 0.5rem;
+}
+
+.adminClearCacheModal_input {
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.9375rem;
+    border: 1px solid var(--admin-gray-200);
+    border-radius: var(--admin-radius-md);
+    color: var(--admin-gray-900);
+    background: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:focus {
+        outline: none;
+        border-color: #2196f3;
+        box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.15);
+    }
+
+    &::placeholder {
+        color: var(--admin-gray-400);
+    }
+}
+
+.adminClearCacheModal_error {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--admin-danger, #ef4444);
+}
+
 .adminClearCacheModal_footer {
     display: flex;
     align-items: center;
@@ -9748,6 +9794,10 @@ $admin-color-system: (
 
     .adminQrCode_listItem_info {
         flex: 1;
+    }
+
+    .adminQrCode_listItem_actions {
+        margin-top: 0.75rem;
     }
 }
 

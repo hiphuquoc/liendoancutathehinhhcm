@@ -271,20 +271,34 @@
                     method: 'POST',
                     body: formData,
                     headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}'
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
                     }
                 });
-                
-                const data = await response.json();
-                
-                // Hide loading
+
+                // Hide loading sớm
                 if (typeof hideAdminLoading === 'function') {
                     hideAdminLoading(loadingId);
                 }
-                
+
+                const contentType = response.headers.get('Content-Type') || '';
+                if (!contentType.includes('application/json')) {
+                    const text = await response.text();
+                    if (response.status === 419) {
+                        alert('Phiên đăng nhập hết hạn. Vui lòng tải lại trang (F5) và thử lại.');
+                    } else if (response.status >= 500) {
+                        alert('Lỗi máy chủ. Vui lòng thử lại sau.');
+                    } else {
+                        alert('Phản hồi không hợp lệ. Vui lòng tải lại trang và thử lại.');
+                    }
+                    return;
+                }
+
+                const data = await response.json();
+
                 if (data.success) {
                     alert(data.message);
-                    // Uncheck all
                     trainerCheckboxes.forEach(cb => cb.checked = false);
                     if (selectAllCheckbox) selectAllCheckbox.checked = false;
                     updateSelectedCount();
@@ -299,7 +313,7 @@
                 if (typeof hideAdminLoading === 'function') {
                     hideAdminLoading(loadingId);
                 }
-                alert('Lỗi: ' + error.message);
+                alert('Lỗi: ' + (error.message || 'Không thể kết nối. Vui lòng thử lại.'));
             } finally {
                 sendSelectedBtn.disabled = false;
                 sendSelectedBtn.innerHTML = `

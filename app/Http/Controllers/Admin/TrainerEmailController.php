@@ -4,12 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
 use App\Models\Trainer;
-use App\Models\User;
-use App\Mail\TrainerAccountMail;
+use App\Jobs\SendTrainerAccountEmailJob;
 
 class TrainerEmailController extends Controller
 {
@@ -106,7 +103,8 @@ class TrainerEmailController extends Controller
     }
 
     /**
-     * Gửi email thông tin tài khoản cho các HLV đã chọn
+     * Đưa email thông tin tài khoản cho các HLV đã chọn vào hàng đợi (queue).
+     * API luôn trả về JSON để tránh lỗi parse HTML trên frontend.
      */
     public function sendEmails(Request $request)
     {
@@ -119,9 +117,8 @@ class TrainerEmailController extends Controller
         ]);
 
         try {
-            $trainerIds = $request->input('trainer_ids', []);
-            
-            // Lấy danh sách trainers với user info
+            $trainerIds = array_unique($request->input('trainer_ids', []));
+
             $trainers = Trainer::with(['seo', 'user'])
                 ->whereIn('id', $trainerIds)
                 ->whereNotNull('user_id')
@@ -131,72 +128,42 @@ class TrainerEmailController extends Controller
             if ($trainers->isEmpty()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Không tìm thấy HLV nào có đầy đủ thông tin để gửi email',
+                    'message' => 'Không tìm thấy HLV nào có đầy đủ thông tin để gửi email.',
                 ], 400);
             }
 
-            $parentSlug = config('main_' . env('APP_NAME') . '.slug_trainer_parent', 'huan-luyen-vien');
-            $successCount = 0;
-            $failCount = 0;
-            $errors = [];
-
+            $queuedCount = 0;
             foreach ($trainers as $trainer) {
-                try {
-                    // Kiểm tra email và user
-                    if (empty($trainer->email) || empty($trainer->user)) {
-                        $failCount++;
-                        $errors[] = "HLV {$trainer->name}: Không có email hoặc tài khoản";
-                        continue;
-                    }
-
-                    // Tạo URL profile
-                    if (!empty($trainer->seo->slug_full)) {
-                        $profileUrl = url('/' . $trainer->seo->slug_full);
-                    } elseif (!empty($trainer->seo->slug)) {
-                        $profileUrl = url('/' . $parentSlug . '/' . $trainer->seo->slug);
-                    } else {
-                        $profileUrl = url('/');
-                    }
-
-                    // Gửi email
-                    Mail::to($trainer->email)->send(new TrainerAccountMail(
-                        $trainer->name,
-                        $trainer->email,
-                        $trainer->user->username,
-                        $trainer->trainer_code,
-                        $profileUrl,
-                        url('/he-thong'),
-                        route('admin.account.trainerProfile')
-                    ));
-
-                    $successCount++;
-                    
-                } catch (\Exception $e) {
-                    $failCount++;
-                    $errors[] = "HLV {$trainer->name}: " . $e->getMessage();
-                    Log::error("TrainerEmail sendEmails error for trainer {$trainer->id}: " . $e->getMessage());
+                if (empty($trainer->email) || empty($trainer->user)) {
+                    continue;
                 }
+                SendTrainerAccountEmailJob::dispatch($trainer->id);
+                $queuedCount++;
             }
 
-            $message = "Đã gửi email thành công cho {$successCount} HLV";
-            if ($failCount > 0) {
-                $message .= ", {$failCount} HLV gửi thất bại";
+            if ($queuedCount === 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Không có HLV nào đủ điều kiện (email + tài khoản) để gửi.',
+                ], 400);
             }
+
+            $message = "Đã đưa {$queuedCount} email vào hàng đợi. Email sẽ được gửi trong giây lát.";
 
             return response()->json([
                 'success' => true,
                 'message' => $message,
-                'success_count' => $successCount,
-                'fail_count' => $failCount,
-                'errors' => $errors,
+                'queued_count' => $queuedCount,
             ]);
 
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            throw $e;
         } catch (\Exception $e) {
-            Log::error("TrainerEmail sendEmails error: " . $e->getMessage());
-            
+            Log::error('TrainerEmail sendEmails: ' . $e->getMessage());
+
             return response()->json([
                 'success' => false,
-                'message' => 'Lỗi khi gửi email: ' . $e->getMessage(),
+                'message' => 'Lỗi hệ thống: ' . $e->getMessage(),
             ], 500);
         }
     }

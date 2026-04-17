@@ -79,11 +79,12 @@
                                             <span>Tải QRcode (.zip)</span>
                                         </a>
                                     @endif
-                                    <a href="{{ route('admin.trainerQrcode.index') }}" class="adminButton adminButton--secondary adminButton--sm">
+                                    <a href="{{ route('admin.trainerQrcode.downloadExcel', ['course' => $courseFilter ?? '', 'search' => $search ?? '']) }}"
+                                       class="adminButton adminButton--secondary adminButton--sm qrcode-download-excel-btn">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M6 18L18 6M6 6l12 12"/>
+                                            <path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
                                         </svg>
-                                        <span>Xóa bộ lọc</span>
+                                        <span>Tải Excel</span>
                                     </a>
                                 @endif
                             </div>
@@ -333,6 +334,68 @@
                 }
                 
                 alert('Có lỗi xảy ra khi tải file ZIP. Vui lòng thử lại.');
+            }
+        });
+    }
+
+    // Loading khi download file Excel
+    const downloadExcelBtn = document.querySelector('.qrcode-download-excel-btn');
+    if (downloadExcelBtn) {
+        downloadExcelBtn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            const url = this.getAttribute('href');
+
+            if (typeof showAdminLoading === 'function') {
+                showAdminLoading(loadingId, 'Đang tạo file Excel...');
+            }
+
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Không thể tải file Excel');
+                }
+
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = blobUrl;
+
+                const contentDisposition = response.headers.get('Content-Disposition');
+                let filename = 'danh_sach_hlv_qrcode.xlsx';
+                if (contentDisposition) {
+                    const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+                    if (filenameMatch && filenameMatch[1]) {
+                        filename = filenameMatch[1].replace(/['"]/g, '');
+                    }
+                }
+
+                link.download = filename;
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                setTimeout(function() {
+                    window.URL.revokeObjectURL(blobUrl);
+                }, 100);
+
+                if (typeof hideAdminLoading === 'function') {
+                    hideAdminLoading(loadingId);
+                }
+            } catch (error) {
+                console.error('Lỗi khi tải file Excel:', error);
+
+                if (typeof hideAdminLoading === 'function') {
+                    hideAdminLoading(loadingId);
+                }
+
+                alert('Có lỗi xảy ra khi tải file Excel. Vui lòng thử lại.');
             }
         });
     }

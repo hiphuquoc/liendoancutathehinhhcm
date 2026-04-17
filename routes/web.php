@@ -117,6 +117,7 @@ Route::middleware(['auth', 'role:admin,trainer,referee'])->group(function () {
             Route::get('/', [QrCodeController::class, 'index'])->name('admin.trainerQrcode.index');
             Route::get('/download', [QrCodeController::class, 'download'])->name('admin.trainerQrcode.download');
             Route::get('/downloadAll', [QrCodeController::class, 'downloadAll'])->name('admin.trainerQrcode.downloadAll');
+            Route::get('/downloadExcel', [QrCodeController::class, 'downloadExcel'])->name('admin.trainerQrcode.downloadExcel');
         });
         /* ===== Trainer Email ===== */
         Route::prefix('trainer-email')->group(function(){

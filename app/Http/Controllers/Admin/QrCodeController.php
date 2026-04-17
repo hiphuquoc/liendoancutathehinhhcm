@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\Trainer;
 use App\Helpers\Charactor;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class QrCodeController extends Controller
 {
@@ -45,7 +47,7 @@ class QrCodeController extends Controller
                 });
             }
 
-            $trainers = $query->orderBy('id', 'DESC')->get();
+            $trainers = $query->orderBy('trainer_code', 'ASC')->get();
         } else {
             // Không có filter, trả về collection rỗng
             $trainers = collect();
@@ -184,7 +186,7 @@ class QrCodeController extends Controller
             });
         }
 
-        $trainers = $query->get();
+        $trainers = $query->orderBy('trainer_code', 'ASC')->get();
 
         $zip = new \ZipArchive();
         $zipFileName = 'qrcode_trainers_' . date('Y-m-d_His') . '.zip';
@@ -235,6 +237,88 @@ class QrCodeController extends Controller
         $zip->close();
 
         return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
+    }
+
+    /**
+     * Tải xuống danh sách HLV QR code dạng Excel
+     */
+    public function downloadExcel(Request $request)
+    {
+        $query = Trainer::with('seo')
+            ->whereHas('seo', function ($q) {
+                $q->where('type', 'trainer_info')
+                  ->where('language', 'vi');
+            });
+
+        $courseFilter = $request->get('course');
+        if (!empty($courseFilter)) {
+            $query->where('trainer_code', 'like', '%' . $courseFilter . '%');
+        }
+
+        $search = $request->get('search');
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('trainer_code', 'like', '%' . $search . '%')
+                  ->orWhereHas('seo', function ($subQ) use ($search) {
+                      $subQ->where('title', 'like', '%' . $search . '%');
+                  });
+            });
+        }
+
+        $trainers = $query->orderBy('trainer_code', 'ASC')->get();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Danh sach HLV');
+
+        $sheet->fromArray([
+            'STT',
+            'Ma so HLV',
+            'Ho ten',
+            'Email',
+            'So dien thoai',
+            'Link QR'
+        ], null, 'A1');
+
+        $parentSlug = config('main_' . env('APP_NAME') . '.slug_trainer_parent', 'huan-luyen-vien');
+
+        $row = 2;
+        $stt = 1;
+        foreach ($trainers as $trainer) {
+            if (!empty($trainer->seo->slug_full)) {
+                $url = url('/' . $trainer->seo->slug_full);
+            } elseif (!empty($trainer->seo->slug)) {
+                $url = url('/' . $parentSlug . '/' . $trainer->seo->slug);
+            } else {
+                $url = '';
+            }
+
+            $sheet->setCellValue('A' . $row, $stt);
+            $sheet->setCellValue('B' . $row, $trainer->trainer_code ?? '');
+            $sheet->setCellValue('C' . $row, $trainer->name ?? '');
+            $sheet->setCellValue('D' . $row, $trainer->email ?? '');
+            $sheet->setCellValue('E' . $row, $trainer->phone ?? '');
+            $sheet->setCellValue('F' . $row, $url);
+
+            $row++;
+            $stt++;
+        }
+
+        foreach (range('A', 'F') as $column) {
+            $sheet->getColumnDimension($column)->setAutoSize(true);
+        }
+
+        if (!file_exists(storage_path('app/temp'))) {
+            mkdir(storage_path('app/temp'), 0755, true);
+        }
+
+        $fileName = 'danh_sach_hlv_qrcode_' . date('Y-m-d_His') . '.xlsx';
+        $filePath = storage_path('app/temp/' . $fileName);
+        $writer = new Xlsx($spreadsheet);
+        $writer->save($filePath);
+
+        return response()->download($filePath, $fileName)->deleteFileAfterSend(true);
     }
 }
 

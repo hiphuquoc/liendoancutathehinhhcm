@@ -10,7 +10,7 @@ class BuildInsertUpdateModel {
         if(!empty($dataForm)){
             // For trainer_info and referee_info, use 'name' for seo title if available
             // Otherwise fallback to 'title'
-            if(in_array($type, ['trainer_info', 'referee_info']) && !empty($dataForm['name'])) {
+            if(in_array($type, ['trainer_info', 'referee_info', 'athlete_info']) && !empty($dataForm['name'])) {
                 $result['title']                = trim($dataForm['name']);
             } else {
                 $result['title']                = !empty($dataForm['title']) ? trim($dataForm['title']) : '';
@@ -19,6 +19,8 @@ class BuildInsertUpdateModel {
             // Otherwise use description from form
             if($type === 'trainer_info' && !empty($dataForm['trainer_description'])) {
                 $result['description']          = trim($dataForm['trainer_description']);
+            } elseif($type === 'athlete_info' && !empty($dataForm['athlete_description'])) {
+                $result['description']          = trim($dataForm['athlete_description']);
             } else {
                 $result['description']          = !empty($dataForm['description']) ? trim($dataForm['description']) : '';
             }

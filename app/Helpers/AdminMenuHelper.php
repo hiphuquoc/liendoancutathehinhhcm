@@ -63,7 +63,7 @@ class AdminMenuHelper
         $user = Auth::user();
         // Load relations để kiểm tra trainer và referee profile
         if ($user) {
-            $user->load(['hasTrainer', 'hasReferee']);
+            $user->load(['hasTrainer', 'hasReferee', 'hasAthlete']);
         }
         $currentRoute = request()->route() ? request()->route()->getName() : '';
         
@@ -124,6 +124,19 @@ class AdminMenuHelper
                         'url' => route('admin.account.refereeProfile'),
                         'active' => $currentRoute === 'admin.account.refereeProfile' || 
                             str_starts_with($currentRoute, 'admin.account.refereeProfile'),
+                    ];
+                    $items[] = $menuItem;
+                }
+
+                $hasAthleteProfile = $user->hasAthlete !== null;
+                if ($hasAthleteProfile) {
+                    $menuItem = [
+                        'label' => 'Hồ sơ VĐV',
+                        'svg' => $item['svg'] ?? null,
+                        'route' => 'admin.account.athleteProfile',
+                        'url' => route('admin.account.athleteProfile'),
+                        'active' => $currentRoute === 'admin.account.athleteProfile' ||
+                            str_starts_with($currentRoute, 'admin.account.athleteProfile'),
                     ];
                     $items[] = $menuItem;
                 }

@@ -11,8 +11,10 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Trainer;
 use App\Models\Referee;
+use App\Models\Athlete;
 use App\Http\Requests\TrainerProfileRequest;
 use App\Http\Requests\RefereeProfileRequest;
+use App\Http\Requests\AthleteProfileRequest;
 use App\Helpers\Upload;
 use App\Models\Seo;
 use App\Models\TrainerAchievement;
@@ -21,6 +23,12 @@ use App\Models\TrainerExperience;
 use App\Models\TrainerExperienceContent;
 use App\Models\TrainerDegree;
 use App\Models\TrainerDegreeContent;
+use App\Models\AthleteAchievement;
+use App\Models\AthleteSkill;
+use App\Models\AthleteExperience;
+use App\Models\AthleteExperienceContent;
+use App\Models\AthleteDegree;
+use App\Models\AthleteDegreeContent;
 use App\Models\ProfileActivityImage;
 
 class AccountController extends Controller
@@ -39,7 +47,14 @@ class AccountController extends Controller
                 $trainerCode = $trainer->trainer_code;
             }
         }
-        return view('admin.account.profile', compact('user', 'trainerCode'));
+        $athleteCode = null;
+        if ($user->hasRole('athlete') && !$user->hasRole('admin')) {
+            $athlete = Athlete::where('user_id', $user->id)->first();
+            if ($athlete && !empty($athlete->athlete_code)) {
+                $athleteCode = $athlete->athlete_code;
+            }
+        }
+        return view('admin.account.profile', compact('user', 'trainerCode', 'athleteCode'));
     }
 
     /**
@@ -48,9 +63,9 @@ class AccountController extends Controller
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
-        $isTrainerOrReferee = ($user->hasRole('trainer') || $user->hasRole('referee')) && !$user->hasRole('admin');
+        $isTrainerOrReferee = ($user->hasRole('trainer') || $user->hasRole('referee') || $user->hasRole('athlete')) && !$user->hasRole('admin');
 
-        // Trainer and Referee cannot update name, but can update email
+        // Trainer, Referee and Athlete cannot update name, but can update email
         if ($isTrainerOrReferee) {
             // Validate that name hasn't changed, but allow email update
             $validator = Validator::make($request->all(), [
@@ -99,7 +114,7 @@ class AccountController extends Controller
             if (!$isTrainerOrReferee) {
                 $user->name = trim($request->name);
             }
-            // All users (admin, trainer, and referee) can update email
+            // All users (admin, trainer, referee, athlete) can update email
             $user->email = trim($request->email);
             // Trainer and referee can update other fields like address, phone, position if needed
             if ($request->has('address')) {
@@ -113,9 +128,10 @@ class AccountController extends Controller
             }
             $user->save();
             
-            // Sync to trainer_info or referee_info if user has profile
+            // Sync to trainer_info, referee_info or athlete_info if user has profile
             $this->syncUserToTrainer($user);
             $this->syncUserToReferee($user);
+            $this->syncUserToAthlete($user);
             
             DB::commit();
 
@@ -886,6 +902,310 @@ class AccountController extends Controller
         }
         
         // Update user if there are changes
+        if ($hasChanges) {
+            $user->save();
+        }
+    }
+
+    /**
+     * Hồ sơ VĐV (role athlete)
+     */
+    public function athleteProfile(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($user->hasRole('admin') || !$user->hasRole('athlete')) {
+            $message = [
+                'type' => 'danger',
+                'message' => '<strong>Lỗi!</strong> Bạn không có quyền truy cập trang này.',
+            ];
+            $request->session()->put('message', $message);
+
+            return redirect()->route('admin.account.profile');
+        }
+
+        $athlete = Athlete::where('user_id', $user->id)
+            ->with('seo.contents', 'achievements', 'skills', 'experiences.contents', 'degrees.contents', 'activityImages')
+            ->first();
+
+        if (empty($athlete)) {
+            $message = [
+                'type' => 'warning',
+                'message' => '<strong>Thông báo!</strong> Bạn chưa có hồ sơ Vận động viên. Vui lòng liên hệ quản trị viên để được tạo hồ sơ.',
+            ];
+            $request->session()->put('message', $message);
+
+            return redirect()->route('admin.account.profile');
+        }
+
+        $athleteCode = $athlete->athlete_code ?? null;
+
+        return view('admin.account.athleteProfile', compact('athlete', 'athleteCode'));
+    }
+
+    public function updateAthleteProfile(AthleteProfileRequest $request)
+    {
+        $user = Auth::user();
+
+        if ($user->hasRole('admin') || !$user->hasRole('athlete')) {
+            abort(403, 'Bạn không có quyền thực hiện thao tác này.');
+        }
+
+        $athlete = Athlete::where('user_id', $user->id)->first();
+
+        if (empty($athlete)) {
+            $message = [
+                'type' => 'danger',
+                'message' => '<strong>Lỗi!</strong> Không tìm thấy hồ sơ VĐV.',
+            ];
+            $request->session()->put('message', $message);
+
+            return redirect()->route('admin.account.athleteProfile');
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $dataPath = [];
+            if ($request->hasFile('image')) {
+                $name = !empty($athlete->seo->slug) ? $athlete->seo->slug : time();
+                $fileName = $name.'.'.config('image.extension');
+                $folderUpload = config('main_'.env('APP_NAME').'.google_cloud_storage.wallpapers');
+                $dataPath = Upload::uploadWallpaper($request->file('image'), $fileName, $folderUpload);
+            }
+
+            $updateData = [];
+
+            if ($request->has('phone')) {
+                $updateData['phone'] = trim($request->phone) ?: null;
+            }
+
+            if ($request->has('email')) {
+                $updateData['email'] = trim($request->email) ?: null;
+            }
+
+            if ($request->has('description')) {
+                $updateData['description'] = trim($request->description) ?: null;
+            }
+            if ($request->has('total_learner')) {
+                $updateData['total_learner'] = (int) $request->get('total_learner', 0);
+            }
+            if ($request->has('total_teaching_hour')) {
+                $updateData['total_teaching_hour'] = (int) $request->get('total_teaching_hour', 0);
+            }
+            if ($request->has('total_prize')) {
+                $updateData['total_prize'] = (int) $request->get('total_prize', 0);
+            }
+
+            if (!empty($updateData)) {
+                Athlete::updateItem($athlete->id, $updateData);
+            }
+
+            $athlete = Athlete::find($athlete->id);
+
+            if (!empty($athlete)) {
+                $this->syncAthleteToUser($athlete);
+            }
+
+            if (!empty($athlete->seo_id)) {
+                $seoUpdateData = [];
+
+                if ($request->has('description') && !empty(trim($request->description))) {
+                    $seoUpdateData['description'] = trim($request->description);
+                }
+
+                if (!empty($dataPath)) {
+                    $seoUpdateData['image'] = $dataPath;
+                }
+
+                if (!empty($seoUpdateData)) {
+                    $existingSeo = Seo::find($athlete->seo_id);
+                    if ($existingSeo && !empty($existingSeo->slug)) {
+                        $seoUpdateData['slug'] = $existingSeo->slug;
+                    }
+                    Seo::updateItem($athlete->seo_id, $seoUpdateData);
+                }
+            }
+
+            $idAthlete = $athlete->id;
+
+            if ($request->has('repeater_athlete_achievement')) {
+                AthleteAchievement::select('*')
+                    ->where('athlete_info_id', $idAthlete)
+                    ->delete();
+                if (!empty($request->get('repeater_athlete_achievement'))) {
+                    foreach ($request->get('repeater_athlete_achievement') as $index => $achi) {
+                        if (!empty($achi['content'])) {
+                            AthleteAchievement::insertItem([
+                                'athlete_info_id' => $idAthlete,
+                                'content' => $achi['content'],
+                                'ordering' => $achi['ordering'] ?? $index,
+                            ]);
+                        }
+                    }
+                }
+            }
+
+            if ($request->has('repeater_athlete_skill')) {
+                AthleteSkill::select('*')
+                    ->where('athlete_info_id', $idAthlete)
+                    ->delete();
+                if (!empty($request->get('repeater_athlete_skill'))) {
+                    foreach ($request->get('repeater_athlete_skill') as $index => $skill) {
+                        if (!empty($skill['skill']) && !empty($skill['percent'])) {
+                            AthleteSkill::insertItem([
+                                'athlete_info_id' => $idAthlete,
+                                'skill' => $skill['skill'],
+                                'percent' => $skill['percent'],
+                                'ordering' => $skill['ordering'] ?? $index,
+                            ]);
+                        }
+                    }
+                }
+            }
+
+            if ($request->has('repeater_athlete_experience')) {
+                AthleteExperience::select('*')
+                    ->where('athlete_info_id', $idAthlete)
+                    ->delete();
+                if (!empty($request->get('repeater_athlete_experience'))) {
+                    foreach ($request->get('repeater_athlete_experience') as $index => $exper) {
+                        if (!empty($exper['title']) && !empty($exper['company']) && !empty($exper['content'])) {
+                            $idExp = AthleteExperience::insertItem([
+                                'athlete_info_id' => $idAthlete,
+                                'title' => $exper['title'],
+                                'company' => $exper['company'],
+                                'ordering' => $exper['ordering'] ?? $index,
+                            ]);
+                            $tmp = explode("\r\n", $exper['content']);
+                            foreach ($tmp as $t) {
+                                if (!empty(trim($t))) {
+                                    AthleteExperienceContent::insertItem([
+                                        'athlete_experience_id' => $idExp,
+                                        'content' => trim($t),
+                                    ]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if ($request->has('repeater_athlete_degree')) {
+                AthleteDegree::select('*')
+                    ->where('athlete_info_id', $idAthlete)
+                    ->delete();
+                if (!empty($request->get('repeater_athlete_degree'))) {
+                    foreach ($request->get('repeater_athlete_degree') as $index => $degree) {
+                        if (!empty($degree['title']) && !empty($degree['school']) && !empty($degree['content'])) {
+                            $idDeg = AthleteDegree::insertItem([
+                                'athlete_info_id' => $idAthlete,
+                                'title' => $degree['title'],
+                                'school' => $degree['school'],
+                                'ordering' => $degree['ordering'] ?? $index,
+                            ]);
+                            $tmp = explode("\r\n", $degree['content']);
+                            foreach ($tmp as $t) {
+                                if (!empty(trim($t))) {
+                                    AthleteDegreeContent::insertItem([
+                                        'athlete_degree_id' => $idDeg,
+                                        'content' => trim($t),
+                                    ]);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            DB::commit();
+
+            $message = [
+                'type' => 'success',
+                'message' => '<strong>Thành công!</strong> Đã cập nhật hồ sơ Vận động viên!',
+            ];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error('Error updating athlete profile', [
+                'user_id' => $user->id,
+                'athlete_id' => $athlete->id ?? null,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            $message = [
+                'type' => 'danger',
+                'message' => '<strong>Lỗi!</strong> Có lỗi xảy ra: '.$e->getMessage(),
+            ];
+        }
+
+        $request->session()->put('message', $message);
+
+        return redirect()->route('admin.account.athleteProfile');
+    }
+
+    private function syncUserToAthlete(User $user)
+    {
+        $athlete = Athlete::where('user_id', $user->id)->first();
+        if (empty($athlete)) {
+            return;
+        }
+
+        $updateData = [];
+
+        if (!empty($user->name) && $athlete->name !== $user->name) {
+            $updateData['name'] = $user->name;
+        }
+
+        if ($user->position !== $athlete->position) {
+            $updateData['position'] = $user->position;
+        }
+
+        if ($user->phone !== $athlete->phone) {
+            $updateData['phone'] = $user->phone;
+        }
+
+        if (!empty($user->email) && $athlete->email !== $user->email) {
+            $updateData['email'] = $user->email;
+        }
+
+        if (!empty($updateData)) {
+            Athlete::updateItem($athlete->id, $updateData);
+        }
+    }
+
+    private function syncAthleteToUser(Athlete $athlete)
+    {
+        if (empty($athlete->user_id)) {
+            return;
+        }
+
+        $user = User::find($athlete->user_id);
+        if (empty($user)) {
+            return;
+        }
+
+        $hasChanges = false;
+
+        if (!empty($athlete->name) && $user->name !== $athlete->name) {
+            $user->name = $athlete->name;
+            $hasChanges = true;
+        }
+
+        if ($user->position !== $athlete->position) {
+            $user->position = $athlete->position;
+            $hasChanges = true;
+        }
+
+        if ($user->phone !== $athlete->phone) {
+            $user->phone = $athlete->phone;
+            $hasChanges = true;
+        }
+
+        if (!empty($athlete->email) && $user->email !== $athlete->email) {
+            $user->email = $athlete->email;
+            $hasChanges = true;
+        }
+
         if ($hasChanges) {
             $user->save();
         }

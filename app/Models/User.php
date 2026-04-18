@@ -92,6 +92,10 @@ class User extends Authenticatable {
         return $this->hasOne(\App\Models\Referee::class, 'user_id', 'id');
     }
 
+    public function hasAthlete() {
+        return $this->hasOne(\App\Models\Athlete::class, 'user_id', 'id');
+    }
+
     public function hasRole($role) {
         return $this->role === $role;
     }

@@ -7,11 +7,12 @@ use App\Helpers\Upload;
 use App\Models\ProfileActivityImage;
 use App\Models\Trainer;
 use App\Models\Referee;
+use App\Models\Athlete;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * API cho Hình ảnh hoạt động (HLV / Trọng tài).
+ * API cho Hình ảnh hoạt động (HLV / Trọng tài / VĐV).
  * Upload, xóa, sắp xếp ngay lập tức qua AJAX – không cần nhấn Lưu form.
  */
 class ProfileActivityImageController extends Controller
@@ -33,6 +34,10 @@ class ProfileActivityImageController extends Controller
             $referee = Referee::where('user_id', $user->id)->where('id', $ownerId)->first();
             return $referee !== null;
         }
+        if ($ownerType === ProfileActivityImage::OWNER_TYPE_ATHLETE && $user->hasRole('athlete')) {
+            $athlete = Athlete::where('user_id', $user->id)->where('id', $ownerId)->first();
+            return $athlete !== null;
+        }
         return false;
     }
 
@@ -42,7 +47,7 @@ class ProfileActivityImageController extends Controller
     public function upload(Request $request)
     {
         $request->validate([
-            'owner_type' => 'required|in:trainer_info,referee_info',
+            'owner_type' => 'required|in:trainer_info,referee_info,athlete_info',
             'owner_id'   => 'required|integer|min:1',
             'image'      => 'required',
             'image.*'    => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
@@ -66,9 +71,13 @@ class ProfileActivityImageController extends Controller
             if (!$file->isValid()) {
                 continue;
             }
-            $fileName = $ownerType === ProfileActivityImage::OWNER_TYPE_TRAINER
-                ? 'trainer-activity-'.$ownerId.'-'.time().'-'.$idx.'.'.config('image.extension')
-                : 'referee-activity-'.$ownerId.'-'.time().'-'.$idx.'.'.config('image.extension');
+            if ($ownerType === ProfileActivityImage::OWNER_TYPE_TRAINER) {
+                $fileName = 'trainer-activity-'.$ownerId.'-'.time().'-'.$idx.'.'.config('image.extension');
+            } elseif ($ownerType === ProfileActivityImage::OWNER_TYPE_ATHLETE) {
+                $fileName = 'athlete-activity-'.$ownerId.'-'.time().'-'.$idx.'.'.config('image.extension');
+            } else {
+                $fileName = 'referee-activity-'.$ownerId.'-'.time().'-'.$idx.'.'.config('image.extension');
+            }
             $dataPath = Upload::uploadWallpaper($file, $fileName, $folderUpload);
             if (!empty($dataPath)) {
                 $maxOrder++;
@@ -120,7 +129,7 @@ class ProfileActivityImageController extends Controller
     public function reorder(Request $request)
     {
         $request->validate([
-            'owner_type' => 'required|in:trainer_info,referee_info',
+            'owner_type' => 'required|in:trainer_info,referee_info,athlete_info',
             'owner_id'   => 'required|integer|min:1',
             'order'      => 'required|array',
             'order.*'    => 'integer|min:1',

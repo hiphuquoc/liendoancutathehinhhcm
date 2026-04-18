@@ -115,7 +115,7 @@ class LoginController extends Controller
             Auth::login($user, $remember);
             
             // Check admin role
-            if ($user->hasRole('admin') || $user->hasRole('trainer') || $user->hasRole('referee')) {
+            if ($user->hasRole('admin') || $user->hasRole('trainer') || $user->hasRole('referee') || $user->hasRole('athlete')) {
                 // Clear rate limiter on success
                 RateLimiter::clear($throttleKey);
                 

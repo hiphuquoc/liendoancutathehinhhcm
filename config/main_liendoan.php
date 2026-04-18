@@ -232,6 +232,10 @@ return [
             'slug'  => 'trong-tai',
         ],
         [
+            'name'  => 'Vận động viên',
+            'slug'  => 'van-dong-vien',
+        ],
+        [
             'name'  => 'Tin tức',
             'slug'  => 'tin-tuc',
         ],
@@ -241,4 +245,5 @@ return [
         ],
     ],
     'slug_trainer_parent' => 'huan-luyen-vien', /* dùng cho cách tính năng nâng cao => nếu thay đổi slug của trang huan-luyen-vien phải cập nhật lại ở đây */
+    'slug_athlete_parent' => 'van-dong-vien',
 ];

@@ -18,7 +18,10 @@ class ProfileActivityImage extends Model
     public $timestamps = true;
 
     const OWNER_TYPE_TRAINER = 'trainer_info';
+
     const OWNER_TYPE_REFEREE = 'referee_info';
+
+    const OWNER_TYPE_ATHLETE = 'athlete_info';
 
     /**
      * Full URL ảnh (Google Cloud).

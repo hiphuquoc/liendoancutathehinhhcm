@@ -22,6 +22,7 @@ use App\Models\RelationSeoProductInfo;
 use App\Models\Timezone;
 use App\Helpers\Url;
 use App\Models\Referee;
+use App\Models\Athlete;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class HomeController extends Controller {
@@ -292,6 +293,35 @@ class HomeController extends Controller {
         //     /* Ghi dữ liệu - Xuất kết quả */
         //     if(env('APP_CACHE_HTML')==true) Storage::put(config('main_'.env('APP_NAME').'.cache.folderSave').$nameCache, $xhtml);
         // }
+        echo $xhtml;
+    }
+
+    public static function athlete(Request $request, $language = 'vi'){
+        SettingController::settingLanguage($language);
+        $slugParent = config('main_'.env('APP_NAME').'.slug_athlete_parent', 'van-dong-vien');
+        $item               = Page::select('*')
+            ->whereHas('seos.infoSeo', function ($query) use ($language, $slugParent) {
+                $query->where('language', $language)
+                        ->where('slug', $slugParent);
+            })
+            ->with('seo', 'seos.infoSeo', 'type')
+            ->first();
+        $itemSeo            = [];
+        if (!empty($item->seos)) {
+            foreach ($item->seos as $s) {
+                if ($s->infoSeo->language == $language) {
+                    $itemSeo = $s->infoSeo;
+                    break;
+                }
+            }
+        }
+        $athletes   = Athlete::whereHas('seo', function ($q) {
+                        $q->whereNotNull('image')->where('image', '!=', '');
+                    })
+                    ->with('seos.infoSeo')
+                    ->inRandomOrder()->get();
+        $breadcrumb = Url::buildBreadcrumb($itemSeo->slug_full);
+        $xhtml      = view('wallpaper.athlete.index', compact('item', 'itemSeo', 'athletes', 'language', 'breadcrumb'))->render();
         echo $xhtml;
     }
 

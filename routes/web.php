@@ -41,6 +41,10 @@ use App\Http\Controllers\Admin\RefereeController;
 use App\Http\Controllers\Admin\RefereeManagementController;
 use App\Http\Controllers\Admin\ProfileActivityImageController;
 use App\Http\Controllers\Admin\RefereeQrCodeController;
+use App\Http\Controllers\Admin\AthleteController;
+use App\Http\Controllers\Admin\AthleteManagementController;
+use App\Http\Controllers\Admin\AthleteQrCodeController;
+use App\Http\Controllers\Admin\AthleteEmailController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\AccountController as AdminAccountController;
 use App\Http\Controllers\Admin\CacheController;
@@ -70,7 +74,7 @@ use App\Http\Controllers\GoogledriveController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::middleware(['auth', 'role:admin,trainer,referee'])->group(function () {
+Route::middleware(['auth', 'role:admin,trainer,referee,athlete'])->group(function () {
     /* ===== Account ===== */
     // Account routes giữ nguyên vị trí (ngoài /he-thong) vì là routes cá nhân
     Route::prefix('account')->group(function(){
@@ -82,6 +86,8 @@ Route::middleware(['auth', 'role:admin,trainer,referee'])->group(function () {
         Route::post('/updateTrainerProfile', [AdminAccountController::class, 'updateTrainerProfile'])->name('admin.account.updateTrainerProfile');
         Route::get('/refereeProfile', [AdminAccountController::class, 'refereeProfile'])->name('admin.account.refereeProfile');
         Route::post('/updateRefereeProfile', [AdminAccountController::class, 'updateRefereeProfile'])->name('admin.account.updateRefereeProfile');
+        Route::get('/athleteProfile', [AdminAccountController::class, 'athleteProfile'])->name('admin.account.athleteProfile');
+        Route::post('/updateAthleteProfile', [AdminAccountController::class, 'updateAthleteProfile'])->name('admin.account.updateAthleteProfile');
     });
     
     // Redirect từ URL cũ sang URL mới (backward compatibility)
@@ -91,9 +97,12 @@ Route::middleware(['auth', 'role:admin,trainer,referee'])->group(function () {
     Route::get('/referee', function() {
         return redirect()->route('admin.referee.list');
     });
+    Route::get('/athlete', function() {
+        return redirect()->route('admin.athlete.list');
+    });
 });
 
-Route::middleware(['auth', 'role:admin,trainer,referee'])->group(function () {
+Route::middleware(['auth', 'role:admin,trainer,referee,athlete'])->group(function () {
     Route::prefix('he-thong')->group(function(){
         /* ===== Trainer ===== */
         Route::prefix('trainer')->group(function(){
@@ -124,6 +133,28 @@ Route::middleware(['auth', 'role:admin,trainer,referee'])->group(function () {
             Route::get('/', [\App\Http\Controllers\Admin\TrainerEmailController::class, 'index'])->name('admin.trainerEmail.index');
             Route::post('/send', [\App\Http\Controllers\Admin\TrainerEmailController::class, 'sendEmails'])->name('admin.trainerEmail.sendEmails');
             Route::post('/send-test', [\App\Http\Controllers\Admin\TrainerEmailController::class, 'sendTestEmail'])->name('admin.trainerEmail.sendTest');
+        });
+        /* ===== Athlete (VĐV) ===== */
+        Route::prefix('athlete')->group(function(){
+            Route::get('/', [AthleteController::class, 'list'])->name('admin.athlete.list');
+            Route::get('/view', [AthleteController::class, 'view'])->name('admin.athlete.view');
+            Route::post('/createAndUpdate', [AthleteController::class, 'createAndUpdate'])->name('admin.athlete.createAndUpdate');
+            Route::get('/delete', [AthleteController::class, 'delete'])->name('admin.athlete.delete');
+        });
+        Route::prefix('athlete-management')->group(function(){
+            Route::get('/', [AthleteManagementController::class, 'index'])->name('admin.athleteManagement.index');
+            Route::post('/uploadExcel', [AthleteManagementController::class, 'uploadExcel'])->name('admin.athleteManagement.uploadExcel');
+        });
+        Route::prefix('athlete-qrcode')->group(function(){
+            Route::get('/', [AthleteQrCodeController::class, 'index'])->name('admin.athleteQrcode.index');
+            Route::get('/download', [AthleteQrCodeController::class, 'download'])->name('admin.athleteQrcode.download');
+            Route::get('/downloadAll', [AthleteQrCodeController::class, 'downloadAll'])->name('admin.athleteQrcode.downloadAll');
+            Route::get('/downloadExcel', [AthleteQrCodeController::class, 'downloadExcel'])->name('admin.athleteQrcode.downloadExcel');
+        });
+        Route::prefix('athlete-email')->group(function(){
+            Route::get('/', [AthleteEmailController::class, 'index'])->name('admin.athleteEmail.index');
+            Route::post('/send', [AthleteEmailController::class, 'sendEmails'])->name('admin.athleteEmail.sendEmails');
+            Route::post('/send-test', [AthleteEmailController::class, 'sendTestEmail'])->name('admin.athleteEmail.sendTest');
         });
         /* ===== Referee Management (Upload Excel) ===== */
         Route::prefix('referee-management')->group(function(){
@@ -500,6 +531,7 @@ Route::get('/lich-hoc', [HomeController::class, 'timetable'])->name('main.timeta
 Route::get('/doi-tac-nha-tai-tro', [HomeController::class, 'sponsor'])->name('main.sponsor');
 Route::get('/huan-luyen-vien', [HomeController::class, 'teacher'])->name('main.teacher');
 Route::get('/trong-tai', [HomeController::class, 'referee'])->name('main.referee');
+Route::get('/van-dong-vien', [HomeController::class, 'athlete'])->name('main.athlete');
 Route::get('/lien-he', [HomeController::class, 'contact'])->name('main.contact');
 /* trang giỏ hàng */
 $validCarts     = config('main_'.env('APP_NAME').'.url_cart_page');

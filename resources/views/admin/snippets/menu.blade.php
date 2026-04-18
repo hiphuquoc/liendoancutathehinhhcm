@@ -28,6 +28,13 @@
                         $trainerCode = $trainer->trainer_code;
                     }
                 }
+                $athleteCode = null;
+                if ($user->hasRole('athlete') && !$user->hasRole('admin')) {
+                    $athlete = \App\Models\Athlete::where('user_id', $user->id)->first();
+                    if ($athlete && !empty($athlete->athlete_code)) {
+                        $athleteCode = $athlete->athlete_code;
+                    }
+                }
             @endphp
             
             <a href="{{ $firstRoute }}" class="adminSidebar_header_link">
@@ -54,6 +61,16 @@
                     title="Nhấp để sao chép mã HLV"
                 >
                     <span class="adminSidebar_header_trainerCode_value">{{ $trainerCode }}</span>
+                </div>
+            @endif
+            @if(!empty($athleteCode))
+                <div 
+                    class="adminSidebar_header_trainerCode"
+                    onclick="copyTrainerCode('{{ $athleteCode }}', this)"
+                    data-tooltip="Nhấp để sao chép mã VĐV"
+                    title="Nhấp để sao chép mã VĐV"
+                >
+                    <span class="adminSidebar_header_trainerCode_value">{{ $athleteCode }}</span>
                 </div>
             @endif
     </div>

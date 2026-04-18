@@ -1,0 +1,324 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use App\Models\Athlete;
+use App\Helpers\Charactor;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
+class AthleteQrCodeController extends Controller
+{
+    /**
+     * Hiển thị danh sách QR code VĐV với bộ lọc
+     */
+    public function index(Request $request)
+    {
+        $query = Athlete::with('seo')
+            ->whereHas('seo', function ($q) {
+                $q->where('type', 'athlete_info')
+                  ->where('language', 'vi');
+            });
+
+        // Mặc định: không hiển thị kết quả nếu không có filter hoặc search
+        $courseFilter = $request->get('course');
+        $search = $request->get('search');
+        
+        // Chỉ query nếu có filter hoặc search
+        if (!empty($courseFilter) || !empty($search)) {
+            // Bộ lọc theo khóa học (mã tháng năm trong athlete_code)
+            if (!empty($courseFilter)) {
+                // Format: T12.25 (tháng.năm)
+                $query->where('athlete_code', 'like', '%' . $courseFilter . '%');
+            }
+
+            // Tìm kiếm theo tên
+            if (!empty($search)) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', '%' . $search . '%')
+                      ->orWhere('athlete_code', 'like', '%' . $search . '%')
+                      ->orWhereHas('seo', function ($subQ) use ($search) {
+                          $subQ->where('title', 'like', '%' . $search . '%');
+                      });
+                });
+            }
+
+            $athletes = $query->orderBy('athlete_code', 'ASC')->get();
+        } else {
+            // Không có filter, trả về collection rỗng
+            $athletes = collect();
+        }
+
+        // Lấy danh sách các khóa học (từ athlete_code)
+        // Format: N.O:001.T12.25/HLV-HWBF -> Extract "T12.25"
+        $courses = Athlete::whereNotNull('athlete_code')
+            ->where('athlete_code', '!=', '')
+            ->pluck('athlete_code')
+            ->map(function ($code) {
+                // Extract phần TMM.YY từ athlete_code
+                // Format: N.O:001.T12.25/HLV-HWBF
+                if (preg_match('/\.(T\d{2}\.\d{2})\//', $code, $matches)) {
+                    return $matches[1];
+                }
+                return null;
+            })
+            ->filter()
+            ->unique()
+            ->map(function ($code) {
+                // Parse để sắp xếp: T12.25 -> month=12, year=25
+                if (preg_match('/T(\d{2})\.(\d{2})/', $code, $matches)) {
+                    return [
+                        'code' => $code,
+                        'month' => (int)$matches[1],
+                        'year' => (int)$matches[2],
+                        'sort_key' => (int)$matches[2] * 100 + (int)$matches[1] // year*100 + month để sort
+                    ];
+                }
+                return ['code' => $code, 'month' => 0, 'year' => 0, 'sort_key' => 0];
+            })
+            ->sortByDesc('sort_key') // Sắp xếp gần nhất -> xa nhất
+            ->pluck('code')
+            ->values();
+
+        // Generate QR code cho mỗi trainer
+        foreach ($athletes as $athlete) {
+            if (!empty($athlete->seo->slug_full)) {
+                $url = url('/' . $athlete->seo->slug_full);
+            } elseif (!empty($athlete->seo->slug)) {
+                $parentSlug = config('main_' . env('APP_NAME') . '.slug_athlete_parent', 'van-dong-vien');
+                $url = url('/' . $parentSlug . '/' . $athlete->seo->slug);
+            } else {
+                $url = url('/');
+            }
+
+            // Generate QR code SVG
+            $qrCode = QrCode::encoding('UTF-8')
+                ->format('svg')
+                ->size(300)
+                ->margin(1)
+                ->backgroundColor(255, 255, 255)
+                ->style('round')
+                ->eye('circle')
+                ->generate($url);
+
+            $athlete->qr_code_svg = "data:image/svg+xml;base64," . base64_encode($qrCode);
+            $athlete->qr_url = $url;
+        }
+
+        return view('admin.qrcode.athleteIndex', compact('athletes', 'courses', 'courseFilter', 'search'));
+    }
+
+    /**
+     * Tải xuống QR code dạng PNG
+     */
+    public function download(Request $request)
+    {
+        $athleteId = $request->get('id');
+        $athlete = Athlete::with('seo')->find($athleteId);
+
+        if (empty($athlete) || empty($athlete->seo)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Không tìm thấy VĐV',
+            ], 404);
+        }
+
+        // Tạo URL
+        if (!empty($athlete->seo->slug_full)) {
+            $url = url('/' . $athlete->seo->slug_full);
+        } elseif (!empty($athlete->seo->slug)) {
+            $parentSlug = config('main_' . env('APP_NAME') . '.slug_athlete_parent', 'van-dong-vien');
+            $url = url('/' . $parentSlug . '/' . $athlete->seo->slug);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Không có URL cho VĐV này',
+            ], 404);
+        }
+
+        // Generate QR code PNG
+        $qrCode = QrCode::encoding('UTF-8')
+            ->format('png')
+            ->size(500)
+            ->margin(2)
+            ->backgroundColor(255, 255, 255)
+            ->style('round')
+            ->eye('circle')
+            ->generate($url);
+
+        $athleteName = Charactor::convertStrToUrl($athlete->name);
+        $filename = "QR_{$athleteName}.png";
+
+        return response($qrCode)
+            ->header('Content-Type', 'image/png')
+            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
+    }
+
+    /**
+     * Tải xuống tất cả QR code dạng ZIP
+     */
+    public function downloadAll(Request $request)
+    {
+        $query = Athlete::with('seo')
+            ->whereHas('seo', function ($q) {
+                $q->where('type', 'athlete_info')
+                  ->where('language', 'vi');
+            });
+
+        // Bộ lọc theo khóa học
+        $courseFilter = $request->get('course');
+        if (!empty($courseFilter)) {
+            $query->where('athlete_code', 'like', '%' . $courseFilter . '%');
+        }
+
+        $search = $request->get('search');
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('athlete_code', 'like', '%' . $search . '%')
+                  ->orWhereHas('seo', function ($subQ) use ($search) {
+                      $subQ->where('title', 'like', '%' . $search . '%');
+                  });
+            });
+        }
+
+        $athletes = $query->orderBy('athlete_code', 'ASC')->get();
+
+        $zip = new \ZipArchive();
+        $zipFileName = 'qrcode_athletes_' . date('Y-m-d_His') . '.zip';
+        $zipPath = storage_path('app/temp/' . $zipFileName);
+
+        // Tạo thư mục temp nếu chưa có
+        if (!file_exists(storage_path('app/temp'))) {
+            mkdir(storage_path('app/temp'), 0755, true);
+        }
+
+        if ($zip->open($zipPath, \ZipArchive::CREATE) !== TRUE) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Không thể tạo file ZIP',
+            ], 500);
+        }
+
+        $parentSlug = config('main_' . env('APP_NAME') . '.slug_athlete_parent', 'huan-luyen-vien');
+
+        foreach ($athletes as $athlete) {
+            if (empty($athlete->seo)) continue;
+
+            // Tạo URL
+            if (!empty($athlete->seo->slug_full)) {
+                $url = url('/' . $athlete->seo->slug_full);
+            } elseif (!empty($athlete->seo->slug)) {
+                $url = url('/' . $parentSlug . '/' . $athlete->seo->slug);
+            } else {
+                continue;
+            }
+
+            // Generate QR code PNG
+            $qrCode = QrCode::encoding('UTF-8')
+                ->format('png')
+                ->size(500)
+                ->margin(2)
+                ->backgroundColor(255, 255, 255)
+                ->style('round')
+                ->eye('circle')
+                ->generate($url);
+
+            $athleteName = Charactor::convertStrToUrl($athlete->name);
+            $filename = "QR_{$athleteName}.png";
+
+            $zip->addFromString($filename, $qrCode);
+        }
+
+        $zip->close();
+
+        return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
+    }
+
+    /**
+     * Tải xuống danh sách HLV QR code dạng Excel
+     */
+    public function downloadExcel(Request $request)
+    {
+        $query = Athlete::with('seo')
+            ->whereHas('seo', function ($q) {
+                $q->where('type', 'athlete_info')
+                  ->where('language', 'vi');
+            });
+
+        $courseFilter = $request->get('course');
+        if (!empty($courseFilter)) {
+            $query->where('athlete_code', 'like', '%' . $courseFilter . '%');
+        }
+
+        $search = $request->get('search');
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('athlete_code', 'like', '%' . $search . '%')
+                  ->orWhereHas('seo', function ($subQ) use ($search) {
+                      $subQ->where('title', 'like', '%' . $search . '%');
+                  });
+            });
+        }
+
+        $athletes = $query->orderBy('athlete_code', 'ASC')->get();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Danh sach VDV');
+
+        $sheet->fromArray([
+            'STT',
+            'Ma so VDV',
+            'Ho ten',
+            'Email',
+            'So dien thoai',
+            'Link QR'
+        ], null, 'A1');
+
+        $parentSlug = config('main_' . env('APP_NAME') . '.slug_athlete_parent', 'huan-luyen-vien');
+
+        $row = 2;
+        $stt = 1;
+        foreach ($athletes as $athlete) {
+            if (!empty($athlete->seo->slug_full)) {
+                $url = url('/' . $athlete->seo->slug_full);
+            } elseif (!empty($athlete->seo->slug)) {
+                $url = url('/' . $parentSlug . '/' . $athlete->seo->slug);
+            } else {
+                $url = '';
+            }
+
+            $sheet->setCellValue('A' . $row, $stt);
+            $sheet->setCellValue('B' . $row, $athlete->athlete_code ?? '');
+            $sheet->setCellValue('C' . $row, $athlete->name ?? '');
+            $sheet->setCellValue('D' . $row, $athlete->email ?? '');
+            $sheet->setCellValue('E' . $row, $athlete->phone ?? '');
+            $sheet->setCellValue('F' . $row, $url);
+
+            $row++;
+            $stt++;
+        }
+
+        foreach (range('A', 'F') as $column) {
+            $sheet->getColumnDimension($column)->setAutoSize(true);
+        }
+
+        if (!file_exists(storage_path('app/temp'))) {
+            mkdir(storage_path('app/temp'), 0755, true);
+        }
+
+        $fileName = 'danh_sach_vdv_qrcode_' . date('Y-m-d_His') . '.xlsx';
+        $filePath = storage_path('app/temp/' . $fileName);
+        $writer = new Xlsx($spreadsheet);
+        $writer->save($filePath);
+
+        return response()->download($filePath, $fileName)->deleteFileAfterSend(true);
+    }
+}
+

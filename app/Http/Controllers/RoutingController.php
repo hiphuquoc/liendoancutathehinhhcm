@@ -14,6 +14,7 @@ use App\Models\Page;
 use App\Models\CategoryBlog;
 use App\Models\Referee;
 use App\Models\Trainer;
+use App\Models\Athlete;
 use App\Models\Seo;
 use Illuminate\Support\Facades\Auth;
 
@@ -180,6 +181,17 @@ class RoutingController extends Controller{
                     $flagMatch          = true;
                     /* thông tin trang */
                     $item               = Referee::select('*')
+                                            ->whereHas('seos.infoSeo', function($query) use($idSeo){
+                                                $query->where('id', $idSeo);
+                                            })
+                                            ->with('seo', 'seos.infoSeo.contents', 'activityImages')
+                                            ->first();
+                    $xhtml              = view('wallpaper.teacherDetail.index', compact('item', 'itemSeo', 'language', 'breadcrumb'))->render();
+                }
+                /* ===== Athlete (VĐV) ==== */
+                if($itemSeo->type=='athlete_info'){
+                    $flagMatch          = true;
+                    $item               = Athlete::select('*')
                                             ->whereHas('seos.infoSeo', function($query) use($idSeo){
                                                 $query->where('id', $idSeo);
                                             })

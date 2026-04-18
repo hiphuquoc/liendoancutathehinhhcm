@@ -10,7 +10,7 @@
 --}}
 @php
     $user = $user ?? auth()->user();
-    $isTrainerOrReferee = ($user->hasRole('trainer') || $user->hasRole('referee')) && !$user->hasRole('admin');
+    $isTrainerOrReferee = ($user->hasRole('trainer') || $user->hasRole('referee') || $user->hasRole('athlete')) && !$user->hasRole('admin');
     
     // For trainer profile, get values from trainer model
     $nameValue = old('name') ?? ($item->name ?? $user->name ?? '');
@@ -22,11 +22,11 @@
 @endphp
 
 @if(!empty($trainerCode))
-    <!-- Trainer Code - Readonly for all users -->
+    <!-- Mã HLV / VĐV - Readonly -->
     <div class="adminFormField">
         <div class="adminFormField_labelWrapper">
             <label class="adminFormField_label">
-                <span>Mã HLV</span>
+                <span>{{ ($formType ?? '') === 'athlete' ? 'Mã VĐV' : 'Mã HLV' }}</span>
             </label>
         </div>
         <div 
@@ -97,7 +97,7 @@
     'type' => 'text',
     'required' => false,
     'value' => $phoneValue,
-    'tooltip' => $formType === 'trainer' ? 'Đây là Số điện thoại của Huấn luyện viên hiển thị trên website' : 'Số điện thoại của bạn'
+    'tooltip' => ($formType === 'trainer' || $formType === 'athlete') ? 'Số điện thoại hiển thị trên website' : 'Số điện thoại của bạn'
 ])
 
 <!-- Email -->
@@ -107,18 +107,18 @@
     'type' => 'email',
     'required' => true,
     'value' => $emailValue,
-    'tooltip' => $formType === 'trainer' ? 'Đây là Email của Huấn luyện viên hiển thị trên website' : 'Email của bạn'
+    'tooltip' => ($formType === 'trainer' || $formType === 'athlete') ? 'Email hiển thị trên website' : 'Email của bạn'
 ])
 
-<!-- Description (only for trainer profile) -->
-@if($formType === 'trainer')
+<!-- Description (HLV / VĐV profile) -->
+@if($formType === 'trainer' || $formType === 'athlete')
     @include('admin.components.formField', [
         'label' => 'Giới thiệu ngắn',
         'name' => 'description',
         'type' => 'textarea',
         'required' => false,
         'value' => $descriptionValue,
-        'tooltip' => 'Giới thiệu ngắn về huấn luyện viên (sẽ được đồng bộ với mô tả SEO)',
+        'tooltip' => $formType === 'athlete' ? 'Giới thiệu ngắn về vận động viên (đồng bộ mô tả SEO)' : 'Giới thiệu ngắn về huấn luyện viên (sẽ được đồng bộ với mô tả SEO)',
         'charCount' => true,
         'maxLength' => 2000,
         'rows' => 7

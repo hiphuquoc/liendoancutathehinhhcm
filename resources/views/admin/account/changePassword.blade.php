@@ -207,6 +207,12 @@ function togglePasswordVisibility(inputId, button) {
     const errorContainer = document.getElementById('changePasswordError');
     const errorText = document.getElementById('changePasswordErrorText');
     const successContainer = document.getElementById('changePasswordSuccess');
+
+    function setSubmitLoading(isLoading) {
+        submitBtn.disabled = isLoading;
+        submitBtn.querySelector('.adminAccountPage_submit_text').style.display = isLoading ? 'none' : 'flex';
+        submitBtn.querySelector('.adminAccountPage_submit_loading').style.display = isLoading ? 'flex' : 'none';
+    }
     
     function showError(message) {
         errorText.textContent = message;
@@ -299,9 +305,7 @@ function togglePasswordVisibility(inputId, button) {
             }
         
         // Disable submit button and show loading
-        submitBtn.disabled = true;
-        submitBtn.querySelector('.adminAccountPage_submit_text').style.display = 'none';
-        submitBtn.querySelector('.adminAccountPage_submit_loading').style.display = 'flex';
+        setSubmitLoading(true);
         
         const formData = new FormData(form);
         
@@ -316,11 +320,17 @@ function togglePasswordVisibility(inputId, button) {
                 credentials: 'same-origin',
             });
             
+            const contentType = response.headers.get('content-type') || '';
+            if (!contentType.includes('application/json')) {
+                throw new Error('Invalid server response');
+            }
+
             const data = await response.json();
             
             if (data.success) {
                 showSuccess();
                 form.reset();
+                setSubmitLoading(false);
                 
                 setTimeout(() => {
                     successContainer.style.display = 'none';
@@ -337,16 +347,12 @@ function togglePasswordVisibility(inputId, button) {
                     });
                 }
                 
-                submitBtn.disabled = false;
-                submitBtn.querySelector('.adminAccountPage_submit_text').style.display = 'flex';
-                submitBtn.querySelector('.adminAccountPage_submit_loading').style.display = 'none';
+                setSubmitLoading(false);
             }
         } catch (error) {
             console.error('Error:', error);
             showError('Có lỗi xảy ra. Vui lòng thử lại sau.');
-            submitBtn.disabled = false;
-            submitBtn.querySelector('.adminAccountPage_submit_text').style.display = 'flex';
-            submitBtn.querySelector('.adminAccountPage_submit_loading').style.display = 'none';
+            setSubmitLoading(false);
         }
     });
     })();

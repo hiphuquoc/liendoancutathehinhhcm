@@ -170,6 +170,7 @@ class AccountController extends Controller
     public function updatePassword(Request $request)
     {
         $user = Auth::user();
+        $isAjaxRequest = $request->ajax() || $request->expectsJson();
 
         $validator = Validator::make($request->all(), [
             'current_password' => 'required|string',
@@ -184,6 +185,14 @@ class AccountController extends Controller
         ]);
 
         if ($validator->fails()) {
+            if ($isAjaxRequest) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->errors()->first(),
+                    'errors' => $validator->errors(),
+                ], 422);
+            }
+
             $message = [
                 'type' => 'danger',
                 'message' => '<strong>Lỗi!</strong> ' . $validator->errors()->first()
@@ -194,6 +203,16 @@ class AccountController extends Controller
 
         // Kiểm tra mật khẩu hiện tại
         if (!Hash::check($request->current_password, $user->password)) {
+            if ($isAjaxRequest) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mật khẩu hiện tại không chính xác',
+                    'errors' => [
+                        'current_password' => ['Mật khẩu hiện tại không chính xác'],
+                    ],
+                ], 422);
+            }
+
             $message = [
                 'type' => 'danger',
                 'message' => '<strong>Lỗi!</strong> Mật khẩu hiện tại không chính xác'
@@ -206,11 +225,31 @@ class AccountController extends Controller
             $user->password = Hash::make($request->password);
             $user->save();
 
+            if ($isAjaxRequest) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Đã đổi mật khẩu thành công!',
+                ]);
+            }
+
             $message = [
                 'type' => 'success',
                 'message' => '<strong>Thành công!</strong> Đã đổi mật khẩu thành công!'
             ];
         } catch (\Exception $e) {
+            \Log::error('Error updating password', [
+                'user_id' => $user->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            if ($isAjaxRequest) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Có lỗi xảy ra, vui lòng thử lại',
+                ], 500);
+            }
+
             $message = [
                 'type' => 'danger',
                 'message' => '<strong>Lỗi!</strong> Có lỗi xảy ra, vui lòng thử lại'

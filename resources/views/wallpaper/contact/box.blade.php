@@ -21,8 +21,7 @@
           <div class="contact-box">
             <div class="contact-box-icons"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-phone.webp" alt="Gymfit" class="img-fluid"> </div>
             <div class="contact-card">
-              <h3>0903 789 820</h3>
-              {{-- <h3>0903 789 820</h3> --}}
+              <h3>0917 478 720</h3>
             </div>
           </div>
         </div>
@@ -32,7 +31,6 @@
             </div>
             <div class="contact-card">
               <h3>info@liendoancutathehinhhcm.com.vn</h3>
-              {{-- <h3>support@yourbrand.com</h3> --}}
             </div>
           </div>
         </div>

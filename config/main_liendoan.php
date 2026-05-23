@@ -9,20 +9,20 @@ return [
             'founding'              => '2023-03-30',
             'company_name'          => 'Liên đoàn Cử tạ - Thể hình TPHCM',
             'email'                 => 'info@liendoancutathehinhhcm.com.vn',
-            'hotline'               => '0903 789 820',
+            'hotline'               => '0917 478 720',
             'company_description'   => 'Giới thiệu dịch vụ',
             'contacts'          =>  [
                                         [
                                             'type'      => 'customer service',
-                                            'phone'     => '0903789820'
+                                            'phone'     => '0917478720'
                                         ],
                                         [
                                             'type'      => 'technical support',
-                                            'phone'     => '0903789820'
+                                            'phone'     => '0917478720'
                                         ],
                                         [
                                             'type'      => 'sales',
-                                            'phone'     => '0903789820'
+                                            'phone'     => '0917478720'
                                         ]
                                     ],
         ],

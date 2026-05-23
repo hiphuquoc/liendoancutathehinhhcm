@@ -26,7 +26,7 @@
           </div>
           <div class="footer-social-link">
             <ul>
-              <li><span><i class="fa fa-phone" aria-hidden="true"></i></span><a href="tel:0903789820">0903.789.820</a></li>
+              <li><span><i class="fa fa-phone" aria-hidden="true"></i></span><a href="tel:0903789820">0917 478 720</a></li>
               <li><span><i class="fa fa-envelope" aria-hidden="true"></i></span><a href="mailto:info@liendoancutathehinhhcm.com.vn">info@liendoancutathehinhhcm.com.vn</a>
               </li>
             </ul>

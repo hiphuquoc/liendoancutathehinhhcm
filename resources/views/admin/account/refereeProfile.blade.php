@@ -390,6 +390,11 @@
                         </div>
                     </div>
 
+                    <!-- Thông tin cá nhân (sidebar) -->
+                    @include('admin.components.profilePersonalInfoFields', [
+                        'item' => $referee
+                    ])
+
                     <!-- Thống kê hoạt động -->
                     <div class="adminFormSection">
                         <div class="adminFormSection_header">

@@ -147,6 +147,9 @@ class RefereeController extends Controller {
                         'total_learner'         => (int) $request->get('total_learner', 0),
                         'total_teaching_hour'   => (int) $request->get('total_teaching_hour', 0),
                         'total_prize'           => (int) $request->get('total_prize', 0),
+                        'area'                  => $request->get('area') ?: null,
+                        'years_experience'      => $request->filled('years_experience') ? (int) $request->get('years_experience') : null,
+                        'languages'             => \App\Helpers\SpokenLanguage::fromRequest($request->input('languages')),
                     ]);
                 }else {
                     $dataReferee    = [];
@@ -157,6 +160,9 @@ class RefereeController extends Controller {
                     if($request->has('total_learner')) $dataReferee['total_learner'] = (int) $request->get('total_learner', 0);
                     if($request->has('total_teaching_hour')) $dataReferee['total_teaching_hour'] = (int) $request->get('total_teaching_hour', 0);
                     if($request->has('total_prize')) $dataReferee['total_prize'] = (int) $request->get('total_prize', 0);
+                    if($request->has('area')) $dataReferee['area'] = $request->get('area') ?: null;
+                    if($request->has('years_experience')) $dataReferee['years_experience'] = $request->filled('years_experience') ? (int) $request->get('years_experience') : null;
+                    $dataReferee['languages'] = \App\Helpers\SpokenLanguage::fromRequest($request->input('languages'));
                     Referee::updateItem($idReferee, $dataReferee);
                 }
                 /* relation_seo_referee_info */

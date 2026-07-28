@@ -17,6 +17,9 @@ class Referee extends Model {
         'total_learner',
         'total_teaching_hour',
         'total_prize',
+        'area',
+        'years_experience',
+        'languages',
     ];
     public $timestamps = false;
 

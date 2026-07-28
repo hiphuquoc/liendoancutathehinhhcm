@@ -242,6 +242,9 @@ class TrainerController extends Controller {
                         'total_learner'         => (int) $request->get('total_learner', 0),
                         'total_teaching_hour'   => (int) $request->get('total_teaching_hour', 0),
                         'total_prize'           => (int) $request->get('total_prize', 0),
+                        'area'                  => $request->get('area') ?: null,
+                        'years_experience'      => $request->filled('years_experience') ? (int) $request->get('years_experience') : null,
+                        'languages'             => \App\Helpers\SpokenLanguage::fromRequest($request->input('languages')),
                     ];
                     // Set user_id for sub-admin when creating new trainer
                     if(auth()->user()->hasRole('sub-admin') && !auth()->user()->hasRole('admin')){
@@ -308,6 +311,9 @@ class TrainerController extends Controller {
                     if($request->has('total_learner')) $dataTrainer['total_learner'] = (int) $request->get('total_learner', 0);
                     if($request->has('total_teaching_hour')) $dataTrainer['total_teaching_hour'] = (int) $request->get('total_teaching_hour', 0);
                     if($request->has('total_prize')) $dataTrainer['total_prize'] = (int) $request->get('total_prize', 0);
+                    if($request->has('area')) $dataTrainer['area'] = $request->get('area') ?: null;
+                    if($request->has('years_experience')) $dataTrainer['years_experience'] = $request->filled('years_experience') ? (int) $request->get('years_experience') : null;
+                    $dataTrainer['languages'] = \App\Helpers\SpokenLanguage::fromRequest($request->input('languages'));
                     // Generate trainer_code if not exists
                     $trainer = Trainer::find($idTrainer);
                     if (!empty($trainer) && empty($trainer->trainer_code)) {

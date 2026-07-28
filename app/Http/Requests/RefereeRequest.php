@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
+use App\Helpers\SpokenLanguage;
+use Illuminate\Validation\Rule;
 
 class RefereeRequest extends FormRequest {
     /**
@@ -52,7 +54,11 @@ class RefereeRequest extends FormRequest {
                 }
             ],
             'rating_aggregate_count'    => 'required',
-            'rating_aggregate_star'     => 'required'
+            'rating_aggregate_star'     => 'required',
+            'area'                      => 'nullable|string|max:255',
+            'years_experience'          => 'nullable|integer|min:0|max:100',
+            'languages'                 => 'nullable|array',
+            'languages.*'               => ['string', Rule::in(SpokenLanguage::allowedValues())],
         ];
     }
 

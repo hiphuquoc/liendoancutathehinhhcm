@@ -54,7 +54,7 @@
                             <div class="icon-wrap"><i class="fa-solid fa-location-dot"></i></div>
                             <div class="info-content">
                                 <span class="label">Khu vực</span>
-                                <span class="value">{{ $item->address ?? 'TP. Hồ Chí Minh' }}</span>
+                                <span class="value">{{ $item->area ?: 'TP. Hồ Chí Minh' }}</span>
                             </div>
                         </li>
                         <li>
@@ -62,8 +62,8 @@
                             <div class="info-content">
                                 <span class="label">Kinh nghiệm</span>
                                 <span class="value">
-                                    @if($item->experiences->isNotEmpty())
-                                        {{ $item->experiences->count() }}+ Năm
+                                    @if(!empty($item->years_experience))
+                                        {{ $item->years_experience }}+ Năm
                                     @else
                                         5+ Năm
                                     @endif
@@ -74,7 +74,7 @@
                             <div class="icon-wrap"><i class="fa-solid fa-language"></i></div>
                             <div class="info-content">
                                 <span class="label">Ngôn ngữ</span>
-                                <span class="value">Tiếng Việt, English</span>
+                                <span class="value">{{ \App\Helpers\SpokenLanguage::display($item->languages ?? null) }}</span>
                             </div>
                         </li>
                         @if(!empty($item->email))

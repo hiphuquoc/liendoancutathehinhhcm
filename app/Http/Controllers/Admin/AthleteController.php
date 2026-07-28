@@ -185,6 +185,9 @@ class AthleteController extends Controller
                         'total_learner' => (int) $request->get('total_learner', 0),
                         'total_teaching_hour' => (int) $request->get('total_teaching_hour', 0),
                         'total_prize' => (int) $request->get('total_prize', 0),
+                        'area' => $request->get('area') ?: null,
+                        'years_experience' => $request->filled('years_experience') ? (int) $request->get('years_experience') : null,
+                        'languages' => \App\Helpers\SpokenLanguage::fromRequest($request->input('languages')),
                     ];
                     if (auth()->user()->hasRole('sub-admin') && !auth()->user()->hasRole('admin')) {
                         $athleteData['user_id'] = auth()->user()->id;
@@ -252,6 +255,13 @@ class AthleteController extends Controller
                     if ($request->has('total_prize')) {
                         $dataAthlete['total_prize'] = (int) $request->get('total_prize', 0);
                     }
+                    if ($request->has('area')) {
+                        $dataAthlete['area'] = $request->get('area') ?: null;
+                    }
+                    if ($request->has('years_experience')) {
+                        $dataAthlete['years_experience'] = $request->filled('years_experience') ? (int) $request->get('years_experience') : null;
+                    }
+                    $dataAthlete['languages'] = \App\Helpers\SpokenLanguage::fromRequest($request->input('languages'));
                     $athlete = Athlete::find($idAthlete);
                     if (!empty($athlete) && empty($athlete->athlete_code)) {
                         $athleteCode = Athlete::generateAthleteCode($idAthlete, $idSeo);

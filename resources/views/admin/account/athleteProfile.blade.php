@@ -204,6 +204,11 @@
                         'oldData' => old('repeater_athlete_degree')
                     ])
 
+                    <!-- Thông tin cá nhân (sidebar) -->
+                    @include('admin.components.profilePersonalInfoFields', [
+                        'item' => $athlete
+                    ])
+
                     <!-- Thống kê hoạt động -->
                     <div class="adminFormSection">
                         <div class="adminFormSection_header">

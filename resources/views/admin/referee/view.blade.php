@@ -106,6 +106,11 @@
                         </div>
                     </div>
 
+                    <!-- Thông tin cá nhân (sidebar) -->
+                    @include('admin.components.profilePersonalInfoFields', [
+                        'item' => !empty($itemSourceToCopy) ? $itemSourceToCopy : $item
+                    ])
+
                     <!-- Thống kê hoạt động -->
                     <div class="adminFormSection">
                         <div class="adminFormSection_header">

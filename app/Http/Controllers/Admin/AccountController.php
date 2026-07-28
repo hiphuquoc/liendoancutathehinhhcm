@@ -356,6 +356,13 @@ class AccountController extends Controller
             if ($request->has('total_prize')) {
                 $updateData['total_prize'] = (int) $request->get('total_prize', 0);
             }
+            if ($request->has('area')) {
+                $updateData['area'] = trim((string) $request->get('area')) ?: null;
+            }
+            if ($request->has('years_experience')) {
+                $updateData['years_experience'] = $request->filled('years_experience') ? (int) $request->get('years_experience') : null;
+            }
+            $updateData['languages'] = \App\Helpers\SpokenLanguage::fromRequest($request->input('languages'));
             
             // Update trainer_info nếu có thay đổi
             if (!empty($updateData)) {
@@ -696,6 +703,13 @@ class AccountController extends Controller
             if ($request->has('total_prize')) {
                 $updateData['total_prize'] = (int) $request->get('total_prize', 0);
             }
+            if ($request->has('area')) {
+                $updateData['area'] = trim((string) $request->get('area')) ?: null;
+            }
+            if ($request->has('years_experience')) {
+                $updateData['years_experience'] = $request->filled('years_experience') ? (int) $request->get('years_experience') : null;
+            }
+            $updateData['languages'] = \App\Helpers\SpokenLanguage::fromRequest($request->input('languages'));
             
             // Update referee_info nếu có thay đổi (KHÔNG bao gồm description vì bảng không có cột này)
             if (!empty($updateData)) {
@@ -1035,6 +1049,13 @@ class AccountController extends Controller
             if ($request->has('total_prize')) {
                 $updateData['total_prize'] = (int) $request->get('total_prize', 0);
             }
+            if ($request->has('area')) {
+                $updateData['area'] = trim((string) $request->get('area')) ?: null;
+            }
+            if ($request->has('years_experience')) {
+                $updateData['years_experience'] = $request->filled('years_experience') ? (int) $request->get('years_experience') : null;
+            }
+            $updateData['languages'] = \App\Helpers\SpokenLanguage::fromRequest($request->input('languages'));
 
             if (!empty($updateData)) {
                 Athlete::updateItem($athlete->id, $updateData);

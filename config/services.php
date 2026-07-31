@@ -41,6 +41,21 @@ return [
         'client_id'     => env('FACEBOOK_CLIENT_ID'),
         'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
         'redirect'      => env('APP_URL').'/auth/facebook/callback',
-    ]
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Google Cloud Storage — chuẩn đa dự án
+    |--------------------------------------------------------------------------
+    */
+    'gcs' => [
+        'project_id' => env('GCS_PROJECT_ID', env('GOOGLE_CLOUD_PROJECT_ID')),
+        'bucket' => env('GCS_BUCKET', env('GOOGLE_CLOUD_STORAGE_BUCKET')),
+        'key_file' => ($path = env('GCS_KEY_FILE', env('GOOGLE_CLOUD_KEY_FILE')))
+            ? (str_starts_with($path, '/') || preg_match('#^[A-Za-z]:[\\\\/]#', $path) ? $path : base_path($path))
+            : null,
+        'public_url' => env('GCS_PUBLIC_URL', env('GCS_PUBLIC_BASE_URL', env('GOOGLE_CLOUD_URL'))),
+        'path_prefix' => env('GCS_PATH_PREFIX', env('GOOGLE_CLOUD_STORAGE_PATH_PREFIX', '')),
+    ],
 
 ];

@@ -51,7 +51,11 @@ return [
         'https://youtube.com/liendoancutathehinhtphcm'
     ],
     'google_cloud_storage' => [
-        'default_domain'    => 'https://'.env('GOOGLE_CLOUD_STORAGE_BUCKET').'.storage.googleapis.com/',
+        // Public base URL — ưu tiên GCS_PUBLIC_URL (chuẩn ViTravel), fallback bucket cũ.
+        'default_domain'    => rtrim((string) env(
+            'GCS_PUBLIC_URL',
+            'https://'.env('GCS_BUCKET', env('GOOGLE_CLOUD_STORAGE_BUCKET')).'.storage.googleapis.com'
+        ), '/').'/',
         'wallpapers'        => 'storage/images/',
         'sources'           => 'sources/',
         'freeWallpapers'    => 'freewallpapers/',

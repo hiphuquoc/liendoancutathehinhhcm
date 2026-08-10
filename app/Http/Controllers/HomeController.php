@@ -410,7 +410,7 @@ class HomeController extends Controller {
         //     ->backgroundColor(255, 255, 255) // Màu nền
         //     ->style('round') // Làm tròn các ô vuông
         //     ->eye('circle') // Làm tròn phần mắt của mã QR
-        //     ->merge('https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/logo-liendoancuta-1.webp', 0.3, true)
+        //     ->merge('https://storage.googleapis.com/liendoan-new/storage/images/logo-liendoancuta-1.webp', 0.3, true)
         //     ->generate($link);
 
         // // Trả về mã QR Code SVG

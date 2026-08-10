@@ -12,7 +12,7 @@
       <div class="row">
         <div class="col-lg-4 col-sm-6 col-xs-12">
           <div class="our-courses-box effectFadeIn">
-            <div class="course-img"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-1-small.webp" alt="Gymfit" class="img-fluid">
+            <div class="course-img"> <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/icon-1-small.webp') }}" alt="Gymfit" class="img-fluid">
             </div>
             <div class="course-content">
               <h2>Khóa học Kettlebells</h2>
@@ -23,7 +23,7 @@
         @for($i=2;$i<13;++$i)
           <div class="col-lg-4 col-sm-6 col-xs-12">
             <div class="our-courses-box effectFadeIn">
-              <div class="course-img"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-{{ $i }}-small.webp" alt="Gymfit" class="img-fluid">
+              <div class="course-img"> <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/icon-'.$i.'-small.webp') }}" alt="Gymfit" class="img-fluid">
               </div>
               <div class="course-content">
                 <h2>Khóa học Weightlifting</h2>

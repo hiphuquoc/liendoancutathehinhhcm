@@ -163,8 +163,7 @@ class Video extends Model
             return null;
         }
 
-        $defaultDomain = config('main_' . env('APP_NAME') . '.google_cloud_storage.default_domain', '');
-        return $defaultDomain . $this->file_cloud;
+        return \App\Helpers\Image::getUrlImageCloud($this->file_cloud);
     }
 
     /**
@@ -176,12 +175,6 @@ class Video extends Model
             return null;
         }
 
-        // Nếu thumbnail là URL đầy đủ, trả về trực tiếp
-        if (filter_var($this->thumbnail, FILTER_VALIDATE_URL)) {
-            return $this->thumbnail;
-        }
-
-        // Nếu là path trên GCS, dùng Image helper để lấy URL
         return \App\Helpers\Image::getUrlImageCloud($this->thumbnail);
     }
 }

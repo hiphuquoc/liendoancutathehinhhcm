@@ -10,6 +10,16 @@ use GuzzleHttp\Client;
 
 class Image {
 
+    /**
+     * Host bucket GCS cũ (virtual-hosted) — rewrite sang GCS_PUBLIC_URL hiện tại.
+     */
+    private static array $legacyCloudHosts = [
+        'https://liendoancutathehinhhcm.storage.googleapis.com/',
+        'http://liendoancutathehinhhcm.storage.googleapis.com/',
+        'https://storage.googleapis.com/liendoancutathehinhhcm/',
+        'http://storage.googleapis.com/liendoancutathehinhhcm/',
+    ];
+
     public static function getActionImageByType($image){
         $arrayAction            = [];
         if(!empty($image)){
@@ -28,16 +38,6 @@ class Image {
     }
 
     public static function streamResizedImage($imageUrl, $width = 300){
-        // // Sử dụng Intervention Image để thay đổi kích thước ảnh từ URL
-        // $resizedImage = I::make($imageUrl)
-        //     ->resize($width, null, function ($constraint) {
-        //         $constraint->aspectRatio();
-        //     })
-        //     ->encode(config('image.extension'));
-
-        // // Stream ảnh về trình duyệt
-        // return response($resizedImage)->header('Content-Type', 'image/jpeg');
-
         // Tạo một phiên làm việc mới với Guzzle
         $client = new Client();
 
@@ -60,34 +60,53 @@ class Image {
         return $resizedImageData;
     }
 
-    public static function getUrlImageCloud($urlImage){
-        $result     = null;
-        if(!empty($urlImage)){
-            // Nếu đã là URL đầy đủ (http/https) thì trả về luôn
-            if (filter_var($urlImage, FILTER_VALIDATE_URL)) {
-                return $urlImage;
-            }
-
-            // Nếu đang ở local -> xử lý path local
-            if (env('APP_ENV') == 'local') {
-                // Fix đường dẫn thừa 'public' do Storage::url() tạo ra với disk local
-                // /storage/public/images/... -> /storage/images/...
-                return str_replace('/storage/public/', '/storage/', $urlImage);
-            }
-
-            /* sử dụng ảnh trong google_cloud_storage */
-            // Xóa dấu / ở đầu để tránh double slash
-            $urlImage = ltrim($urlImage, '/');
-            $result = config('main_'.env('APP_NAME').'.google_cloud_storage.default_domain').$urlImage;
+    /**
+     * Base URL public GCS theo config dự án (.env GCS_PUBLIC_URL).
+     */
+    public static function getCloudDomain(): string
+    {
+        $domain = config('main_'.env('APP_NAME').'.google_cloud_storage.default_domain');
+        if (empty($domain)) {
+            $domain = rtrim((string) config('services.gcs.public_url', ''), '/').'/';
         }
-        return $result;
+        return rtrim((string) $domain, '/').'/';
+    }
+
+    /**
+     * Chuẩn hóa path/URL ảnh về domain GCS hiện tại (đồng bộ bucket mới + rewrite URL cũ).
+     */
+    public static function normalizeCloudUrl(?string $urlImage): ?string
+    {
+        if ($urlImage === null || $urlImage === '') {
+            return null;
+        }
+
+        $domain = self::getCloudDomain();
+
+        foreach (self::$legacyCloudHosts as $legacy) {
+            if (stripos($urlImage, $legacy) === 0) {
+                return $domain.ltrim(substr($urlImage, strlen($legacy)), '/');
+            }
+        }
+
+        if (filter_var($urlImage, FILTER_VALIDATE_URL)) {
+            return $urlImage;
+        }
+
+        // Path local Storage::url() thừa public — chỉ normalize path, vẫn gắn GCS
+        $urlImage = str_replace('/storage/public/', '/storage/', $urlImage);
+
+        return $domain.ltrim($urlImage, '/');
+    }
+
+    public static function getUrlImageCloud($urlImage){
+        return self::normalizeCloudUrl($urlImage);
     }
 
     public static function getUrlImageMiniByUrlImage($urlImage){
         $result     = null;
         if(!empty($urlImage)){
-            /* sử dụng ảnh trong google_cloud_storage */
-            $url = filter_var($urlImage, FILTER_VALIDATE_URL) ? $urlImage : config('main_'.env('APP_NAME').'.google_cloud_storage.default_domain').$urlImage;
+            $url = self::normalizeCloudUrl($urlImage);
             $tmp    = pathinfo($url);
             $result = $tmp['dirname'].'/'.$tmp['filename'].'-mini.'.$tmp['extension'];
         }
@@ -97,8 +116,7 @@ class Image {
     public static function getUrlImageSmallByUrlImage($urlImage){
         $result     = null;
         if(!empty($urlImage)){
-            /* sử dụng ảnh trong google_cloud_storage */
-            $url = filter_var($urlImage, FILTER_VALIDATE_URL) ? $urlImage : config('main_'.env('APP_NAME').'.google_cloud_storage.default_domain').$urlImage;
+            $url = self::normalizeCloudUrl($urlImage);
             $tmp    = pathinfo($url);
             $result = $tmp['dirname'].'/'.$tmp['filename'].'-small.'.$tmp['extension'];
         }
@@ -108,8 +126,7 @@ class Image {
     public static function getUrlImageLargeByUrlImage($urlImage){
         $result     = null;
         if(!empty($urlImage)){
-            /* sử dụng ảnh trong google_cloud_storage */
-            $url = filter_var($urlImage, FILTER_VALIDATE_URL) ? $urlImage : config('main_'.env('APP_NAME').'.google_cloud_storage.default_domain').$urlImage;
+            $url = self::normalizeCloudUrl($urlImage);
             $tmp    = pathinfo($url);
             $result = $tmp['dirname'].'/'.$tmp['filename'].'-large.'.$tmp['extension'];
         }

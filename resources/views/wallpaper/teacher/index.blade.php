@@ -45,7 +45,7 @@
     @include('wallpaper.template.shareSocial')
     <!-- Item Category Grid Box -->
     @include('wallpaper.snippets.banner', [
-        'urlImage' => 'https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/about-bg-img.webp',
+        'urlImage' => \App\Helpers\Image::getUrlImageCloud('storage/images/about-bg-img.webp'),
     ])
     @include('wallpaper.teacher.teacher')
 @endsection

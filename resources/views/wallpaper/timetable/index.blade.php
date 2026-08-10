@@ -47,7 +47,7 @@
     <div class="breadcrumbMobileBox"><!-- dùng để chống nhảy padding - margin so với các trang có breadcrumb --></div>
     <!-- Item Category Grid Box -->
     @include('wallpaper.snippets.banner', [
-        'urlImage' => 'https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/schedule-bg-img.webp',
+        'urlImage' => \App\Helpers\Image::getUrlImageCloud('storage/images/schedule-bg-img.webp'),
     ])
     @include('wallpaper.home.timetable')
 @endsection

@@ -61,7 +61,7 @@
           <div class="why-image-wrapper">
             <div class="deco-blob blob-1"></div>
             <div class="deco-blob blob-2"></div>
-            <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/about-img-2.webp" alt="Tại sao nên chọn chúng tôi?" class="img-fluid img-main" loading="lazy">
+            <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/about-img-2.webp') }}" alt="Tại sao nên chọn chúng tôi?" class="img-fluid img-main" loading="lazy">
           </div>
         </div>
       </div>

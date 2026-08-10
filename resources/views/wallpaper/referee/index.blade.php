@@ -45,7 +45,7 @@
     @include('wallpaper.template.shareSocial')
     <!-- Item Category Grid Box -->
     @include('wallpaper.snippets.banner', [
-        'urlImage' => 'https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/banner-trong-tai.webp',
+        'urlImage' => \App\Helpers\Image::getUrlImageCloud('storage/images/banner-trong-tai.webp'),
     ])
     @include('wallpaper.referee.referee')
 @endsection

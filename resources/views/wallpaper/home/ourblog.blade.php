@@ -44,7 +44,7 @@
                               @if(!empty($blog->seo->image))
                                 <img src="{{ $image }}" alt="{{ $titleBlog }}" title="{{ $titleBlog }}" loading="lazy" />
                               @else
-                                <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/default-news.webp" alt="{{ $titleBlog }}" loading="lazy" />
+                                <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/default-news.webp') }}" alt="{{ $titleBlog }}" loading="lazy" />
                               @endif
                               <div class="img-overlay"></div>
                            </a> 

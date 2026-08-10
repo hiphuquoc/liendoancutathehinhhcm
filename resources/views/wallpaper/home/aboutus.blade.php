@@ -4,10 +4,10 @@
             <!-- Left: Images -->
             <div class="homeAboutUs_images">
                 <div class="homeAboutUs_images_main">
-                    <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/thong-bao-chieu-sinh-khoa-dao-tao-nguoi-huong-dan-tap-luyen-mon-the-hinh-&-fitness-trinh-do-cap-ii-1732632055.webp" alt="Liên đoàn Cử tạ Thể hình TP.HCM" loading="lazy">
+                    <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/thong-bao-chieu-sinh-khoa-dao-tao-nguoi-huong-dan-tap-luyen-mon-the-hinh-&-fitness-trinh-do-cap-ii-1732632055.webp') }}" alt="Liên đoàn Cử tạ Thể hình TP.HCM" loading="lazy">
                 </div>
                 <div class="homeAboutUs_images_sub">
-                    <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/chuc-mung-le-khai-giang-khoa-dao-tao-huong-dan-vien-the-hinh-fitness-122025-1766412670.webp" alt="Đào tạo huấn luyện viên" loading="lazy">
+                    <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/chuc-mung-le-khai-giang-khoa-dao-tao-huong-dan-vien-the-hinh-fitness-122025-1766412670.webp') }}" alt="Đào tạo huấn luyện viên" loading="lazy">
                 </div>
                 <!-- Decorative Elements -->
                 <div class="homeAboutUs_images_badge">

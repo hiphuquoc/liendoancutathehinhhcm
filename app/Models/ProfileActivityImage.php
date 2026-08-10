@@ -24,17 +24,13 @@ class ProfileActivityImage extends Model
     const OWNER_TYPE_ATHLETE = 'athlete_info';
 
     /**
-     * Full URL ảnh (Google Cloud).
+     * Full URL ảnh (Google Cloud) — theo GCS_PUBLIC_URL / config dự án.
      */
     public function getImageUrlAttribute(): string
     {
         if (empty($this->image)) {
             return '';
         }
-        if (str_starts_with($this->image, 'http')) {
-            return $this->image;
-        }
-        $domain = config('main_'.env('APP_NAME').'.google_cloud_storage.default_domain', 'https://liendoancutathehinhhcm.storage.googleapis.com/');
-        return rtrim($domain, '/') . '/' . ltrim($this->image, '/');
+        return (string) \App\Helpers\Image::getUrlImageCloud($this->image);
     }
 }

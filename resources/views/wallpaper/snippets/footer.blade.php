@@ -8,7 +8,7 @@
       <!-- end card section -->
       <div class="row">
         <div class="col-lg-12 col-sm-12 col-xs-12">
-          <div class="footer-logo"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/logo-liendoancuta-white-large.webp" alt="logo liên đoàn cử tạ thể hình TPHCM" class="img-fluid">
+          <div class="footer-logo"> <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/logo-liendoancuta-white-large.webp') }}" alt="logo liên đoàn cử tạ thể hình TPHCM" class="img-fluid">
           </div>
           <div class="footer-nav">
             <ul>

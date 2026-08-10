@@ -4,7 +4,7 @@
         <div class="col-lg-12">
         <div class="title_box">
             <h2>LỢI ÍCH CỦA VIỆC TẬP GYM</h2>
-            {{-- <img class="img-fluid" src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/about-header-line-large.webp"> --}}
+            {{-- <img class="img-fluid" src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/about-header-line-large.webp') }}"> --}}
         </div>
         </div>
     </div>
@@ -18,7 +18,7 @@
             </div>
             <div class="yoga_img">
                 <div class="icon_box">
-                    <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/flash-large.webp" alt="Tăng cường sức khỏe" title="Tăng cường sức khỏe" />
+                    <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/flash-large.webp') }}" alt="Tăng cường sức khỏe" title="Tăng cường sức khỏe" />
                 </div>
             </div>
             </div>
@@ -29,7 +29,7 @@
             </div>
             <div class="yoga_img">
                 <div class="icon_box">
-                    <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/danger-large.webp" alt="Đốt cháy calo tối ưu" title="Đốt cháy calo tối ưu" />
+                    <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/danger-large.webp') }}" alt="Đốt cháy calo tối ưu" title="Đốt cháy calo tối ưu" />
                 </div>
             </div>
             </div>
@@ -40,19 +40,19 @@
             </div>
             <div class="yoga_img">
                 <div class="icon_box">
-                    <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/body-large.webp" alt="Giảm cân hiệu quả" title="Giảm cân hiệu quả" />
+                    <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/body-large.webp') }}" alt="Giảm cân hiệu quả" title="Giảm cân hiệu quả" />
                 </div>
             </div>
             </div>
         </div>
         <div class="first_col2">
-            <div class="yoga_img_box"> <img class="img-fluid" src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/about-img-2.webp"> </div>
+            <div class="yoga_img_box"> <img class="img-fluid" src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/about-img-2.webp') }}"> </div>
         </div>
         <div class="first_col3">
             <div class="yoga_box">
             <div class="yoga_img">
                 <div class="icon_box">
-                    <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/strong-large.webp" alt="Xương chắc, khớp khỏe" title="Xương chắc, khớp khỏe" />
+                    <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/strong-large.webp') }}" alt="Xương chắc, khớp khỏe" title="Xương chắc, khớp khỏe" />
                 </div>
             </div>
             <div class="yoga_con">
@@ -63,7 +63,7 @@
             <div class="yoga_box">
             <div class="yoga_img">
                 <div class="icon_box">
-                    <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/yoga-large.webp" alt="Thư giãn tinh thần" title="Thư giãn tinh thần" />
+                    <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/yoga-large.webp') }}" alt="Thư giãn tinh thần" title="Thư giãn tinh thần" />
                 </div>
             </div>
             <div class="yoga_con">
@@ -74,7 +74,7 @@
             <div class="yoga_box">
             <div class="yoga_img">
                 <div class="icon_box">
-                    <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/height-large.webp" alt="Tăng chiều cao vượt trội" title="Tăng chiều cao vượt trội" />
+                    <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/height-large.webp') }}" alt="Tăng chiều cao vượt trội" title="Tăng chiều cao vượt trội" />
                 </div>
             </div>
             <div class="yoga_con">

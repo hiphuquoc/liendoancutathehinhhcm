@@ -301,7 +301,7 @@ start header banner
 .hero-header-banner-section {
 	position: relative;
 	display: block;
-	background-image: url(https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/sl2.webp);
+	background-image: url(https://storage.googleapis.com/liendoan-new/storage/images/sl2.webp);
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -846,7 +846,7 @@ VIDEO SECTION
 	rgba(0, 163, 225, 0.7),
 	rgba(0, 150, 211, 0.7),
 	rgba(0, 135, 196, 0.7),
-	rgba(0, 111, 170, 0.7)), url(https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/video-bg-img.webp);
+	rgba(0, 111, 170, 0.7)), url(https://storage.googleapis.com/liendoan-new/storage/images/video-bg-img.webp);
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -1061,7 +1061,7 @@ footer {
 	position: relative;
 	display: block;
 	margin: 0px 0;
-	background-image: url(https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/footer-bg-img-fix-large.webp);
+	background-image: url(https://storage.googleapis.com/liendoan-new/storage/images/footer-bg-img-fix-large.webp);
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -1307,7 +1307,7 @@ ABOUT PAGE
 	rgba(0, 163, 225, 0.7),
 	rgba(0, 150, 211, 0.7),
 	rgba(0, 135, 196, 0.7),
-	rgba(0, 111, 170, 0.7)), url(https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/about-img-3.webp);
+	rgba(0, 111, 170, 0.7)), url(https://storage.googleapis.com/liendoan-new/storage/images/about-img-3.webp);
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -1337,20 +1337,20 @@ ABOUT PAGE
 .about-img-1 {
 	width: 100%;
 	height: 100%;
-	background: url(https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/abt2.webp) center center no-repeat;
+	background: url(https://storage.googleapis.com/liendoan-new/storage/images/abt2.webp) center center no-repeat;
 	background-size: 100% auto;
 	border-radius: 50px 0 0 12px;
 }
 .about-img-2 {
 	width: 100%;
 	height: 100%;
-	background: url(https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/t2.webp) center center no-repeat;
+	background: url(https://storage.googleapis.com/liendoan-new/storage/images/t2.webp) center center no-repeat;
 	background-size: auto 100%;
 }
 .about-img-3 {
 	width: 100%;
 	height: 100%;
-	background: url(https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/t1.webp) center center no-repeat;
+	background: url(https://storage.googleapis.com/liendoan-new/storage/images/t1.webp) center center no-repeat;
 	background-size: auto 100%;
 	border-radius: 0 12px 50px 0;
 }
@@ -3051,7 +3051,7 @@ i.fa-clock {
 }
 
 .yoga_bg{
-	background-image: linear-gradient(to right, rgba(0, 173, 239, 0.7), rgba(0, 163, 225, 0.7), rgba(0, 150, 211, 0.7), rgba(0, 135, 196, 0.7), rgba(0, 111, 170, 0.7)), url(https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/about-img-3.webp);
+	background-image: linear-gradient(to right, rgba(0, 173, 239, 0.7), rgba(0, 163, 225, 0.7), rgba(0, 150, 211, 0.7), rgba(0, 135, 196, 0.7), rgba(0, 111, 170, 0.7)), url(https://storage.googleapis.com/liendoan-new/storage/images/about-img-3.webp);
 	position: relative;
 	background-repeat:no-repeat;
 	padding-top: 60px;

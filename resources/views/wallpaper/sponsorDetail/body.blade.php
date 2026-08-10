@@ -3,7 +3,7 @@
     <div class="layoutTeacherDetail_info">
         <!-- ảnh đại diện -->
         <div class="teacherDetailImg">
-          <img class="lazyload" src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/phong-tap-mau-mini.webp" data-src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/phong-tap-mau-large.webp" alt="Gym Center Q3" title="Gym Center Q3" loading="lazy" style="">
+          <img class="lazyload" src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/phong-tap-mau-mini.webp') }}" data-src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/phong-tap-mau-large.webp') }}" alt="Gym Center Q3" title="Gym Center Q3" loading="lazy" style="">
 
           <div class="sponsor_sign">Đối tác kim cương</div>
         </div>
@@ -20,7 +20,7 @@
         <!-- thông tin header -->
         <div class="teacherInfoBox2">
           <div class="teacherInfoBox2_image">
-              <img class="lazyload" src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/phong-tap-mau-mini.webp" data-src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/phong-tap-mau-large.webp" alt="Gym Center Q3" title="Gym Center Q3" loading="lazy" style="">
+              <img class="lazyload" src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/phong-tap-mau-mini.webp') }}" data-src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/phong-tap-mau-large.webp') }}" alt="Gym Center Q3" title="Gym Center Q3" loading="lazy" style="">
               <div class="sponsor_sign">Đối tác kim cương</div>
           </div>
           <div class="teacherInfoBox2_info">

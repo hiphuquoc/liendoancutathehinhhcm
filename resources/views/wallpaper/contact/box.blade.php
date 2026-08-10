@@ -11,7 +11,7 @@
       <div class="row justify-content-center">
         <div class="col-lg-4 col-sm-10 col-xs-12">
           <div class="contact-box">
-            <div class="contact-box-icons"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-local.webp" alt="Gymfit" class="img-fluid"> </div>
+            <div class="contact-box-icons"> <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/icon-local.webp') }}" alt="Gymfit" class="img-fluid"> </div>
             <div class="contact-card">
               <h3>219 Lý Thường Kiệt, Phường 15, Quận 11, TP. Hồ Chí Minh</h3>
             </div>
@@ -19,7 +19,7 @@
         </div>
         <div class="col-lg-4 col-sm-10 col-xs-12">
           <div class="contact-box">
-            <div class="contact-box-icons"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-phone.webp" alt="Gymfit" class="img-fluid"> </div>
+            <div class="contact-box-icons"> <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/icon-phone.webp') }}" alt="Gymfit" class="img-fluid"> </div>
             <div class="contact-card">
               <h3>0917 478 720</h3>
             </div>
@@ -27,7 +27,7 @@
         </div>
         <div class="col-lg-4 col-sm-10 col-xs-12">
           <div class="contact-box">
-            <div class="contact-box-icons"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-email.webp" alt="Gymfit" class="img-fluid">
+            <div class="contact-box-icons"> <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/icon-email.webp') }}" alt="Gymfit" class="img-fluid">
             </div>
             <div class="contact-card">
               <h3>info@liendoancutathehinhhcm.com.vn</h3>

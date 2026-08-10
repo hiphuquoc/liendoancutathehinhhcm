@@ -25,8 +25,8 @@
                         
                         <a href="/doi-tac-nha-tai-tro/test" class="img-link">
                             <img class="lazyload" 
-                                 src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/phong-tap-mau-mini.webp" 
-                                 data-src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/phong-tap-mau-large.webp" 
+                                 src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/phong-tap-mau-mini.webp') }}" 
+                                 data-src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/phong-tap-mau-large.webp') }}" 
                                  alt="Gym Center Q3" 
                                  loading="lazy">
                         </a>

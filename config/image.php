@@ -1,7 +1,10 @@
 <?php 
 
 return [
-    'default'               => 'https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/image-default-660x660.webp',
+    'default'               => rtrim((string) env(
+            'GCS_PUBLIC_URL',
+            'https://storage.googleapis.com/'.env('GCS_BUCKET', 'liendoan-new')
+        ), '/').'/storage/images/image-default-660x660.webp',
     'folder_upload'         => 'public/images/upload/',
     'extension'             => 'webp',
     'mine_type'             => 'image/webp', /* extension mặc định dùng webp nên mine_type mặc định là này . */

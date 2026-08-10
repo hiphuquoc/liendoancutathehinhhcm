@@ -32,7 +32,7 @@
               <div class=" gallery_product blog-column-1 filter hdpe">
                 <div class="blog-img-1">
                   <div class=" nature people">
-                    <div class="content"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-1-small.webp" alt="Gymfit" class="img-fluid">
+                    <div class="content"> <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/icon-1-small.webp') }}" alt="Gymfit" class="img-fluid">
                       <div class="time">
                         <p>6:00am - 8:00am</p>
                       </div>
@@ -45,7 +45,7 @@
               <div class="gallery_product blog-column-2 filter sprinkle">
                 <div class="blog-img-2">
                   <div class=" nature people">
-                    <div class="content"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-2-small.webp" alt="Gymfit" class="img-fluid">
+                    <div class="content"> <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/icon-2-small.webp') }}" alt="Gymfit" class="img-fluid">
                       <div class="time">
                         <p>8:00am - 10:00am</p>
                       </div>
@@ -58,7 +58,7 @@
               <div class="gallery_product blog-column-3 filter sprinkle">
                 <div class="blog-img-3">
                   <div class=" nature cars">
-                    <div class="content"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-3-small.webp" alt="Gymfit" class="img-fluid">
+                    <div class="content"> <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/icon-3-small.webp') }}" alt="Gymfit" class="img-fluid">
                       <div class="time">
                         <p>10:00am - 11:00am</p>
                       </div>
@@ -71,7 +71,7 @@
               <div class="gallery_product blog-column-4 filter hdpe">
                 <div class="blog-img-4">
                   <div class=" cars">
-                    <div class="content"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-4-small.webp" alt="Gymfit" class="img-fluid">
+                    <div class="content"> <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/icon-4-small.webp') }}" alt="Gymfit" class="img-fluid">
                       <div class="time">
                         <p>12:00pm - 1:00pm</p>
                       </div>
@@ -84,7 +84,7 @@
               <div class="gallery_product blog-column-5">
                 <div class="blog-img-5 filter spray">
                   <div class=" cars">
-                    <div class="content"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-5-small.webp" alt="Gymfit" class="img-fluid">
+                    <div class="content"> <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/icon-5-small.webp') }}" alt="Gymfit" class="img-fluid">
                       <div class="time">
                         <p>4:00pm - 5:00pm</p>
                       </div>
@@ -97,7 +97,7 @@
               <div class="gallery_product blog-column-5">
                 <div class="blog-img-5 filter spray">
                   <div class="cars people">
-                    <div class="content"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-6-small.webp" alt="Gymfit" class="img-fluid">
+                    <div class="content"> <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/icon-6-small.webp') }}" alt="Gymfit" class="img-fluid">
                       <div class="time">
                         <p>6:00pm - 7:00pm</p>
                       </div>
@@ -110,7 +110,7 @@
               <div class="gallery_product blog-column-5">
                 <div class="blog-img-5 filter spray">
                   <div class="nature cars">
-                    <div class="content"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-7-small.webp" alt="Gymfit" class="img-fluid">
+                    <div class="content"> <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/icon-7-small.webp') }}" alt="Gymfit" class="img-fluid">
                       <div class="time">
                         <p>7:00pm - 8:00pm</p>
                       </div>
@@ -123,7 +123,7 @@
               <div class="gallery_product blog-column-5">
                 <div class="blog-img-5 filter spray">
                   <div class=" people">
-                    <div class="content"> <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-8-small.webp" alt="Gymfit"
+                    <div class="content"> <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/icon-8-small.webp') }}" alt="Gymfit"
                         class="img-fluid">
                       <div class="time">
                         <p>8:00pm - 9:00pm</p>

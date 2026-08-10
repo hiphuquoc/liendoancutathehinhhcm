@@ -20,7 +20,7 @@
                  <div class="testimonials-box">
                     <div class="testimonials-header">
                        <div class="testimonials-img">
-                          <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-empty-avatar.webp" alt="Nguyễn Văn Hưng">
+                          <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/icon-empty-avatar.webp') }}" alt="Nguyễn Văn Hưng">
                           <div class="img-back"></div>
                        </div>
                        <div class="testimonials-content">
@@ -40,7 +40,7 @@
                  <div class="testimonials-box">
                     <div class="testimonials-header">
                        <div class="testimonials-img">
-                          <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-empty-avatar.webp" alt="Trần Thu Trang">
+                          <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/icon-empty-avatar.webp') }}" alt="Trần Thu Trang">
                           <div class="img-back"></div>
                        </div>
                        <div class="testimonials-content">
@@ -60,7 +60,7 @@
                  <div class="testimonials-box">
                     <div class="testimonials-header">
                        <div class="testimonials-img">
-                          <img src="https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/icon-empty-avatar.webp" alt="Lê Minh Hoàng">
+                          <img src="{{ \App\Helpers\Image::getUrlImageCloud('storage/images/icon-empty-avatar.webp') }}" alt="Lê Minh Hoàng">
                           <div class="img-back"></div>
                        </div>
                        <div class="testimonials-content">

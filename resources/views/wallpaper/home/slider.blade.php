@@ -22,8 +22,8 @@
         })->toArray()
         : [
             [
-                'image' => 'https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/background-slider-1.webp',
-                'image_mobile' => 'https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/background-slider-1.webp',
+                'image' => \App\Helpers\Image::getUrlImageCloud('storage/images/background-slider-1.webp'),
+                'image_mobile' => \App\Helpers\Image::getUrlImageCloud('storage/images/background-slider-1.webp'),
                 'title' => null,
                 'description' => null,
                 'position' => 'left',

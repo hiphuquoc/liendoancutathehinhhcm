@@ -7,12 +7,10 @@
                 <div class="sidebar-card profile-card">
                     <div class="profile-image-wrapper">
                         @php
-                            $imageUrl = $item->seo->image ?? $item->image;
-                            if (!empty($imageUrl) && !str_starts_with($imageUrl, 'http')) {
-                                $avatar = 'https://liendoancutathehinhhcm.storage.googleapis.com/' . $imageUrl;
-                            } else {
-                                $avatar = $imageUrl ?? 'https://via.placeholder.com/300x400';
-                            }
+                            $imageUrl = $item->seo->image ?? $item->image ?? null;
+                            $avatar = !empty($imageUrl)
+                                ? \App\Helpers\Image::getUrlImageCloud($imageUrl)
+                                : config('image.default');
                         @endphp
                         <img src="{{ $avatar }}" alt="{{ $item->name ?? 'Trainer' }}" class="profile-image">
                         <div class="status-badge"><i class="fa-solid fa-circle-check"></i> Verified Coach</div>

@@ -23,7 +23,7 @@
     @include('wallpaper.template.shareSocial')
     <div class="breadcrumbMobileBox" aria-hidden="true"></div>
     @include('wallpaper.snippets.banner', [
-        'urlImage' => 'https://liendoancutathehinhhcm.storage.googleapis.com/storage/images/blog-bg-img.webp',
+        'urlImage' => \App\Helpers\Image::getUrlImageCloud('storage/images/blog-bg-img.webp'),
     ])
 
     @php

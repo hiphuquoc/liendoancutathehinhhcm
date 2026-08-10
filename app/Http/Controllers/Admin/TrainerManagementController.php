@@ -16,6 +16,7 @@ use App\Models\User;
 use App\Models\UserRole;
 use App\Services\BuildInsertUpdateModel;
 use App\Http\Requests\TrainerRequest;
+use App\Support\TrainerDraftProfile;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class TrainerManagementController extends Controller
@@ -168,62 +169,8 @@ class TrainerManagementController extends Controller
                 throw new \Exception('Không tìm thấy trang parent "huan-luyen-vien"');
             }
 
-            // Lấy thông tin mẫu từ một trainer để copy achievements, skills, etc.
-            $trainerExample = Trainer::whereHas('seo', function ($query) {
-                $query->where('slug', 'cao-quoc-viet');
-            })
-                ->with('achievements', 'skills', 'experiences.contents', 'degrees.contents')
-                ->first();
-
-            $dataAchievements = [];
-            $dataSkills = [];
-            $dataExperiences = [];
-            $dataDegrees = [];
-
-            if ($trainerExample) {
-                foreach ($trainerExample->achievements as $achi) {
-                    if (!empty($achi->content)) {
-                        $dataAchievements[] = ['content' => $achi->content];
-                    }
-                }
-
-                foreach ($trainerExample->skills as $skill) {
-                    if (!empty($skill->skill)) {
-                        $dataSkills[] = [
-                            'percent' => $skill->percent,
-                            'skill' => $skill->skill,
-                        ];
-                    }
-                }
-
-                foreach ($trainerExample->experiences as $exper) {
-                    if (!empty($exper->title) && !empty($exper->company)) {
-                        $content = [];
-                        foreach ($exper->contents as $t) {
-                            $content[] = $t->content;
-                        }
-                        $dataExperiences[] = [
-                            'title' => $exper->title,
-                            'company' => $exper->company,
-                            'content' => implode("\r\n", $content),
-                        ];
-                    }
-                }
-
-                foreach ($trainerExample->degrees as $degree) {
-                    if (!empty($degree->title) && !empty($degree->school)) {
-                        $content = [];
-                        foreach ($degree->contents as $t) {
-                            $content[] = $t->content;
-                        }
-                        $dataDegrees[] = [
-                            'title' => $degree->title,
-                            'school' => $degree->school,
-                            'content' => implode("\r\n", $content),
-                        ];
-                    }
-                }
-            }
+            // Hồ sơ nháp đầy đủ (đánh dấu [NHÁP]) — không copy từ HLV thật để tránh trùng dữ liệu
+            $draftProfile = TrainerDraftProfile::forImport();
 
             // Đọc tất cả dữ liệu từ Excel trước để kiểm tra trùng
             // Cấu trúc: Cột 1 (STT), Cột 2 (Họ và Tên - BẮT BUỘC), Cột 3 (Ngày tháng năm sinh - tùy chọn), 
@@ -444,9 +391,9 @@ class TrainerManagementController extends Controller
                     $trainerCode = $this->generateTrainerCode($month, $year, $orderNumber);
                     $orderNumber++;
 
-                    // Tạo SEO data
+                    // Tạo SEO data + hồ sơ nháp đầy đủ các cấp
                     $seoTitle = "Huấn luyện viên {$nameCover} của Liên Đoàn Cử Tạ - Thể Hình HCM | liendoancutathehinhhcm";
-                    $seoData = [
+                    $seoData = array_merge($draftProfile, [
                         'seo_id' => 0,
                         'seo_id_vi' => 0,
                         'trainer_info_id' => 0,
@@ -457,18 +404,11 @@ class TrainerManagementController extends Controller
                         'rating_aggregate_star' => '4.7',
                         'title' => $nameCover,
                         'name' => $nameCover,
-                        'position' => 'Huấn luyện viên cá nhân (PT)',
                         'phone' => $phone,
                         'email' => $email,
                         'seo_title' => $seoTitle,
-                        'seo_description' => 'Viết 1 đoạn giới thiệu về bạn!',
-                        'description' => 'Viết 1 đoạn giới thiệu về bạn!',
                         'slug' => $slug,
-                        'repeater_trainer_achievement' => $dataAchievements,
-                        'repeater_trainer_skill' => $dataSkills,
-                        'repeater_trainer_experience' => $dataExperiences,
-                        'repeater_trainer_degree' => $dataDegrees,
-                    ];
+                    ]);
 
                     // Tạo request object để sử dụng TrainerRequest validation
                     $trainerRequest = TrainerRequest::create(

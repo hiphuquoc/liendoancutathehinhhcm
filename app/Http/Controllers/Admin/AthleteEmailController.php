@@ -138,7 +138,12 @@ class AthleteEmailController extends Controller
                 if (empty($athlete->email) || empty($athlete->user)) {
                     continue;
                 }
-                SendAthleteAccountEmailJob::dispatch($athlete->id);
+                // Tự động tạo mật khẩu mới ngẫu nhiên, lưu DB và gửi qua email cho người dùng
+                $newPassword = \Illuminate\Support\Str::random(8);
+                $athlete->user->password = \Illuminate\Support\Facades\Hash::make($newPassword);
+                $athlete->user->save();
+
+                SendAthleteAccountEmailJob::dispatch($athlete->id, $newPassword);
                 $queuedCount++;
             }
 
@@ -216,7 +221,8 @@ class AthleteEmailController extends Controller
                 $athlete->athlete_code ?? '',
                 $profileUrl,
                 url('/he-thong'),
-                route('admin.account.athleteProfile')
+                route('admin.account.athleteProfile'),
+                '••••••••'
             ));
 
             return response()->json([

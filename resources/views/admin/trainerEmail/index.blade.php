@@ -514,6 +514,7 @@
             formData.append('_token', csrf);
             formData.append('trainer_id', trainerTestEmailModalTrainerId);
             formData.append('test_email', email);
+            
 
             const response = await fetch(sendUrl, {
                 method: 'POST',

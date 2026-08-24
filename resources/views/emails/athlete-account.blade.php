@@ -176,11 +176,11 @@
                             <td class="value">{{ $username }}</td>
                         </tr>
                         <tr>
-                            <td class="label">Mật khẩu mặc định</td>
-                            <td class="value">{{ $username }}</td>
+                            <td class="label">Mật khẩu đăng nhập</td>
+                            <td class="value"><span style="font-family: monospace; font-size: 15px; font-weight: 700; color: #0174be; background: #e8f4fc; padding: 3px 8px; border-radius: 4px;">{{ $password ?? $username }}</span></td>
                         </tr>
                     </table>
-                    <div style="background: #fefce8; border: 1px solid #fef08a; border-radius: 6px; padding: 12px 14px; font-size: 13px; color: #854d0e; margin-top: 12px; line-height: 1.5;"><strong>📌 Lưu ý quan trọng về mật khẩu:</strong><br>- Mật khẩu khởi tạo ban đầu là: <strong>{{ $username }}</strong> (áp dụng cho lần đầu đăng nhập).<br>- Nếu bạn <strong>đã từng đổi mật khẩu</strong> hoặc <strong>quên mật khẩu</strong>: Vui lòng truy cập <a href="{{ $loginUrl }}" style="color: #2563eb; font-weight: 600;">Trang đăng nhập</a> và bấm vào <strong>&quot;Quên mật khẩu?&quot;</strong> để nhận liên kết đặt lại mật khẩu mới qua email này.</div>
+                    <p class="note-inline" style="color: #059669; font-weight: 500;">✓ Mật khẩu trên là mật khẩu đăng nhập chính xác hiện tại của bạn. Vui lòng đổi lại mật khẩu sau khi đăng nhập để bảo mật.</p>
                 </div>
 
                 <div class="section">
@@ -188,7 +188,7 @@
                     <ol class="steps-list">
                         <li>Mở link đăng nhập: <a href="{{ $loginUrl }}" class="link-url">{{ $loginUrl }}</a></li>
                         <li>Nhập <strong>Tên đăng nhập</strong> hoặc <strong>Email</strong>: <strong>{{ $username }}</strong></li>
-                        <li>Nhập <strong>Mật khẩu</strong>: <strong>{{ $username }}</strong> (mật khẩu mặc định)</li>
+                        <li>Nhập <strong>Mật khẩu</strong>: <strong>{{ $password ?? $username }}</strong></li>
                         <li>Bấm <strong>Đăng nhập</strong></li>
                     </ol>
                     <div class="link-block">

@@ -139,7 +139,12 @@ class TrainerEmailController extends Controller
                 if (empty($trainer->email) || empty($trainer->user)) {
                     continue;
                 }
-                SendTrainerAccountEmailJob::dispatch($trainer->id);
+                // Tự động tạo mật khẩu mới ngẫu nhiên, lưu DB và gửi qua email cho người dùng
+                $newPassword = \Illuminate\Support\Str::random(8);
+                $trainer->user->password = \Illuminate\Support\Facades\Hash::make($newPassword);
+                $trainer->user->save();
+
+                SendTrainerAccountEmailJob::dispatch($trainer->id, $newPassword);
                 $queuedCount++;
             }
 
@@ -217,7 +222,8 @@ class TrainerEmailController extends Controller
                 $trainer->trainer_code ?? '',
                 $profileUrl,
                 url('/he-thong'),
-                route('admin.account.trainerProfile')
+                route('admin.account.trainerProfile'),
+                '••••••••'
             ));
 
             return response()->json([

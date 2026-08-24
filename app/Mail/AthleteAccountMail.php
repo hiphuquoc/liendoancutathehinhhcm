@@ -24,7 +24,9 @@ class AthleteAccountMail extends Mailable
 
     public $profileEditUrl;
 
-    public function __construct($athleteName, $email, $username, $athleteCode, $profileUrl, $loginUrl, $profileEditUrl)
+    public $password;
+
+    public function __construct($athleteName, $email, $username, $athleteCode, $profileUrl, $loginUrl, $profileEditUrl, $password = null)
     {
         $this->athleteName = $athleteName;
         $this->email = $email;
@@ -33,6 +35,7 @@ class AthleteAccountMail extends Mailable
         $this->profileUrl = $profileUrl;
         $this->loginUrl = $loginUrl;
         $this->profileEditUrl = $profileEditUrl;
+        $this->password = $password ?? $username;
     }
 
     public function build()
@@ -47,6 +50,7 @@ class AthleteAccountMail extends Mailable
                 'profileUrl' => $this->profileUrl,
                 'loginUrl' => $this->loginUrl,
                 'profileEditUrl' => $this->profileEditUrl,
+                'password' => $this->password,
             ]);
     }
 }

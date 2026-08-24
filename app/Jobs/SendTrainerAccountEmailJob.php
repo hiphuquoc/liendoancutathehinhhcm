@@ -19,6 +19,7 @@ class SendTrainerAccountEmailJob implements ShouldQueue
 
     /** @var int */
     protected $trainerId;
+    protected $password;
 
     /** Số lần thử lại khi job thất bại */
     public $tries = 3;
@@ -32,9 +33,10 @@ class SendTrainerAccountEmailJob implements ShouldQueue
      * @param int $trainerId
      * @return void
      */
-    public function __construct(int $trainerId)
+    public function __construct(int $trainerId, ?string $password = null)
     {
         $this->trainerId = $trainerId;
+        $this->password = $password;
         $this->onQueue(config('queue.connections.' . config('queue.default') . '.queue', 'default'));
     }
 
@@ -74,7 +76,8 @@ class SendTrainerAccountEmailJob implements ShouldQueue
             $trainer->trainer_code ?? '',
             $profileUrl,
             url('/he-thong'),
-            route('admin.account.trainerProfile')
+            route('admin.account.trainerProfile'),
+            $this->password
         ));
     }
 

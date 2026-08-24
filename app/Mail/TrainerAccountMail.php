@@ -17,13 +17,14 @@ class TrainerAccountMail extends Mailable
     public $profileUrl;
     public $loginUrl;
     public $profileEditUrl;
+    public $password;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($trainerName, $email, $username, $trainerCode, $profileUrl, $loginUrl, $profileEditUrl)
+    public function __construct($trainerName, $email, $username, $trainerCode, $profileUrl, $loginUrl, $profileEditUrl, $password = null)
     {
         $this->trainerName = $trainerName;
         $this->email = $email;
@@ -32,6 +33,7 @@ class TrainerAccountMail extends Mailable
         $this->profileUrl = $profileUrl;
         $this->loginUrl = $loginUrl;
         $this->profileEditUrl = $profileEditUrl;
+        $this->password = $password ?? $username;
     }
 
     /**
@@ -51,6 +53,7 @@ class TrainerAccountMail extends Mailable
                         'profileUrl' => $this->profileUrl,
                         'loginUrl' => $this->loginUrl,
                         'profileEditUrl' => $this->profileEditUrl,
+                        'password' => $this->password,
                     ]);
     }
 }

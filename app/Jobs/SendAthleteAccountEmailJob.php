@@ -17,14 +17,16 @@ class SendAthleteAccountEmailJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $athleteId;
+    protected $password;
 
     public $tries = 3;
 
     public $backoff = 60;
 
-    public function __construct(int $athleteId)
+    public function __construct(int $athleteId, ?string $password = null)
     {
         $this->athleteId = $athleteId;
+        $this->password = $password;
         $this->onQueue(config('queue.connections.'.config('queue.default').'.queue', 'default'));
     }
 
@@ -60,7 +62,8 @@ class SendAthleteAccountEmailJob implements ShouldQueue
             $athlete->athlete_code ?? '',
             $profileUrl,
             url('/he-thong'),
-            route('admin.account.athleteProfile')
+            route('admin.account.athleteProfile'),
+            $this->password
         ));
     }
 

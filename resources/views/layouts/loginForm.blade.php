@@ -327,6 +327,122 @@
             height: 20px;
         }
         
+        .formGroup_forgot {
+            font-size: 0.8125rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.15s;
+        }
+        
+        .formGroup_forgot:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        /* Modal Quên mật khẩu */
+        .modalOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        
+        .modalOverlay.active {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .modalBox {
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            width: 100%;
+            max-width: 420px;
+            overflow: hidden;
+            transform: scale(0.95);
+            transition: transform 0.2s ease;
+        }
+        
+        .modalOverlay.active .modalBox {
+            transform: scale(1);
+        }
+        
+        .modalHeader {
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--gray-100);
+            background: var(--gray-50);
+        }
+        
+        .modalHeader_title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .modalHeader_title svg {
+            width: 20px;
+            height: 20px;
+            color: var(--primary);
+        }
+        
+        .modalClose {
+            background: none;
+            border: none;
+            color: var(--gray-400);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .modalClose:hover {
+            color: var(--gray-700);
+            background: var(--gray-200);
+        }
+        
+        .modalBody {
+            padding: 1.5rem;
+        }
+        
+        .modalBody_desc {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            line-height: 1.45;
+            margin-bottom: 1.25rem;
+        }
+        
+        .modalAlert {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            display: none;
+            line-height: 1.4;
+        }
+        
+        .modalAlert.show { display: block; }
+        .modalAlert--error { background: #fef2f2; border: 1px solid #fee2e2; color: var(--danger); }
+        .modalAlert--success { background: #f0fdf4; border: 1px solid #dcfce7; color: var(--success); }
+
         /* Remember Me */
         .formGroup_remember {
             display: flex;
@@ -586,7 +702,7 @@
                     </svg>
                 </div>
                 <h1 class="loginCard_header_title">Đăng nhập Quản trị</h1>
-                <p class="loginCard_header_subtitle">Chào mừng bạn quay trở lại! Vui lòng đăng nhập để tiếp tục.</p>
+                <p class="loginCard_header_subtitle">Hệ thống quản lý HLV - VĐV - Trọng tài Liên Đoàn</p>
             </div>
             
             {{-- Body --}}
@@ -626,6 +742,7 @@
                     <div class="formGroup">
                         <label class="formGroup_label">
                             <span>Mật khẩu</span>
+                            <a href="javascript:void(0)" class="formGroup_forgot" onclick="openForgotModal()">Quên mật khẩu?</a>
                         </label>
                         <div class="formGroup_input">
                             <input type="password" 
@@ -829,6 +946,91 @@
             });
         });
         
+                // Modal Forgot Password Functions
+        function openForgotModal() {
+            const modal = document.getElementById('forgotModal');
+            const currentEmail = document.getElementById('email').value.trim();
+            const forgotEmailInput = document.getElementById('forgotEmail');
+            
+            if (currentEmail && currentEmail.includes('@')) {
+                forgotEmailInput.value = currentEmail;
+            }
+            
+            modal.classList.add('active');
+            hideModalAlert();
+            setTimeout(() => forgotEmailInput.focus(), 100);
+        }
+
+        function closeForgotModal() {
+            document.getElementById('forgotModal').classList.remove('active');
+        }
+
+        function handleModalOverlayClick(e) {
+            if (e.target.id === 'forgotModal') {
+                closeForgotModal();
+            }
+        }
+
+        function showModalAlert(message, type = 'error') {
+            const box = document.getElementById('modalAlertBox');
+            box.className = 'modalAlert modalAlert--' + type + ' show';
+            box.textContent = message;
+        }
+
+        function hideModalAlert() {
+            document.getElementById('modalAlertBox').classList.remove('show');
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeForgotModal();
+            }
+        });
+
+        document.getElementById('forgotPasswordForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            hideModalAlert();
+
+            const email = document.getElementById('forgotEmail').value.trim();
+            if (!email) {
+                showModalAlert('Vui lòng nhập địa chỉ email.');
+                return;
+            }
+
+            const btn = document.getElementById('forgotSubmitBtn');
+            btn.classList.add('loading');
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('{{ route("admin.forgotPassword") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ email: email })
+                });
+
+                const data = await response.json();
+                btn.classList.remove('loading');
+                btn.disabled = false;
+
+                if (data.success) {
+                    showModalAlert(data.message, 'success');
+                    setTimeout(() => {
+                        closeForgotModal();
+                    }, 4000);
+                } else {
+                    showModalAlert(data.message || 'Có lỗi xảy ra, vui lòng thử lại sau.', 'error');
+                }
+            } catch (err) {
+                btn.classList.remove('loading');
+                btn.disabled = false;
+                showModalAlert('Lỗi kết nối máy chủ. Vui lòng kiểm tra lại mạng hoặc thử lại sau.', 'error');
+            }
+        });
+
         // Auto-focus email input
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('email').focus();
@@ -848,5 +1050,54 @@
             });
         });
     </script>
+    {{-- Modal Quên Mật Khẩu --}}
+    <div id="forgotModal" class="modalOverlay" onclick="handleModalOverlayClick(event)">
+        <div class="modalBox">
+            <div class="modalHeader">
+                <div class="modalHeader_title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                    </svg>
+                    <span>Quên mật khẩu</span>
+                </div>
+                <button type="button" class="modalClose" onclick="closeForgotModal()" aria-label="Đóng">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                        <path d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modalBody">
+                <p class="modalBody_desc">
+                    Nhập địa chỉ <strong>Email</strong> liên kết với tài khoản của bạn. Hệ thống sẽ gửi liên kết bảo mật để bạn tạo mật khẩu mới.
+                </p>
+
+                <div id="modalAlertBox" class="modalAlert modalAlert--error"></div>
+
+                <form id="forgotPasswordForm">
+                    @csrf
+                    <div class="formGroup">
+                        <label class="formGroup_label">Email tài khoản</label>
+                        <div class="formGroup_input">
+                            <input type="email" id="forgotEmail" name="email" placeholder="vidu@gmail.com" required autocomplete="email">
+                            <span class="formGroup_input_icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submitBtn" id="forgotSubmitBtn">
+                        <span class="submitBtn_text">Gửi link đặt lại mật khẩu</span>
+                        <span class="submitBtn_loading">
+                            <span class="spinner"></span>
+                            Đang gửi email...
+                        </span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>

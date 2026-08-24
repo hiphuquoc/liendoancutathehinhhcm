@@ -180,7 +180,7 @@
                             <td class="value">{{ $username }}</td>
                         </tr>
                     </table>
-                    <p class="note-inline">Vui lòng đổi mật khẩu ngay sau lần đăng nhập đầu tiên.</p>
+                    <div style="background: #fefce8; border: 1px solid #fef08a; border-radius: 6px; padding: 12px 14px; font-size: 13px; color: #854d0e; margin-top: 12px; line-height: 1.5;"><strong>📌 Lưu ý quan trọng về mật khẩu:</strong><br>- Mật khẩu khởi tạo ban đầu là: <strong>{{ $username }}</strong> (áp dụng cho lần đầu đăng nhập).<br>- Nếu bạn <strong>đã từng đổi mật khẩu</strong> hoặc <strong>quên mật khẩu</strong>: Vui lòng truy cập <a href="{{ $loginUrl }}" style="color: #2563eb; font-weight: 600;">Trang đăng nhập</a> và bấm vào <strong>&quot;Quên mật khẩu?&quot;</strong> để nhận liên kết đặt lại mật khẩu mới qua email này.</div>
                 </div>
 
                 <div class="section">

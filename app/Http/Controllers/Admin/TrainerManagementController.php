@@ -17,6 +17,8 @@ use App\Models\UserRole;
 use App\Services\BuildInsertUpdateModel;
 use App\Http\Requests\TrainerRequest;
 use App\Support\TrainerDraftProfile;
+use App\Support\PersonnelImportOrderAllocator;
+use App\Services\ProfileDeletionService;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class TrainerManagementController extends Controller
@@ -184,7 +186,8 @@ class TrainerManagementController extends Controller
                     $cells[] = $cell->getCalculatedValue();
                 }
 
-                // Cột 1: STT (index 0) - bỏ qua
+                // Cột 1: STT (index 0) — dùng cho trainer_code; trống thì hệ thống sinh số
+                $fileStt = PersonnelImportOrderAllocator::parseFileStt($cells[0] ?? null);
                 // Cột 2: Họ và Tên (BẮT BUỘC) - index 1
                 $name = trim($cells[1] ?? '');
                 // Cột 3: Ngày tháng năm sinh (tùy chọn) - index 2
@@ -201,6 +204,7 @@ class TrainerManagementController extends Controller
                 // Lưu tất cả dữ liệu, kể cả trường hợp thiếu name/email để xử lý lỗi sau
                 $trainersData[] = [
                     'row' => $rowIndex,
+                    'stt' => $fileStt,
                     'name' => $name,
                     'name_formatted' => !empty($name) ? mb_convert_case($name, MB_CASE_TITLE, 'UTF-8') : '',
                     'dob' => $dob, // Có thể trống
@@ -293,8 +297,11 @@ class TrainerManagementController extends Controller
             $duplicateCount = 0;
             $errorCount = 0;
             
-            // Lấy số thứ tự tiếp theo từ database (đếm tiếp từ số cuối cùng của tháng/năm)
-            $orderNumber = $this->getNextOrderNumber($month, $year);
+            // STT: ưu tiên cột 1 trong file; chỉ sinh số khi dòng không có STT.
+            // Dòng trùng/lỗi không chiếm số — tránh đôn STT các hồ sơ sau.
+            $existingCodes = Trainer::where('trainer_code', 'LIKE', "%.T{$month}.{$year}/HLV-HWBF")
+                ->pluck('trainer_code');
+            $orderAllocator = PersonnelImportOrderAllocator::fromExistingCodes($existingCodes);
 
             // Lấy danh sách slug hiện có để kiểm tra trùng
             $existingSlugs = Seo::where('type', 'trainer_info')
@@ -339,10 +346,6 @@ class TrainerManagementController extends Controller
 
                 // Format tên: viết hoa chữ cái đầu mỗi từ (hỗ trợ Unicode/tiếng Việt)
                 $nameCover = mb_convert_case($name, MB_CASE_TITLE, 'UTF-8');
-                
-                $baseSlug = Charactor::convertStrToUrl($nameCover);
-                $slug = $this->generateUniqueSlug($baseSlug, $existingSlugs);
-                $existingSlugs[] = $slug; // Thêm vào danh sách để tránh trùng trong cùng batch
 
                 // Kiểm tra trùng
                 $isDuplicate = false;
@@ -379,17 +382,38 @@ class TrainerManagementController extends Controller
                         'phone' => $phone ?: 'N/A',
                         'email' => $email,
                         'trainer_code' => null,
-                        'slug' => $slug,
+                        'slug' => null,
                         'reasons' => $duplicateReasons,
                         'qr_code' => null,
                     ];
                     continue;
                 }
 
+                $baseSlug = Charactor::convertStrToUrl($nameCover);
+                $slug = $this->generateUniqueSlug($baseSlug, $existingSlugs);
+                $existingSlugs[] = $slug;
+
+                $fileStt = $trainerData['stt'] ?? null;
+                if ($fileStt !== null && $orderAllocator->isUsed($fileStt)) {
+                    $errorCount++;
+                    $results[] = [
+                        'status' => 'error',
+                        'name' => $nameCover,
+                        'phone' => $phone ?: 'N/A',
+                        'email' => $email,
+                        'trainer_code' => null,
+                        'slug' => $slug,
+                        'error' => "STT {$fileStt} đã được dùng cho mã HLV khóa T{$month}.{$year}",
+                        'qr_code' => null,
+                    ];
+                    continue;
+                }
+
                 // Tạo trainer
+                $allocatedOrder = null;
                 try {
-                    $trainerCode = $this->generateTrainerCode($month, $year, $orderNumber);
-                    $orderNumber++;
+                    $allocatedOrder = $orderAllocator->allocate($fileStt);
+                    $trainerCode = $this->generateTrainerCode($month, $year, $allocatedOrder);
 
                     // Tạo SEO data + hồ sơ nháp đầy đủ các cấp
                     $seoTitle = "Huấn luyện viên {$nameCover} của Liên Đoàn Cử Tạ - Thể Hình HCM | liendoancutathehinhhcm";
@@ -451,16 +475,11 @@ class TrainerManagementController extends Controller
                                 ->first();
                             
                             if ($trainerUsingUser) {
-                                // User đã được sử dụng bởi Trainer (cùng chức vụ) - không cho phép
-                                // Xóa trainer đã tạo và báo lỗi
-                                if ($trainer->seo_id) {
-                                    $seo = \App\Models\Seo::find($trainer->seo_id);
-                                    if ($seo) {
-                                        $seo->delete();
-                                    }
+                                app(ProfileDeletionService::class)->deleteTrainer($trainer->id);
+                                if ($allocatedOrder !== null) {
+                                    $orderAllocator->release($allocatedOrder);
                                 }
-                                $trainer->delete();
-                                
+
                                 $duplicateCount++;
                                 $results[] = [
                                     'status' => 'duplicate',
@@ -577,6 +596,15 @@ class TrainerManagementController extends Controller
                         throw new \Exception('Không thể tạo trainer');
                     }
                 } catch (\Exception $e) {
+                    $createdTrainer = Trainer::whereHas('seo', function ($query) use ($slug) {
+                        $query->where('slug', $slug);
+                    })->first();
+                    if ($createdTrainer) {
+                        app(ProfileDeletionService::class)->deleteTrainer($createdTrainer->id);
+                    }
+                    if ($allocatedOrder !== null) {
+                        $orderAllocator->release($allocatedOrder);
+                    }
                     $errorCount++;
                     Log::error("TrainerManagement uploadExcel error for {$nameCover}: " . $e->getMessage());
                     $results[] = [

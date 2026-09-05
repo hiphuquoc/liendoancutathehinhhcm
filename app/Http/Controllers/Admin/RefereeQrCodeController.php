@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\Referee;
 use App\Helpers\Charactor;
+use App\Services\ProfileDeletionService;
 
 class RefereeQrCodeController extends Controller
 {
@@ -127,7 +128,27 @@ class RefereeQrCodeController extends Controller
             });
         }
 
+        $ids = $this->selectedIds($request);
+        if ($request->isMethod('post')) {
+            if (empty($ids)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Vui lòng chọn ít nhất một hồ sơ để tải mã QR.',
+                ], 422);
+            }
+            $query->whereIn('id', $ids);
+        } elseif (!empty($ids)) {
+            $query->whereIn('id', $ids);
+        }
+
         $referees = $query->get();
+
+        if ($referees->isEmpty()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Không có hồ sơ nào để tải mã QR.',
+            ], 422);
+        }
 
         $zip = new \ZipArchive();
         $zipFileName = 'qrcode_referees_' . date('Y-m-d_His') . '.zip';
@@ -176,6 +197,44 @@ class RefereeQrCodeController extends Controller
         $zip->close();
 
         return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
+    }
+
+    public function deleteSelected(Request $request)
+    {
+        if (!auth()->user() || !auth()->user()->hasRole('admin')) {
+            abort(403, 'Bạn không có quyền xóa hồ sơ trọng tài.');
+        }
+
+        $ids = $this->selectedIds($request);
+        if (empty($ids)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Vui lòng chọn ít nhất một hồ sơ để xóa.',
+            ], 422);
+        }
+
+        $result = app(ProfileDeletionService::class)->deleteMany(ProfileDeletionService::TYPE_REFEREE, $ids);
+        $deletedCount = count($result['deleted']);
+        $failedCount = count($result['failed']);
+
+        return response()->json([
+            'status' => $deletedCount > 0,
+            'deleted_ids' => $result['deleted'],
+            'failed' => $result['failed'],
+            'message' => $failedCount === 0
+                ? "Đã xóa {$deletedCount} hồ sơ trọng tài."
+                : "Đã xóa {$deletedCount} hồ sơ, {$failedCount} hồ sơ không xóa được.",
+        ], $deletedCount > 0 ? 200 : 422);
+    }
+
+    private function selectedIds(Request $request): array
+    {
+        $ids = $request->input('ids', []);
+        if (!is_array($ids)) {
+            $ids = array_filter(explode(',', (string) $ids));
+        }
+
+        return array_values(array_unique(array_filter(array_map('intval', $ids))));
     }
 }
 

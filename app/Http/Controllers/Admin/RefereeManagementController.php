@@ -16,6 +16,7 @@ use App\Models\User;
 use App\Models\UserRole;
 use App\Services\BuildInsertUpdateModel;
 use App\Http\Requests\RefereeRequest;
+use App\Services\ProfileDeletionService;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class RefereeManagementController extends Controller
@@ -446,16 +447,8 @@ class RefereeManagementController extends Controller
                                 ->first();
                             
                             if ($refereeUsingUser) {
-                                // User đã được sử dụng bởi Referee khác (cùng chức vụ) - không cho phép
-                                // Xóa referee đã tạo và báo lỗi
-                                if ($referee->seo_id) {
-                                    $seo = \App\Models\Seo::find($referee->seo_id);
-                                    if ($seo) {
-                                        $seo->delete();
-                                    }
-                                }
-                                $referee->delete();
-                                
+                                app(ProfileDeletionService::class)->deleteReferee($referee->id);
+
                                 $duplicateCount++;
                                 $results[] = [
                                     'status' => 'duplicate',
@@ -570,6 +563,12 @@ class RefereeManagementController extends Controller
                         throw new \Exception('Không thể tạo referee');
                     }
                 } catch (\Exception $e) {
+                    $createdReferee = Referee::whereHas('seo', function ($query) use ($slug) {
+                        $query->where('slug', $slug);
+                    })->first();
+                    if ($createdReferee) {
+                        app(ProfileDeletionService::class)->deleteReferee($createdReferee->id);
+                    }
                     $errorCount++;
                     Log::error("RefereeManagement uploadExcel error for {$nameCover}: " . $e->getMessage());
                     $results[] = [

@@ -19,7 +19,7 @@
                         <h2 class="companyManagementPage_section_title">
                             Mã QR Trọng tài
                         </h2>
-                        <p class="companyManagementPage_section_desc">Xem và tải xuống mã QR code của từng trọng tài</p>
+                        <p class="companyManagementPage_section_desc">Chọn hồ sơ để tải mã QR PNG hoặc xóa hàng loạt</p>
                     </div>
                 </div>
                 <div class="companyManagementPage_section_header_right">
@@ -53,15 +53,6 @@
                         <!-- Filter & Actions -->
                         <div class="adminPersonnelPage_searchBar_controls">
                             <div class="adminPersonnelPage_searchBar_actions">
-                                @if($referees->count() > 0)
-                                    <a href="{{ route('admin.refereeQrcode.downloadAll', ['search' => $search ?? '']) }}" 
-                                       class="adminButton adminButton--primary adminButton--sm qrcode-download-all-btn">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
-                                        </svg>
-                                        <span>Tải QRcode (.zip)</span>
-                                    </a>
-                                @endif
                                 @if(!empty($search))
                                     <a href="{{ route('admin.refereeQrcode.index') }}" class="adminButton adminButton--secondary adminButton--sm">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -77,9 +68,26 @@
 
                 <!-- QR Code List -->
                 @if($referees->count() > 0)
-                    <div class="adminQrCode_list">
+                    @include('admin.components.qrcodeBulkBar', [
+                        'downloadUrl' => route('admin.refereeQrcode.downloadAll'),
+                        'deleteUrl' => route('admin.refereeQrcode.deleteSelected'),
+                        'entityLabelShort' => 'Trọng tài',
+                        'zipFallbackName' => 'qrcode_referees.zip',
+                        'loadingId' => 'refereeQrcodeLoadingOverlay',
+                    ])
+                    <div class="adminQrCode_list adminQrCode_list--email">
                         @foreach($referees as $referee)
-                            <div class="adminQrCode_listItem">
+                            <div class="adminQrCode_listItem adminQrCode_listItem--email">
+                                <div class="adminQrCode_listItem_checkbox">
+                                    <label class="adminCheckbox">
+                                        <input type="checkbox"
+                                            class="qrcode-item-checkbox"
+                                            value="{{ $referee->id }}"
+                                            data-name="{{ $referee->name ?? 'Trọng tài' }}"
+                                            data-code="">
+                                        <span class="adminCheckbox_label"></span>
+                                    </label>
+                                </div>
                                 <div class="adminQrCode_listItem_qr">
                                     <img src="{{ $referee->qr_code_svg ?? '' }}" alt="QR Code" class="adminQrCode_listItem_qr_img">
                                 </div>
@@ -143,6 +151,12 @@
         </div>
     </div>
 </div>
+
+@include('admin.components.confirmDeleteProfileModal', [
+    'entityLabel' => 'trọng tài',
+    'entityLabelShort' => 'Trọng tài',
+    'loadingId' => 'refereeQrcodeLoadingOverlay',
+])
 
 @endsection
 

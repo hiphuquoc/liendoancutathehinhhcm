@@ -16,6 +16,8 @@ use App\Models\User;
 use App\Models\UserRole;
 use App\Services\BuildInsertUpdateModel;
 use App\Http\Requests\AthleteRequest;
+use App\Support\PersonnelImportOrderAllocator;
+use App\Services\ProfileDeletionService;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class AthleteManagementController extends Controller
@@ -235,7 +237,8 @@ class AthleteManagementController extends Controller
                     $cells[] = $cell->getCalculatedValue();
                 }
 
-                // Cột 1: STT (index 0) - bỏ qua
+                // Cột 1: STT (index 0) — dùng cho athlete_code; trống thì hệ thống sinh số
+                $fileStt = PersonnelImportOrderAllocator::parseFileStt($cells[0] ?? null);
                 // Cột 2: Họ và Tên (BẮT BUỘC) - index 1
                 $name = trim($cells[1] ?? '');
                 // Cột 3: Ngày tháng năm sinh (tùy chọn) - index 2
@@ -252,6 +255,7 @@ class AthleteManagementController extends Controller
                 // Lưu tất cả dữ liệu, kể cả trường hợp thiếu name/email để xử lý lỗi sau
                 $trainersData[] = [
                     'row' => $rowIndex,
+                    'stt' => $fileStt,
                     'name' => $name,
                     'name_formatted' => !empty($name) ? mb_convert_case($name, MB_CASE_TITLE, 'UTF-8') : '',
                     'dob' => $dob, // Có thể trống
@@ -344,8 +348,11 @@ class AthleteManagementController extends Controller
             $duplicateCount = 0;
             $errorCount = 0;
             
-            // Lấy số thứ tự tiếp theo từ database (đếm tiếp từ số cuối cùng của tháng/năm)
-            $orderNumber = $this->getNextOrderNumber($month, $year);
+            // STT: ưu tiên cột 1 trong file; chỉ sinh số khi dòng không có STT.
+            // Dòng trùng/lỗi không chiếm số — tránh đôn STT các hồ sơ sau.
+            $existingCodes = Athlete::where('athlete_code', 'LIKE', "%.T{$month}.{$year}/VDV-HWBF")
+                ->pluck('athlete_code');
+            $orderAllocator = PersonnelImportOrderAllocator::fromExistingCodes($existingCodes);
 
             // Lấy danh sách slug hiện có để kiểm tra trùng
             $existingSlugs = Seo::where('type', 'athlete_info')
@@ -390,10 +397,6 @@ class AthleteManagementController extends Controller
 
                 // Format tên: viết hoa chữ cái đầu mỗi từ (hỗ trợ Unicode/tiếng Việt)
                 $nameCover = mb_convert_case($name, MB_CASE_TITLE, 'UTF-8');
-                
-                $baseSlug = Charactor::convertStrToUrl($nameCover);
-                $slug = $this->generateUniqueSlug($baseSlug, $existingSlugs);
-                $existingSlugs[] = $slug; // Thêm vào danh sách để tránh trùng trong cùng batch
 
                 // Kiểm tra trùng
                 $isDuplicate = false;
@@ -430,17 +433,38 @@ class AthleteManagementController extends Controller
                         'phone' => $phone ?: 'N/A',
                         'email' => $email,
                         'athlete_code' => null,
-                        'slug' => $slug,
+                        'slug' => null,
                         'reasons' => $duplicateReasons,
                         'qr_code' => null,
                     ];
                     continue;
                 }
 
-                // Tạo trainer
+                $baseSlug = Charactor::convertStrToUrl($nameCover);
+                $slug = $this->generateUniqueSlug($baseSlug, $existingSlugs);
+                $existingSlugs[] = $slug;
+
+                $fileStt = $trainerData['stt'] ?? null;
+                if ($fileStt !== null && $orderAllocator->isUsed($fileStt)) {
+                    $errorCount++;
+                    $results[] = [
+                        'status' => 'error',
+                        'name' => $nameCover,
+                        'phone' => $phone ?: 'N/A',
+                        'email' => $email,
+                        'athlete_code' => null,
+                        'slug' => $slug,
+                        'error' => "STT {$fileStt} đã được dùng cho mã VĐV khóa T{$month}.{$year}",
+                        'qr_code' => null,
+                    ];
+                    continue;
+                }
+
+                // Tạo vận động viên
+                $allocatedOrder = null;
                 try {
-                    $trainerCode = $this->generateAthleteCode($month, $year, $orderNumber);
-                    $orderNumber++;
+                    $allocatedOrder = $orderAllocator->allocate($fileStt);
+                    $trainerCode = $this->generateAthleteCode($month, $year, $allocatedOrder);
 
                     // Tạo SEO data
                     $seoTitle = "Vận động viên {$nameCover} của Liên Đoàn Cử Tạ - Thể Hình HCM | liendoancutathehinhhcm";
@@ -509,16 +533,11 @@ class AthleteManagementController extends Controller
                                 ->first();
                             
                             if ($trainerUsingUser) {
-                                // User đã được sử dụng bởi Trainer (cùng chức vụ) - không cho phép
-                                // Xóa trainer đã tạo và báo lỗi
-                                if ($trainer->seo_id) {
-                                    $seo = \App\Models\Seo::find($trainer->seo_id);
-                                    if ($seo) {
-                                        $seo->delete();
-                                    }
+                                app(ProfileDeletionService::class)->deleteAthlete($trainer->id);
+                                if ($allocatedOrder !== null) {
+                                    $orderAllocator->release($allocatedOrder);
                                 }
-                                $trainer->delete();
-                                
+
                                 $duplicateCount++;
                                 $results[] = [
                                     'status' => 'duplicate',
@@ -635,6 +654,15 @@ class AthleteManagementController extends Controller
                         throw new \Exception('Không thể tạo vận động viên');
                     }
                 } catch (\Exception $e) {
+                    $createdAthlete = Athlete::whereHas('seo', function ($query) use ($slug) {
+                        $query->where('slug', $slug);
+                    })->first();
+                    if ($createdAthlete) {
+                        app(ProfileDeletionService::class)->deleteAthlete($createdAthlete->id);
+                    }
+                    if ($allocatedOrder !== null) {
+                        $orderAllocator->release($allocatedOrder);
+                    }
                     $errorCount++;
                     Log::error("AthleteManagement uploadExcel error for {$nameCover}: " . $e->getMessage());
                     $results[] = [

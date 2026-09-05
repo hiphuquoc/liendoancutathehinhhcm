@@ -434,61 +434,20 @@ class AthleteController extends Controller
 
     public function delete(Request $request)
     {
-        if (!empty($request->get('id'))) {
-            try {
-                DB::beginTransaction();
-                $id = $request->get('id');
-                $info = Athlete::select('*')
-                    ->where('id', $id)
-                    ->with('seo', 'seos', 'activityImages')
-                    ->first();
-                if (!empty($info->seo->image)) {
-                    Upload::deleteWallpaper($info->seo->image);
-                }
-                foreach ($info->activityImages as $actImg) {
-                    Upload::deleteWallpaper($actImg->image);
-                }
-                $info->activityImages()->delete();
-                $info->achievements()->delete();
-                $info->skills()->delete();
-                foreach ($info->experiences as $e) {
-                    $e->contents()->delete();
-                }
-                $info->experiences()->delete();
-                foreach ($info->degrees as $d) {
-                    $d->contents()->delete();
-                }
-                $info->degrees()->delete();
-                foreach ($info->seos as $s) {
-                    if (!empty($s->infoSeo->image)) {
-                        Upload::deleteWallpaper($s->infoSeo->image);
-                    }
-                    if (!empty($s->infoSeo->contents)) {
-                        foreach ($s->infoSeo->contents as $c) {
-                            $c->delete();
-                        }
-                    }
-                    $s->infoSeo()->delete();
-                    $s->delete();
-                }
-                $slug = $info->seo->slug ?? null;
-                if (!empty($slug)) {
-                    $email = str_replace('-', '', $slug);
-                    $user = User::where('email', $email)->first();
-                    if (!empty($user)) {
-                        UserRole::where('user_id', $user->id)->delete();
-                        $user->delete();
-                    }
-                }
-                $info->delete();
-                DB::commit();
-
-                return true;
-            } catch (\Exception $exception) {
-                DB::rollBack();
-
-                return false;
-            }
+        if (!auth()->user() || !auth()->user()->hasRole('admin')) {
+            abort(403, 'Bạn không có quyền xóa hồ sơ vận động viên.');
         }
+
+        $result = app(\App\Services\ProfileDeletionService::class)
+            ->deleteAthlete((int) $request->get('id'));
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'status' => !empty($result['ok']),
+                'message' => $result['message'] ?? '',
+            ], !empty($result['ok']) ? 200 : 422);
+        }
+
+        return !empty($result['ok']);
     }
 }

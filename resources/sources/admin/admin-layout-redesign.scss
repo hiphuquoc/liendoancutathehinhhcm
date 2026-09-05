@@ -8836,6 +8836,21 @@ $admin-color-system: (
         }
     }
 
+    &--danger {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: #fff;
+        box-shadow: 0 4px 12px rgba(220, 38, 38, 0.18);
+
+        &:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(220, 38, 38, 0.28);
+        }
+
+        &:active:not(:disabled) {
+            transform: translateY(0);
+        }
+    }
+
     &--sm {
         padding: 0.625rem 1.25rem;
         font-size: 0.875rem;
@@ -9789,6 +9804,10 @@ $admin-color-system: (
     }
 }
 
+#qrcodeBulkBar {
+    margin-bottom: 1rem;
+}
+
 .adminQrCode_listItem--email {
     padding-left: 0.5rem;
 
@@ -9850,7 +9869,14 @@ $admin-color-system: (
 .adminQrCode_listItem_actions {
     flex-shrink: 0;
     display: flex;
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+
+    .adminButton {
+        width: 100%;
+        justify-content: center;
+    }
 
     @media (max-width: 768px) {
         width: 100%;
@@ -9866,6 +9892,121 @@ $admin-color-system: (
     svg {
         width: 1rem;
         height: 1rem;
+    }
+}
+
+.adminConfirmModal[hidden] {
+    display: none !important;
+}
+
+.adminConfirmModal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.adminConfirmModal_overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(4px);
+}
+
+.adminConfirmModal_dialog {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 440px;
+    background: #fff;
+    border-radius: var(--admin-radius-lg, 16px);
+    padding: 1.75rem 1.5rem 1.5rem;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.2);
+}
+
+.adminConfirmModal_icon {
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+
+    svg {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+.adminConfirmModal_title {
+    margin: 0 0 0.5rem;
+    text-align: center;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--admin-gray-800, #1e293b);
+}
+
+.adminConfirmModal_lead {
+    margin: 0 0 0.75rem;
+    text-align: center;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--admin-gray-600, #475569);
+}
+
+.adminConfirmModal_list {
+    margin: 0 0 0.75rem;
+    padding: 0.75rem 0.75rem 0.75rem 1.5rem;
+    background: var(--admin-gray-50, #f8fafc);
+    border: 1px solid var(--admin-gray-200, #e2e8f0);
+    border-radius: var(--admin-radius-md, 10px);
+    color: var(--admin-gray-700, #334155);
+    font-size: 0.8125rem;
+    line-height: 1.55;
+
+    li + li {
+        margin-top: 0.35rem;
+    }
+}
+
+.adminConfirmModal_warning {
+    margin: 0 0 1rem;
+    text-align: center;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #b91c1c;
+}
+
+.adminConfirmModal_error {
+    margin: 0 0 1rem;
+    padding: 0.625rem 0.75rem;
+    border-radius: 8px;
+    background: #fef2f2;
+    color: #b91c1c;
+    font-size: 0.8125rem;
+}
+
+.adminConfirmModal_actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+
+    .adminButton {
+        min-width: 132px;
+    }
+
+    @media (max-width: 480px) {
+        flex-direction: column;
+
+        .adminButton {
+            width: 100%;
+        }
     }
 }
 

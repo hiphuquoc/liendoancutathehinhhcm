@@ -113,7 +113,7 @@ Route::middleware(['auth', 'role:admin,trainer,referee,athlete'])->group(functio
             // Create/Update: POST /he-thong/trainer/createAndUpdate
             Route::post('/createAndUpdate', [TrainerController::class, 'createAndUpdate'])->name('admin.trainer.createAndUpdate');
             // Delete: GET /he-thong/trainer/delete?id={id}
-            Route::get('/delete', [TrainerController::class, 'delete'])->name('admin.trainer.delete');
+            Route::match(['get', 'post'], '/delete', [TrainerController::class, 'delete'])->name('admin.trainer.delete');
             // Additional actions
         });
         /* ===== Trainer Management (Upload Excel) ===== */
@@ -125,8 +125,9 @@ Route::middleware(['auth', 'role:admin,trainer,referee,athlete'])->group(functio
         Route::prefix('trainer-qrcode')->group(function(){
             Route::get('/', [QrCodeController::class, 'index'])->name('admin.trainerQrcode.index');
             Route::get('/download', [QrCodeController::class, 'download'])->name('admin.trainerQrcode.download');
-            Route::get('/downloadAll', [QrCodeController::class, 'downloadAll'])->name('admin.trainerQrcode.downloadAll');
+            Route::match(['get', 'post'], '/downloadAll', [QrCodeController::class, 'downloadAll'])->name('admin.trainerQrcode.downloadAll');
             Route::get('/downloadExcel', [QrCodeController::class, 'downloadExcel'])->name('admin.trainerQrcode.downloadExcel');
+            Route::post('/deleteSelected', [QrCodeController::class, 'deleteSelected'])->name('admin.trainerQrcode.deleteSelected');
         });
         /* ===== Trainer Email ===== */
         Route::prefix('trainer-email')->group(function(){
@@ -139,7 +140,7 @@ Route::middleware(['auth', 'role:admin,trainer,referee,athlete'])->group(functio
             Route::get('/', [AthleteController::class, 'list'])->name('admin.athlete.list');
             Route::get('/view', [AthleteController::class, 'view'])->name('admin.athlete.view');
             Route::post('/createAndUpdate', [AthleteController::class, 'createAndUpdate'])->name('admin.athlete.createAndUpdate');
-            Route::get('/delete', [AthleteController::class, 'delete'])->name('admin.athlete.delete');
+            Route::match(['get', 'post'], '/delete', [AthleteController::class, 'delete'])->name('admin.athlete.delete');
         });
         Route::prefix('athlete-management')->group(function(){
             Route::get('/', [AthleteManagementController::class, 'index'])->name('admin.athleteManagement.index');
@@ -148,8 +149,9 @@ Route::middleware(['auth', 'role:admin,trainer,referee,athlete'])->group(functio
         Route::prefix('athlete-qrcode')->group(function(){
             Route::get('/', [AthleteQrCodeController::class, 'index'])->name('admin.athleteQrcode.index');
             Route::get('/download', [AthleteQrCodeController::class, 'download'])->name('admin.athleteQrcode.download');
-            Route::get('/downloadAll', [AthleteQrCodeController::class, 'downloadAll'])->name('admin.athleteQrcode.downloadAll');
+            Route::match(['get', 'post'], '/downloadAll', [AthleteQrCodeController::class, 'downloadAll'])->name('admin.athleteQrcode.downloadAll');
             Route::get('/downloadExcel', [AthleteQrCodeController::class, 'downloadExcel'])->name('admin.athleteQrcode.downloadExcel');
+            Route::post('/deleteSelected', [AthleteQrCodeController::class, 'deleteSelected'])->name('admin.athleteQrcode.deleteSelected');
         });
         Route::prefix('athlete-email')->group(function(){
             Route::get('/', [AthleteEmailController::class, 'index'])->name('admin.athleteEmail.index');
@@ -165,7 +167,8 @@ Route::middleware(['auth', 'role:admin,trainer,referee,athlete'])->group(functio
         Route::prefix('referee-qrcode')->group(function(){
             Route::get('/', [RefereeQrCodeController::class, 'index'])->name('admin.refereeQrcode.index');
             Route::get('/download', [RefereeQrCodeController::class, 'download'])->name('admin.refereeQrcode.download');
-            Route::get('/downloadAll', [RefereeQrCodeController::class, 'downloadAll'])->name('admin.refereeQrcode.downloadAll');
+            Route::match(['get', 'post'], '/downloadAll', [RefereeQrCodeController::class, 'downloadAll'])->name('admin.refereeQrcode.downloadAll');
+            Route::post('/deleteSelected', [RefereeQrCodeController::class, 'deleteSelected'])->name('admin.refereeQrcode.deleteSelected');
         });
         /* ===== Referee ===== */
         Route::prefix('referee')->group(function(){
@@ -176,7 +179,7 @@ Route::middleware(['auth', 'role:admin,trainer,referee,athlete'])->group(functio
             // Create/Update: POST /he-thong/referee/createAndUpdate
             Route::post('/createAndUpdate', [RefereeController::class, 'createAndUpdate'])->name('admin.referee.createAndUpdate');
             // Delete: GET /he-thong/referee/delete?id={id}
-            Route::get('/delete', [RefereeController::class, 'delete'])->name('admin.referee.delete');
+            Route::match(['get', 'post'], '/delete', [RefereeController::class, 'delete'])->name('admin.referee.delete');
             // Additional actions
             Route::get('/createUser', [RefereeController::class, 'createUser'])->name('admin.referee.createUser');
         });

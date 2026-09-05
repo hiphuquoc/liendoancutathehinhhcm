@@ -505,62 +505,25 @@ class TrainerController extends Controller {
     
 
     public function delete(Request $request){
-        if(!empty($request->get('id'))){
-            try {
-                DB::beginTransaction();
-                $id         = $request->get('id');
-                $info       = Trainer::select('*')
-                                ->where('id', $id)
-                                ->with('seo', 'seos', 'activityImages')
-                                ->first();
-                /* xóa ảnh đại diện trên google_clouds */ 
-                if(!empty($info->seo->image)) Upload::deleteWallpaper($info->seo->image);
-                /* delete relation */
-                foreach ($info->activityImages as $actImg) {
-                    Upload::deleteWallpaper($actImg->image);
-                }
-                $info->activityImages()->delete();
-                $info->achievements()->delete();
-                $info->skills()->delete();
-                // $info->experiences()->contents()->delete();
-                foreach($info->experiences as $e){
-                    $e->contents()->delete();
-                }
-                $info->experiences()->delete();
-                // $info->degrees()->contents()->delete();
-                foreach($info->degrees as $d){
-                    $d->contents()->delete();
-                }
-                $info->degrees()->delete();
-                /* delete các trang seos ngôn ngữ */
-                foreach($info->seos as $s){
-                    /* xóa ảnh đại diện trên google_clouds */ 
-                    if(!empty($s->infoSeo->image)) Upload::deleteWallpaper($s->infoSeo->image);
-                    if(!empty($s->infoSeo->contents)) foreach($s->infoSeo->contents as $c) $c->delete();
-                    $s->infoSeo()->delete();
-                    $s->delete();
-                }
-                /* Xóa user tương ứng */
-                $slug = $info->seo->slug ?? null;
-                if (!empty($slug)) {
-                    $email = str_replace('-', '', $slug);
-                    $user = User::where('email', $email)->first();
-                    
-                    if (!empty($user)) {
-                        // Xóa tất cả vai trò của user
-                        UserRole::where('user_id', $user->id)->delete();
-                        // Xóa user
-                        $user->delete();
-                    }
-                }
-
-                $info->delete();
-                DB::commit();
-                return true;
-            } catch (\Exception $exception){
-                DB::rollBack();
-                return false;
-            }
+        if(!auth()->user() || !auth()->user()->hasRole('admin')){
+            abort(403, 'Bạn không có quyền xóa hồ sơ huấn luyện viên.');
         }
+
+        $result = app(\App\Services\ProfileDeletionService::class)
+            ->deleteTrainer((int) $request->get('id'));
+
+        return $this->deleteResponse($request, $result);
+    }
+
+    private function deleteResponse(Request $request, array $result)
+    {
+        if ($request->wantsJson()) {
+            return response()->json([
+                'status' => !empty($result['ok']),
+                'message' => $result['message'] ?? '',
+            ], !empty($result['ok']) ? 200 : 422);
+        }
+
+        return !empty($result['ok']);
     }
 }

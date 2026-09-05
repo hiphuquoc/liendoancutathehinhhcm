@@ -19,7 +19,7 @@
                         <h2 class="companyManagementPage_section_title">
                             Mã QR HLV
                         </h2>
-                        <p class="companyManagementPage_section_desc">Xem và tải xuống mã QR code của từng huấn luyện viên</p>
+                        <p class="companyManagementPage_section_desc">Chọn hồ sơ để tải mã QR PNG hoặc xóa hàng loạt</p>
                     </div>
                 </div>
                 <div class="companyManagementPage_section_header_right">
@@ -70,15 +70,6 @@
                             
                             <div class="adminPersonnelPage_searchBar_actions">
                                 @if(!empty($courseFilter) || !empty($search))
-                                    @if($trainers->count() > 0)
-                                        <a href="{{ route('admin.trainerQrcode.downloadAll', ['course' => $courseFilter ?? '', 'search' => $search ?? '']) }}" 
-                                           class="adminButton adminButton--primary adminButton--sm qrcode-download-all-btn">
-                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
-                                            </svg>
-                                            <span>Tải QRcode (.zip)</span>
-                                        </a>
-                                    @endif
                                     <a href="{{ route('admin.trainerQrcode.downloadExcel', ['course' => $courseFilter ?? '', 'search' => $search ?? '']) }}"
                                        class="adminButton adminButton--secondary adminButton--sm qrcode-download-excel-btn">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -95,9 +86,26 @@
                 <!-- QR Code List -->
                 @if(!empty($courseFilter) || !empty($search))
                     @if($trainers->count() > 0)
-                        <div class="adminQrCode_list">
+                        @include('admin.components.qrcodeBulkBar', [
+                            'downloadUrl' => route('admin.trainerQrcode.downloadAll'),
+                            'deleteUrl' => route('admin.trainerQrcode.deleteSelected'),
+                            'entityLabelShort' => 'HLV',
+                            'zipFallbackName' => 'qrcode_trainers.zip',
+                            'loadingId' => 'qrcodeLoadingOverlay',
+                        ])
+                        <div class="adminQrCode_list adminQrCode_list--email">
                             @foreach($trainers as $trainer)
-                                <div class="adminQrCode_listItem">
+                                <div class="adminQrCode_listItem adminQrCode_listItem--email">
+                                    <div class="adminQrCode_listItem_checkbox">
+                                        <label class="adminCheckbox">
+                                            <input type="checkbox"
+                                                class="qrcode-item-checkbox"
+                                                value="{{ $trainer->id }}"
+                                                data-name="{{ $trainer->name ?? 'HLV' }}"
+                                                data-code="{{ $trainer->trainer_code ?? '' }}">
+                                            <span class="adminCheckbox_label"></span>
+                                        </label>
+                                    </div>
                                     <div class="adminQrCode_listItem_qr">
                                         <img src="{{ $trainer->qr_code_svg ?? '' }}" alt="QR Code" class="adminQrCode_listItem_qr_img">
                                     </div>
@@ -175,6 +183,12 @@
         </div>
     </div>
 </div>
+
+@include('admin.components.confirmDeleteProfileModal', [
+    'entityLabel' => 'huấn luyện viên',
+    'entityLabelShort' => 'HLV',
+    'loadingId' => 'qrcodeLoadingOverlay',
+])
 
 @endsection
 

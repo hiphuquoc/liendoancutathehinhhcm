@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\Referee;
-use App\Helpers\Charactor;
 use App\Services\ProfileDeletionService;
+use App\Support\QrCodeDownloadName;
 
 class RefereeQrCodeController extends Controller
 {
@@ -100,8 +100,11 @@ class RefereeQrCodeController extends Controller
             ->eye('circle')
             ->generate($url);
 
-        $refereeName = Charactor::convertStrToUrl($referee->name);
-        $filename = "QR_{$refereeName}.png";
+        $filename = QrCodeDownloadName::png(
+            null,
+            $referee->seo->slug ?? null,
+            $referee->name
+        );
 
         return response($qrCode)
             ->header('Content-Type', 'image/png')
@@ -188,8 +191,11 @@ class RefereeQrCodeController extends Controller
                 ->eye('circle')
                 ->generate($url);
 
-            $refereeName = Charactor::convertStrToUrl($referee->name);
-            $filename = "QR_{$refereeName}.png";
+            $filename = QrCodeDownloadName::png(
+                null,
+                $referee->seo->slug ?? null,
+                $referee->name
+            );
 
             $zip->addFromString($filename, $qrCode);
         }

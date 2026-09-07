@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\Trainer;
-use App\Helpers\Charactor;
 use App\Services\ProfileDeletionService;
+use App\Support\QrCodeDownloadName;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -151,8 +151,11 @@ class QrCodeController extends Controller
             ->eye('circle')
             ->generate($url);
 
-        $trainerName = Charactor::convertStrToUrl($trainer->name);
-        $filename = "QR_{$trainerName}.png";
+        $filename = QrCodeDownloadName::png(
+            $trainer->trainer_code,
+            $trainer->seo->slug ?? null,
+            $trainer->name
+        );
 
         return response($qrCode)
             ->header('Content-Type', 'image/png')
@@ -249,8 +252,11 @@ class QrCodeController extends Controller
                 ->eye('circle')
                 ->generate($url);
 
-            $trainerName = Charactor::convertStrToUrl($trainer->name);
-            $filename = "QR_{$trainerName}.png";
+            $filename = QrCodeDownloadName::png(
+                $trainer->trainer_code,
+                $trainer->seo->slug ?? null,
+                $trainer->name
+            );
 
             $zip->addFromString($filename, $qrCode);
         }

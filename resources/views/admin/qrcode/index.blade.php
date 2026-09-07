@@ -88,9 +88,9 @@
                     @if($trainers->count() > 0)
                         @include('admin.components.qrcodeBulkBar', [
                             'downloadUrl' => route('admin.trainerQrcode.downloadAll'),
+                            'processUrl' => route('admin.trainerQrcode.downloadAll.process'),
                             'deleteUrl' => route('admin.trainerQrcode.deleteSelected'),
                             'entityLabelShort' => 'HLV',
-                            'zipFallbackName' => 'qrcode_trainers.zip',
                             'loadingId' => 'qrcodeLoadingOverlay',
                         ])
                         <div class="adminQrCode_list adminQrCode_list--email">

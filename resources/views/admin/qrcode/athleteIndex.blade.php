@@ -88,9 +88,9 @@
                     @if($athletes->count() > 0)
                         @include('admin.components.qrcodeBulkBar', [
                             'downloadUrl' => route('admin.athleteQrcode.downloadAll'),
+                            'processUrl' => route('admin.athleteQrcode.downloadAll.process'),
                             'deleteUrl' => route('admin.athleteQrcode.deleteSelected'),
                             'entityLabelShort' => 'VĐV',
-                            'zipFallbackName' => 'qrcode_athletes.zip',
                             'loadingId' => 'qrcodeLoadingOverlay',
                         ])
                         <div class="adminQrCode_list adminQrCode_list--email">

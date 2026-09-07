@@ -3,15 +3,24 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Concerns\HandlesQrCodeZipDownload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\Referee;
 use App\Services\ProfileDeletionService;
+use App\Services\QrCodeZipExportService;
 use App\Support\QrCodeDownloadName;
 
 class RefereeQrCodeController extends Controller
 {
+    use HandlesQrCodeZipDownload;
+
+    protected function qrZipType(): string
+    {
+        return QrCodeZipExportService::TYPE_REFEREE;
+    }
+
     /**
      * Hiển thị danh sách QR code Trọng tài với bộ lọc
      */
@@ -109,100 +118,6 @@ class RefereeQrCodeController extends Controller
         return response($qrCode)
             ->header('Content-Type', 'image/png')
             ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
-    }
-
-    /**
-     * Tải xuống tất cả QR code dạng ZIP
-     */
-    public function downloadAll(Request $request)
-    {
-        $query = Referee::with('seo')
-            ->whereHas('seo', function ($q) {
-                $q->where('language', 'vi');
-            });
-
-        $search = $request->get('search');
-        if (!empty($search)) {
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhereHas('seo', function ($subQ) use ($search) {
-                      $subQ->where('title', 'like', '%' . $search . '%');
-                  });
-            });
-        }
-
-        $ids = $this->selectedIds($request);
-        if ($request->isMethod('post')) {
-            if (empty($ids)) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Vui lòng chọn ít nhất một hồ sơ để tải mã QR.',
-                ], 422);
-            }
-            $query->whereIn('id', $ids);
-        } elseif (!empty($ids)) {
-            $query->whereIn('id', $ids);
-        }
-
-        $referees = $query->get();
-
-        if ($referees->isEmpty()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Không có hồ sơ nào để tải mã QR.',
-            ], 422);
-        }
-
-        $zip = new \ZipArchive();
-        $zipFileName = 'qrcode_referees_' . date('Y-m-d_His') . '.zip';
-        $zipPath = storage_path('app/temp/' . $zipFileName);
-
-        // Tạo thư mục temp nếu chưa có
-        if (!file_exists(storage_path('app/temp'))) {
-            mkdir(storage_path('app/temp'), 0755, true);
-        }
-
-        if ($zip->open($zipPath, \ZipArchive::CREATE) !== TRUE) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Không thể tạo file ZIP',
-            ], 500);
-        }
-
-        foreach ($referees as $referee) {
-            if (empty($referee->seo)) continue;
-
-            // Tạo URL
-            if (!empty($referee->seo->slug_full)) {
-                $url = url('/' . $referee->seo->slug_full);
-            } elseif (!empty($referee->seo->slug)) {
-                $url = url('/trong-tai/' . $referee->seo->slug);
-            } else {
-                continue;
-            }
-
-            // Generate QR code PNG
-            $qrCode = QrCode::encoding('UTF-8')
-                ->format('png')
-                ->size(500)
-                ->margin(2)
-                ->backgroundColor(255, 255, 255)
-                ->style('round')
-                ->eye('circle')
-                ->generate($url);
-
-            $filename = QrCodeDownloadName::png(
-                null,
-                $referee->seo->slug ?? null,
-                $referee->name
-            );
-
-            $zip->addFromString($filename, $qrCode);
-        }
-
-        $zip->close();
-
-        return response()->download($zipPath, $zipFileName)->deleteFileAfterSend(true);
     }
 
     public function deleteSelected(Request $request)

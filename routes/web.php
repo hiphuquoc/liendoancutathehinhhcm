@@ -125,7 +125,11 @@ Route::middleware(['auth', 'role:admin,trainer,referee,athlete'])->group(functio
         Route::prefix('trainer-qrcode')->group(function(){
             Route::get('/', [QrCodeController::class, 'index'])->name('admin.trainerQrcode.index');
             Route::get('/download', [QrCodeController::class, 'download'])->name('admin.trainerQrcode.download');
-            Route::match(['get', 'post'], '/downloadAll', [QrCodeController::class, 'downloadAll'])->name('admin.trainerQrcode.downloadAll');
+            Route::post('/downloadAll', [QrCodeController::class, 'downloadAll'])->name('admin.trainerQrcode.downloadAll');
+            Route::post('/downloadAll/process', [QrCodeController::class, 'processZip'])->name('admin.trainerQrcode.downloadAll.process');
+            Route::get('/downloadAll/file/{token}', [QrCodeController::class, 'downloadZip'])
+                ->where('token', '[a-f0-9]{32}')
+                ->name('admin.trainerQrcode.downloadAll.file');
             Route::get('/downloadExcel', [QrCodeController::class, 'downloadExcel'])->name('admin.trainerQrcode.downloadExcel');
             Route::post('/deleteSelected', [QrCodeController::class, 'deleteSelected'])->name('admin.trainerQrcode.deleteSelected');
         });
@@ -149,7 +153,11 @@ Route::middleware(['auth', 'role:admin,trainer,referee,athlete'])->group(functio
         Route::prefix('athlete-qrcode')->group(function(){
             Route::get('/', [AthleteQrCodeController::class, 'index'])->name('admin.athleteQrcode.index');
             Route::get('/download', [AthleteQrCodeController::class, 'download'])->name('admin.athleteQrcode.download');
-            Route::match(['get', 'post'], '/downloadAll', [AthleteQrCodeController::class, 'downloadAll'])->name('admin.athleteQrcode.downloadAll');
+            Route::post('/downloadAll', [AthleteQrCodeController::class, 'downloadAll'])->name('admin.athleteQrcode.downloadAll');
+            Route::post('/downloadAll/process', [AthleteQrCodeController::class, 'processZip'])->name('admin.athleteQrcode.downloadAll.process');
+            Route::get('/downloadAll/file/{token}', [AthleteQrCodeController::class, 'downloadZip'])
+                ->where('token', '[a-f0-9]{32}')
+                ->name('admin.athleteQrcode.downloadAll.file');
             Route::get('/downloadExcel', [AthleteQrCodeController::class, 'downloadExcel'])->name('admin.athleteQrcode.downloadExcel');
             Route::post('/deleteSelected', [AthleteQrCodeController::class, 'deleteSelected'])->name('admin.athleteQrcode.deleteSelected');
         });
@@ -167,7 +175,11 @@ Route::middleware(['auth', 'role:admin,trainer,referee,athlete'])->group(functio
         Route::prefix('referee-qrcode')->group(function(){
             Route::get('/', [RefereeQrCodeController::class, 'index'])->name('admin.refereeQrcode.index');
             Route::get('/download', [RefereeQrCodeController::class, 'download'])->name('admin.refereeQrcode.download');
-            Route::match(['get', 'post'], '/downloadAll', [RefereeQrCodeController::class, 'downloadAll'])->name('admin.refereeQrcode.downloadAll');
+            Route::post('/downloadAll', [RefereeQrCodeController::class, 'downloadAll'])->name('admin.refereeQrcode.downloadAll');
+            Route::post('/downloadAll/process', [RefereeQrCodeController::class, 'processZip'])->name('admin.refereeQrcode.downloadAll.process');
+            Route::get('/downloadAll/file/{token}', [RefereeQrCodeController::class, 'downloadZip'])
+                ->where('token', '[a-f0-9]{32}')
+                ->name('admin.refereeQrcode.downloadAll.file');
             Route::post('/deleteSelected', [RefereeQrCodeController::class, 'deleteSelected'])->name('admin.refereeQrcode.deleteSelected');
         });
         /* ===== Referee ===== */

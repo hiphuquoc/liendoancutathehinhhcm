@@ -2,17 +2,17 @@
     Thanh thao tác hàng loạt trên trang QR.
     @include('admin.components.qrcodeBulkBar', [
         'downloadUrl' => route('admin.trainerQrcode.downloadAll'),
+        'processUrl' => route('admin.trainerQrcode.downloadAll.process'),
         'deleteUrl' => route('admin.trainerQrcode.deleteSelected'),
         'entityLabelShort' => 'HLV',
-        'zipFallbackName' => 'qrcode_trainers.zip',
         'loadingId' => 'qrcodeLoadingOverlay',
     ])
 --}}
 @php
     $downloadUrl = $downloadUrl ?? '';
+    $processUrl = $processUrl ?? '';
     $deleteUrl = $deleteUrl ?? '';
     $entityLabelShort = $entityLabelShort ?? 'hồ sơ';
-    $zipFallbackName = $zipFallbackName ?? 'qrcode.zip';
     $loadingId = $loadingId ?? 'qrcodeLoadingOverlay';
     $canDelete = !empty($deleteUrl) && auth()->user() && auth()->user()->hasRole('admin');
 @endphp
@@ -49,9 +49,9 @@
     'use strict';
 
     const downloadUrl = @json($downloadUrl);
+    const processUrl = @json($processUrl);
     const deleteUrl = @json($canDelete ? $deleteUrl : '');
     const entityLabelShort = @json($entityLabelShort);
-    const zipFallbackName = @json($zipFallbackName);
     const loadingId = @json($loadingId);
 
     const selectAll = document.getElementById('qrcodeSelectAll');
@@ -103,27 +103,24 @@
         return params;
     }
 
-    function triggerBlobDownload(blob, filename) {
-        const blobUrl = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = blobUrl;
-        link.download = filename;
-        link.style.display = 'none';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        setTimeout(function() {
-            window.URL.revokeObjectURL(blobUrl);
-        }, 100);
+    async function parseJsonResponse(response) {
+        const payload = await response.json().catch(function() { return null; });
+        if (!response.ok || !payload || payload.status === false) {
+            throw new Error((payload && payload.message) || 'Không thể tải mã QR đã chọn.');
+        }
+        return payload;
     }
 
-    function filenameFromDisposition(header, fallback) {
-        if (!header) return fallback;
-        const match = header.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
-        if (match && match[1]) {
-            return match[1].replace(/['"]/g, '');
+    function triggerNativeDownload(url) {
+        let iframe = document.getElementById('qrcodeZipDownloadFrame');
+        if (!iframe) {
+            iframe = document.createElement('iframe');
+            iframe.id = 'qrcodeZipDownloadFrame';
+            iframe.setAttribute('aria-hidden', 'true');
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
         }
-        return fallback;
+        iframe.src = url;
     }
 
     function showModalError(message) {
@@ -178,39 +175,86 @@
     if (downloadBtn) {
         downloadBtn.addEventListener('click', async function() {
             const ids = selectedIds();
-            if (!ids.length || !downloadUrl) return;
+            if (!ids.length || !downloadUrl || !processUrl) return;
 
             if (typeof showAdminLoading === 'function') {
-                showAdminLoading(loadingId, 'Đang tạo file ZIP mã QR đã chọn...');
+                showAdminLoading(loadingId, 'Đang tạo file ZIP mã QR...', true);
             }
 
+            let succeeded = false;
             try {
-                const body = appendIds(new URLSearchParams({ _token: csrfToken() }), ids);
-                const response = await fetch(downloadUrl, {
+                const startResponse = await fetch(downloadUrl, {
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': csrfToken(),
                         'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
                     },
-                    body: body,
+                    body: appendIds(new URLSearchParams({ _token: csrfToken() }), ids),
                 });
+                const startPayload = await parseJsonResponse(startResponse);
+                const token = startPayload.token;
+                const total = startPayload.total || ids.length;
 
-                if (!response.ok) {
-                    const payload = await response.json().catch(function() { return null; });
-                    throw new Error((payload && payload.message) || 'Không thể tải mã QR đã chọn.');
+                if (typeof updateAdminLoadingProgress === 'function') {
+                    updateAdminLoadingProgress(loadingId, 0, '0 / ' + total + ' mã QR');
                 }
 
-                const blob = await response.blob();
-                const filename = filenameFromDisposition(
-                    response.headers.get('Content-Disposition'),
-                    zipFallbackName
-                );
-                triggerBlobDownload(blob, filename);
+                let done = false;
+                let processed = 0;
+                let downloadFileUrl = null;
+                let guard = 0;
+                const maxLoops = total + 5;
+
+                while (!done && guard < maxLoops) {
+                    guard += 1;
+                    const processResponse = await fetch(processUrl, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken(),
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json',
+                        },
+                        body: new URLSearchParams({
+                            _token: csrfToken(),
+                            token: token,
+                        }),
+                    });
+                    const progress = await parseJsonResponse(processResponse);
+                    processed = progress.processed || processed;
+                    done = !!progress.done;
+                    downloadFileUrl = progress.download_url || downloadFileUrl;
+
+                    const percent = total > 0 ? Math.min(100, Math.round((processed / total) * 100)) : 100;
+                    if (typeof updateAdminLoadingProgress === 'function') {
+                        updateAdminLoadingProgress(loadingId, percent, processed + ' / ' + total + ' mã QR');
+                    }
+                }
+
+                if (!done || !downloadFileUrl) {
+                    throw new Error('Không thể hoàn tất file ZIP. Vui lòng thử lại.');
+                }
+
+                if (typeof showAdminLoading === 'function') {
+                    showAdminLoading(loadingId, 'Đang tải file xuống máy...', true);
+                }
+                if (typeof updateAdminLoadingProgress === 'function') {
+                    updateAdminLoadingProgress(loadingId, 100, 'Bắt đầu tải xuống...');
+                }
+
+                triggerNativeDownload(downloadFileUrl);
+                succeeded = true;
             } catch (error) {
                 alert(error.message || 'Có lỗi xảy ra khi tải mã QR.');
             } finally {
                 if (typeof hideAdminLoading === 'function') {
-                    hideAdminLoading(loadingId);
+                    if (succeeded) {
+                        setTimeout(function() {
+                            hideAdminLoading(loadingId);
+                        }, 1200);
+                    } else {
+                        hideAdminLoading(loadingId);
+                    }
                 }
             }
         });

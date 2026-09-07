@@ -70,9 +70,9 @@
                 @if($referees->count() > 0)
                     @include('admin.components.qrcodeBulkBar', [
                         'downloadUrl' => route('admin.refereeQrcode.downloadAll'),
+                        'processUrl' => route('admin.refereeQrcode.downloadAll.process'),
                         'deleteUrl' => route('admin.refereeQrcode.deleteSelected'),
                         'entityLabelShort' => 'Trọng tài',
-                        'zipFallbackName' => 'qrcode_referees.zip',
                         'loadingId' => 'refereeQrcodeLoadingOverlay',
                     ])
                     <div class="adminQrCode_list adminQrCode_list--email">
